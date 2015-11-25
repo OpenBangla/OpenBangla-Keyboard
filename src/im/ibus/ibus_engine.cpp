@@ -22,6 +22,8 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include "im/im.h"
+#include "im/ibus/ibus_keycode.h"
+#include "layout/layout.h"
 #include "log.h"
 
 static IBusBus *bus = NULL;
@@ -38,7 +40,25 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
                                    guint       keyval,
                                    guint       keycode,
                                    guint       state) {
-  //
+  // Set Defaults
+  bool kshift, kctrl, kalt;
+  kshift = false;
+  kctrl = false;
+  kalt = false;
+
+  // Don't accept Key Release event
+  if (state & IBUS_RELEASE_MASK) return FALSE;
+
+  // Set modifiers
+  if(state & IBUS_SHIFT_MASK) kshift = true;
+  if(state & IBUS_CONTROL_MASK) kctrl = true;
+  if(state & IBUS_MOD1_MASK) kalt = true;
+
+  // Force Shift
+  if(keyval >= IBUS_KEY_A && keyval <= IBUS_KEY_Z) kshift = true;
+
+  // At last, send the key
+  return (gboolean)gLayout->sendKey(ibus_keycode(keyval), kshift, kctrl, kalt);
 }
 
 void ibus_enable_cb(IBusEngine *engine) {

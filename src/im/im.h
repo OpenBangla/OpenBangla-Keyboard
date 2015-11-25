@@ -20,6 +20,7 @@
 
 #include <string>
 #include <list>
+#include "im/keycode.h"
 
 /* Calling this function will start platform's IM fuctions
  * bool executed - set this 'true' if the program was started by the platform's

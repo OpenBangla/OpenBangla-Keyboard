@@ -1,0 +1,5 @@
+Used 3rd party libraries
+========================
+
+1. json.hpp - JSON for Modern C++(https://github.com/nlohmann/json) by Niels Lohmann.
+              The code is licensed under the MIT License.
