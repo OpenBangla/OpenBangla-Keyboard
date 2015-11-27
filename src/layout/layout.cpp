@@ -28,7 +28,11 @@
    fin.open(path, std::ifstream::in);
 
    // Load Layout(Json) file
-   mth->layout << fin;
+   lf << fin;
+   // Set typing method
+   setMethod();
+   // Send changed layout to typing method
+   mth->setLayout(lf);
    // Load it's Description
    loadDesc();
  }
@@ -36,7 +40,7 @@
  void Layout::loadDesc() {
    // Load Layout Description
    // Layout File Type
-   switch(mth->layout["info"]['type']) {
+   switch(lf["info"]['type']) {
      case "phonetic":
       lD.type = Layout_Phonetic;
       break;
@@ -46,15 +50,23 @@
    }
 
    // Layout File Version
-   lD.filever = mth->layout["info"]["ver"];
+   lD.filever = lf["info"]["ver"];
    // Layout Name
-   lD.name = mth->layout["info"]["layout_name"];
+   lD.name = lf["info"]["layout_name"];
    // Layout Version
-   lD.ver = mth->layout["info"]["layout_ver"];
+   lD.ver = lf["info"]["layout_ver"];
    // Layout Develper Name
-   lD.dev_name = mth->layout["info"]["layout_dev_name"];
+   lD.dev_name = lf["info"]["layout_dev_name"];
    // Layout Developer Comment
-   lD.dev_comment = mth->layout["info"]["layout_dev_comment"];
+   lD.dev_comment = lf["info"]["layout_dev_comment"];
+ }
+
+ void Layout::setMethod() {
+   // TODO: implement
+ }
+
+ bool Layout::sendKey(int lkey, bool lshift, bool lctrl, bool lalt) {
+   mth->processKey(lkey, lshift, lctrl, lalt);
  }
 
  LayoutDesc Layout::getDesc() {

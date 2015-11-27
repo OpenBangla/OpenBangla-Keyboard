@@ -39,22 +39,26 @@ struct LayoutDesc {
   std::string devComment;
 };
 
-class LowLayout {
-protected:
-  nlohmann::json layout;
+/* A pure virtual class. Every Typing Method have to implement this.
+ */
+class LayoutMth {
 public:
-  std::string getCharForKey(int key, bool shift, bool altgr, bool shift_altgr);
-  virtual bool sendKey(int key, bool shift, bool ctrl, bool alt);
+  virtual void setLayout(nlohmann::json lay) = 0;
+  virtual bool processKey(int key, bool shift, bool ctrl, bool alt)  = 0;
 }
 
-class Layout : public LowLayout {
-  LowLayout *mth;
+class Layout {
+  LayoutMth *mth;
   /* File input handler */
   std::ifstream fin;
+  /* Layout File */
+  nlohmann::json lf;
   LayoutDesc lD;
 
   /* Load Layout Description. Used internaly */
   void loadDesc();
+  /* Set typing method. Used internaly */
+  void setMethod();
 public:
   /* Load a layout from given @path */
   void loadLayout(std::string path);
@@ -63,7 +67,7 @@ public:
   /* Send key event to selected method for further processing.
    * It is usually called from IM Engine
    */
-  bool sendKey(int key, bool shift, bool ctrl, bool alt);
+  bool sendKey(int lkey, bool lshift, bool lctrl, bool lalt);
 };
 
 /* Global */
