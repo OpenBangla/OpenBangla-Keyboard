@@ -18,18 +18,20 @@
 
 #pragma once
 
-/* From The Unicode Standard 8.0                *
- * http://www.unicode.org/charts/               *
- * http://www.unicode.org/charts/PDF/U0980.pdf  *
+/* The Unicode Standard 8.0
+ * http://www.unicode.org/charts/
+ * http://www.unicode.org/charts/PDF/U0980.pdf
  */
 
-/* The Bengali script is also known as Bangla. In Assam, the   *
+/***************************************************************
+ * The Bengali script is also known as Bangla. In Assam, the   *
  * preferred name of the script is Asamiya or Assamese. The    *
  * Assamese language has also been written historically using  *
  * distinct regional scripts known as Kamrupi.                 *
- */
+ ***************************************************************/
 
-/* We have changed some Character names according to Bangla language. Actual names are denoted by comments */
+/* We have changed some Character names according to Bangla language or phonetic equivalent.
+ * Actual names are denoted by comments */
 
 /* Various signs */
 const char *bSign_Anji = "\u0980";
@@ -113,9 +115,24 @@ const char *b_Khandatta = "\u09CE";
 const char *bLength_Mark = "\u09D7"; // BENGALI AU LENGTH MARK
 
 /* Additional consonants */
-const char *b_Rr = "\u09DC";
-const char *b_Rh = "\u09DD";
-const char *b_Y = "\u09DF";
+const char *b_Rr = "\u09DC"; // BENGALI LETTER RRA
+const char *b_Rh = "\u09DD"; // BENGALI LETTER RHA
+const char *b_Y = "\u09DF"; // BENGALI LETTER YYA
+
+/* Additional vowels for Sanskrit */
+const char *bSanskrit_RR = "\u09E0"; // BENGALI LETTER VOCALIC RR
+const char *bSanskrit_LL = "\u09E1"; // BENGALI LETTER VOCALIC LL
+const char *bSign_L = "\u09E2"; // BENGALI VOWEL SIGN VOCALIC L
+const char *bSign_LL = "\u09E3"; // BENGALI VOWEL SIGN VOCALIC LL
+
+/* Reserved */
+/****************************************************************
+ * For viram punctuation, use the generic Indic 0964 and 0965.  *
+ * Note that these punctuation marks are referred to as dahri   *
+ * and double dahri in Bangla.                                  *
+ ****************************************************************/
+const char *b_Dari = "\u0964";
+const char *b_DDari = "\u0965";
 
 /* Digits */
 const char *b_0 = "\u09E6";
@@ -150,4 +167,7 @@ const char *bSign_Isshar = "\u09FA";
 
 /* Historic currency sign */
 const char *bCurrencyGanda = "\u09FB";
-const char *
+
+/* Unicode Addition */
+const char *ZWJ = "\u200D";
+const char *ZWNJ = "\u200C";
