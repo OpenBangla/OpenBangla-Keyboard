@@ -1,2 +1,0 @@
-The Manage____.cmake files were copied from cmake-fedora(https://fedorahosted.org/cmake-fedora/)
-project. Version 2.4.4. These are needed for searching libibus and glib.
