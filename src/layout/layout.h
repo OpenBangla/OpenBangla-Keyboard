@@ -16,7 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef LAYOUT_H
+#define LAYOUT_H
 
 #include <fstream>
 #include <string>
@@ -44,7 +45,7 @@ struct LayoutDesc {
 class LayoutMth {
 public:
   virtual void setLayout(nlohmann::json lay) = 0;
-  virtual bool processKey(int key, bool shift, bool ctrl, bool alt)  = 0;
+  virtual bool processKey(int key, bool shift, bool altgr, bool shiftaltgr)  = 0;
 }
 
 class Layout {
@@ -72,3 +73,5 @@ public:
 
 /* Global */
 extern Layout *gLayout;
+
+#endif /* end of include guard: LAYOUT_H */

@@ -16,7 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef IM_KEYCODE_H
+#define IM_KEYCODE_H
 
 /* Cross-platform Keycodes for OpenBangla Keyboard
  * IM sends Keycodes accroding to this file.
@@ -145,3 +146,5 @@
 #define VC_META_R								0x0E5C	// Windows or Command Key
 #define VC_CONTEXT_MENU							0x0E5D
 // End Modifier and Control Keys
+
+#endif /* end of include guard: IM_KEYCODE_H */

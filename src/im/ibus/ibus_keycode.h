@@ -16,7 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef IBUS_KEYCODE_H
+#define IBUS_KEYCODE_H
 
 #include <map>
 #include <ibus.h>
@@ -160,3 +161,5 @@ int ibus_keycode(guint k) {
   intKeycode();
   return key[k];
 }
+
+#endif /* end of include guard: IBUS_KEYCODE_H */

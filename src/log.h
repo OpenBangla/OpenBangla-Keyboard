@@ -18,7 +18,8 @@
 
 /* Logging functions */
 
-#pragma once
+#ifndef LOG_H
+#define LOG_H
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -52,3 +53,5 @@ void log_print(unsigned int level, const char *format, ...) {
   #define LOG_DEBUG(a...) log_print(LOGT_DEBUG,"[OpenBangla-Debug]: "a)
 #endif
 #define LOG_ERR(a...) log_print(LOGT_DEBUG,"[OpenBangla-Error]: "a)
+
+#endif /* end of include guard: LOG_H */

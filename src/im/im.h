@@ -16,7 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef IM_H
+#define IM_H
 
 #include <string>
 #include <list>
@@ -47,3 +48,5 @@ void im_table_sel_inc();
 void im_table_sel_dec();
 
 void im_forward_key();
+
+#endif /* end of include guard: IM_H */

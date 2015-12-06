@@ -16,7 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef BENGALICHARS_H
+#define BENGALICHARS_H
 
 /* The Unicode Standard 8.0
  * http://www.unicode.org/charts/
@@ -171,3 +172,5 @@ const char *bCurrencyGanda = "\u09FB";
 /* Unicode Addition */
 const char *ZWJ = "\u200D";
 const char *ZWNJ = "\u200C";
+
+#endif /* end of include guard: BENGALICHARS_H */
