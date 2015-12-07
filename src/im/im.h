@@ -20,7 +20,7 @@
 #define IM_H
 
 #include <string>
-#include <list>
+#include <vector>
 #include "im/keycode.h"
 
 /* Calling this function will start platform's IM fuctions
@@ -38,8 +38,11 @@ void im_table_show();
 /* Hides IM engine's Lookup table */
 void im_table_hide();
 
-/* Updates IM engine's lookup table with given 'std::list lst' */
-void im_update_suggest(std::list lst);
+/* Updates IM engine's lookup table with given @lst */
+void im_update_suggest(std::vector<std::string> lst, std::string typed);
+
+/* Get current candidate selected by user */
+std::string im_get_candidate();
 
 /* Increment selection in IM engine's lookup table */
 void im_table_sel_inc();
