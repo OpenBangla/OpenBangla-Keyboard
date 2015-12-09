@@ -58,11 +58,11 @@ std::string PhoneticParser::parse(std::string input) {
           if(find == chunk) {
             json rules = pattern["rules"];
             if(!(rules.empty())) {
-              for(json& rule : rules) {
+              for(auto& rule : rules) {
                 bool replace = true;
                 int chk = 0;
                 json matches = rule.at("matches");
-                for(json& match : matches) {
+                for(auto& match : matches) {
                   std::string value = match["value"];
                   std::string type = match["type"];
                   std::string scope = match["scope"];
@@ -85,57 +85,57 @@ std::string PhoneticParser::parse(std::string input) {
                         isPunctuation(fixed.at(chk))
                         ) ^ isNegative
                       ) {
-                          replace = false;
-                          break;
-                        }
+                            replace = false;
+                            break;
                     }
-                    // Vowel
-                    else if(scope == "vowel") {
-                      if(
-                        ! (
-                          (
-                          (chk >= 0 && (type == "prefix")) ||
-                          (chk < len && (type == "suffix"))
-                          ) &&
-                          isVowel(fixed.at(chk))
-                          ) ^ isNegative
-                        ) {
+                  }
+                  // Vowel
+                  else if(scope == "vowel") {
+                    if(
+                       !(
+                        (
+                        (chk >= 0 && (type == "prefix")) ||
+                        (chk < len && (type == "suffix"))
+                        ) &&
+                        isVowel(fixed.at(chk))
+                        ) ^ isNegative
+                      ) {
                             replace = false;
                             break;
-                          }
-                      }
-                      // Consonant
-                      else if(scope == "consonant") {
-                        if(
-                          ! (
-                            (
-                            (chk >= 0 && (type == "prefix")) ||
-                            (chk < len && (type == "suffix"))
-                            ) &&
-                            isConsonant(fixed.at(chk))
-                            ) ^ isNegative
-                          ) {
-                              replace = false;
-                              break;
-                            }
-                        }
-                        // Exact
-                        else if(scope == "exact") {
-                          int s, e;
-                          if(type == "suffix") {
-                            s = end;
-                            e = end + value.length();
-                          }
-                          // Prefix
-                          else {
-                            s = start - value.length();
-                            e = start;
-                          }
-                          if(!(isExact(value, fixed, s, e, isNegative))) {
+                    }
+                  }
+                  // Consonant
+                  else if(scope == "consonant") {
+                    if(
+                       !(
+                        (
+                        (chk >= 0 && (type == "prefix")) ||
+                        (chk < len && (type == "suffix"))
+                        ) &&
+                        isConsonant(fixed.at(chk))
+                        ) ^ isNegative
+                      ) {
                             replace = false;
                             break;
-                          }
-                       }
+                    }
+                  }
+                  // Exact
+                  else if(scope == "exact") {
+                    int s, e;
+                    if(type == "suffix") {
+                      s = end;
+                      e = end + value.length();
+                    }
+                    // Prefix
+                    else {
+                      s = start - value.length();
+                      e = start;
+                    }
+                    if(!(isExact(value, fixed, s, e, isNegative))) {
+                      replace = false;
+                      break;
+                    }
+                  }
                 }
 
                 if(replace) {
@@ -145,8 +145,7 @@ std::string PhoneticParser::parse(std::string input) {
                   matched = true;
                   break;
                 }
-
-              } //
+              }
             }
 
             if(matched == true) break;
@@ -157,17 +156,17 @@ std::string PhoneticParser::parse(std::string input) {
             cur = end - 1;
             matched = true;
             break;
+          }
+          else if (find.length() > chunk.length() ||
+                  (find.length() == chunk.length() && find.compare(chunk) < 0)) {
+                  left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
         }
-         else if (find.length() > chunk.length() ||
-                 (find.length() == chunk.length() && find.compare(chunk) < 0)) {
-                 left = mid + 1;
-        } else {
-          right = mid - 1;
-        }
+        if(matched == true) break;
       }
-      if(matched == true) break;
     }
-  }
 
     if(!matched) {
       output += fixed.at(cur);
@@ -189,51 +188,36 @@ char PhoneticParser::smallCap(char letter) {
 
 std::string PhoneticParser::fixString(std::string input) {
   std::string fixed;
-  char cChar;
-  for(int i=0; i < input.length(); ++i) {
-    cChar = input.at(i);
-    if(isCaseSensitive(cChar)) {
-      fixed += cChar;
+  for(const auto& c : input) {
+    if(isCaseSensitive(c)) {
+      fixed += c;
     } else {
-      fixed += smallCap(cChar);
+      fixed += smallCap(c);
     }
   }
   return fixed;
 }
+
 bool PhoneticParser::isVowel(char c) {
-  char sc = smallCap(c);
   std::string vowel = layout["vowel"];
-  for(unsigned i = 0; i < vowel.length(); ++i) {
-    if(sc == vowel.at(i)) {
-      return true;
-    }
-  }
-  return false;
+  return vowel.find(smallCap(c)) != std::string::npos;
 }
+
 bool PhoneticParser::isConsonant(char c) {
-  char sc = smallCap(c);
   std::string cons = layout["consonant"];
-  for(unsigned i = 0; i < cons.length(); ++i) {
-    if(sc == cons.at(i)) {
-      return true;
-    }
-  }
-  return false;
+  return cons.find(smallCap(c)) != std::string::npos;
 }
+
 bool PhoneticParser::isPunctuation(char c) {
   return (!(isVowel(c) || isConsonant(c)));
 }
+
 bool PhoneticParser::isExact(std::string needle, std::string heystack, int start, int end, bool strnot) {
   int len = end - start;
   return ((start >= 0 && end < heystack.length() && (heystack.substr(start, len)  == needle)) ^ strnot);
 }
+
 bool PhoneticParser::isCaseSensitive(char c) {
-  char sc = smallCap(c);
   std::string csen = layout["casesensitive"];
-  for(unsigned i = 0; i < csen.length(); ++i) {
-    if(sc  == csen.at(i)) {
-      return true;
-    }
-  }
-  return false;
+  return csen.find(smallCap(c)) != std::string::npos;
 }
