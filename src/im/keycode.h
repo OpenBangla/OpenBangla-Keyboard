@@ -44,7 +44,6 @@
 #define VC_BACKSPACE							0x000E
 
 #define VC_TAB									0x000F
-#define VC_CAPS_LOCK							0x003A
 
 #define VC_A									0x001E
 #define VC_B									0x0030

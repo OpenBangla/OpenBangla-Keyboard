@@ -54,6 +54,16 @@ void intKeycode() {
   key[IBUS_KEY_asterisk] = VC_8;
   key[IBUS_KEY_parenleft] = VC_9;
 
+  key[IBUS_KEY_minus] = VC_MINUS;
+  key[IBUS_KEY_underscore] = VC_MINUS;
+
+  key[IBUS_KEY_equal] = VC_EQUALS;
+  key[IBUS_KEY_plus] = VC_EQUALS;
+
+  key[IBUS_KEY_BackSpace] = VC_BACKSPACE;
+
+  key[IBUS_KEY_Tab] = VC_TAB;
+
   /* You may notice that we have mapped
    * uppercase and lowercase keys with same
    * keys, becase we would emulate shift key
