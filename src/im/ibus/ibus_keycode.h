@@ -115,25 +115,39 @@ void intKeycode() {
   key[IBUS_KEY_y] = VC_Y;
   key[IBUS_KEY_z] = VC_Z;
 
-  // Without shift key
-  key[IBUS_KEY_backslash] = VC_BACK_SLASH;
-  key[IBUS_KEY_slash] = VC_SLASH;
-  key[IBUS_KEY_semicolon] = VC_SEMICOLON;
-  key[IBUS_KEY_period] = VC_PERIOD;
+  key[IBUS_KEY_bracketleft] = VC_OPEN_BRACKET;
+  key[IBUS_KEY_braceleft] = VC_OPEN_BRACKET;
 
-  // Emulate shift key
+  key[IBUS_KEY_bracketright] = VC_CLOSE_BRACKET;
+  key[IBUS_KEY_braceright] = VC_CLOSE_BRACKET;
+
+  key[IBUS_KEY_backslash] = VC_BACK_SLASH;
   key[IBUS_KEY_bar] = VC_BACK_SLASH;
+
+  key[IBUS_KEY_slash] = VC_SLASH;
   key[IBUS_KEY_question] = VC_SLASH;
+
+  key[IBUS_KEY_semicolon] = VC_SEMICOLON;
   key[IBUS_KEY_colon] = VC_SEMICOLON;
+
+  key[IBUS_KEY_comma] = VC_COMMA;
+  key[IBUS_KEY_less] = VC_COMMA;
+
+  key[IBUS_KEY_period] = VC_PERIOD;
   key[IBUS_KEY_greater] = VC_PERIOD;
 
+  key[IBUS_KEY_apostrophe] = VC_QUOTE;
+  key[IBUS_KEY_quotedbl] = VC_QUOTE;
 
+  key[IBUS_KEY_Return] = VC_ENTER;
   key[IBUS_KEY_space] = VC_SPACE;
 
+  // Begin Cursor Key Zone
   key[IBUS_KEY_Left] = VC_LEFT;
   key[IBUS_KEY_Up] = VC_UP;
   key[IBUS_KEY_Right] = VC_RIGHT;
   key[IBUS_KEY_Down] = VC_DOWN;
+  // End Cursor Key Zone
 
   // Begin Numeric Zone
   key[IBUS_KEY_KP_Divide] = VC_KP_DIVIDE;
@@ -159,7 +173,16 @@ void intKeycode() {
 
 int ibus_keycode(guint k) {
   intKeycode();
-  return key[k];
+  try
+  {
+    return key.at(k);
+  }
+  catch(std::out_of_range)
+  {
+    // The key is not mapped - means that we don't needed the UNKNOWN key!
+    LOG_DEBUG("[IM:iBus]: Got unknown keycode. Mapping to VC_UNKNOWN");
+    return VC_UNKNOWN;
+  }
 }
 
 #endif /* end of include guard: IBUS_KEYCODE_H */

@@ -70,7 +70,7 @@
    bool laltgr, lshiftaltgr;
    if(lctrl && lalt) { laltgr = true; } else { laltgr = false; }
    if(lshift && altgr) { lshiftaltgr = true; } else { lshiftaltgr = false; }
-   mth->processKey(lkey, lshift, laltgr, lshiftaltgr);
+   return mth->processKey(lkey, lshift, laltgr, lshiftaltgr);
  }
 
  LayoutDesc Layout::getDesc() {

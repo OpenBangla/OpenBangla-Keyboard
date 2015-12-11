@@ -29,8 +29,8 @@
  */
 void im_start(bool executed);
 
-/* std::string text - text to commit */
-void im_commit(std::string text);
+/* Commit text */
+void im_commit();
 
 /* Shows IM engine's Lookup table */
 void im_table_show();
@@ -41,14 +41,14 @@ void im_table_hide();
 /* Updates IM engine's lookup table with given @lst */
 void im_update_suggest(std::vector<std::string> lst, std::string typed);
 
-/* Get current candidate selected by user */
-std::string im_get_candidate();
-
 /* Increment selection in IM engine's lookup table */
 void im_table_sel_inc();
 
 /* Decrement selection in IM engine's lookup table */
 void im_table_sel_dec();
+
+/* Reset IM functions */
+void im_reset()
 
 void im_forward_key();
 

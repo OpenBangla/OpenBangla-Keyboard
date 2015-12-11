@@ -16,22 +16,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef METHOD_PHONETIC_H
-#define METHOD_PHONETIC_H
-
-#include "3rdparty/json.hpp"
-#include "layout.h"
 #include "phoneticsuggestion.h"
 
-class MethodPhonetic : public LayoutMth {
-  PhoneticSuggestion suggest;
-  std::string EnglishT;
+/* TODO: Add Phonetic facilities eg Dictonary suggestion, Auto correct */
 
-  void updateCache();
-public:
-  // Functions inherited from class LayoutMth
-  void setLayout(nlohmann::json lay);
-  bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
+void PhoneticSuggestion::setLayout(nlohmann::json lay) {
+  parser.setLayout(lay);
 }
 
-#endif /* end of include guard: METHOD_PHONETIC_H */
+std::vector<std::string> Suggest(std::string cache) {
+  std::vector<std::string> list;
+
+  list.clear();
+  std::string bangla = parser.parse(cache);
+  list.push_back(bangla);
+
+  return list;
+}

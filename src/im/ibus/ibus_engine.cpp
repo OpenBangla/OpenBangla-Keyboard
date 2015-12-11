@@ -29,11 +29,9 @@
 static IBusBus *bus = NULL;
 static IBusFactory *factory = NULL;
 static IBusEngine *engine = NULL;
-static IBusLookupTable *table;
+static IBusLookupTable *table = NULL;
 static int id = 0;
-static guint candidateSel;
-// Suggestion list
-std::vector<std::string> list;
+static guint candidateSel = 0;
 
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
   ibus_quit();
@@ -122,7 +120,7 @@ void start_setup(bool ibus) {
                                        "GPL 3",
                                        "See AboutBox",
                                        "",
-                                       "bn"
+                                       "us"
                                      );
     ibus_component_add_engine(component, engine_dec);
     ibus_bus_register_component(bus, component);
@@ -134,9 +132,8 @@ void ibus_update_preedit() {
   ibus_lookup_table_set_cursor_pos(table, candidateSel);
   ibus_engine_update_lookup_table_fast(engine, table, TRUE);
   // Get current suggestion
-  std::string str = list[(int)candidateSel];
-  IBusText *txt = ibus_text_new_from_string((gchar*)str.c_str());
-  ibus_engine_update_preedit_text(engine, txt, (guint)str.length(), TRUE);
+  IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
+  ibus_engine_update_preedit_text(engine, txt, ibus_text_get_length(txt), TRUE);
 }
 
 void im_table_sel_inc() {
@@ -154,16 +151,12 @@ void im_table_sel_dec() {
   ibus_update_preedit();
 }
 
-std::string im_get_candidate() {
-  IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
-  std::string val = (char*)txt->text;
-  return val;
-}
-
 void im_update_suggest(std::vector<std::string> lst, std::string typed) {
-  list = lst;
+  // Update auxiliary text
+  IBusText *caux = ibus_text_new_from_string((gchar*)typed.c_str());
+  ibus_engine_update_auxiliary_text(engine, caux, TRUE);
   ibus_lookup_table_clear(table); // At first, remove all candidates
-  for(auto& str : list) {
+  for(auto& str : lst) {
     IBusText *ctext = ibus_text_new_from_string((gchar*)str.c_str());
     ibus_lookup_table_append_candidate(table, ctext);
     // Hide candidate labels // Hack learned from ibus-avro
@@ -173,10 +166,20 @@ void im_update_suggest(std::vector<std::string> lst, std::string typed) {
   ibus_update_preedit();
 }
 
-void im_commit(std::string text) {
-  IBusText * txt = ibus_text_new_from_string((gchar*)text.c_str());
+void im_reset() {
+  // Reset all our mess
+  candidateSel = 0;
+  ibus_lookup_table_clear(table);
+  ibus_engine_hide_preedit_text(engine);
+  ibus_engine_hide_auxiliary_text(engine);
+  ibus_engine_hide_lookup_table(engine);
+}
+
+void im_commit() {
+  IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
   ibus_engine_commit_text(engine,txt);
   LOG_DEBUG("[IM:iBus]: String commited: %s",text.c_str());
+  im_reset();
 }
 
 void im_start(bool executed) {

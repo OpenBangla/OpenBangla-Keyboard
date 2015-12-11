@@ -16,22 +16,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef METHOD_PHONETIC_H
-#define METHOD_PHONETIC_H
+#ifndef PHONETIC_SUGGESTION_H
+#define PHONETIC_SUGGESTION_H
 
-#include "3rdparty/json.hpp"
-#include "layout.h"
-#include "phoneticsuggestion.h"
+#include <vector>
+#include <string>
+#include "phoneticparser.h"
 
-class MethodPhonetic : public LayoutMth {
-  PhoneticSuggestion suggest;
-  std::string EnglishT;
-
-  void updateCache();
+class PhoneticSuggestion {
+private:
+  PhoneticParser parser;
 public:
-  // Functions inherited from class LayoutMth
   void setLayout(nlohmann::json lay);
-  bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
-}
+  std::vector<std::string> Suggest(std::string cache);
+};
 
-#endif /* end of include guard: METHOD_PHONETIC_H */
+#endif /* end of include guard: PHONETIC_SUGGESTION_H */

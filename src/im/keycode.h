@@ -39,8 +39,8 @@
 #define VC_9									0x000A
 #define VC_0									0x000B
 
-#define VC_MINUS								0x000C	// '-'
-#define VC_EQUALS								0x000D	// '='
+#define VC_MINUS								0x000C	// '-' , '_'
+#define VC_EQUALS								0x000D	// '=' , '+'
 #define VC_BACKSPACE							0x000E
 
 #define VC_TAB									0x000F
@@ -73,26 +73,22 @@
 #define VC_Y									0x0015
 #define VC_Z									0x002C
 
-#define VC_OPEN_BRACKET							0x001A	// '['
-#define VC_CLOSE_BRACKET						0x001B	// ']'
+#define VC_OPEN_BRACKET							0x001A	// '[' , '{'
+#define VC_CLOSE_BRACKET						0x001B	// ']' , '}'
 #define VC_BACK_SLASH							0x002B	// '\'
 
 #define VC_SEMICOLON							0x0027	// ';'
-#define VC_QUOTE								0x0028
+#define VC_QUOTE								0x0028 // ''' , '"'
 #define VC_ENTER								0x001C
 
-#define VC_COMMA								0x0033	// ','
-#define VC_PERIOD								0x0034	// '.'
-#define VC_SLASH								0x0035	// '/'
+#define VC_COMMA								0x0033	// ',' , '<'
+#define VC_PERIOD								0x0034	// '.' , '>'
+#define VC_SLASH								0x0035	// '/' , '?'
 
 #define VC_SPACE								0x0039
 // End Alphanumeric Zone
 
-/*
-#define VC_PRINTSCREEN							0x0E37
-#define VC_SCROLL_LOCK							0x0046
-#define VC_PAUSE								0x0E45	// FIXME Testing needed on Windows!
-*/
+#define VC_UNKNOWN							0x0046
 
 // Begin Edit Key Zone
 #define VC_INSERT								0x0E52
@@ -113,7 +109,6 @@
 
 
 // Begin Numeric Zone
-#define VC_NUM_LOCK								0x0045
 #define VC_KP_DIVIDE							0x0E35
 #define VC_KP_MULTIPLY							0x0037
 #define VC_KP_SUBTRACT							0x004A
@@ -133,18 +128,5 @@
 #define VC_KP_9									0x0049
 #define VC_KP_0									0x0052
 // End Numeric Zone
-
-
-// Begin Modifier and Control Keys
-#define VC_SHIFT_L								0x002A
-#define VC_SHIFT_R								0x0036
-#define VC_CONTROL_L							0x001D
-#define VC_CONTROL_R							0x0E1D
-#define VC_ALT_L								0x0038	// Option or Alt Key
-#define VC_ALT_R								0x0E38	// Option or Alt Key
-#define VC_META_L								0x0E5B	// Windows or Command Key
-#define VC_META_R								0x0E5C	// Windows or Command Key
-#define VC_CONTEXT_MENU							0x0E5D
-// End Modifier and Control Keys
 
 #endif /* end of include guard: IM_KEYCODE_H */
