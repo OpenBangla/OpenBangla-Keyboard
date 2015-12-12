@@ -22,7 +22,7 @@
 #include <map>
 #include <windows.h>
 
-/* Windows Virtual Keycode Mapping 
+/* Windows Virtual Keycode Mapping
  * https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731%28v=vs.85%29.aspx
  */
 
@@ -124,7 +124,7 @@ void intKeycode() {
   // End Numeric Zone
 }
 
-int ibus_keycode(guint k) {
+int win_keycode(guint k) {
   intKeycode();
   try
   {
@@ -133,7 +133,7 @@ int ibus_keycode(guint k) {
   catch(std::out_of_range)
   {
     // The key is not mapped - means that we don't needed the UNKNOWN key!
-    LOG_DEBUG("[IM:iBus]: Got unknown keycode. Mapping to VC_UNKNOWN");
+    LOG_DEBUG("[IM:Windows]: Got unknown keycode. Mapping to VC_UNKNOWN");
     return VC_UNKNOWN;
   }
 }
