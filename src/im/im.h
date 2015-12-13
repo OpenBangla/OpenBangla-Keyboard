@@ -21,7 +21,7 @@
 
 #include <string>
 #include <vector>
-#include "im/keycode.h"
+#include "keycode.h"
 
 /* Calling this function will start platform's IM fuctions
  * bool executed - set this 'true' if the program was started by the platform's
@@ -48,7 +48,7 @@ void im_table_sel_inc();
 void im_table_sel_dec();
 
 /* Reset IM functions */
-void im_reset()
+void im_reset();
 
 void im_forward_key();
 

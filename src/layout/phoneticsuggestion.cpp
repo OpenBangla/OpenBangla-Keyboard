@@ -24,7 +24,7 @@ void PhoneticSuggestion::setLayout(nlohmann::json lay) {
   parser.setLayout(lay);
 }
 
-std::vector<std::string> Suggest(std::string cache) {
+std::vector<std::string> PhoneticSuggestion::Suggest(std::string cache) {
   std::vector<std::string> list;
 
   list.clear();

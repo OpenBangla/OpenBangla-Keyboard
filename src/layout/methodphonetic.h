@@ -19,7 +19,7 @@
 #ifndef METHOD_PHONETIC_H
 #define METHOD_PHONETIC_H
 
-#include "3rdparty/json.hpp"
+#include "json.hpp"
 #include "layout.h"
 #include "phoneticsuggestion.h"
 
@@ -32,6 +32,6 @@ public:
   // Functions inherited from class LayoutMth
   void setLayout(nlohmann::json lay);
   bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
-}
+};
 
 #endif /* end of include guard: METHOD_PHONETIC_H */

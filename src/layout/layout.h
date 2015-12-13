@@ -21,13 +21,13 @@
 
 #include <fstream>
 #include <string>
-#include "3rdparty/json.hpp"
+#include "json.hpp"
 
 /* Core of Layout Management */
 
 enum LayoutType {
   Layout_Phonetic,
-  Layout_Fixed;
+  Layout_Fixed
 };
 
 /* Structure for storing Layout Description */
@@ -46,7 +46,7 @@ class LayoutMth {
 public:
   virtual void setLayout(nlohmann::json lay) = 0;
   virtual bool processKey(int key, bool shift, bool altgr, bool shiftaltgr)  = 0;
-}
+};
 
 class Layout {
   LayoutMth *mth;

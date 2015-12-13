@@ -24,7 +24,7 @@
 
 using namespace nlohmann;
 
-bool PhoneticParser::setLayout(json l) {
+void PhoneticParser::setLayout(json l) {
   layout = l;
 }
 

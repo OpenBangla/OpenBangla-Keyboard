@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "im/im.h"
+#include "im.h"
 
 int main(int argc, char *argv []) {
   if (argv[1] = "--ibus") {

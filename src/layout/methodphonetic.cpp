@@ -16,11 +16,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "im/im.h"
-#include "im/keycode.h"
+#include "im.h"
+#include "keycode.h"
 #include "methodphonetic.h"
 
-void setLayout(nlohmann::json lay) {
+void MethodPhonetic::setLayout(nlohmann::json lay) {
   suggest.setLayout(lay);
 }
 
@@ -32,7 +32,7 @@ void MethodPhonetic::updateCache() {
     return;
   } else {
     // Something we have to build
-    list = suggest(EnglishT);
+    list = suggest.Suggest(EnglishT);
     im_update_suggest(list, EnglishT);
   }
 }
@@ -48,7 +48,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "1";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -61,7 +61,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "2";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -74,7 +74,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "3";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -87,7 +87,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "4";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -100,7 +100,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "4";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -113,7 +113,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "6";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -126,7 +126,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "7";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -139,7 +139,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "8";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -152,7 +152,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "9";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -165,7 +165,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "0";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
 
@@ -215,7 +215,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "a";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -228,7 +228,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "b";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -241,7 +241,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "c";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -254,7 +254,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "d";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -267,7 +267,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "e";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -280,7 +280,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "f";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -293,7 +293,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "g";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -306,7 +306,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "h";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -319,7 +319,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "i";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -332,7 +332,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "j";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -345,7 +345,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "k";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -358,7 +358,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "l";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -371,7 +371,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "m";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -384,7 +384,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "n";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -397,7 +397,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "o";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -410,7 +410,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "p";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -423,7 +423,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "q";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -436,7 +436,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "r";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -449,7 +449,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "s";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -462,7 +462,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "t";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
    case VC_U:
@@ -474,7 +474,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "u";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -487,7 +487,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "v";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -500,7 +500,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "w";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -513,10 +513,10 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "x";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
-      return;
+      break;
    case VC_Y:
       if(shift) {
         EnglishT += "Y";
@@ -526,7 +526,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "y";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -539,7 +539,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += "z";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
@@ -553,13 +553,13 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         EnglishT += ";";
         updateCache();
         return true;
-      } else if(altgr || shiftaltgr)
+      } else if(altgr || shiftaltgr) {
         return false;
       }
       break;
    case VC_QUOTE:
       if(shift) {
-        EnglishT += "\""
+        EnglishT += "\"";
         updateCache();
         return true;
       } else if(!shift) {

@@ -18,7 +18,7 @@
 
  /* Core of Layout Management */
 
- #include "layout/layout.h"
+ #include "layout.h"
 
  void Layout::loadLayout(std::string path) {
    // Check if we have already a opened file
@@ -40,25 +40,29 @@
  void Layout::loadDesc() {
    // Load Layout Description
    // Layout File Type
-   switch(lf["info"]['type']) {
-     case "phonetic":
-      lD.type = Layout_Phonetic;
-      break;
-     case "fixed":
-      lD.type = Layout_Fixed;
-      break;
+   std::string type = lf["info"]["type"];
+   if(type == "phonetic") {
+     lD.type = Layout_Phonetic;
+   } else {
+     lD.type = Layout_Fixed;
    }
 
+   // Get values
+   int FileVer = lf["info"]["ver"];
+   std::string Name = lf["info"]["layout_name"];
+   std::string Ver = lf["info"]["layout_ver"];
+   std::string DevName = lf["info"]["layout_dev_name"];
+   std::string DevComment = lf["info"]["layout_dev_comment"];
    // Layout File Version
-   lD.filever = lf["info"]["ver"];
+   lD.fileVer = FileVer;
    // Layout Name
-   lD.name = lf["info"]["layout_name"];
+   lD.name = Name;
    // Layout Version
-   lD.ver = lf["info"]["layout_ver"];
+   lD.ver = Ver;
    // Layout Develper Name
-   lD.dev_name = lf["info"]["layout_dev_name"];
+   lD.devName = DevName;
    // Layout Developer Comment
-   lD.dev_comment = lf["info"]["layout_dev_comment"];
+   lD.devComment = DevComment;
  }
 
  void Layout::setMethod() {
@@ -68,8 +72,10 @@
  bool Layout::sendKey(int lkey, bool lshift, bool lctrl, bool lalt) {
    // Set modifiers
    bool laltgr, lshiftaltgr;
+   // Don't catch Ctrl without Shift
+   if(lctrl || !lshift) { return false; }
    if(lctrl && lalt) { laltgr = true; } else { laltgr = false; }
-   if(lshift && altgr) { lshiftaltgr = true; } else { lshiftaltgr = false; }
+   if(lshift && laltgr) { lshiftaltgr = true; } else { lshiftaltgr = false; }
    return mth->processKey(lkey, lshift, laltgr, lshiftaltgr);
  }
 
