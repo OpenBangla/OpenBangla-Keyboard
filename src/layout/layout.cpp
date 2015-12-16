@@ -20,6 +20,8 @@
 
  #include "layout.h"
 
+ Layout *gLayout;
+
  void Layout::loadLayout(std::string path) {
    // Check if we have already a opened file
    if(fin.is_open()) fin.close();

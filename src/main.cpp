@@ -17,8 +17,10 @@
  */
 
 #include "im.h"
+#include "layout.h"
 
 int main(int argc, char *argv []) {
+  gLayout = new Layout();
   if (argv[1] = "--ibus") {
     im_start(true);
   } else {

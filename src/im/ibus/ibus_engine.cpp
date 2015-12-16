@@ -20,17 +20,16 @@
 
 #include <ibus.h>
 #include <glib.h>
-#include <glib/gprintf.h>
-#include "im/im.h"
-#include "im/ibus/ibus_keycode.h"
-#include "layout/layout.h"
+#include "im.h"
+#include "ibus_keycode.h"
+#include "layout.h"
 #include "log.h"
 
 static IBusBus *bus = NULL;
 static IBusFactory *factory = NULL;
 static IBusEngine *engine = NULL;
 static IBusLookupTable *table = NULL;
-static int id = 0;
+static gint id = 0;
 static guint candidateSel = 0;
 
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
@@ -72,8 +71,9 @@ IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
                                   gchar* engine_name,
                                   gpointer     user_data) {
   id += 1;
+  gchar *path = g_strdup_printf("/org/freedesktop/IBus/Engine/%i",id);
   engine = ibus_engine_new( engine_name,
-                            g_strdup_printf("/org/freedesktop/IBus/Engine/%i",id),
+                            path,
                             ibus_bus_get_connection(bus) );
 
   table = ibus_lookup_table_new (9, 0, TRUE, TRUE);
@@ -109,8 +109,8 @@ void start_setup(bool ibus) {
                                     "GPL 3",
                                     "See AboutBox",
                                     "https://github.com/OpenBangla/OpenBangla-Keyboard",
-                                    "",
-                                    ""
+                                    "/home/mominul/experiment/OpenBnagla-Keyboard",
+                                    "openbangla-keyboard"
                                   );
 
     engine_dec = ibus_engine_desc_new( "OpenBangla",
@@ -119,7 +119,7 @@ void start_setup(bool ibus) {
                                        "bn",
                                        "GPL 3",
                                        "See AboutBox",
-                                       "",
+                                       "/home/mominul/experiment/avro-bangla.png",
                                        "us"
                                      );
     ibus_component_add_engine(component, engine_dec);
@@ -178,7 +178,7 @@ void im_reset() {
 void im_commit() {
   IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
   ibus_engine_commit_text(engine,txt);
-  LOG_DEBUG("[IM:iBus]: String commited: %s",text.c_str());
+  LOG_DEBUG("[IM:iBus]: String commited: %s",(char*)ibus_text_get_text(txt));
   im_reset();
 }
 
