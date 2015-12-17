@@ -19,6 +19,8 @@
 #ifndef BENGALICHARS_H
 #define BENGALICHARS_H
 
+#include <string>
+
 /* The Unicode Standard 8.0
  * http://www.unicode.org/charts/
  * http://www.unicode.org/charts/PDF/U0980.pdf
@@ -35,96 +37,96 @@
  * Actual names are denoted by comments */
 
 /* Various signs */
-const char *bSign_Anji = "\u0980";
-const char *b_Chandra = "\u0981";
-const char *b_Anushar = "\u0982"; // BENGALI SIGN ANUSVARA
-const char *b_Bisharga = "\u0983"; // BENGALI SIGN VISARGA
+std::string bSign_Anji = "\u0980";
+std::string b_Chandra = "\u0981";
+std::string b_Anushar = "\u0982"; // BENGALI SIGN ANUSVARA
+std::string b_Bisharga = "\u0983"; // BENGALI SIGN VISARGA
 
 /* Independent vowels */
-const char *b_A = "\u0985";
-const char *b_AA = "\u0986";
-const char *b_I = "\u0987";
-const char *b_II = "\u0988";
-const char *b_U = "\u0989";
-const char *b_UU = "\u098A";
-const char *b_RRI = "\u098B"; // BENGALI LETTER VOCALIC R
-const char *bVocalic_L = "\u098C";
-const char *b_E = "\u098F";
-const char *b_OI = "\u0990"; // BENGALI LETTER AI
-const char *b_O = "\u0993";
-const char *b_OU = "\u0994";
+std::string b_A = "\u0985";
+std::string b_AA = "\u0986";
+std::string b_I = "\u0987";
+std::string b_II = "\u0988";
+std::string b_U = "\u0989";
+std::string b_UU = "\u098A";
+std::string b_RRI = "\u098B"; // BENGALI LETTER VOCALIC R
+std::string bVocalic_L = "\u098C";
+std::string b_E = "\u098F";
+std::string b_OI = "\u0990"; // BENGALI LETTER AI
+std::string b_O = "\u0993";
+std::string b_OU = "\u0994";
 
 /* Consonants */
-const char *b_K = "\u0995";
-const char *b_Kh = "\u0996";
-const char *b_G = "\u0997";
-const char *b_Gh = "\u0998";
-const char *b_NGA = "\u0999";
-const char *b_C = "\u099A";
-const char *b_Ch = "\u099B";
-const char *b_J = "\u099C";
-const char *b_Jh = "\u099D";
-const char *b_NYA = "\u099E";
-const char *b_Tt = "\u099F";
-const char *b_Tth = "\u09A0";
-const char *b_Dd = "\u09A1";
-const char *b_Ddh = "\u09A2";
-const char *b_Nn = "\u09A3";
-const char *b_T = "\u09A4";
-const char *b_Th = "\u09A5";
-const char *b_D = "\u09A6";
-const char *b_Dh = "\u09A7";
-const char *b_N = "\u09A8";
-const char *b_P = "\u09AA";
-const char *b_Ph = "\u09AB";
-const char *b_B = "\u09AC";
-const char *b_Bh = "\u09AD";
-const char *b_M = "\u09AE";
-const char *b_Z = "\u09AF";
-const char *b_R = "\u09B0";
-const char *b_L = "\u09B2";
-const char *b_Sh = "\u09B6";
-const char *b_Ss = "\u09B7";
-const char *b_S = "\u09B8";
-const char *b_H = "\u09B9";
+std::string b_K = "\u0995";
+std::string b_Kh = "\u0996";
+std::string b_G = "\u0997";
+std::string b_Gh = "\u0998";
+std::string b_NGA = "\u0999";
+std::string b_C = "\u099A";
+std::string b_Ch = "\u099B";
+std::string b_J = "\u099C";
+std::string b_Jh = "\u099D";
+std::string b_NYA = "\u099E";
+std::string b_Tt = "\u099F";
+std::string b_Tth = "\u09A0";
+std::string b_Dd = "\u09A1";
+std::string b_Ddh = "\u09A2";
+std::string b_Nn = "\u09A3";
+std::string b_T = "\u09A4";
+std::string b_Th = "\u09A5";
+std::string b_D = "\u09A6";
+std::string b_Dh = "\u09A7";
+std::string b_N = "\u09A8";
+std::string b_P = "\u09AA";
+std::string b_Ph = "\u09AB";
+std::string b_B = "\u09AC";
+std::string b_Bh = "\u09AD";
+std::string b_M = "\u09AE";
+std::string b_Z = "\u09AF";
+std::string b_R = "\u09B0";
+std::string b_L = "\u09B2";
+std::string b_Sh = "\u09B6";
+std::string b_Ss = "\u09B7";
+std::string b_S = "\u09B8";
+std::string b_H = "\u09B9";
 
 /* Various signs */
-const char *bSign_Nukta = "\u09BC"; // for extending the alphabet to new letters
-const char *bSign_Avagraha = "\u09BD";
+std::string bSign_Nukta = "\u09BC"; // for extending the alphabet to new letters
+std::string bSign_Avagraha = "\u09BD";
 
 /* Dependent vowel signs (kars) */
-const char *b_AAkar = "\u09BE";
-const char *b_Ikar = "\u09BF";
-const char *b_IIkar = "\u09C0";
-const char *b_Ukar = "\u09C1";
-const char *b_UUkar = "\u09C2";
-const char *b_RRIkar = "\u09C3"; // BENGALI VOWEL SIGN VOCALIC R
-const char *bVocalic_RR = "\u09C4"; // BENGALI VOWEL SIGN VOCALIC RR
-const char *b_OIkar = "\u09C8";
+std::string b_AAkar = "\u09BE";
+std::string b_Ikar = "\u09BF";
+std::string b_IIkar = "\u09C0";
+std::string b_Ukar = "\u09C1";
+std::string b_UUkar = "\u09C2";
+std::string b_RRIkar = "\u09C3"; // BENGALI VOWEL SIGN VOCALIC R
+std::string bVocalic_RR = "\u09C4"; // BENGALI VOWEL SIGN VOCALIC RR
+std::string b_OIkar = "\u09C8";
 
 /* Two-part dependent vowel signs */
-const char *b_Okar = "\u09CB";
-const char *b_OUkar = "\u09CC"; // BENGALI VOWEL SIGN AU
+std::string b_Okar = "\u09CB";
+std::string b_OUkar = "\u09CC"; // BENGALI VOWEL SIGN AU
 
 /* Virama or Hasant */
-const char *b_Hasanta = "\u09CD";
+std::string b_Hasanta = "\u09CD";
 
 /* Additional consonant */
-const char *b_Khandatta = "\u09CE";
+std::string b_Khandatta = "\u09CE";
 
 /* Sign */
-const char *bLength_Mark = "\u09D7"; // BENGALI AU LENGTH MARK
+std::string bLength_Mark = "\u09D7"; // BENGALI AU LENGTH MARK
 
 /* Additional consonants */
-const char *b_Rr = "\u09DC"; // BENGALI LETTER RRA
-const char *b_Rh = "\u09DD"; // BENGALI LETTER RHA
-const char *b_Y = "\u09DF"; // BENGALI LETTER YYA
+std::string b_Rr = "\u09DC"; // BENGALI LETTER RRA
+std::string b_Rh = "\u09DD"; // BENGALI LETTER RHA
+std::string b_Y = "\u09DF"; // BENGALI LETTER YYA
 
 /* Additional vowels for Sanskrit */
-const char *bSanskrit_RR = "\u09E0"; // BENGALI LETTER VOCALIC RR
-const char *bSanskrit_LL = "\u09E1"; // BENGALI LETTER VOCALIC LL
-const char *bSign_L = "\u09E2"; // BENGALI VOWEL SIGN VOCALIC L
-const char *bSign_LL = "\u09E3"; // BENGALI VOWEL SIGN VOCALIC LL
+std::string bSanskrit_RR = "\u09E0"; // BENGALI LETTER VOCALIC RR
+std::string bSanskrit_LL = "\u09E1"; // BENGALI LETTER VOCALIC LL
+std::string bSign_L = "\u09E2"; // BENGALI VOWEL SIGN VOCALIC L
+std::string bSign_LL = "\u09E3"; // BENGALI VOWEL SIGN VOCALIC LL
 
 /* Reserved */
 /****************************************************************
@@ -132,45 +134,45 @@ const char *bSign_LL = "\u09E3"; // BENGALI VOWEL SIGN VOCALIC LL
  * Note that these punctuation marks are referred to as dahri   *
  * and double dahri in Bangla.                                  *
  ****************************************************************/
-const char *b_Dari = "\u0964";
-const char *b_DDari = "\u0965";
+std::string b_Dari = "\u0964";
+std::string b_DDari = "\u0965";
 
 /* Digits */
-const char *b_0 = "\u09E6";
-const char *b_1 = "\u09E7";
-const char *b_2 = "\u09E8";
-const char *b_3 = "\u09E9";
-const char *b_4 = "\u09EA";
-const char *b_5 = "\u09EB";
-const char *b_6 = "\u09EC";
-const char *b_7 = "\u09ED";
-const char *b_8 = "\u09EE";
-const char *b_9 = "\u09EF";
+std::string b_0 = "\u09E6";
+std::string b_1 = "\u09E7";
+std::string b_2 = "\u09E8";
+std::string b_3 = "\u09E9";
+std::string b_4 = "\u09EA";
+std::string b_5 = "\u09EB";
+std::string b_6 = "\u09EC";
+std::string b_7 = "\u09ED";
+std::string b_8 = "\u09EE";
+std::string b_9 = "\u09EF";
 
 /* Additions for Assamese */
-const char *b_RM = "\u09F0"; // BENGALI LETTER RA WITH MIDDLE DIAGONAL
-const char *b_RL = "\u09F1"; // BENGALI LETTER RA WITH LOWER DIAGONAL
+std::string b_RM = "\u09F0"; // BENGALI LETTER RA WITH MIDDLE DIAGONAL
+std::string b_RL = "\u09F1"; // BENGALI LETTER RA WITH LOWER DIAGONAL
 
 /* Currency signs */
-const char *b_CRTaka_M = "\u09F2"; // BENGALI RUPEE MARK = taka
-const char *b_CRTaka = "\u09F3"; // BENGALI RUPEE SIGN = Bangladeshi taka
+std::string b_CRTaka_M = "\u09F2"; // BENGALI RUPEE MARK = taka
+std::string b_CRTaka = "\u09F3"; // BENGALI RUPEE SIGN = Bangladeshi taka
 
 /* Historic symbols for fractional values */
-const char *bCurrencyNumerator_One = "\u09F4";
-const char *bCurrencyNumerator_Two = "\u09F5";
-const char *bCurrencyNumerator_Three = "\u09F6";
-const char *bCurrencyNumerator_Four = "\u09F7";
-const char *bCurrencyNumerator_Less = "\u09F8";
-const char *bCurrencyNumerator_Sixteen = "\u09F9";
+std::string bCurrencyNumerator_One = "\u09F4";
+std::string bCurrencyNumerator_Two = "\u09F5";
+std::string bCurrencyNumerator_Three = "\u09F6";
+std::string bCurrencyNumerator_Four = "\u09F7";
+std::string bCurrencyNumerator_Less = "\u09F8";
+std::string bCurrencyNumerator_Sixteen = "\u09F9";
 
 /* Sign */
-const char *bSign_Isshar = "\u09FA";
+std::string bSign_Isshar = "\u09FA";
 
 /* Historic currency sign */
-const char *bCurrencyGanda = "\u09FB";
+std::string bCurrencyGanda = "\u09FB";
 
 /* Unicode Addition */
-const char *ZWJ = "\u200D";
-const char *ZWNJ = "\u200C";
+std::string ZWJ = "\u200D";
+std::string ZWNJ = "\u200C";
 
 #endif /* end of include guard: BENGALICHARS_H */
