@@ -22,6 +22,7 @@
 #include <fstream>
 #include <string>
 #include "json.hpp"
+#include "methodphonetic.h"
 
 /* Core of Layout Management */
 
@@ -49,12 +50,18 @@ public:
 };
 
 class Layout {
+  /* Layout Method handler */
   LayoutMth *mth;
+
   /* File input handler */
   std::ifstream fin;
   /* Layout File */
   nlohmann::json lf;
+  /* Layout Descriptor */
   LayoutDesc lD;
+
+  // Available methods
+  MethodPhonetic mPh;
 
   /* Load Layout Description. Used internaly */
   void loadDesc();
@@ -63,8 +70,10 @@ class Layout {
 public:
   /* Load a layout from given @path */
   void loadLayout(std::string path);
+
   /* Get Layout Description */
   LayoutDesc getDesc();
+
   /* Send key event to selected method for further processing.
    * It is usually called from IM Engine
    */

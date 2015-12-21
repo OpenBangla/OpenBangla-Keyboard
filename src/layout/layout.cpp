@@ -16,72 +16,82 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /* Core of Layout Management */
+/* Core of Layout Management */
 
- #include "layout.h"
+#include "layout.h"
 
- Layout *gLayout;
+Layout *gLayout;
 
- void Layout::loadLayout(std::string path) {
-   // Check if we have already a opened file
-   if(fin.is_open()) fin.close();
+void Layout::loadLayout(std::string path) {
+  // Check if we have already a opened file
+  if(fin.is_open()) fin.close();
 
-   // Open the given layout file
-   fin.open(path, std::ifstream::in);
+  // Open the given layout file
+  fin.open(path, std::ifstream::in);
 
-   // Load Layout(Json) file
-   lf << fin;
-   // Set typing method
-   setMethod();
-   // Send changed layout to typing method
-   mth->setLayout(lf);
-   // Load it's Description
-   loadDesc();
- }
+  // Load Layout(Json) file
+  lf << fin;
+  // Load it's Description
+  loadDesc();
+  // Set typing method
+  setMethod();
+  // Send changed layout to typing method
+  mth->setLayout(lf);
+}
 
- void Layout::loadDesc() {
-   // Load Layout Description
-   // Layout File Type
-   std::string type = lf["info"]["type"];
-   if(type == "phonetic") {
-     lD.type = Layout_Phonetic;
-   } else {
-     lD.type = Layout_Fixed;
-   }
+void Layout::loadDesc() {
+  // Load Layout Description
+  // Layout File Type
+  std::string type = lf["info"]["type"];
+  if(type == "phonetic") {
+    lD.type = Layout_Phonetic;
+  } else {
+    lD.type = Layout_Fixed;
+  }
 
-   // Get values
-   int FileVer = lf["info"]["ver"];
-   std::string Name = lf["info"]["layout_name"];
-   std::string Ver = lf["info"]["layout_ver"];
-   std::string DevName = lf["info"]["layout_dev_name"];
-   std::string DevComment = lf["info"]["layout_dev_comment"];
-   // Layout File Version
-   lD.fileVer = FileVer;
-   // Layout Name
-   lD.name = Name;
-   // Layout Version
-   lD.ver = Ver;
-   // Layout Develper Name
-   lD.devName = DevName;
-   // Layout Developer Comment
-   lD.devComment = DevComment;
- }
+  // Get values
+  int FileVer = lf["info"]["ver"];
+  std::string Name = lf["info"]["layout"]["name"];
+  std::string Ver = lf["info"]["layout"]["version"];
+  std::string DevName = lf["info"]["layout"]["developer"]["name"];
+  std::string DevComment = lf["info"]["layout"]["developer"]["comment"];
+  // Layout File Version
+  lD.fileVer = FileVer;
+  // Layout Name
+  lD.name = Name;
+  // Layout Version
+  lD.ver = Ver;
+  // Layout Develper Name
+  lD.devName = DevName;
+  // Layout Developer Comment
+  lD.devComment = DevComment;
+}
 
- void Layout::setMethod() {
-   // TODO: implement
- }
+void Layout::setMethod() {
+  // Check layout type and set methods
+  if(lD.type == Layout_Phonetic) {
+    // Selected method is phonetic
+    mth = mPh; // Phonetic Method
+  } else {
+    // Selected method is fixed layout
+    // TODO: implement
+  }
+}
 
- bool Layout::sendKey(int lkey, bool lshift, bool lctrl, bool lalt) {
-   // Set modifiers
-   bool laltgr, lshiftaltgr;
-   // Don't catch Ctrl without Shift
-   if(lctrl || !lshift) { return false; }
-   if(lctrl && lalt) { laltgr = true; } else { laltgr = false; }
-   if(lshift && laltgr) { lshiftaltgr = true; } else { lshiftaltgr = false; }
-   return mth->processKey(lkey, lshift, laltgr, lshiftaltgr);
- }
+bool Layout::sendKey(int lkey, bool lshift, bool lctrl, bool lalt) {
+  // Set modifiers
+  bool laltgr, lshiftaltgr;
 
- LayoutDesc Layout::getDesc() {
-   // We have loaded Loaded LayoutDesc earlier, so just return it
-   return lD;
- }
+  // Don't catch Ctrl without Shift
+  if(lctrl || !lshift) { return false; }
+
+  if(lctrl && lalt) { laltgr = true; } else { laltgr = false; }
+  if(lshift && laltgr) { lshiftaltgr = true; } else { lshiftaltgr = false; }
+
+  return mth->processKey(lkey, lshift, laltgr, lshiftaltgr);
+}
+
+LayoutDesc Layout::getDesc() {
+  // We have loaded Loaded LayoutDesc earlier, so just return it
+  return lD;
+}
