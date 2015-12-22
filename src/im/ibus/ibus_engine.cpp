@@ -90,7 +90,6 @@ IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
 
 void start_setup(bool ibus) {
   IBusComponent *component;
-  IBusEngineDesc *engine_dec;
 
   ibus_init();
 
@@ -113,16 +112,16 @@ void start_setup(bool ibus) {
                                     "openbangla-keyboard"
                                   );
 
-    engine_dec = ibus_engine_desc_new( "OpenBangla",
-                                       "OpenBangla Keyboard",
-                                       "OpenBangla Keyboard IME for iBus",
-                                       "bn",
-                                       "GPL 3",
-                                       "See AboutBox",
-                                       "/home/mominul/experiment/avro-bangla.png",
-                                       "us"
-                                     );
-    ibus_component_add_engine(component, engine_dec);
+    ibus_component_add_engine(component,
+                              ibus_engine_desc_new( "OpenBangla",
+                                                    "OpenBangla Keyboard",
+                                                    "OpenBangla Keyboard IME for iBus",
+                                                    "bn",
+                                                    "GPL 3",
+                                                    "See AboutBox",
+                                                    "/home/mominul/experiment/avro-bangla.png",
+                                                    "us"
+                                                  ));
     ibus_bus_register_component(bus, component);
   }
   ibus_main();
