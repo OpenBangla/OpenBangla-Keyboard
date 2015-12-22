@@ -1,27 +1,27 @@
-SET(SOURCES_CPP
+set(SOURCES_CPP
     main.cpp)
-SET(SOURCES_HPP
+set(SOURCES_HPP
     log.h)
 
-INCLUDE_DIRECTORIES(3rdparty im layout)
+include_directories(3rdparty im layout)
 
 ## At first, set platform independent things
-LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/layout)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/layout)
 
 ## Platform depended things
-IF(OS_LINUX)
+if(OS_LINUX)
   ## Platform is Linux
-  INCLUDE_DIRECTORIES(im/ibus ${IBUS_INCLUDE_DIRS})
-  LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/im/ibus)
-  ADD_SUBDIRECTORY(im/ibus)
-ENDIF(OS_LINUX)
+  include_directories(im/ibus ${IBUS_INCLUDE_DIRS})
+  link_directories(${CMAKE_CURRENT_BINARY_DIR}/im/ibus)
+  add_subdirectory(im/ibus)
+endif(OS_LINUX)
 
 ## Include subdirectories
-ADD_SUBDIRECTORY(layout)
+add_subdirectory(layout)
 
-ADD_EXECUTABLE(OpenBangla-Keyboard ${SOURCES_CPP} ${SOURCES_HPP})
-TARGET_LINK_LIBRARIES(OpenBangla-Keyboard Layout)
+add_executable(OpenBangla-Keyboard ${SOURCES_CPP} ${SOURCES_HPP})
+target_link_libraries(OpenBangla-Keyboard Layout)
 
-IF(OS_LINUX)
-  TARGET_LINK_LIBRARIES(OpenBangla-Keyboard IM_iBus ${IBUS_LIBRARIES})
-ENDIF(OS_LINUX)
+if(OS_LINUX)
+  target_link_libraries(OpenBangla-Keyboard IM_iBus ${IBUS_LIBRARIES})
+endif(OS_LINUX)

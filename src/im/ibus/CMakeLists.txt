@@ -1,3 +1,3 @@
-INCLUDE_DIRECTORIES(. ../../ ../../layout ${IBUS_INCLUDE_DIRS})
-ADD_LIBRARY(IM_iBus ibus_engine.cpp
+include_directories(. ../../ ../../layout ${IBUS_INCLUDE_DIRS})
+add_library(IM_iBus ibus_engine.cpp
                     ibus_keycode.h)
