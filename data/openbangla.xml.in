@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- filename: openbangla.xml -->
+<!-- XML specification for iBus -->
+<component>
+    <name>org.freedesktop.IBus.OpenBangla</name>
+    <description>OpenBangla Keyboard</description>
+    <exec>@LIBEXEC_DIR@/OpenBangla-Keyboard --ibus</exec>
+    <version>1.0</version>
+    <author>See AboutBox</author>
+    <license>GPL 3</license>
+    <homepage>http://openbangla.github.io</homepage>
+    <textdomain>openbangla-keyboard</textdomain>
+    <engines>
+        <engine>
+            <name>OpenBangla</name>
+            <language>bn</language>
+            <license>GPL 3</license>
+            <author>See AboutBox</author>
+            <icon>@PROJECT_DATADIR@/icons/OpenBangla-Keyboard.png</icon>
+            <layout>us</layout>
+            <longname>OpenBangla Keyboard</longname>
+            <description>OpenBangla Keyboard IME for iBus</description>
+            <rank>0</rank>
+        </engine>
+    </engines>
+</component>

@@ -107,7 +107,7 @@ void start_setup(bool ibus) {
                                     "1.0",
                                     "GPL 3",
                                     "See AboutBox",
-                                    "https://github.com/OpenBangla/OpenBangla-Keyboard",
+                                    "http://openbangla.github.io",
                                     "/home/mominul/experiment/OpenBnagla-Keyboard",
                                     "openbangla-keyboard"
                                   );
