@@ -50,7 +50,7 @@ void Layout::loadDesc() {
   }
 
   // Get values
-  int FileVer = lf["info"]["ver"];
+  int FileVer = lf["info"]["version"];
   std::string Name = lf["info"]["layout"]["name"];
   std::string Ver = lf["info"]["layout"]["version"];
   std::string DevName = lf["info"]["layout"]["developer"]["name"];

@@ -34,7 +34,7 @@ std::string PhoneticParser::parse(std::string input) {
   std::string fixed = fixString(input);
   std::string output;
 
-  json patterns = layout["patterns"];
+  json patterns = layout["layout"]["patterns"];
   std::string _find = patterns[0]["find"];
   int maxPatternLength = _find.length();
 
@@ -199,12 +199,12 @@ std::string PhoneticParser::fixString(std::string input) {
 }
 
 bool PhoneticParser::isVowel(char c) {
-  std::string vowel = layout["vowel"];
+  std::string vowel = layout["layout"]["vowel"];
   return vowel.find(smallCap(c)) != std::string::npos;
 }
 
 bool PhoneticParser::isConsonant(char c) {
-  std::string cons = layout["consonant"];
+  std::string cons = layout["layout"]["consonant"];
   return cons.find(smallCap(c)) != std::string::npos;
 }
 
@@ -218,6 +218,6 @@ bool PhoneticParser::isExact(std::string needle, std::string heystack, int start
 }
 
 bool PhoneticParser::isCaseSensitive(char c) {
-  std::string csen = layout["casesensitive"];
+  std::string csen = layout["layout"]["casesensitive"];
   return csen.find(smallCap(c)) != std::string::npos;
 }
