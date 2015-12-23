@@ -21,7 +21,7 @@
 
 int main(int argc, char *argv []) {
   gLayout = new Layout();
-  gLayout->loadLayout( PKGDATADIR "/layouts/avrophonetic.json")
+  gLayout->loadLayout( PKGDATADIR "/layouts/avrophonetic.json");
   if (argv[1] = "--ibus") {
     im_start(true);
   } else {
