@@ -24,4 +24,7 @@ target_link_libraries(OpenBangla-Keyboard Layout)
 
 if(OS_LINUX)
   target_link_libraries(OpenBangla-Keyboard IM_iBus ${IBUS_LIBRARIES})
+  install(TARGETS OpenBangla-Keyboard
+     RUNTIME DESTINATION ${LIBEXEC_DIR}
+  )
 endif(OS_LINUX)

@@ -108,7 +108,7 @@ void start_setup(bool ibus) {
                                     "GPL 3",
                                     "See AboutBox",
                                     "http://openbangla.github.io",
-                                    "/home/mominul/experiment/OpenBnagla-Keyboard",
+                                    LIBEXEC_DIR "/OpenBangla-Keyboard --ibus",
                                     "openbangla-keyboard"
                                   );
 
@@ -119,7 +119,7 @@ void start_setup(bool ibus) {
                                                     "bn",
                                                     "GPL 3",
                                                     "See AboutBox",
-                                                    "/home/mominul/experiment/avro-bangla.png",
+                                                    PKGDATADIR "/icons/OpenBangla-Keyboard.png",
                                                     "us"
                                                   ));
     ibus_bus_register_component(bus, component);

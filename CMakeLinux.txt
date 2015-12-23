@@ -1,0 +1,32 @@
+## Additions for Linux ##
+
+cmake_policy(SET CMP0005 OLD)
+
+## Set Directories for installing and storing files
+add_definitions(-DCMAKE_INSTALL_PREFIX='"${CMAKE_INSTALL_PREFIX}"')
+
+if(NOT DEFINED datadir)
+    set(datadir "${CMAKE_INSTALL_PREFIX}/share")
+endif()
+add_definitions(-DDATADIR='"${datadir}"')
+
+if(NOT DEFINED LIBEXEC_DIR)
+    set(LIBEXEC_DIR "${CMAKE_INSTALL_PREFIX}/libexec")
+endif()
+add_definitions(-DLIBEXEC_DIR='"${LIBEXEC_DIR}"')
+
+if(NOT DEFINED PROJECT_DATADIR)
+    set(PROJECT_DATADIR "${datadir}/openbangla-keyboard")
+ENDIF(NOT DEFINED PROJECT_DATADIR)
+add_definitions(-DPROJECT_DATADIR='"${PROJECT_DATADIR}"')
+add_definitions(-DPKGDATADIR='"${PROJECT_DATADIR}"')
+
+## Configure the XML file
+configure_file(${CMAKE_SOURCE_DIR}/data/openbangla.xml.in ${CMAKE_BINARY_DIR}/data/openbangla.xml)
+
+## Install things
+install(FILES ${CMAKE_SOURCE_DIR}/data/OpenBangla-Keyboard.png
+DESTINATION  ${PROJECT_DATADIR}/icons)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/data/openbangla.xml
+    DESTINATION "${datadir}/ibus/component")
