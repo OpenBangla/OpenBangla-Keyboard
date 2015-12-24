@@ -19,8 +19,12 @@
 /* Core of Layout Management */
 
 #include "layout.h"
+#include "methodphonetic.h"
 
 Layout *gLayout;
+
+// Available typing methods
+MethodPhonetic mPh;
 
 void Layout::loadLayout(std::string path) {
   // Check if we have already a opened file
@@ -71,7 +75,7 @@ void Layout::setMethod() {
   // Check layout type and set methods
   if(lD.type == Layout_Phonetic) {
     // Selected method is phonetic
-    mth = mPh; // Phonetic Method
+    mth = &mPh; // Phonetic Method
   } else {
     // Selected method is fixed layout
     // TODO: implement
@@ -83,7 +87,7 @@ bool Layout::sendKey(int lkey, bool lshift, bool lctrl, bool lalt) {
   bool laltgr, lshiftaltgr;
 
   // Don't catch Ctrl without Shift
-  if(lctrl || !lshift) { return false; }
+  if(lctrl && !lshift) { return false; }
 
   if(lctrl && lalt) { laltgr = true; } else { laltgr = false; }
   if(lshift && laltgr) { lshiftaltgr = true; } else { lshiftaltgr = false; }

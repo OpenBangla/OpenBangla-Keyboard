@@ -32,6 +32,9 @@ std::map<guint,int> key;
 
 void intKeycode() {
   // Begin Alphanumeric Zone
+  key[IBUS_KEY_grave] = VC_BACKQUOTE;
+  key[IBUS_KEY_asciitilde] = VC_BACKQUOTE;
+
   key[IBUS_KEY_0] = VC_0;
   key[IBUS_KEY_1] = VC_1;
   key[IBUS_KEY_2] = VC_2;
@@ -43,7 +46,6 @@ void intKeycode() {
   key[IBUS_KEY_8] = VC_8;
   key[IBUS_KEY_9] = VC_9;
 
-  // If these occured, emulate shift key
   key[IBUS_KEY_parenright] = VC_0;
   key[IBUS_KEY_exclam] = VC_1;
   key[IBUS_KEY_at] = VC_2;
@@ -65,12 +67,6 @@ void intKeycode() {
 
   key[IBUS_KEY_Tab] = VC_TAB;
 
-  /* You may notice that we have mapped
-   * uppercase and lowercase keys with same
-   * keys, becase we would emulate shift key
-   * when needed.
-   */
-  // If occured, emulate shift key
   key[IBUS_KEY_A] = VC_A;
   key[IBUS_KEY_B] = VC_B;
   key[IBUS_KEY_C] = VC_C;
@@ -98,7 +94,6 @@ void intKeycode() {
   key[IBUS_KEY_Y] = VC_Y;
   key[IBUS_KEY_Z] = VC_Z;
 
-  // If occured, send without shift key
   key[IBUS_KEY_a] = VC_A;
   key[IBUS_KEY_b] = VC_B;
   key[IBUS_KEY_c] = VC_C;
@@ -108,7 +103,7 @@ void intKeycode() {
   key[IBUS_KEY_g] = VC_G;
   key[IBUS_KEY_h] = VC_H;
   key[IBUS_KEY_i] = VC_I;
-  key[IBUS_KEY_J] = VC_J;
+  key[IBUS_KEY_j] = VC_J;
   key[IBUS_KEY_k] = VC_K;
   key[IBUS_KEY_l] = VC_L;
   key[IBUS_KEY_m] = VC_M;
@@ -152,6 +147,7 @@ void intKeycode() {
 
   key[IBUS_KEY_Return] = VC_ENTER;
   key[IBUS_KEY_space] = VC_SPACE;
+  // End Alphanumeric Zone
 
   // Begin Cursor Key Zone
   key[IBUS_KEY_Left] = VC_LEFT;
@@ -167,7 +163,7 @@ void intKeycode() {
   key[IBUS_KEY_KP_Equal] = VC_KP_EQUALS;
   key[IBUS_KEY_KP_Add] = VC_KP_ADD;
   key[IBUS_KEY_KP_Enter] = VC_KP_ENTER;
-  key[IBUS_KEY_KP_Separator] = VC_KP_SEPARATOR;
+  key[IBUS_KEY_KP_Decimal] = VC_KP_DECIMAL;
 
   key[IBUS_KEY_KP_1] = VC_KP_1;
   key[IBUS_KEY_KP_2] = VC_KP_2;
@@ -191,7 +187,7 @@ int ibus_keycode(guint k) {
   catch(std::out_of_range)
   {
     // The key is not mapped - means that we don't needed the UNKNOWN key!
-    LOG_DEBUG("[IM:iBus]: Got unknown keycode. Mapping to VC_UNKNOWN");
+    LOG_DEBUG("[IM:iBus]: Got unknown keycode. Mapping to VC_UNKNOWN\n");
     return VC_UNKNOWN;
   }
 }

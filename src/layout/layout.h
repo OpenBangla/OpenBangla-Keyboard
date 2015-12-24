@@ -22,7 +22,7 @@
 #include <fstream>
 #include <string>
 #include "json.hpp"
-#include "methodphonetic.h"
+//#include "methodphonetic.h"
 
 /* Core of Layout Management */
 
@@ -59,9 +59,6 @@ class Layout {
   nlohmann::json lf;
   /* Layout Descriptor */
   LayoutDesc lD;
-
-  // Available methods
-  MethodPhonetic mPh;
 
   /* Load Layout Description. Used internaly */
   void loadDesc();

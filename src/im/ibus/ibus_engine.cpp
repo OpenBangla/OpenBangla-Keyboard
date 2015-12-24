@@ -28,13 +28,13 @@
 static IBusBus *bus = NULL;
 static IBusFactory *factory = NULL;
 static IBusEngine *engine = NULL;
-static IBusLookupTable *table = NULL;
-static gint id = 0;
-static guint candidateSel = 0;
+IBusLookupTable *table = NULL;
+gint id = 0;
+guint candidateSel = 0;
 
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
   ibus_quit();
-  LOG_INFO("[IM:iBus]: Bus disconnected!");
+  LOG_INFO("[IM:iBus]: Bus disconnected!\n");
 }
 
 gboolean ibus_process_key_event_cb(IBusEngine *engine,
@@ -56,15 +56,17 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
   if(state & IBUS_MOD1_MASK) kalt = true;
 
   // Send the key to layout management
-  return (gboolean)gLayout->sendKey(ibus_keycode(keyval), kshift, kctrl, kalt);
+  bool ret = gLayout->sendKey(ibus_keycode(keyval), kshift, kctrl, kalt);
+  LOG_DEBUG("[IM:iBus]: Layout Management %s event\n",ret?"accepted":"rejected");
+  return (gboolean)ret;
 }
 
 void ibus_enable_cb(IBusEngine *engine) {
-  LOG_INFO("[IM:iBus]: IM enabled");
+  LOG_INFO("[IM:iBus]: IM enabled\n");
 }
 
 void ibus_disable_cb(IBusEngine *engine) {
-  LOG_INFO("[IM:iBus]: IM disabled");
+  LOG_INFO("[IM:iBus]: IM disabled\n");
 }
 
 IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
@@ -76,10 +78,13 @@ IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
                             path,
                             ibus_bus_get_connection(bus) );
 
+  // Setup Lookup table
   table = ibus_lookup_table_new (9, 0, TRUE, TRUE);
+  ibus_lookup_table_set_orientation(table, IBUS_ORIENTATION_HORIZONTAL);
+  g_object_ref_sink (table);
 
-  LOG_INFO("[IM:iBus]: Creating IM Engine");
-  LOG_DEBUG("[IM:iBus]: Creating IM Engine with name:%s and id:%i",(char*)engine_name, id);
+  LOG_INFO("[IM:iBus]: Creating IM Engine\n");
+  LOG_DEBUG("[IM:iBus]: Creating IM Engine with name:%s and id:%d\n",(char*)engine_name, id);
 
   g_signal_connect(engine, "process-key-event", G_CALLBACK(ibus_process_key_event_cb), NULL);
   g_signal_connect(engine, "enable", G_CALLBACK(ibus_enable_cb), NULL);
@@ -136,18 +141,23 @@ void ibus_update_preedit() {
 }
 
 void im_table_sel_inc() {
-  guint lastIndex = ibus_lookup_table_get_number_of_candidates(table) - 1;
-  if((candidateSel + 1) > lastIndex) { candidateSel -= 1; }
+  guint lastIndex = ibus_lookup_table_get_number_of_candidates(table) -1;
+  if((candidateSel + 1) > lastIndex) {
+    candidateSel = -1;
+  }
   ++candidateSel;
   ibus_update_preedit();
 }
 
 void im_table_sel_dec() {
-  if((candidateSel - 1) < 0) {
-    candidateSel = ibus_lookup_table_get_number_of_candidates(table);
+  if(candidateSel ==  0) {
+    candidateSel = ibus_lookup_table_get_number_of_candidates(table) -1;
+    ibus_update_preedit();
+    return;
+  } else {
+    --candidateSel;
+    ibus_update_preedit();
   }
-  --candidateSel;
-  ibus_update_preedit();
 }
 
 void im_update_suggest(std::vector<std::string> lst, std::string typed) {
@@ -177,10 +187,11 @@ void im_reset() {
 void im_commit() {
   IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
   ibus_engine_commit_text(engine,txt);
-  LOG_DEBUG("[IM:iBus]: String commited: %s",(char*)ibus_text_get_text(txt));
   im_reset();
+  candidateSel = 0;
 }
 
 void im_start(bool executed) {
+  LOG_DEBUG("[IM:iBus]: Started IM facilities.\n");
   start_setup(executed);
 }

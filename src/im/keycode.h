@@ -26,7 +26,7 @@
 /* From libUIOHook */
 
 // Begin Alphanumeric Zone
-#define VC_BACKQUOTE							0x0029
+#define VC_BACKQUOTE							0x0029  // '`` , '~'
 
 #define VC_1									0x0002
 #define VC_2									0x0003
@@ -74,7 +74,7 @@
 
 #define VC_OPEN_BRACKET							0x001A	// '[' , '{'
 #define VC_CLOSE_BRACKET						0x001B	// ']' , '}'
-#define VC_BACK_SLASH							0x002B	// '\'
+#define VC_BACK_SLASH							0x002B	// '\' , '|'
 
 #define VC_SEMICOLON							0x0027	// ';'
 #define VC_QUOTE								0x0028 // ''' , '"'
@@ -114,7 +114,7 @@
 #define VC_KP_EQUALS							0x0E0D
 #define VC_KP_ADD								0x004E
 #define VC_KP_ENTER								0x0E1C
-#define VC_KP_SEPARATOR							0x0053
+#define VC_KP_DECIMAL							0x0053
 
 #define VC_KP_1									0x004F
 #define VC_KP_2									0x0050

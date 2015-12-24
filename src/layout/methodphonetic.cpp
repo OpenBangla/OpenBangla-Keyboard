@@ -17,6 +17,7 @@
  */
 
 #include "im.h"
+#include "log.h"
 #include "keycode.h"
 #include "methodphonetic.h"
 
@@ -39,6 +40,21 @@ void MethodPhonetic::updateCache() {
 
 bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr) {
   switch(key) {
+    // Begin Alphanumeric Zone
+    case VC_BACKQUOTE:
+    if(shift) {
+      EnglishT += "~";
+      updateCache();
+      return true;
+    } else if(!shift) {
+      EnglishT += "`";
+      updateCache();
+      return true;
+    } else if(altgr || shiftaltgr) {
+      return false;
+    }
+    break;
+
     case VC_1:
       if(shift) {
         EnglishT += "!";
@@ -97,7 +113,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         updateCache();
         return true;
       } else if(!shift) {
-        EnglishT += "4";
+        EnglishT += "5";
         updateCache();
         return true;
       } else if(altgr || shiftaltgr) {
@@ -195,7 +211,8 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       }
    case VC_BACKSPACE:
       if(EnglishT.length() > 0) {
-        EnglishT.substr(0, EnglishT.length()-1);
+        std::string ET = EnglishT.substr(0, EnglishT.length()-1);
+        EnglishT = ET;
         updateCache();
         if(EnglishT.length() <= 0) {
           im_reset();
@@ -544,6 +561,46 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       }
       break;
 
+   case VC_OPEN_BRACKET:
+      if(shift) {
+        EnglishT += "{";
+        updateCache();
+        return true;
+      } else if(!shift) {
+        EnglishT += "[";
+        updateCache();
+        return true;
+      } else if(altgr || shiftaltgr) {
+        return false;
+      }
+      break;
+   case VC_CLOSE_BRACKET:
+      if(shift) {
+        EnglishT += "}";
+        updateCache();
+        return true;
+      } else if(!shift) {
+        EnglishT += "]";
+        updateCache();
+        return true;
+      } else if(altgr || shiftaltgr) {
+        return false;
+      }
+      break;
+   case VC_BACK_SLASH:
+      if(shift) {
+        EnglishT += "|";
+        updateCache();
+        return true;
+      } else if(!shift) {
+        EnglishT += "\\";
+        updateCache();
+        return true;
+      } else if(altgr || shiftaltgr) {
+        return false;
+      }
+      break;
+
    case VC_SEMICOLON:
       if(shift) {
         EnglishT += ":";
@@ -574,7 +631,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       if(EnglishT.length() > 0) {
         im_commit();
         EnglishT = "";
-        return true;
+        return false; // Close candidate window and ungrab the event
       } else {
         return false;
       }
@@ -623,15 +680,33 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       if(EnglishT.length() > 0) {
         im_commit();
         EnglishT = "";
+        return false; // Close candidate window and ungrab the event
+      } else {
+        return false;
+      }
+      break;
+   // End Alphanumeric Zone
+
+   // Begin Cursor Key Zone
+   case VC_UP:
+      if(EnglishT.length() > 0) {
+        im_table_sel_inc();
         return true;
       } else {
         return false;
       }
       break;
-
    case VC_RIGHT:
       if(EnglishT.length() > 0) {
         im_table_sel_inc();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_DOWN:
+      if(EnglishT.length() > 0) {
+        im_table_sel_dec();
         return true;
       } else {
         return false;
@@ -645,7 +720,9 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         return false;
       }
       break;
+   // End Cursor Key Zone
 
+   // Begin Numeric Zone
    case VC_KP_DIVIDE:
       if(shift || altgr || shiftaltgr) {
         return false;
@@ -654,6 +731,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         updateCache();
         return true;
       }
+      break;
    case VC_KP_MULTIPLY:
       if(shift || altgr || shiftaltgr) {
         return false;
@@ -662,6 +740,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         updateCache();
         return true;
       }
+      break;
    case VC_KP_SUBTRACT:
       if(shift || altgr || shiftaltgr) {
         return false;
@@ -670,6 +749,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         updateCache();
         return true;
       }
+      break;
    case VC_KP_ADD:
       if(shift || altgr || shiftaltgr) {
         return false;
@@ -678,25 +758,121 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
         updateCache();
         return true;
       }
+      break;
    case VC_KP_ENTER:
       if(EnglishT.length() > 0) {
         im_commit();
         EnglishT = "";
+        return false; // Close candidate window and ungrab the event
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_DECIMAL:
+      if(shift || altgr || shiftaltgr) {
+        return false;
+      } else {
+        EnglishT += ".";
+        updateCache();
+        return true;
+      }
+      break;
+
+   case VC_KP_1:
+      if(!shift) {
+        EnglishT += "1";
+        updateCache();
         return true;
       } else {
         return false;
       }
-   /*case VC_KP_SEPARATOR:
-      if(shift || altgr || shiftaltgr) {
-        return false;
+      break;
+   case VC_KP_2:
+      if(!shift) {
+        EnglishT += "2";
+        updateCache();
+        return true;
       } else {
-        EnglishT += "";
-      }*/
-
-   /* TODO: Add Numpad */
+        return false;
+      }
+      break;
+   case VC_KP_3:
+      if(!shift) {
+        EnglishT += "3";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_4:
+      if(!shift) {
+        EnglishT += "4";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_5:
+      if(!shift) {
+        EnglishT += "5";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_6:
+      if(!shift) {
+        EnglishT += "6";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_7:
+      if(!shift) {
+        EnglishT += "7";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_8:
+      if(!shift) {
+        EnglishT += "8";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_9:
+      if(!shift) {
+        EnglishT += "9";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   case VC_KP_0:
+      if(!shift) {
+        EnglishT += "0";
+        updateCache();
+        return true;
+      } else {
+        return false;
+      }
+      break;
+   // End Numeric Zone
 
    case VC_UNKNOWN:
       return false;
+      break;
    default:
       return false;
    }

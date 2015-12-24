@@ -28,8 +28,6 @@ std::vector<std::string> PhoneticSuggestion::Suggest(std::string cache) {
   std::vector<std::string> list;
 
   list.clear();
-  std::string bangla = parser.parse(cache);
-  list.push_back(bangla);
-
+  list.push_back(parser.parse(cache));
   return list;
 }

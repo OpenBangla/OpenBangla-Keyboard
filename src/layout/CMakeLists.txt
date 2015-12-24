@@ -1,4 +1,4 @@
-include_directories(. ../im )
+include_directories(. ../im ../ )
 add_library(Layout
             layout.cpp
             layout.h
