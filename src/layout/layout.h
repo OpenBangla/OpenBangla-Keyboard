@@ -22,7 +22,6 @@
 #include <fstream>
 #include <string>
 #include "json.hpp"
-//#include "methodphonetic.h"
 
 /* Core of Layout Management */
 
