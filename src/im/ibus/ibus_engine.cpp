@@ -57,7 +57,7 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
 
   // Send the key to layout management
   bool ret = gLayout->sendKey(ibus_keycode(keyval), kshift, kctrl, kalt);
-  LOG_DEBUG("[IM:iBus]: Layout Management %s event\n",ret?"accepted":"rejected");
+  LOG_DEBUG("[IM:iBus]: Layout Management %s the event\n",ret?"accepted":"rejected");
   return (gboolean)ret;
 }
 
@@ -182,6 +182,12 @@ void im_reset() {
   ibus_engine_hide_preedit_text(engine);
   ibus_engine_hide_auxiliary_text(engine);
   ibus_engine_hide_lookup_table(engine);
+}
+
+std::string im_get_selection() {
+  IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
+  std::string ret = (char*)txt->text;
+  return ret;
 }
 
 void im_commit() {

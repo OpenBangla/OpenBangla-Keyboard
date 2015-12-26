@@ -50,6 +50,9 @@ void im_table_sel_dec();
 /* Reset IM functions */
 void im_reset();
 
+/* Get the current selection */
+std::string im_get_selection();
+
 void im_forward_key();
 
 #endif /* end of include guard: IM_H */
