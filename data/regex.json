@@ -855,5 +855,5 @@
   ],
   "vowel": "aeiou",
   "consonant": "bcdfghjklmnpqrstvwxyz",
-  "casesensitive": "|()[]{}^$*+?.~!@#%&-_='\";<>/\\,:`"
+  "ignore": "|()[]{}^$*+?.~!@#%&-_='\";<>/\\,:`"
 }

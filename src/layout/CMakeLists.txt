@@ -5,5 +5,7 @@ add_library(Layout
             methodphonetic.cpp
             phoneticparser.cpp
             phoneticparser.h
+            regexparser.cpp
+            regexparser.h
             phoneticsuggestion.cpp
             phoneticsuggestion.h)

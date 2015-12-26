@@ -14,26 +14,27 @@
   *  OpenBangla Keyboard.
   *  For showing respect to the Avro project and Rifat Nabi, I am
   *  releasing this code under MPL 2.0.
-  *  So this code is now dual licensed under the MPL 2 and the GNU GPL 3.
+  *  So this is code now dual licensed under the MPL 2 and the GNU GPL 3.
   *  If you have any questions about this matter, please send e-mail to
   *  me at described above.
   *  http://www.gnu.org/licenses/license-list.en.html#MPL-2.0
   */
+#ifndef REGEX_PARSER_H
+#define REGEX_PARSER_H
 
-#ifndef PHONETIC_PARSER_H
-#define PHONETIC_PARSER_H
-
+#include <fstream>
 #include <string>
 #include "json.hpp"
 
-class PhoneticParser {
+class RegexParser {
 private:
-  nlohmann::json layout;
+  std::ifstream fin;
+  nlohmann::json grammar;
 
   nlohmann::json patterns;
   std::string vowel;
   std::string cons;
-  std::string csen;
+  std::string ign;
   int maxPatternLength;
 
   char to_char(std::string a);
@@ -44,12 +45,12 @@ private:
   bool isConsonant(char c);
   bool isPunctuation(char c);
   bool isExact(std::string needle, std::string heystack, int start, int end, bool strnot);
-  bool isCaseSensitive(char c);
+  bool isIgnore(char c);
+  std::string cleanString(std::string input);
 public:
-  ~PhoneticParser();
-  void setLayout(nlohmann::json l);
+  RegexParser();
+  ~RegexParser();
   std::string parse(std::string input);
-  std::string fixString(std::string input);
 };
 
-#endif /* end of include guard: PHONETIC_PARSER_H */
+#endif /* end of include guard: REGEX_PARSER_H */

@@ -20,26 +20,34 @@
   *  http://www.gnu.org/licenses/license-list.en.html#MPL-2.0
   */
 
-#include "phoneticparser.h"
+#include "regexparser.h"
 
 using namespace nlohmann;
 
-void PhoneticParser::setLayout(json l) {
-  layout = l;
-  patterns = layout["layout"]["patterns"];
+RegexParser::RegexParser() {
+  fin.open(PKGDATADIR "/data/regex.json", std::ifstream::in);
+
+  grammar << fin;
+
+  patterns = grammar["patterns"];
   std::string _find = patterns[0]["find"];
   maxPatternLength = _find.length();
-  vowel = layout["layout"]["vowel"];
-  cons = layout["layout"]["consonant"];
-  csen = layout["layout"]["casesensitive"];
+  vowel = grammar["vowel"];
+  cons = grammar["consonant"];
+  ign = grammar["ignore"];
 }
 
-PhoneticParser::~PhoneticParser() {}
+RegexParser::~RegexParser() {
+  // Close the file handler
+  fin.close();
+}
 
-std::string PhoneticParser::parse(std::string input) {
-  std::string fixed = fixString(input);
+std::string RegexParser::parse(std::string input) {
+  // Check
+  if(input.length() == 0) return input;
+
+  std::string fixed = cleanString(input);
   std::string output;
-
 
   int len = fixed.length();
   for(int cur = 0; cur < len; ++cur) {
@@ -144,6 +152,7 @@ std::string PhoneticParser::parse(std::string input) {
                 if(replace) {
                   std::string rl = rule["replace"];
                   output += rl;
+                  output += "(্[যবম])?(্?)([ঃঁ]?)";
                   cur = end - 1;
                   matched = true;
                   break;
@@ -156,6 +165,7 @@ std::string PhoneticParser::parse(std::string input) {
             // Default
             std::string rl = pattern["replace"];
             output += rl;
+            output += "(্[যবম])?(্?)([ঃঁ]?)";
             cur = end - 1;
             matched = true;
             break;
@@ -180,44 +190,42 @@ std::string PhoneticParser::parse(std::string input) {
 }
 
 /* Convert to their returning type. Warning: We only convert one character! */
-char PhoneticParser::to_char(std::string a) {const char* b = a.c_str(); char r = *b; return r;}
-std::string PhoneticParser::to_str(char a) {std::string r; r = a; return r;}
+char RegexParser::to_char(std::string a) {const char* b = a.c_str(); char r = *b; return r;}
+std::string RegexParser::to_str(char a) {std::string r; r = a; return r;}
 
-char PhoneticParser::smallCap(char letter) {
+char RegexParser::smallCap(char letter) {
     std::string res = to_str(letter);
     std::transform(res.begin(), res.end(), res.begin(), ::tolower);
     return to_char(res);
 }
 
-std::string PhoneticParser::fixString(std::string input) {
+std::string RegexParser::cleanString(std::string input) {
   std::string fixed;
   for(const auto& c : input) {
-    if(isCaseSensitive(c)) {
-      fixed += c;
-    } else {
+    if(!isIgnore(c)) {
       fixed += smallCap(c);
     }
   }
   return fixed;
 }
 
-bool PhoneticParser::isVowel(char c) {
+bool RegexParser::isVowel(char c) {
   return vowel.find(smallCap(c)) != std::string::npos;
 }
 
-bool PhoneticParser::isConsonant(char c) {
+bool RegexParser::isConsonant(char c) {
   return cons.find(smallCap(c)) != std::string::npos;
 }
 
-bool PhoneticParser::isPunctuation(char c) {
+bool RegexParser::isPunctuation(char c) {
   return (!(isVowel(c) || isConsonant(c)));
 }
 
-bool PhoneticParser::isExact(std::string needle, std::string heystack, int start, int end, bool strnot) {
+bool RegexParser::isExact(std::string needle, std::string heystack, int start, int end, bool strnot) {
   int len = end - start;
   return ((start >= 0 && end < heystack.length() && (heystack.substr(start, len)  == needle)) ^ strnot);
 }
 
-bool PhoneticParser::isCaseSensitive(char c) {
-  return csen.find(smallCap(c)) != std::string::npos;
+bool RegexParser::isIgnore(char c) {
+  return ign.find(smallCap(c)) != std::string::npos;
 }
