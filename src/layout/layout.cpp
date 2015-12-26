@@ -26,6 +26,11 @@ Layout *gLayout;
 // Available typing methods
 MethodPhonetic mPh;
 
+Layout::~Layout() {
+  // Close the file handler
+  fin.close();
+}
+
 void Layout::loadLayout(std::string path) {
   // Check if we have already a opened file
   if(fin.is_open()) fin.close();

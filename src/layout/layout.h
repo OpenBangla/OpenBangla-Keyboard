@@ -64,6 +64,8 @@ class Layout {
   /* Set typing method. Used internaly */
   void setMethod();
 public:
+  ~Layout();
+
   /* Load a layout from given @path */
   void loadLayout(std::string path);
 

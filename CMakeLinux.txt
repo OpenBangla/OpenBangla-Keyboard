@@ -31,5 +31,8 @@ DESTINATION  ${PROJECT_DATADIR}/icons)
 install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
 DESTINATION  ${PROJECT_DATADIR}/layouts)
 
+install(FILES ${CMAKE_SOURCE_DIR}/data/autocorrect.json
+DESTINATION  ${PROJECT_DATADIR}/data)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/data/openbangla.xml
     DESTINATION "${datadir}/ibus/component")

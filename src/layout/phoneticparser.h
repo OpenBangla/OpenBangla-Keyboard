@@ -31,7 +31,6 @@ private:
   nlohmann::json layout;
 
   char smallCap(char letter);
-  std::string fixString(std::string input);
   bool isVowel(char c);
   bool isConsonant(char c);
   bool isPunctuation(char c);
@@ -41,6 +40,7 @@ public:
   ~PhoneticParser();
   void setLayout(nlohmann::json l);
   std::string parse(std::string input);
+  std::string fixString(std::string input);
 };
 
 #endif /* end of include guard: PHONETIC_PARSER_H */

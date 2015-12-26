@@ -26,9 +26,13 @@
 class PhoneticSuggestion {
 private:
   PhoneticParser parser;
+  nlohmann::json autodict;
 public:
+  PhoneticSuggestion();
   void setLayout(nlohmann::json lay);
   std::vector<std::string> Suggest(std::string cache);
+
+  std::string getAutoCorrect(std::string word);
 };
 
 #endif /* end of include guard: PHONETIC_SUGGESTION_H */
