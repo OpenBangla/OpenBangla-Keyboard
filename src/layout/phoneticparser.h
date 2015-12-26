@@ -30,6 +30,12 @@ class PhoneticParser {
 private:
   nlohmann::json layout;
 
+  nlohmann::json patterns;
+  std::string vowel;
+  std::string cons;
+  std::string csen;
+  int maxPatternLength;
+
   char smallCap(char letter);
   bool isVowel(char c);
   bool isConsonant(char c);
