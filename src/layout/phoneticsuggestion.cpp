@@ -19,8 +19,6 @@
 #include <fstream>
 #include "phoneticsuggestion.h"
 
-/* TODO: Add Phonetic facilities eg Dictonary suggestion */
-
 PhoneticSuggestion::PhoneticSuggestion() {
   std::ifstream fin;
   // Load Auto Correct Dictionary
@@ -51,5 +49,10 @@ std::vector<std::string> PhoneticSuggestion::Suggest(std::string cache) {
   // Add Auto Correct
   if(getAutoCorrect(cache) != "") list.push_back(getAutoCorrect(cache));
   list.push_back(parser.parse(cache));
+
+  std::vector<std::string> dbb = db.find(cache);
+  for(auto& str : dbb) {
+    list.push_back(str);
+  }
   return list;
 }

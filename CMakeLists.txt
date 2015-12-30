@@ -6,6 +6,9 @@ set(APP_NAME "OpenBangla-Keyboard")
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 11)
 
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Sql REQUIRED)
+
 # Get system information. WIN32 and APPLE are defined by CMake
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   set(OS_LINUX 1)
@@ -15,7 +18,7 @@ endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 if(OS_LINUX)
   # Include our Linux specific additions
   include(CMakeLinux.txt)
-  
+
   include(FindPkgConfig)
   ## Find iBus ##
   find_package(PkgConfig)

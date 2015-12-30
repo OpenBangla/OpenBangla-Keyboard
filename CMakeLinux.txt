@@ -34,6 +34,9 @@ DESTINATION  ${PROJECT_DATADIR}/layouts)
 install(FILES ${CMAKE_SOURCE_DIR}/data/autocorrect.json
 DESTINATION  ${PROJECT_DATADIR}/data)
 
+install(FILES ${CMAKE_SOURCE_DIR}/data/database.db3
+DESTINATION  ${PROJECT_DATADIR}/data)
+
 install(FILES ${CMAKE_SOURCE_DIR}/data/regex.json
 DESTINATION  ${PROJECT_DATADIR}/data)
 

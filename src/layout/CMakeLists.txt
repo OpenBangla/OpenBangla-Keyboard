@@ -7,5 +7,9 @@ add_library(Layout
             phoneticparser.h
             regexparser.cpp
             regexparser.h
+            database.cpp
+            database.h
             phoneticsuggestion.cpp
             phoneticsuggestion.h)
+
+target_link_libraries(Layout Qt5::Core Qt5::Sql)

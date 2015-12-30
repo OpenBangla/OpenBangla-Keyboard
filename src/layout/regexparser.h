@@ -24,6 +24,7 @@
 
 #include <fstream>
 #include <string>
+#include <QString>
 #include "json.hpp"
 
 class RegexParser {
@@ -47,10 +48,12 @@ private:
   bool isExact(std::string needle, std::string heystack, int start, int end, bool strnot);
   bool isIgnore(char c);
   std::string cleanString(std::string input);
+
+  QString makeRegexCompatible(std::string input);
 public:
   RegexParser();
   ~RegexParser();
-  std::string parse(std::string input);
+  QString parse(std::string input);
 };
 
 #endif /* end of include guard: REGEX_PARSER_H */

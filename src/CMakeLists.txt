@@ -20,7 +20,7 @@ endif(OS_LINUX)
 add_subdirectory(layout)
 
 add_executable(OpenBangla-Keyboard ${SOURCES_CPP} ${SOURCES_HPP})
-target_link_libraries(OpenBangla-Keyboard Layout)
+target_link_libraries(OpenBangla-Keyboard Layout Qt5::Core Qt5::Sql)
 
 if(OS_LINUX)
   target_link_libraries(OpenBangla-Keyboard IM_iBus ${IBUS_LIBRARIES})

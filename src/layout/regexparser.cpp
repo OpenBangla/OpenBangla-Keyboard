@@ -42,9 +42,9 @@ RegexParser::~RegexParser() {
   fin.close();
 }
 
-std::string RegexParser::parse(std::string input) {
+QString RegexParser::parse(std::string input) {
   // Check
-  if(input.length() == 0) return input;
+  if(input.length() == 0) return QString::fromStdString(input);
 
   std::string fixed = cleanString(input);
   std::string output;
@@ -186,12 +186,25 @@ std::string RegexParser::parse(std::string input) {
     }
   }
 
-  return output;
+  return makeRegexCompatible(output);
 }
 
 /* Convert to their returning type. Warning: We only convert one character! */
 char RegexParser::to_char(std::string a) {const char* b = a.c_str(); char r = *b; return r;}
 std::string RegexParser::to_str(char a) {std::string r; r = a; return r;}
+
+QString RegexParser::makeRegexCompatible(std::string input) {
+  QString output;
+  QString in = QString::fromStdString(input);
+  for(auto& str : in) {
+    if(str.unicode() >= 255) {
+      output += "\\x{0" + QString::number(str.unicode(), 16).toUpper() + "}";
+    } else {
+      output += str;
+    }
+  }
+  return QString("^" + output + "$");
+}
 
 char RegexParser::smallCap(char letter) {
     std::string res = to_str(letter);

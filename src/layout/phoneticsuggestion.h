@@ -22,11 +22,13 @@
 #include <vector>
 #include <string>
 #include "phoneticparser.h"
+#include "database.h"
 
 class PhoneticSuggestion {
 private:
   PhoneticParser parser;
   nlohmann::json autodict;
+  Database db;
 public:
   PhoneticSuggestion();
   void setLayout(nlohmann::json lay);
