@@ -24,8 +24,8 @@ public:
   void loadTableWithName(QString name, QSqlDatabase dbase);
   void loadSuffixTableFromDatabase(QSqlDatabase dbase);
 
-  std::vector<std::string> find(std::string word);
-  std::string banglaForSuffix(std::string word);
+  std::vector<std::string> find(QString word);
+  std::string banglaForSuffix(QString word);
 };
 
 #endif /* end of include guard: DATABASE_H */

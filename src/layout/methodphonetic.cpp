@@ -21,7 +21,7 @@
 #include "keycode.h"
 #include "methodphonetic.h"
 
-void MethodPhonetic::setLayout(nlohmann::json lay) {
+void MethodPhonetic::setLayout(QJsonObject lay) {
   suggest.setLayout(lay);
 }
 
@@ -34,7 +34,7 @@ void MethodPhonetic::updateCache() {
   } else {
     // Something we have to build
     list = suggest.Suggest(EnglishT);
-    im_update_suggest(list, EnglishT);
+    im_update_suggest(list, EnglishT.toStdString());
   }
 }
 
@@ -211,7 +211,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       }
    case VC_BACKSPACE:
       if(EnglishT.length() > 0) {
-        std::string ET = EnglishT.substr(0, EnglishT.length()-1);
+        QString ET = EnglishT.mid(0, EnglishT.length()-1);
         EnglishT = ET;
         updateCache();
         if(EnglishT.length() <= 0) {

@@ -15,27 +15,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef AUTO_CORRECT_H
+#define AUTO_CORRECT_H
 
-#ifndef PHONETIC_SUGGESTION_H
-#define PHONETIC_SUGGESTION_H
-
-#include <vector>
-#include <string>
 #include <QString>
 #include <QJsonObject>
-#include "phoneticparser.h"
-#include "database.h"
-#include "autocorrect.h"
 
-class PhoneticSuggestion {
-private:
-  PhoneticParser parser;
-  AutoCorrect autodict;
-  Database db;
+class AutoCorrect {
+  QJsonObject dict;
 public:
-  PhoneticSuggestion();
-  void setLayout(QJsonObject lay);
-  std::vector<std::string> Suggest(QString cache);
+  AutoCorrect();
+  QString getCorrected(QString word);
 };
 
-#endif /* end of include guard: PHONETIC_SUGGESTION_H */
+#endif /* end of include guard: AUTO_CORRECT_H */

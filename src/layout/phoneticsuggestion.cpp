@@ -16,39 +16,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fstream>
 #include "phoneticsuggestion.h"
+#include <QDebug>
 
-PhoneticSuggestion::PhoneticSuggestion() {
-  std::ifstream fin;
-  // Load Auto Correct Dictionary
-  fin.open(PKGDATADIR "/data/autocorrect.json", std::ifstream::in);
-  autodict << fin;
-  fin.close();
-}
+PhoneticSuggestion::PhoneticSuggestion() {}
 
-std::string PhoneticSuggestion::getAutoCorrect(std::string word) {
-  std::string fixed = parser.fixString(word);
-  // Find the exact matching
-  try {
-    return autodict["autocorrect"].at(fixed);
-  } catch (std::out_of_range) {
-    // Not found
-    return (std::string)"";
-  }
-}
-
-void PhoneticSuggestion::setLayout(nlohmann::json lay) {
+void PhoneticSuggestion::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
 
-std::vector<std::string> PhoneticSuggestion::Suggest(std::string cache) {
+std::vector<std::string> PhoneticSuggestion::Suggest(QString cache) {
   std::vector<std::string> list;
+
+  QString parsed = parser.parse(cache);
 
   list.clear();
   // Add Auto Correct
-  if(getAutoCorrect(cache) != "") list.push_back(getAutoCorrect(cache));
-  list.push_back(parser.parse(cache));
+  QString autodct = autodict.getCorrected(cache);
+  qDebug() << autodct;
+  if(autodct != "") list.push_back(autodct.toStdString());
+  list.push_back(parsed.toStdString());
 
   std::vector<std::string> dbb = db.find(cache);
   for(auto& str : dbb) {

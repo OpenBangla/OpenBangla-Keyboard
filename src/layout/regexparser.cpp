@@ -20,34 +20,39 @@
   *  http://www.gnu.org/licenses/license-list.en.html#MPL-2.0
   */
 
+#include <QFile>
+#include <QByteArray>
 #include "regexparser.h"
-
-using namespace nlohmann;
+#include "log.h"
 
 RegexParser::RegexParser() {
-  fin.open(PKGDATADIR "/data/regex.json", std::ifstream::in);
+  QFile grammarFile(PKGDATADIR "/data/regex.json");
+  if (!grammarFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[RegexParser]: Error: Couldn't open grammar file\n");
+  }
+  QByteArray data = grammarFile.readAll();
+  QJsonDocument json(QJsonDocument::fromJson(data));
 
-  grammar << fin;
+  QJsonObject grammar = json.object();
 
-  patterns = grammar["patterns"];
-  std::string _find = patterns[0]["find"];
+  patterns = grammar.value("patterns").toArray();
+  QString _find = patterns.at(0).toObject().value("find").toString();
   maxPatternLength = _find.length();
-  vowel = grammar["vowel"];
-  cons = grammar["consonant"];
-  ign = grammar["ignore"];
+  vowel = grammar.value("vowel").toString();
+  cons = grammar.value("consonant").toString();
+  ign = grammar.value("ignore").toString();
+
+  grammarFile.close();
 }
 
-RegexParser::~RegexParser() {
-  // Close the file handler
-  fin.close();
-}
+RegexParser::~RegexParser() {}
 
-QString RegexParser::parse(std::string input) {
+QString RegexParser::parse(QString input) {
   // Check
-  if(input.length() == 0) return QString::fromStdString(input);
+  if(input.length() == 0) return input;
 
-  std::string fixed = cleanString(input);
-  std::string output;
+  QString fixed = cleanString(input);
+  QString output;
 
   int len = fixed.length();
   for(int cur = 0; cur < len; ++cur) {
@@ -58,26 +63,30 @@ QString RegexParser::parse(std::string input) {
     for(int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
       end = start + chunkLen;
       if(end <= len) {
-        std::string chunk = fixed.substr(start, chunkLen);
+        QString chunk = fixed.mid(start, chunkLen);
 
         // Binary Search
         int left = 0, right = patterns.size() - 1, mid;
         while(right >= left) {
           mid = (right + left) / 2;
-          json pattern = patterns.at(mid);
-          std::string find = pattern["find"];
+          QJsonObject pattern = patterns.at(mid).toObject();
+          QString find = pattern.value("find").toString();
           if(find == chunk) {
-            json rules = pattern["rules"];
-            if(!(rules.empty())) {
-              for(auto& rule : rules) {
+            QJsonArray rules = pattern.value("rules").toArray();
+            if(!(rules.isEmpty())) {
+              for(QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
+                QJsonValue rul = *r;
+                QJsonObject rule = rul.toObject();
                 bool replace = true;
                 int chk = 0;
-                json matches = rule.at("matches");
-                for(auto& match : matches) {
-                  std::string value = match["value"];
-                  std::string type = match["type"];
-                  std::string scope = match["scope"];
-                  bool isNegative = match["negative"];
+                QJsonArray matches = rule.value("matches").toArray();
+                for(QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
+                  QJsonValue mch = *m;
+                  QJsonObject match = mch.toObject();
+                  QString value = match.value("value").toString();
+                  QString type = match.value("type").toString();
+                  QString scope = match.value("scope").toString();
+                  bool isNegative = match.value("negative").toBool();
 
                   if(type == "suffix") {
                     chk = end;
@@ -150,7 +159,7 @@ QString RegexParser::parse(std::string input) {
                 }
 
                 if(replace) {
-                  std::string rl = rule["replace"];
+                  QString rl = rule.value("replace").toString();
                   output += rl;
                   output += "(্[যবম])?(্?)([ঃঁ]?)";
                   cur = end - 1;
@@ -163,7 +172,7 @@ QString RegexParser::parse(std::string input) {
             if(matched == true) break;
 
             // Default
-            std::string rl = pattern["replace"];
+            QString rl = pattern.value("replace").toString();
             output += rl;
             output += "(্[যবম])?(্?)([ঃঁ]?)";
             cur = end - 1;
@@ -171,7 +180,7 @@ QString RegexParser::parse(std::string input) {
             break;
           }
           else if (find.length() > chunk.length() ||
-                  (find.length() == chunk.length() && find.compare(chunk) < 0)) {
+                  (find.length() == chunk.length() && find.compare(chunk, Qt::CaseSensitive) < 0)) {
                   left = mid + 1;
           } else {
             right = mid - 1;
@@ -189,14 +198,9 @@ QString RegexParser::parse(std::string input) {
   return makeRegexCompatible(output);
 }
 
-/* Convert to their returning type. Warning: We only convert one character! */
-char RegexParser::to_char(std::string a) {const char* b = a.c_str(); char r = *b; return r;}
-std::string RegexParser::to_str(char a) {std::string r; r = a; return r;}
-
-QString RegexParser::makeRegexCompatible(std::string input) {
+QString RegexParser::makeRegexCompatible(QString input) {
   QString output;
-  QString in = QString::fromStdString(input);
-  for(auto& str : in) {
+  for(auto& str : input) {
     if(str.unicode() >= 255) {
       output += "\\x{0" + QString::number(str.unicode(), 16).toUpper() + "}";
     } else {
@@ -206,39 +210,33 @@ QString RegexParser::makeRegexCompatible(std::string input) {
   return QString("^" + output + "$");
 }
 
-char RegexParser::smallCap(char letter) {
-    std::string res = to_str(letter);
-    std::transform(res.begin(), res.end(), res.begin(), ::tolower);
-    return to_char(res);
-}
-
-std::string RegexParser::cleanString(std::string input) {
-  std::string fixed;
+QString RegexParser::cleanString(QString input) {
+  QString fixed;
   for(const auto& c : input) {
     if(!isIgnore(c)) {
-      fixed += smallCap(c);
+      fixed += c.toLower();
     }
   }
   return fixed;
 }
 
-bool RegexParser::isVowel(char c) {
-  return vowel.find(smallCap(c)) != std::string::npos;
+bool RegexParser::isVowel(QChar c) {
+  return vowel.contains(c, Qt::CaseInsensitive);
 }
 
-bool RegexParser::isConsonant(char c) {
-  return cons.find(smallCap(c)) != std::string::npos;
+bool RegexParser::isConsonant(QChar c) {
+  return cons.contains(c, Qt::CaseInsensitive);
 }
 
-bool RegexParser::isPunctuation(char c) {
+bool RegexParser::isPunctuation(QChar c) {
   return (!(isVowel(c) || isConsonant(c)));
 }
 
-bool RegexParser::isExact(std::string needle, std::string heystack, int start, int end, bool strnot) {
+bool RegexParser::isExact(QString needle, QString heystack, int start, int end, bool strnot) {
   int len = end - start;
-  return ((start >= 0 && end < heystack.length() && (heystack.substr(start, len)  == needle)) ^ strnot);
+  return ((start >= 0 && end < heystack.length() && (heystack.mid(start, len)  == needle)) ^ strnot);
 }
 
-bool RegexParser::isIgnore(char c) {
-  return ign.find(smallCap(c)) != std::string::npos;
+bool RegexParser::isIgnore(QChar c) {
+  return ign.contains(c, Qt::CaseInsensitive);
 }

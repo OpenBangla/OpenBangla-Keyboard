@@ -3,10 +3,13 @@ add_library(Layout
             layout.cpp
             layout.h
             methodphonetic.cpp
+            methodphonetic.h
             phoneticparser.cpp
             phoneticparser.h
             regexparser.cpp
             regexparser.h
+            autocorrect.cpp
+            autocorrect.h
             database.cpp
             database.h
             phoneticsuggestion.cpp

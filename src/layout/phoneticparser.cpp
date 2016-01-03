@@ -22,24 +22,21 @@
 
 #include "phoneticparser.h"
 
-using namespace nlohmann;
-
-void PhoneticParser::setLayout(json l) {
+void PhoneticParser::setLayout(QJsonObject l) {
   layout = l;
-  patterns = layout["layout"]["patterns"];
-  std::string _find = patterns[0]["find"];
+  patterns = layout.value("patterns").toArray();
+  QString _find = patterns.at(0).toObject().value("find").toString();
   maxPatternLength = _find.length();
-  vowel = layout["layout"]["vowel"];
-  cons = layout["layout"]["consonant"];
-  csen = layout["layout"]["casesensitive"];
+  vowel = layout.value("vowel").toString();
+  cons = layout.value("consonant").toString();
+  csen = layout.value("casesensitive").toString();
 }
 
 PhoneticParser::~PhoneticParser() {}
 
-std::string PhoneticParser::parse(std::string input) {
-  std::string fixed = fixString(input);
-  std::string output;
-
+QString PhoneticParser::parse(QString input) {
+  QString fixed = fixString(input);
+  QString output;
 
   int len = fixed.length();
   for(int cur = 0; cur < len; ++cur) {
@@ -50,26 +47,30 @@ std::string PhoneticParser::parse(std::string input) {
     for(int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
       end = start + chunkLen;
       if(end <= len) {
-        std::string chunk = fixed.substr(start, chunkLen);
+        QString chunk = fixed.mid(start, chunkLen);
 
         // Binary Search
         int left = 0, right = patterns.size() - 1, mid;
         while(right >= left) {
           mid = (right + left) / 2;
-          json pattern = patterns.at(mid);
-          std::string find = pattern["find"];
+          QJsonObject pattern = patterns.at(mid).toObject();
+          QString find = pattern.value("find").toString();
           if(find == chunk) {
-            json rules = pattern["rules"];
-            if(!(rules.empty())) {
-              for(auto& rule : rules) {
+            QJsonArray rules = pattern.value("rules").toArray();
+            if(!(rules.isEmpty())) {
+              for(QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
+                QJsonValue rul = *r;
+                QJsonObject rule = rul.toObject();
                 bool replace = true;
                 int chk = 0;
-                json matches = rule.at("matches");
-                for(auto& match : matches) {
-                  std::string value = match["value"];
-                  std::string type = match["type"];
-                  std::string scope = match["scope"];
-                  bool isNegative = match["negative"];
+                QJsonArray matches = rule.value("matches").toArray();
+                for(QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
+                  QJsonValue mch = *m;
+                  QJsonObject match = mch.toObject();
+                  QString value = match.value("value").toString();
+                  QString type = match.value("type").toString();
+                  QString scope = match.value("scope").toString();
+                  bool isNegative = match.value("negative").toBool();
 
                   if(type == "suffix") {
                     chk = end;
@@ -142,7 +143,7 @@ std::string PhoneticParser::parse(std::string input) {
                 }
 
                 if(replace) {
-                  std::string rl = rule["replace"];
+                  QString rl = rule.value("replace").toString();
                   output += rl;
                   cur = end - 1;
                   matched = true;
@@ -154,14 +155,14 @@ std::string PhoneticParser::parse(std::string input) {
             if(matched == true) break;
 
             // Default
-            std::string rl = pattern["replace"];
+            QString rl = pattern.value("replace").toString();
             output += rl;
             cur = end - 1;
             matched = true;
             break;
           }
           else if (find.length() > chunk.length() ||
-                  (find.length() == chunk.length() && find.compare(chunk) < 0)) {
+                  (find.length() == chunk.length() && find.compare(chunk, Qt::CaseSensitive) < 0)) {
                   left = mid + 1;
           } else {
             right = mid - 1;
@@ -179,45 +180,35 @@ std::string PhoneticParser::parse(std::string input) {
   return output;
 }
 
-/* Convert to their returning type. Warning: We only convert one character! */
-char PhoneticParser::to_char(std::string a) {const char* b = a.c_str(); char r = *b; return r;}
-std::string PhoneticParser::to_str(char a) {std::string r; r = a; return r;}
-
-char PhoneticParser::smallCap(char letter) {
-    std::string res = to_str(letter);
-    std::transform(res.begin(), res.end(), res.begin(), ::tolower);
-    return to_char(res);
-}
-
-std::string PhoneticParser::fixString(std::string input) {
-  std::string fixed;
+QString PhoneticParser::fixString(QString input) {
+  QString fixed;
   for(const auto& c : input) {
     if(isCaseSensitive(c)) {
       fixed += c;
     } else {
-      fixed += smallCap(c);
+      fixed += c.toLower();
     }
   }
   return fixed;
 }
 
-bool PhoneticParser::isVowel(char c) {
-  return vowel.find(smallCap(c)) != std::string::npos;
+bool PhoneticParser::isVowel(QChar c) {
+  return vowel.contains(c, Qt::CaseInsensitive);
 }
 
-bool PhoneticParser::isConsonant(char c) {
-  return cons.find(smallCap(c)) != std::string::npos;
+bool PhoneticParser::isConsonant(QChar c) {
+  return cons.contains(c, Qt::CaseInsensitive);
 }
 
-bool PhoneticParser::isPunctuation(char c) {
+bool PhoneticParser::isPunctuation(QChar c) {
   return (!(isVowel(c) || isConsonant(c)));
 }
 
-bool PhoneticParser::isExact(std::string needle, std::string heystack, int start, int end, bool strnot) {
+bool PhoneticParser::isExact(QString needle, QString heystack, int start, int end, bool strnot) {
   int len = end - start;
-  return ((start >= 0 && end < heystack.length() && (heystack.substr(start, len)  == needle)) ^ strnot);
+  return ((start >= 0 && end < heystack.length() && (heystack.mid(start, len)  == needle)) ^ strnot);
 }
 
-bool PhoneticParser::isCaseSensitive(char c) {
-  return csen.find(smallCap(c)) != std::string::npos;
+bool PhoneticParser::isCaseSensitive(QChar c) {
+  return csen.contains(c, Qt::CaseInsensitive);
 }

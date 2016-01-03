@@ -22,38 +22,31 @@
 #ifndef REGEX_PARSER_H
 #define REGEX_PARSER_H
 
-#include <fstream>
-#include <string>
 #include <QString>
-#include "json.hpp"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 class RegexParser {
 private:
-  std::ifstream fin;
-  nlohmann::json grammar;
-
-  nlohmann::json patterns;
-  std::string vowel;
-  std::string cons;
-  std::string ign;
+  QJsonArray patterns;
+  QString vowel;
+  QString cons;
+  QString ign;
   int maxPatternLength;
 
-  char to_char(std::string a);
-  std::string to_str(char a);
+  bool isVowel(QChar c);
+  bool isConsonant(QChar c);
+  bool isPunctuation(QChar c);
+  bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
+  bool isIgnore(QChar c);
+  QString cleanString(QString input);
 
-  char smallCap(char letter);
-  bool isVowel(char c);
-  bool isConsonant(char c);
-  bool isPunctuation(char c);
-  bool isExact(std::string needle, std::string heystack, int start, int end, bool strnot);
-  bool isIgnore(char c);
-  std::string cleanString(std::string input);
-
-  QString makeRegexCompatible(std::string input);
+  QString makeRegexCompatible(QString input);
 public:
   RegexParser();
   ~RegexParser();
-  QString parse(std::string input);
+  QString parse(QString input);
 };
 
 #endif /* end of include guard: REGEX_PARSER_H */

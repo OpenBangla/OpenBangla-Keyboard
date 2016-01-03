@@ -15,27 +15,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef PHONETIC_SUGGESTION_H
-#define PHONETIC_SUGGESTION_H
-
-#include <vector>
-#include <string>
-#include <QString>
-#include <QJsonObject>
-#include "phoneticparser.h"
-#include "database.h"
+#include <QFile>
+#include <QByteArray>
+#include <QJsonDocument>
+#include <QDebug>
 #include "autocorrect.h"
+#include "log.h"
 
-class PhoneticSuggestion {
-private:
-  PhoneticParser parser;
-  AutoCorrect autodict;
-  Database db;
-public:
-  PhoneticSuggestion();
-  void setLayout(QJsonObject lay);
-  std::vector<std::string> Suggest(QString cache);
-};
+AutoCorrect::AutoCorrect() {
+  QFile dictFile(PKGDATADIR "/data/autocorrect.json");
+  if (!dictFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[AutoCorrect]: Error: Couldn't open dictionary file\n");
+  }
+  QByteArray data = dictFile.readAll();
+  QJsonDocument json(QJsonDocument::fromJson(data));
 
-#endif /* end of include guard: PHONETIC_SUGGESTION_H */
+  QJsonObject dict = json.object().value("autocorrect").toObject();
+  dictFile.close();
+}
+
+QString AutoCorrect::getCorrected(QString word) {
+  QJsonValue corrected = dict.value(word);
+  qDebug() << dict.value(word).toString();
+  if(!(corrected.type() == QJsonValue::Undefined)) {
+    return corrected.toString();
+  } else {
+    return QString("");
+  }
+}

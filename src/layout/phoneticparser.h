@@ -23,33 +23,30 @@
 #ifndef PHONETIC_PARSER_H
 #define PHONETIC_PARSER_H
 
-#include <string>
-#include "json.hpp"
+#include <QString>
+#include <QJsonObject>
+#include <QJsonArray>
 
 class PhoneticParser {
 private:
-  nlohmann::json layout;
+  QJsonObject layout;
 
-  nlohmann::json patterns;
-  std::string vowel;
-  std::string cons;
-  std::string csen;
+  QJsonArray patterns;
+  QString vowel;
+  QString cons;
+  QString csen;
   int maxPatternLength;
 
-  char to_char(std::string a);
-  std::string to_str(char a);
-
-  char smallCap(char letter);
-  bool isVowel(char c);
-  bool isConsonant(char c);
-  bool isPunctuation(char c);
-  bool isExact(std::string needle, std::string heystack, int start, int end, bool strnot);
-  bool isCaseSensitive(char c);
+  bool isVowel(QChar c);
+  bool isConsonant(QChar c);
+  bool isPunctuation(QChar c);
+  bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
+  bool isCaseSensitive(QChar c);
 public:
   ~PhoneticParser();
-  void setLayout(nlohmann::json l);
-  std::string parse(std::string input);
-  std::string fixString(std::string input);
+  void setLayout(QJsonObject l);
+  QString parse(QString input);
+  QString fixString(QString input);
 };
 
 #endif /* end of include guard: PHONETIC_PARSER_H */

@@ -19,9 +19,9 @@
 #ifndef LAYOUT_H
 #define LAYOUT_H
 
-#include <fstream>
-#include <string>
-#include "json.hpp"
+#include <QFile>
+#include <QString>
+#include <QJsonObject>
 
 /* Core of Layout Management */
 
@@ -34,17 +34,17 @@ enum LayoutType {
 struct LayoutDesc {
   LayoutType type;
   int fileVer;
-  std::string name;
-  std::string ver;
-  std::string devName;
-  std::string devComment;
+  QString name;
+  QString ver;
+  QString devName;
+  QString devComment;
 };
 
 /* A pure virtual class. Every Typing Method have to implement this.
  */
 class LayoutMth {
 public:
-  virtual void setLayout(nlohmann::json lay) = 0;
+  virtual void setLayout(QJsonObject lay) = 0;
   virtual bool processKey(int key, bool shift, bool altgr, bool shiftaltgr)  = 0;
 };
 
@@ -53,9 +53,9 @@ class Layout {
   LayoutMth *mth;
 
   /* File input handler */
-  std::ifstream fin;
+  QFile fin;
   /* Layout File */
-  nlohmann::json lf;
+  QJsonObject lf;
   /* Layout Descriptor */
   LayoutDesc lD;
 
@@ -67,7 +67,9 @@ public:
   ~Layout();
 
   /* Load a layout from given @path */
-  void loadLayout(std::string path);
+  void loadLayout(QString path);
+
+  QJsonObject sendLayout();
 
   /* Get Layout Description */
   LayoutDesc getDesc();

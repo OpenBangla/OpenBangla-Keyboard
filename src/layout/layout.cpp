@@ -18,6 +18,9 @@
 
 /* Core of Layout Management */
 
+#include <QJsonDocument>
+#include <QFile>
+#include <QByteArray>
 #include "layout.h"
 #include "methodphonetic.h"
 
@@ -31,27 +34,30 @@ Layout::~Layout() {
   fin.close();
 }
 
-void Layout::loadLayout(std::string path) {
+void Layout::loadLayout(QString path) {
   // Check if we have already a opened file
-  if(fin.is_open()) fin.close();
+  if(fin.isOpen()) fin.close();
 
   // Open the given layout file
-  fin.open(path, std::ifstream::in);
+  fin.setFileName(path);
+  fin.open(QIODevice::ReadOnly);
+  QByteArray data = fin.readAll();
 
   // Load Layout(Json) file
-  lf << fin;
+  QJsonDocument json(QJsonDocument::fromJson(data));
+  lf = json.object();
   // Load it's Description
   loadDesc();
   // Set typing method
   setMethod();
   // Send changed layout to typing method
-  mth->setLayout(lf);
+  mth->setLayout(sendLayout());
 }
 
 void Layout::loadDesc() {
   // Load Layout Description
   // Layout File Type
-  std::string type = lf["info"]["type"];
+  QString type = lf.value("info").toObject().value("type").toString();
   if(type == "phonetic") {
     lD.type = Layout_Phonetic;
   } else {
@@ -59,21 +65,26 @@ void Layout::loadDesc() {
   }
 
   // Get values
+  /*
   int FileVer = lf["info"]["version"];
   std::string Name = lf["info"]["layout"]["name"];
   std::string Ver = lf["info"]["layout"]["version"];
   std::string DevName = lf["info"]["layout"]["developer"]["name"];
-  std::string DevComment = lf["info"]["layout"]["developer"]["comment"];
+  std::string DevComment = lf["info"]["layout"]["developer"]["comment"];*/
   // Layout File Version
-  lD.fileVer = FileVer;
+  lD.fileVer = lf.value("info").toObject().value("version").toInt();
   // Layout Name
-  lD.name = Name;
+  lD.name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
   // Layout Version
-  lD.ver = Ver;
+  lD.ver = lf.value("info").toObject().value("layout").toObject().value("version").toString();
   // Layout Develper Name
-  lD.devName = DevName;
+  lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("name").toString();
   // Layout Developer Comment
-  lD.devComment = DevComment;
+  lD.devComment = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("comment").toString();
+}
+
+QJsonObject Layout::sendLayout() {
+  return lf.value("layout").toObject();
 }
 
 void Layout::setMethod() {

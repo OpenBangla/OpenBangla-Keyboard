@@ -27,6 +27,6 @@
 //#ifdef DEBUG
   #define LOG_DEBUG(a...) std::fprintf(stdout, "[OpenBangla-Debug]: " a)
 //#endif
-#define LOG_ERR(a...) std::fprintf(stderr, "[OpenBangla-Error]: " a)
+#define LOG_ERROR(a...) std::fprintf(stderr, "[OpenBangla-Error]: " a)
 
 #endif /* end of include guard: LOG_H */

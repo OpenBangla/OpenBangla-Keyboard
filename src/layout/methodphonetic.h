@@ -19,18 +19,18 @@
 #ifndef METHOD_PHONETIC_H
 #define METHOD_PHONETIC_H
 
-#include "json.hpp"
+#include <QJsonObject>
 #include "layout.h"
 #include "phoneticsuggestion.h"
 
 class MethodPhonetic : public LayoutMth {
   PhoneticSuggestion suggest;
-  std::string EnglishT;
+  QString EnglishT;
 
   void updateCache();
 public:
   // Functions inherited from class LayoutMth
-  void setLayout(nlohmann::json lay);
+  void setLayout(QJsonObject lay);
   bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
 };
 
