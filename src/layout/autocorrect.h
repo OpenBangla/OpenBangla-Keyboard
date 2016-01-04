@@ -20,9 +20,11 @@
 
 #include <QString>
 #include <QJsonObject>
+#include "phoneticparser.h"
 
 class AutoCorrect {
   QJsonObject dict;
+  PhoneticParser parser;
 public:
   AutoCorrect();
   QString getCorrected(QString word);

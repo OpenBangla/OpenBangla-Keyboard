@@ -18,7 +18,6 @@
 #include <QFile>
 #include <QByteArray>
 #include <QJsonDocument>
-#include <QDebug>
 #include "autocorrect.h"
 #include "log.h"
 
@@ -35,7 +34,8 @@ AutoCorrect::AutoCorrect() {
 }
 
 QString AutoCorrect::getCorrected(QString word) {
-  QJsonValue corrected = dict.value(word);
+  QString fixed = parser.fixString(word);
+  QJsonValue corrected = dict.value(fixed);
   if(!(corrected.type() == QJsonValue::Undefined)) {
     return corrected.toString();
   } else {
