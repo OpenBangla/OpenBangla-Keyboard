@@ -35,6 +35,7 @@ private:
 public:
   PhoneticSuggestion();
   void setLayout(QJsonObject lay);
+  std::vector<std::string> toStdVector(QVector<QString> vec);
   std::vector<std::string> Suggest(QString cache);
 };
 

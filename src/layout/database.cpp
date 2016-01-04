@@ -100,10 +100,10 @@ void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
   query.finish();
 }
 
-std::vector<std::string> Database::find(QString word) {
+QVector<QString> Database::find(QString word) {
   RegexParser rgx;
   QStringList tablelist;
-  std::vector<std::string> suggestions;
+  QVector<QString> suggestions;
   char lmc = word.toStdString().at(0); // Left Most Character
 
   QRegularExpression regex(rgx.parse(word), QRegularExpression::OptimizeOnFirstUsageOption);
@@ -195,16 +195,15 @@ std::vector<std::string> Database::find(QString word) {
     QVector<QString> tableData = word_table[table];
     for(auto& tmpString : tableData) {
       if(tmpString.contains(regex)) {
-        suggestions.push_back(tmpString.toStdString());
+        suggestions.push_back(tmpString);
       }
     }
   }
   return suggestions;
 }
 
-std::string Database::banglaForSuffix(QString word) {
+QString Database::banglaForSuffix(QString word) {
   if(suffix_table.contains(word)) {
-    QString ret = suffix_table[word];
-    return ret.toStdString();
-  } else { std::string(""); }
+    return suffix_table[word];
+  } else { QString(""); }
 }

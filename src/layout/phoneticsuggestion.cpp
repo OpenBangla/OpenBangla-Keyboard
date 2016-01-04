@@ -17,6 +17,7 @@
  */
 
 #include "phoneticsuggestion.h"
+#include "qlevenshtein.hpp"
 #include <QDebug>
 
 PhoneticSuggestion::PhoneticSuggestion() {}
@@ -25,20 +26,46 @@ void PhoneticSuggestion::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
 
+std::vector<std::string> PhoneticSuggestion::toStdVector(QVector<QString> vec) {
+  std::vector<std::string> v;
+  for(auto& str : vec) {
+    v.push_back(str.toStdString());
+  }
+  return v;
+}
+
 std::vector<std::string> PhoneticSuggestion::Suggest(QString cache) {
-  std::vector<std::string> list;
+  QVector<QString> list;
+  list.clear();
 
   QString parsed = parser.parse(cache);
 
-  list.clear();
   // Add Auto Correct
   QString autodct = autodict.getCorrected(cache);
-  if(autodct != "") list.push_back(autodct.toStdString());
-  list.push_back(parsed.toStdString());
+  if(autodct != "") list.push_back(autodct);
 
-  std::vector<std::string> dbb = db.find(cache);
-  for(auto& str : dbb) {
-    list.push_back(str);
+  // Add Dictionary suggestion
+  QVector<QString> dictList = db.find(cache);
+  // Remove the AutoCorrect suggestion if it matches with dictionary suggestion
+  if((autodct != "") && (dictList.contains(autodct))) {
+    list.removeOne(autodct);
   }
-  return list;
+  // Sort Dictionary suggestions using Levenshtien distance algorithm
+  std::sort(dictList.begin(), dictList.end(), [&] (QString i, QString j) {
+    int dist1 = levenshtein_distance(parsed, i);
+    int dist2 = levenshtein_distance(parsed, j);
+    if(dist1 < dist2) {
+      return i > j;
+    } else if(dist1 > dist2) {
+      return i < j;
+    } else {
+      return i < j;
+    }
+  });
+  list << dictList;
+
+  if(!(list.contains(parsed))) {
+    list.push_back(parsed);
+  }
+  return toStdVector(list);
 }
