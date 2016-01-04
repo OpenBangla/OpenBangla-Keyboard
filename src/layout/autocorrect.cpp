@@ -30,13 +30,12 @@ AutoCorrect::AutoCorrect() {
   QByteArray data = dictFile.readAll();
   QJsonDocument json(QJsonDocument::fromJson(data));
 
-  QJsonObject dict = json.object().value("autocorrect").toObject();
+  dict = json.object().value("autocorrect").toObject();
   dictFile.close();
 }
 
 QString AutoCorrect::getCorrected(QString word) {
   QJsonValue corrected = dict.value(word);
-  qDebug() << dict.value(word).toString();
   if(!(corrected.type() == QJsonValue::Undefined)) {
     return corrected.toString();
   } else {

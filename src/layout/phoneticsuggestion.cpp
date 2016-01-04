@@ -33,7 +33,6 @@ std::vector<std::string> PhoneticSuggestion::Suggest(QString cache) {
   list.clear();
   // Add Auto Correct
   QString autodct = autodict.getCorrected(cache);
-  qDebug() << autodct;
   if(autodct != "") list.push_back(autodct.toStdString());
   list.push_back(parsed.toStdString());
 
