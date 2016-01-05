@@ -29,6 +29,7 @@ void PhoneticParser::setLayout(QJsonObject l) {
   maxPatternLength = _find.length();
   vowel = layout.value("vowel").toString();
   cons = layout.value("consonant").toString();
+  num = layout.value("number").toString();
   csen = layout.value("casesensitive").toString();
 }
 
@@ -123,6 +124,21 @@ QString PhoneticParser::parse(QString input) {
                             break;
                     }
                   }
+                  // Number
+                  else if(scope == "number") {
+                    if(
+                       !(
+                        (
+                        (chk >= 0 && (type == "prefix")) ||
+                        (chk < len && (type == "suffix"))
+                        ) &&
+                        isNumber(fixed.at(chk))
+                        ) ^ isNegative
+                      ) {
+                            replace = false;
+                            break;
+                    }
+                  }
                   // Exact
                   else if(scope == "exact") {
                     int s, e;
@@ -202,6 +218,10 @@ bool PhoneticParser::isConsonant(QChar c) {
 
 bool PhoneticParser::isPunctuation(QChar c) {
   return (!(isVowel(c) || isConsonant(c)));
+}
+
+bool PhoneticParser::isNumber(QChar c) {
+  return num.contains(c, Qt::CaseInsensitive);
 }
 
 bool PhoneticParser::isExact(QString needle, QString heystack, int start, int end, bool strnot) {

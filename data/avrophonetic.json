@@ -1918,7 +1918,17 @@
             "find":".",
             "replace":"।",
             "rules":[
-
+              {
+                "matches":[
+                    {
+                        "type":"prefix",
+                        "scope":"number",
+                        "value":"",
+                        "negative":false
+                    }
+                ],
+                "replace": "."
+              }
             ]
         },
         {
@@ -2671,6 +2681,7 @@
     ],
     "vowel":"aeiou",
     "consonant":"bcdfghjklmnpqrstvwxyz",
+    "number":"1234567890",
     "casesensitive":"oiudgjnrstyz"
   }
 }

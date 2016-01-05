@@ -34,12 +34,14 @@ private:
   QJsonArray patterns;
   QString vowel;
   QString cons;
+  QString num;
   QString csen;
   int maxPatternLength;
 
   bool isVowel(QChar c);
   bool isConsonant(QChar c);
   bool isPunctuation(QChar c);
+  bool isNumber(QChar c);
   bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
   bool isCaseSensitive(QChar c);
 public:
