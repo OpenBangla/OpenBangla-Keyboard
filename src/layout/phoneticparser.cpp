@@ -68,10 +68,21 @@ QString PhoneticParser::parse(QString input) {
                 for(QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
                   QJsonValue mch = *m;
                   QJsonObject match = mch.toObject();
-                  QString value = match.value("value").toString();
+
+                  QJsonValue jvalue = match.value("value");
+                  QString value;
                   QString type = match.value("type").toString();
                   QString scope = match.value("scope").toString();
-                  bool isNegative = match.value("negative").toBool();
+                  bool isNegative = false;
+
+                  // Handle Negative
+                  if((scope.at(0) == QLatin1Char('!'))) {
+                    isNegative = true;
+                    scope = scope.mid(1);
+                  }
+
+                  // Handle empty value
+                  if(!(jvalue.type() == QJsonValue::Undefined))  value = jvalue.toString();
 
                   if(type == "suffix") {
                     chk = end;

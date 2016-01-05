@@ -637,9 +637,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         }
                     ],
                     "replace":"ঋ"
@@ -648,9 +646,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         }
                     ],
                     "replace":"ঋ"
@@ -917,9 +913,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         }
                     ],
                     "replace":"ঐ"
@@ -928,9 +922,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         }
                     ],
                     "replace":"ঐ"
@@ -945,9 +937,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         }
                     ],
                     "replace":"ঔ"
@@ -956,9 +946,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         }
                     ],
                     "replace":"ঔ"
@@ -1183,15 +1171,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ঈ"
@@ -1200,15 +1185,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ঈ"
@@ -1580,15 +1562,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"উ"
@@ -1597,15 +1576,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"উ"
@@ -1669,33 +1645,27 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":false
+                            "scope":"consonant"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"r",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"r"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"y",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"y"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"w",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"w"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"x",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"x"
                         }
                     ],
                     "replace":"্র্য"
@@ -1710,27 +1680,20 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"vowel",
-                            "value":"",
-                            "negative":true
+                            "scope":"!vowel"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"r",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"r"
                         },
                         {
                             "type":"suffix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":true
+                            "scope":"!punctuation"
                         }
                     ],
                     "replace":"র্"
@@ -1739,15 +1702,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":false
+                            "scope":"consonant"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"r",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"r"
                         }
                     ],
                     "replace":"্রর"
@@ -1762,33 +1722,27 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":false
+                            "scope":"consonant"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"r",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"r"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"y",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"y"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"w",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"w"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"x",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"x"
                         }
                     ],
                     "replace":"্র্য"
@@ -1922,9 +1876,7 @@
                 "matches":[
                     {
                         "type":"suffix",
-                        "scope":"number",
-                        "value":"",
-                        "negative":false
+                        "scope":"number"
                     }
                 ],
                 "replace": "."
@@ -2030,15 +1982,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ঈ"
@@ -2047,15 +1996,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ঈ"
@@ -2084,9 +2030,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         }
                     ],
                     "replace":"ও"
@@ -2095,9 +2039,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         }
                     ],
                     "replace":"ও"
@@ -2133,15 +2075,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ঊ"
@@ -2150,15 +2089,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ঊ"
@@ -2201,15 +2137,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"আ"
@@ -2218,21 +2151,17 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"a",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"a"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"য়া"
@@ -2242,14 +2171,12 @@
                         {
                             "type":"prefix",
                             "scope":"exact",
-                            "value":"a",
-                            "negative":false
+                            "value":"a"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"আ"
@@ -2285,15 +2212,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"এ"
@@ -2302,15 +2226,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"এ"
@@ -2346,15 +2267,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ই"
@@ -2363,15 +2281,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"ই"
@@ -2421,15 +2336,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"vowel",
-                            "value":"",
-                            "negative":false
+                            "scope":"vowel"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"o",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"o"
                         }
                     ],
                     "replace":"ও"
@@ -2438,15 +2350,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"vowel",
-                            "value":"",
-                            "negative":false
+                            "scope":"vowel"
                         },
                         {
                             "type":"prefix",
                             "scope":"exact",
-                            "value":"o",
-                            "negative":false
+                            "value":"o"
                         }
                     ],
                     "replace":"অ"
@@ -2455,9 +2364,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         }
                     ],
                     "replace":"অ"
@@ -2486,39 +2393,32 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":false
+                            "scope":"consonant"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"r",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"r"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"y",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"y"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"w",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"w"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"x",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"x"
                         },
                         {
                             "type":"prefix",
-                            "scope":"exact",
-                            "value":"Z",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"Z"
                         }
                     ],
                     "replace":"্র"
@@ -2547,15 +2447,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"উ"
@@ -2564,15 +2461,12 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"exact",
-                            "value":"`",
-                            "negative":true
+                            "scope":"!exact",
+                            "value":"`"
                         }
                     ],
                     "replace":"উ"
@@ -2594,15 +2488,11 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         },
                         {
                             "type":"suffix",
-                            "scope":"vowel",
-                            "value":"",
-                            "negative":false
+                            "scope":"vowel"
                         }
                     ],
                     "replace":"ওয়"
@@ -2611,9 +2501,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":false
+                            "scope":"consonant"
                         }
                     ],
                     "replace":"্ব"
@@ -2628,9 +2516,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         }
                     ],
                     "replace":"এক্স"
@@ -2645,15 +2531,11 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"consonant",
-                            "value":"",
-                            "negative":true
+                            "scope":"!consonant"
                         },
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":true
+                            "scope":"!punctuation"
                         }
                     ],
                     "replace":"য়"
@@ -2662,9 +2544,7 @@
                     "matches":[
                         {
                             "type":"prefix",
-                            "scope":"punctuation",
-                            "value":"",
-                            "negative":false
+                            "scope":"punctuation"
                         }
                     ],
                     "replace":"ইয়"
