@@ -2,7 +2,7 @@
  *  Public Domain
  *  C++ & QT Implementation Of Levenshtein Distance
  *
- *  Additions for QT by Muhammad Mominul Huque <nahidbinbaten1995@gmail.com>
+ *  Additions for QT by Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  From:
  *  1. https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#C.2B.2B

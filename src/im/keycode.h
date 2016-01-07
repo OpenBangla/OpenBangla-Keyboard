@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015  Muhammad Mominul Huque <nahidbinbaten1995@gmail.com>
+ *  Copyright (C) 2015 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
