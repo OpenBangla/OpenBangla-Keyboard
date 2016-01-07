@@ -15,30 +15,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef CACHE_MANAGER_H
+#define CACHE_MANAGER_H
 
-#ifndef PHONETIC_SUGGESTION_H
-#define PHONETIC_SUGGESTION_H
-
-#include <vector>
-#include <string>
 #include <QString>
-#include <QJsonObject>
-#include "phoneticparser.h"
-#include "database.h"
-#include "autocorrect.h"
-#include "cachemanager.h"
+#include <QMap>
+#include <QVector>
 
-class PhoneticSuggestion {
-private:
-  PhoneticParser parser;
-  AutoCorrect autodict;
-  Database db;
-  CacheManager cacheMan;
+class CacheManager {
+  QMap<QString, QVector<QString>> tempCache;
 public:
-  PhoneticSuggestion();
-  void setLayout(QJsonObject lay);
-  std::vector<std::string> toStdVector(QVector<QString> vec);
-  std::vector<std::string> Suggest(QString cache);
+  void setTempCache(QString key, QVector<QString> suggestions);
+  QVector<QString> getTempCache(QString key);
 };
 
-#endif /* end of include guard: PHONETIC_SUGGESTION_H */
+#endif /* end of include guard: CACHE_MANAGER_H */

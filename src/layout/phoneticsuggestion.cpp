@@ -40,29 +40,37 @@ std::vector<std::string> PhoneticSuggestion::Suggest(QString cache) {
 
   QString parsed = parser.parse(cache);
 
-  // Add Auto Correct
-  QString autodct = autodict.getCorrected(cache);
-  if(autodct != "") list.push_back(autodct);
+  // If we have cached the suggestions before, send them
+  list << cacheMan.getTempCache(cache);
+  if(list.isEmpty()) {
+    // Add Auto Correct
+    QString autodct = autodict.getCorrected(cache);
+    if(autodct != "") list.push_back(autodct);
 
-  // Add Dictionary suggestion
-  QVector<QString> dictList = db.find(cache);
-  // Remove the AutoCorrect suggestion if it matches with dictionary suggestion
-  if((autodct != "") && (dictList.contains(autodct))) {
-    list.removeOne(autodct);
-  }
-  // Sort Dictionary suggestions using Levenshtien distance algorithm
-  std::sort(dictList.begin(), dictList.end(), [&] (QString i, QString j) {
-    int dist1 = levenshtein_distance(parsed, i);
-    int dist2 = levenshtein_distance(parsed, j);
-    if(dist1 < dist2) {
-      return i > j;
-    } else if(dist1 > dist2) {
-      return i < j;
-    } else {
-      return i < j;
+    // Add Dictionary suggestion
+    QVector<QString> dictList = db.find(cache);
+    if(!(dictList.isEmpty())) {
+      // Remove the AutoCorrect suggestion if it matches with dictionary suggestion
+      if((autodct != "") && (dictList.contains(autodct))) {
+        list.removeOne(autodct);
+      }
+      // Sort Dictionary suggestions using Levenshtien distance algorithm
+      std::sort(dictList.begin(), dictList.end(), [&] (QString i, QString j) {
+        int dist1 = levenshtein_distance(parsed, i);
+        int dist2 = levenshtein_distance(parsed, j);
+        if(dist1 < dist2) {
+          return i > j;
+        } else if(dist1 > dist2) {
+          return i < j;
+        } else {
+          return i < j;
+        }
+      });
+      list << dictList;
     }
-  });
-  list << dictList;
+    // Save the suggestions temporary
+    cacheMan.setTempCache(cache, list);
+  }
 
   if(!(list.contains(parsed))) {
     list.push_back(parsed);

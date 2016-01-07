@@ -12,6 +12,8 @@ add_library(Layout
             autocorrect.h
             database.cpp
             database.h
+            cachemanager.cpp
+            cachemanager.h
             phoneticsuggestion.cpp
             phoneticsuggestion.h)
 

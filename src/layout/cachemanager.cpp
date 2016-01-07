@@ -16,29 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PHONETIC_SUGGESTION_H
-#define PHONETIC_SUGGESTION_H
-
-#include <vector>
-#include <string>
-#include <QString>
-#include <QJsonObject>
-#include "phoneticparser.h"
-#include "database.h"
-#include "autocorrect.h"
 #include "cachemanager.h"
 
-class PhoneticSuggestion {
-private:
-  PhoneticParser parser;
-  AutoCorrect autodict;
-  Database db;
-  CacheManager cacheMan;
-public:
-  PhoneticSuggestion();
-  void setLayout(QJsonObject lay);
-  std::vector<std::string> toStdVector(QVector<QString> vec);
-  std::vector<std::string> Suggest(QString cache);
-};
+void CacheManager::setTempCache(QString key, QVector<QString> suggestions) {
+  tempCache[key] = suggestions;
+}
 
-#endif /* end of include guard: PHONETIC_SUGGESTION_H */
+QVector<QString> CacheManager::getTempCache(QString key) {
+  return tempCache.value(key);
+}
