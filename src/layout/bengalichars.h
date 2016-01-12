@@ -19,7 +19,7 @@
 #ifndef BENGALICHARS_H
 #define BENGALICHARS_H
 
-#include <string>
+#include <QChar>
 
 /* The Unicode Standard 8.0
  * http://www.unicode.org/charts/
@@ -37,96 +37,96 @@
  * Actual names are denoted by comments */
 
 /* Various signs */
-std::string bSign_Anji = "\u0980";
-std::string b_Chandra = "\u0981";
-std::string b_Anushar = "\u0982"; // BENGALI SIGN ANUSVARA
-std::string b_Bisharga = "\u0983"; // BENGALI SIGN VISARGA
+QChar bSign_Anji = 0x980;
+QChar b_Chandra = 0x981;
+QChar b_Anushar = 0x982; // BENGALI SIGN ANUSVARA
+QChar b_Bisharga = 0x983; // BENGALI SIGN VISARGA
 
 /* Independent vowels */
-std::string b_A = "\u0985";
-std::string b_AA = "\u0986";
-std::string b_I = "\u0987";
-std::string b_II = "\u0988";
-std::string b_U = "\u0989";
-std::string b_UU = "\u098A";
-std::string b_RRI = "\u098B"; // BENGALI LETTER VOCALIC R
-std::string bVocalic_L = "\u098C";
-std::string b_E = "\u098F";
-std::string b_OI = "\u0990"; // BENGALI LETTER AI
-std::string b_O = "\u0993";
-std::string b_OU = "\u0994";
+QChar b_A = 0x985;
+QChar b_AA = 0x986;
+QChar b_I = 0x987;
+QChar b_II = 0x988;
+QChar b_U = 0x989;
+QChar b_UU = 0x98A;
+QChar b_RRI = 0x98B; // BENGALI LETTER VOCALIC R
+QChar bVocalic_L = 0x98C;
+QChar b_E = 0x98F;
+QChar b_OI = 0x990; // BENGALI LETTER AI
+QChar b_O = 0x993;
+QChar b_OU = 0x994;
 
 /* Consonants */
-std::string b_K = "\u0995";
-std::string b_Kh = "\u0996";
-std::string b_G = "\u0997";
-std::string b_Gh = "\u0998";
-std::string b_NGA = "\u0999";
-std::string b_C = "\u099A";
-std::string b_Ch = "\u099B";
-std::string b_J = "\u099C";
-std::string b_Jh = "\u099D";
-std::string b_NYA = "\u099E";
-std::string b_Tt = "\u099F";
-std::string b_Tth = "\u09A0";
-std::string b_Dd = "\u09A1";
-std::string b_Ddh = "\u09A2";
-std::string b_Nn = "\u09A3";
-std::string b_T = "\u09A4";
-std::string b_Th = "\u09A5";
-std::string b_D = "\u09A6";
-std::string b_Dh = "\u09A7";
-std::string b_N = "\u09A8";
-std::string b_P = "\u09AA";
-std::string b_Ph = "\u09AB";
-std::string b_B = "\u09AC";
-std::string b_Bh = "\u09AD";
-std::string b_M = "\u09AE";
-std::string b_Z = "\u09AF";
-std::string b_R = "\u09B0";
-std::string b_L = "\u09B2";
-std::string b_Sh = "\u09B6";
-std::string b_Ss = "\u09B7";
-std::string b_S = "\u09B8";
-std::string b_H = "\u09B9";
+QChar b_K = 0x995;
+QChar b_Kh = 0x996;
+QChar b_G = 0x997;
+QChar b_Gh = 0x998;
+QChar b_NGA = 0x999;
+QChar b_C = 0x99A;
+QChar b_Ch = 0x99B;
+QChar b_J = 0x99C;
+QChar b_Jh = 0x99D;
+QChar b_NYA = 0x99E;
+QChar b_Tt = 0x99F;
+QChar b_Tth = 0x9A0;
+QChar b_Dd = 0x9A1;
+QChar b_Ddh = 0x9A2;
+QChar b_Nn = 0x9A3;
+QChar b_T = 0x9A4;
+QChar b_Th = 0x9A5;
+QChar b_D = 0x9A6;
+QChar b_Dh = 0x9A7;
+QChar b_N = 0x9A8;
+QChar b_P = 0x9AA;
+QChar b_Ph = 0x9AB;
+QChar b_B = 0x9AC;
+QChar b_Bh = 0x9AD;
+QChar b_M = 0x9AE;
+QChar b_Z = 0x9AF;
+QChar b_R = 0x9B0;
+QChar b_L = 0x9B2;
+QChar b_Sh = 0x9B6;
+QChar b_Ss = 0x9B7;
+QChar b_S = 0x9B8;
+QChar b_H = 0x9B9;
 
 /* Various signs */
-std::string bSign_Nukta = "\u09BC"; // for extending the alphabet to new letters
-std::string bSign_Avagraha = "\u09BD";
+QChar bSign_Nukta = 0x9BC; // for extending the alphabet to new letters
+QChar bSign_Avagraha = 0x9BD;
 
 /* Dependent vowel signs (kars) */
-std::string b_AAkar = "\u09BE";
-std::string b_Ikar = "\u09BF";
-std::string b_IIkar = "\u09C0";
-std::string b_Ukar = "\u09C1";
-std::string b_UUkar = "\u09C2";
-std::string b_RRIkar = "\u09C3"; // BENGALI VOWEL SIGN VOCALIC R
-std::string bVocalic_RR = "\u09C4"; // BENGALI VOWEL SIGN VOCALIC RR
-std::string b_OIkar = "\u09C8";
+QChar b_AAkar = 0x9BE;
+QChar b_Ikar = 0x9BF;
+QChar b_IIkar = 0x9C0;
+QChar b_Ukar = 0x9C1;
+QChar b_UUkar = 0x9C2;
+QChar b_RRIkar = 0x9C3; // BENGALI VOWEL SIGN VOCALIC R
+QChar bVocalic_RR = 0x9C4; // BENGALI VOWEL SIGN VOCALIC RR
+QChar b_OIkar = 0x9C8;
 
 /* Two-part dependent vowel signs */
-std::string b_Okar = "\u09CB";
-std::string b_OUkar = "\u09CC"; // BENGALI VOWEL SIGN AU
+QChar b_Okar = 0x9CB;
+QChar b_OUkar = 0x9CC; // BENGALI VOWEL SIGN AU
 
 /* Virama or Hasant */
-std::string b_Hasanta = "\u09CD";
+QChar b_Hasanta = 0x9CD;
 
 /* Additional consonant */
-std::string b_Khandatta = "\u09CE";
+QChar b_Khandatta = 0x9CE;
 
 /* Sign */
-std::string bLength_Mark = "\u09D7"; // BENGALI AU LENGTH MARK
+QChar bLength_Mark = 0x9D7; // BENGALI AU LENGTH MARK
 
 /* Additional consonants */
-std::string b_Rr = "\u09DC"; // BENGALI LETTER RRA
-std::string b_Rh = "\u09DD"; // BENGALI LETTER RHA
-std::string b_Y = "\u09DF"; // BENGALI LETTER YYA
+QChar b_Rr = 0x9DC; // BENGALI LETTER RRA
+QChar b_Rh = 0x9DD; // BENGALI LETTER RHA
+QChar b_Y = 0x9DF; // BENGALI LETTER YYA
 
 /* Additional vowels for Sanskrit */
-std::string bSanskrit_RR = "\u09E0"; // BENGALI LETTER VOCALIC RR
-std::string bSanskrit_LL = "\u09E1"; // BENGALI LETTER VOCALIC LL
-std::string bSign_L = "\u09E2"; // BENGALI VOWEL SIGN VOCALIC L
-std::string bSign_LL = "\u09E3"; // BENGALI VOWEL SIGN VOCALIC LL
+QChar bSanskrit_RR = 0x9E0; // BENGALI LETTER VOCALIC RR
+QChar bSanskrit_LL = 0x9E1; // BENGALI LETTER VOCALIC LL
+QChar bSign_L = 0x9E2; // BENGALI VOWEL SIGN VOCALIC L
+QChar bSign_LL = 0x9E3; // BENGALI VOWEL SIGN VOCALIC LL
 
 /* Reserved */
 /****************************************************************
@@ -134,45 +134,45 @@ std::string bSign_LL = "\u09E3"; // BENGALI VOWEL SIGN VOCALIC LL
  * Note that these punctuation marks are referred to as dahri   *
  * and double dahri in Bangla.                                  *
  ****************************************************************/
-std::string b_Dari = "\u0964";
-std::string b_DDari = "\u0965";
+QChar b_Dari = 0x964;
+QChar b_DDari = 0x965;
 
 /* Digits */
-std::string b_0 = "\u09E6";
-std::string b_1 = "\u09E7";
-std::string b_2 = "\u09E8";
-std::string b_3 = "\u09E9";
-std::string b_4 = "\u09EA";
-std::string b_5 = "\u09EB";
-std::string b_6 = "\u09EC";
-std::string b_7 = "\u09ED";
-std::string b_8 = "\u09EE";
-std::string b_9 = "\u09EF";
+QChar b_0 = 0x9E6;
+QChar b_1 = 0x9E7;
+QChar b_2 = 0x9E8;
+QChar b_3 = 0x9E9;
+QChar b_4 = 0x9EA;
+QChar b_5 = 0x9EB;
+QChar b_6 = 0x9EC;
+QChar b_7 = 0x9ED;
+QChar b_8 = 0x9EE;
+QChar b_9 = 0x9EF;
 
 /* Additions for Assamese */
-std::string b_RM = "\u09F0"; // BENGALI LETTER RA WITH MIDDLE DIAGONAL
-std::string b_RL = "\u09F1"; // BENGALI LETTER RA WITH LOWER DIAGONAL
+QChar b_RM = 0x9F0; // BENGALI LETTER RA WITH MIDDLE DIAGONAL
+QChar b_RL = 0x9F1; // BENGALI LETTER RA WITH LOWER DIAGONAL
 
 /* Currency signs */
-std::string b_CRTaka_M = "\u09F2"; // BENGALI RUPEE MARK = taka
-std::string b_CRTaka = "\u09F3"; // BENGALI RUPEE SIGN = Bangladeshi taka
+QChar b_CRTaka_M = 0x9F2; // BENGALI RUPEE MARK = taka
+QChar b_CRTaka = 0x9F3; // BENGALI RUPEE SIGN = Bangladeshi taka
 
 /* Historic symbols for fractional values */
-std::string bCurrencyNumerator_One = "\u09F4";
-std::string bCurrencyNumerator_Two = "\u09F5";
-std::string bCurrencyNumerator_Three = "\u09F6";
-std::string bCurrencyNumerator_Four = "\u09F7";
-std::string bCurrencyNumerator_Less = "\u09F8";
-std::string bCurrencyNumerator_Sixteen = "\u09F9";
+QChar bCurrencyNumerator_One = 0x9F4;
+QChar bCurrencyNumerator_Two = 0x9F5;
+QChar bCurrencyNumerator_Three = 0x9F6;
+QChar bCurrencyNumerator_Four = 0x9F7;
+QChar bCurrencyNumerator_Less = 0x9F8;
+QChar bCurrencyNumerator_Sixteen = 0x9F9;
 
 /* Sign */
-std::string bSign_Isshar = "\u09FA";
+QChar bSign_Isshar = 0x9FA;
 
 /* Historic currency sign */
-std::string bCurrencyGanda = "\u09FB";
+QChar bCurrencyGanda = 0x9FB;
 
 /* Unicode Addition */
-std::string ZWJ = "\u200D";
-std::string ZWNJ = "\u200C";
+QChar ZWJ = 0x200D;
+QChar ZWNJ = 0x200C;
 
 #endif /* end of include guard: BENGALICHARS_H */
