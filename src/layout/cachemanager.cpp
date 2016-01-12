@@ -16,7 +16,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDir>
+#include <QFile>
+#include <QJsonDocument>
 #include "cachemanager.h"
+#include "log.h"
+
+CacheManager::CacheManager() {
+  loadCandidateSelection();
+}
 
 void CacheManager::setTempCache(QString key, QVector<QString> suggestions) {
   tempCache[key] = suggestions;
@@ -24,4 +32,44 @@ void CacheManager::setTempCache(QString key, QVector<QString> suggestions) {
 
 QVector<QString> CacheManager::getTempCache(QString key) {
   return tempCache.value(key);
+}
+
+void CacheManager::loadCandidateSelection() {
+  QString path = QDir::homePath() + "/phonetic-candidate-selection.json";
+
+  QFile loadFile(path);
+  if(!loadFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[CacheManager:Load]: Error couldn't open save file.\n");
+    return;
+  }
+  QByteArray jsonData = loadFile.readAll();
+
+  QJsonDocument json(QJsonDocument::fromJson(jsonData));
+  candidateSel = json.object();
+
+  loadFile.close();
+}
+
+QString CacheManager::getCandidateSelection(QString word) {
+  return candidateSel[word].toString();
+}
+
+void CacheManager::writeCandidateSelection(QString word, QString sel) {
+  candidateSel[word] = sel;
+  saveCandidateSelection();
+}
+
+void CacheManager::saveCandidateSelection() {
+  QString path = QDir::homePath() + "/phonetic-candidate-selection.json";
+
+  QFile saveFile(path);
+  if(!saveFile.open(QIODevice::WriteOnly)) {
+    LOG_ERROR("[CacheManager:Save]: Error couldn't open save file.\n");
+    return;
+  }
+
+  QJsonDocument json(candidateSel);
+  saveFile.write(json.toJson());
+
+  saveFile.close();
 }

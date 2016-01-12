@@ -19,14 +19,23 @@
 #define CACHE_MANAGER_H
 
 #include <QString>
+#include <QJsonObject>
 #include <QMap>
 #include <QVector>
 
 class CacheManager {
   QMap<QString, QVector<QString>> tempCache;
+  QJsonObject candidateSel;
 public:
+  CacheManager();
+
   void setTempCache(QString key, QVector<QString> suggestions);
   QVector<QString> getTempCache(QString key);
+
+  void loadCandidateSelection();
+  QString getCandidateSelection(QString word);
+  void writeCandidateSelection(QString word, QString sel);
+  void saveCandidateSelection();
 };
 
 #endif /* end of include guard: CACHE_MANAGER_H */
