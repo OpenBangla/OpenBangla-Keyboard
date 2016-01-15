@@ -60,6 +60,12 @@ void MethodPhonetic::commitCandidate() {
     // User selected other candidates than the default no 0 candidate
     QString candidate = QString::fromStdString(im_get_selection(selected));
     suggest.saveSelection(candidate);
+  } else {
+    // User selected default one.
+    // Check if the user want to go back to the default candidate
+    if(suggest.getPrevSelected() != "") {
+      suggest.removeSelection();
+    }
   }
   im_commit();
 }

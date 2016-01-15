@@ -163,11 +163,22 @@ QVector<QString> PhoneticSuggestion::getSuggestion(QString term) {
 }
 
 QString PhoneticSuggestion::getPrevSelected() {
-  return cacheMan.getCandidateSelection(wMiddle);
+  QString prev = cacheMan.getCandidateSelection(wMiddle);
+  return wBegin + prev + wEnd;
 }
 
 void PhoneticSuggestion::saveSelection(QString selected) {
-  cacheMan.writeCandidateSelection(wMiddle, selected);
+  QString term;
+  QRegularExpression rgx("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
+  QRegularExpressionMatch match = rgx.match(selected);
+  if(match.hasMatch()) {
+    term = match.captured(2); // Only middle
+  }
+  cacheMan.writeCandidateSelection(wMiddle, term);
+}
+
+void PhoneticSuggestion::removeSelection() {
+  cacheMan.removeCandidateSelection(wMiddle);
 }
 
 QVector<QString> PhoneticSuggestion::Suggest(QString cache) {

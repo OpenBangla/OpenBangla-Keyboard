@@ -63,6 +63,13 @@ void CacheManager::writeCandidateSelection(QString word, QString sel) {
   saveCandidateSelection();
 }
 
+void CacheManager::removeCandidateSelection(QString word) {
+  if(candidateSel.contains(word)) {
+    candidateSel.remove(word);
+    saveCandidateSelection();
+  }
+}
+
 void CacheManager::saveCandidateSelection() {
   QString path = QDir::homePath() + "/phonetic-candidate-selection.json";
 
