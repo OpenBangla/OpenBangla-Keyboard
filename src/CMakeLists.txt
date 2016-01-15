@@ -3,7 +3,7 @@ set(SOURCES_CPP
 set(SOURCES_HPP
     log.h)
 
-include_directories(3rdparty im layout)
+include_directories(im layout)
 
 ## At first, set platform independent things
 link_directories(${CMAKE_CURRENT_BINARY_DIR}/layout)
@@ -20,7 +20,7 @@ endif(OS_LINUX)
 add_subdirectory(layout)
 
 add_executable(OpenBangla-Keyboard ${SOURCES_CPP} ${SOURCES_HPP})
-target_link_libraries(OpenBangla-Keyboard Layout Qt5::Core Qt5::Sql)
+target_link_libraries(OpenBangla-Keyboard Layout Qt5::Core)
 
 if(OS_LINUX)
   target_link_libraries(OpenBangla-Keyboard IM_iBus ${IBUS_LIBRARIES})
