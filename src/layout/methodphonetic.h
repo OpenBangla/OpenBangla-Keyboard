@@ -25,9 +25,12 @@
 
 class MethodPhonetic : public LayoutMth {
   PhoneticSuggestion suggest;
+  QVector<QString> list;
   QString EnglishT;
 
   void updateCache();
+  std::vector<std::string> toStdVector(QVector<QString> vec);
+  void commitCandidate();
 public:
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);

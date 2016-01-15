@@ -25,8 +25,15 @@ void MethodPhonetic::setLayout(QJsonObject lay) {
   suggest.setLayout(lay);
 }
 
+std::vector<std::string> MethodPhonetic::toStdVector(QVector<QString> vec) {
+  std::vector<std::string> v;
+  for(auto& str : vec) {
+    v.push_back(str.toStdString());
+  }
+  return v;
+}
+
 void MethodPhonetic::updateCache() {
-  std::vector<std::string> list;
   // Our Suggestion builder
   if(EnglishT == "") {
     // If there is no text available, don't do anything
@@ -34,8 +41,27 @@ void MethodPhonetic::updateCache() {
   } else {
     // Something we have to build
     list = suggest.Suggest(EnglishT);
-    im_update_suggest(list, EnglishT.toStdString());
+    im_update_suggest(toStdVector(list), EnglishT.toStdString());
+    // Is user selected any candidate before?
+    QString selected = suggest.getPrevSelected();
+    if(selected != "") {
+      // User has selected a candidate before
+      int index = list.indexOf(selected);
+      if(index != -1) {
+        im_selectCandidate(index);
+      }
+    }
   }
+}
+
+void MethodPhonetic::commitCandidate() {
+  int selected = im_get_selection_id();
+  if(selected != 0) {
+    // User selected other candidates than the default no 0 candidate
+    QString candidate = QString::fromStdString(im_get_selection(selected));
+    suggest.saveSelection(candidate);
+  }
+  im_commit();
 }
 
 bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr) {
@@ -629,7 +655,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       break;
    case VC_ENTER:
       if(EnglishT.length() > 0) {
-        im_commit();
+        commitCandidate();
         EnglishT = "";
         return false; // Close candidate window and ungrab the event
       } else {
@@ -678,7 +704,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
 
    case VC_SPACE:
       if(EnglishT.length() > 0) {
-        im_commit();
+        commitCandidate();
         EnglishT = "";
         return false; // Close candidate window and ungrab the event
       } else {
@@ -761,7 +787,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       break;
    case VC_KP_ENTER:
       if(EnglishT.length() > 0) {
-        im_commit();
+        commitCandidate();
         EnglishT = "";
         return false; // Close candidate window and ungrab the event
       } else {

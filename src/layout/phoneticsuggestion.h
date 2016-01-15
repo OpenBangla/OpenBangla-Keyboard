@@ -34,11 +34,22 @@ private:
   AutoCorrect autodict;
   Database db;
   CacheManager cacheMan;
+
+  QString wBegin;
+  QString wMiddle;
+  QString wEnd;
 public:
   PhoneticSuggestion();
   void setLayout(QJsonObject lay);
-  std::vector<std::string> toStdVector(QVector<QString> vec);
-  std::vector<std::string> Suggest(QString cache);
+
+  void separatePadding(QString word);
+  //bool isKar(QString word);
+  //bool isVowel(QString word);
+  QVector<QString> getSuggestion(QString term);
+  QString getPrevSelected();
+  void saveSelection(QString selected);
+
+  QVector<QString> Suggest(QString cache);
 };
 
 #endif /* end of include guard: PHONETIC_SUGGESTION_H */

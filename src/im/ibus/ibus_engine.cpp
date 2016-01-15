@@ -172,6 +172,7 @@ void im_update_suggest(std::vector<std::string> lst, std::string typed) {
     IBusText *clabel = ibus_text_new_from_string("");
     ibus_lookup_table_append_label(table, clabel);
   }
+  candidateSel = 0;
   ibus_update_preedit();
 }
 
@@ -184,10 +185,19 @@ void im_reset() {
   ibus_engine_hide_lookup_table(engine);
 }
 
-std::string im_get_selection() {
-  IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
+std::string im_get_selection(int index) {
+  IBusText *txt = ibus_lookup_table_get_candidate(table, (guint)index);
   std::string ret = (char*)txt->text;
   return ret;
+}
+
+int im_get_selection_id() {
+  return (int)candidateSel;
+}
+
+void im_selectCandidate(int index) {
+  candidateSel = (guint)index;
+  ibus_update_preedit();
 }
 
 void im_commit() {

@@ -16,8 +16,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QRegularExpression>
 #include "phoneticsuggestion.h"
 #include "qlevenshtein.hpp"
+#include "bengalichars.h"
 #include <QDebug>
 
 PhoneticSuggestion::PhoneticSuggestion() {}
@@ -26,29 +28,47 @@ void PhoneticSuggestion::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
 
-std::vector<std::string> PhoneticSuggestion::toStdVector(QVector<QString> vec) {
-  std::vector<std::string> v;
-  for(auto& str : vec) {
-    v.push_back(str.toStdString());
+void PhoneticSuggestion::separatePadding(QString word) {
+  QRegularExpression rgx("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
+  QRegularExpressionMatch match = rgx.match(word);
+  if(match.hasMatch()) {
+    wBegin = match.captured(1);
+    wMiddle = match.captured(2);
+    wEnd = match.captured(3);
   }
-  return v;
+}
+/*
+bool PhoneticSuggestion::isKar(QString word){
+  if(word.length() < 1) {
+    return false;
+  }
+  QRegularExpression rgx("^[\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}\\x{09C4}]$");
+  return word.contains(rgx);
 }
 
-std::vector<std::string> PhoneticSuggestion::Suggest(QString cache) {
+bool PhoneticSuggestion::isVowel(QString word) {
+  if(word.length() < 1) {
+    return false;
+  }
+  QRegularExpression rgx("^[\\x{0985}\\x{0986}\\x{0987}\\x{0988}\\x{0989}\\x{098A}\\x{098B}\\x{098F}\\x{0990}\\x{0993}\\x{0994}\\x{098C}\\x{09E1}\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}]$");
+  return word.contains(rgx);
+}*/
+
+QVector<QString> PhoneticSuggestion::getSuggestion(QString term) {
   QVector<QString> list;
-  list.clear();
-
-  QString parsed = parser.parse(cache);
-
+  QString parsed = parser.parse(term);
   // If we have cached the suggestions before, send them
-  list << cacheMan.getTempCache(cache);
+  list << cacheMan.getTempCache(term);
   if(list.isEmpty()) {
     // Add Auto Correct
-    QString autodct = autodict.getCorrected(cache);
+    QString autodct = autodict.getCorrected(term);
     if(autodct != "") list.push_back(autodct);
 
     // Add Dictionary suggestion
-    QVector<QString> dictList = db.find(cache);
+    QVector<QString> dictList;
+    if(term != "") {
+      dictList = db.find(term);
+    }
     if(!(dictList.isEmpty())) {
       // Remove the AutoCorrect suggestion if it matches with dictionary suggestion
       if((autodct != "") && (dictList.contains(autodct))) {
@@ -69,11 +89,114 @@ std::vector<std::string> PhoneticSuggestion::Suggest(QString cache) {
       list << dictList;
     }
     // Save the suggestions temporary
-    cacheMan.setTempCache(cache, list);
+    cacheMan.setTempCache(term, list);
+  }
+/* TODO: Add Suffix implementation
+  // Suggestions with Suffix
+  bool alreadySelected = false;
+  cacheMan.removeAllBase();
+  for(int i = term.length()-1; i > 0; --i) {
+    QString suffix = db.banglaForSuffix(term.mid(i).toLower());
+    if (suffix != "") {
+      QString base = term.mid(0, i);
+      QVector<QString> cached = cacheMan.getTempCache(base);
+      QString selected;
+      if (!alreadySelected) {
+        // Base user selection
+        selected = cacheMan.getCandidateSelection(base);
+      }
+      // This should always exist, so it's just a safety check
+      if (!cached.isEmpty()) {
+        for (auto& item : cached) {
+          // Skip AutoCorrect English Entry
+          if (base == item) {
+            continue;
+          }
+          QString word;
+          // Again saving humanity cause I'm Superman, no I'm not drunk or on weed :D
+          int cutPos = item.length() - 1;
+
+          QString itemRMC = item.mid(cutPos);   // RMC is Right Most Character
+          QString suffixLMC = suffix.mid(0, 1);      // LMC is Left Most Character
+          // BEGIN :: This part was taken from http://d.pr/zTmF
+          if (isVowel(itemRMC) && isKar(suffixLMC)) {
+            word = item + "\u09df" + suffix;
+          }
+          else {
+            if (itemRMC == "\u09ce") {
+              word = item.mid(0, cutPos) + "\u09a4" + suffix;
+            }
+            else if (itemRMC == "\u0982") {
+              word = item.mid(0, cutPos) + "\u0999" + suffix;
+            } else {
+              word = item + suffix;
+            }
+          }
+          // END
+
+          // Reverse Suffix Caching
+          QVector<QString> temp;
+          temp << base << item;
+          cacheMan.setBase(temp, word);
+
+          // Check that the WORD is not already in the list
+          if (!list.contains(word)) {
+            // Intelligent Selection
+            if (!alreadySelected && (selected != "") && (item == selected)) {
+              if (!(cacheMan.getCandidateSelection(term) != "")) {
+                cacheMan.writeCandidateSelection(word, term);
+              }
+              alreadySelected = true;
+            }
+            list << word;
+          }
+        }
+      }
+    }
+  }*/
+
+  // Check if the the list already contains the classic phonetic item.
+  if(!list.contains(parsed)) {
+    list << parsed;
+  }
+  return list;
+}
+
+QString PhoneticSuggestion::getPrevSelected() {
+  return cacheMan.getCandidateSelection(wMiddle);
+}
+
+void PhoneticSuggestion::saveSelection(QString selected) {
+  cacheMan.writeCandidateSelection(wMiddle, selected);
+}
+
+QVector<QString> PhoneticSuggestion::Suggest(QString cache) {
+  //Seperate begining and trailing padding characters, punctuations etc. from whole word
+  separatePadding(cache);
+
+  //Convert begining and trailing padding text to phonetic Bangla
+  wBegin = parser.parse(wBegin);
+  wEnd = parser.parse(wEnd);
+
+  QVector<QString> candidates = getSuggestion(wMiddle);
+  if(!candidates.isEmpty()) {
+    // Add padding to all, that we have captured.
+    for(int i; i < candidates.size(); ++i) {
+      candidates[i] = wBegin + candidates[i] + wEnd;
+    }
+    // Exact autocorrect
+    if((cache != wMiddle)) {
+      QString autocorrect = autodict.getCorrected(cache);
+      if(autocorrect != "") {
+        if(!candidates.contains(autocorrect)) {
+          candidates.insert(0, autocorrect);
+        }
+      }
+    }
+  } else {
+    candidates << wBegin;
   }
 
-  if(!(list.contains(parsed))) {
-    list.push_back(parsed);
-  }
-  return toStdVector(list);
+
+  return candidates;
 }

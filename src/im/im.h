@@ -51,7 +51,13 @@ void im_table_sel_dec();
 void im_reset();
 
 /* Get the current selection */
-std::string im_get_selection();
+std::string im_get_selection(int index);
+
+/* Get the current selection id */
+int im_get_selection_id();
+
+/* Select the candidate at @index */
+void im_selectCandidate(int index);
 
 void im_forward_key();
 

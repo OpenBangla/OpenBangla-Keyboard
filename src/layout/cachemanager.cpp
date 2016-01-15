@@ -51,7 +51,11 @@ void CacheManager::loadCandidateSelection() {
 }
 
 QString CacheManager::getCandidateSelection(QString word) {
-  return candidateSel[word].toString();
+  if(candidateSel.contains(word)) {
+    return candidateSel[word].toString();
+  } else {
+    return QString("");
+  }
 }
 
 void CacheManager::writeCandidateSelection(QString word, QString sel) {
