@@ -24,6 +24,7 @@
 #include "phoneticsuggestion.h"
 
 class MethodPhonetic : public LayoutMth {
+  bool changedCandidateSelection = false;
   PhoneticSuggestion suggest;
   QVector<QString> list;
   QString EnglishT;

@@ -49,7 +49,6 @@ public:
   void loadCandidateSelection();
   QString getCandidateSelection(QString word);
   void writeCandidateSelection(QString word, QString sel);
-  void removeCandidateSelection(QString word);
   void saveCandidateSelection();
 };
 

@@ -39,9 +39,16 @@ void MethodPhonetic::updateCache() {
     // If there is no text available, don't do anything
     return;
   } else {
+    if(changedCandidateSelection) {
+      // User selected other candidate, save current selection
+      suggest.saveSelection(QString::fromStdString(im_get_selection(im_get_selection_id())));
+      changedCandidateSelection = false;
+    }
+
     // Something we have to build
     list = suggest.Suggest(EnglishT);
     im_update_suggest(toStdVector(list), EnglishT.toStdString());
+
     // Is user selected any candidate before?
     QString selected = suggest.getPrevSelected();
     if(selected != "") {
@@ -55,17 +62,10 @@ void MethodPhonetic::updateCache() {
 }
 
 void MethodPhonetic::commitCandidate() {
-  int selected = im_get_selection_id();
-  if(selected != 0) {
-    // User selected other candidates than the default no 0 candidate
-    QString candidate = QString::fromStdString(im_get_selection(selected));
-    suggest.saveSelection(candidate);
-  } else {
-    // User selected default one.
-    // Check if the user want to go back to the default candidate
-    if(suggest.getPrevSelected() != "") {
-      suggest.removeSelection();
-    }
+  if(changedCandidateSelection) {
+    // User selected other candidates
+    suggest.saveSelection(QString::fromStdString(im_get_selection(im_get_selection_id())));
+    changedCandidateSelection = false;
   }
   im_commit();
 }
@@ -723,6 +723,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
    case VC_UP:
       if(EnglishT.length() > 0) {
         im_table_sel_inc();
+        changedCandidateSelection = true;
         return true;
       } else {
         return false;
@@ -731,6 +732,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
    case VC_RIGHT:
       if(EnglishT.length() > 0) {
         im_table_sel_inc();
+        changedCandidateSelection = true;
         return true;
       } else {
         return false;
@@ -739,6 +741,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
    case VC_DOWN:
       if(EnglishT.length() > 0) {
         im_table_sel_dec();
+        changedCandidateSelection = true;
         return true;
       } else {
         return false;
@@ -747,6 +750,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
    case VC_LEFT:
       if(EnglishT.length() > 0) {
         im_table_sel_dec();
+        changedCandidateSelection = true;
         return true;
       } else {
         return false;

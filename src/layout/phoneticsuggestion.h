@@ -45,7 +45,6 @@ public:
   QVector<QString> getSuggestion(QString term);
   QString getPrevSelected();
   void saveSelection(QString selected);
-  void removeSelection();
 
   QVector<QString> Suggest(QString cache);
 };

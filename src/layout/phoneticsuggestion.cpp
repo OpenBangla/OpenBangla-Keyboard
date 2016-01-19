@@ -174,10 +174,6 @@ void PhoneticSuggestion::saveSelection(QString selected) {
   cacheMan.writeCandidateSelection(PadMap["term"], mapTerm["term"]);
 }
 
-void PhoneticSuggestion::removeSelection() {
-  cacheMan.removeCandidateSelection(PadMap["term"]);
-}
-
 QVector<QString> PhoneticSuggestion::Suggest(QString cache) {
   //Seperate begining and trailing padding characters, punctuations etc. from whole word
   PadMap = separatePadding(cache);
