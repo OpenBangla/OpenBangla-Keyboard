@@ -19,8 +19,7 @@
 #ifndef PHONETIC_SUGGESTION_H
 #define PHONETIC_SUGGESTION_H
 
-#include <vector>
-#include <string>
+#include <QMap>
 #include <QString>
 #include <QJsonObject>
 #include "phoneticparser.h"
@@ -35,14 +34,12 @@ private:
   Database db;
   CacheManager cacheMan;
 
-  QString wBegin;
-  QString wMiddle;
-  QString wEnd;
+  QMap<QString, QString> PadMap;
 public:
   PhoneticSuggestion();
   void setLayout(QJsonObject lay);
 
-  void separatePadding(QString word);
+  QMap<QString, QString> separatePadding(QString word);
   //bool isKar(QString word);
   //bool isVowel(QString word);
   QVector<QString> getSuggestion(QString term);

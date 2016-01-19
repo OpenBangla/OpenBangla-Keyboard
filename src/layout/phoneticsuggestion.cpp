@@ -28,14 +28,16 @@ void PhoneticSuggestion::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
 
-void PhoneticSuggestion::separatePadding(QString word) {
+QMap<QString, QString> PhoneticSuggestion::separatePadding(QString word) {
+  QMap<QString, QString> cutted;
   QRegularExpression rgx("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
   QRegularExpressionMatch match = rgx.match(word);
   if(match.hasMatch()) {
-    wBegin = match.captured(1);
-    wMiddle = match.captured(2);
-    wEnd = match.captured(3);
+    cutted["prefix"] = match.captured(1);
+    cutted["term"] = match.captured(2);
+    cutted["suffix"] = match.captured(3);
   }
+  return cutted;
 }
 /*
 bool PhoneticSuggestion::isKar(QString word){
@@ -163,40 +165,35 @@ QVector<QString> PhoneticSuggestion::getSuggestion(QString term) {
 }
 
 QString PhoneticSuggestion::getPrevSelected() {
-  QString prev = cacheMan.getCandidateSelection(wMiddle);
-  return wBegin + prev + wEnd;
+  QString prev = cacheMan.getCandidateSelection(PadMap["term"]);
+  return PadMap["prefix"] + prev + PadMap["suffix"];
 }
 
 void PhoneticSuggestion::saveSelection(QString selected) {
-  QString term;
-  QRegularExpression rgx("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
-  QRegularExpressionMatch match = rgx.match(selected);
-  if(match.hasMatch()) {
-    term = match.captured(2); // Only middle
-  }
-  cacheMan.writeCandidateSelection(wMiddle, term);
+  QMap<QString, QString> mapTerm = separatePadding(selected);
+  cacheMan.writeCandidateSelection(PadMap["term"], mapTerm["term"]);
 }
 
 void PhoneticSuggestion::removeSelection() {
-  cacheMan.removeCandidateSelection(wMiddle);
+  cacheMan.removeCandidateSelection(PadMap["term"]);
 }
 
 QVector<QString> PhoneticSuggestion::Suggest(QString cache) {
   //Seperate begining and trailing padding characters, punctuations etc. from whole word
-  separatePadding(cache);
+  PadMap = separatePadding(cache);
 
   //Convert begining and trailing padding text to phonetic Bangla
-  wBegin = parser.parse(wBegin);
-  wEnd = parser.parse(wEnd);
+  PadMap["prefix"] = parser.parse(PadMap["prefix"]);
+  PadMap["suffix"] = parser.parse(PadMap["suffix"]);
 
-  QVector<QString> candidates = getSuggestion(wMiddle);
+  QVector<QString> candidates = getSuggestion(PadMap["term"]);
   if(!candidates.isEmpty()) {
     // Add padding to all, that we have captured.
-    for(int i; i < candidates.size(); ++i) {
-      candidates[i] = wBegin + candidates[i] + wEnd;
+    for(auto& candidate : candidates) {
+      candidate = PadMap["prefix"] + candidate + PadMap["suffix"];
     }
     // Exact autocorrect
-    if((cache != wMiddle)) {
+    if((cache != PadMap["term"])) {
       QString autocorrect = autodict.getCorrected(cache);
       if(autocorrect != "") {
         if(!candidates.contains(autocorrect)) {
@@ -205,7 +202,7 @@ QVector<QString> PhoneticSuggestion::Suggest(QString cache) {
       }
     }
   } else {
-    candidates << wBegin;
+    candidates << PadMap["prefix"];
   }
 
 
