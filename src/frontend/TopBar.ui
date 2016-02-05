@@ -42,7 +42,7 @@
       <normaloff>:/images/keyboard_layout_viewer.png</normaloff>:/images/keyboard_layout_viewer.png</iconset>
     </property>
    </widget>
-   <widget class="QPushButton" name="buttonViewLayou">
+   <widget class="QPushButton" name="buttonViewLayout">
     <property name="geometry">
      <rect>
       <x>40</x>

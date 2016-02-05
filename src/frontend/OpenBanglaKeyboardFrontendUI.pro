@@ -8,11 +8,14 @@
 TEMPLATE	= app
 LANGUAGE	= C++
 
-SOURCES += topbar.cpp
+SOURCES += \
+    TopBar.cpp
 
-HEADERS  += topbar.h
+HEADERS  += \
+    TopBar.h
 
-FORMS    += topbar.ui
+FORMS    += \
+    TopBar.ui
 
 RESOURCES += \
     images.qrc

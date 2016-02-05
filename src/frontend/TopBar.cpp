@@ -1,5 +1,5 @@
-#include "topbar.h"
-#include "ui_topbar.h"
+#include "TopBar.h"
+#include "ui_TopBar.h"
 
 TopBar::TopBar(QWidget *parent) :
     QMainWindow(parent),
