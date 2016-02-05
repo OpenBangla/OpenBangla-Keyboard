@@ -4,7 +4,7 @@
 <component>
     <name>org.freedesktop.IBus.OpenBangla</name>
     <description>OpenBangla Keyboard</description>
-    <exec>@LIBEXEC_DIR@/OpenBangla-Keyboard --ibus</exec>
+    <exec>@LIBEXEC_DIR@/OpenBangla-Engine --ibus</exec>
     <version>1.0</version>
     <author>See AboutBox</author>
     <license>GPL 3</license>

@@ -19,12 +19,12 @@ endif(OS_LINUX)
 ## Include subdirectories
 add_subdirectory(layout)
 
-add_executable(OpenBangla-Keyboard ${SOURCES_CPP} ${SOURCES_HPP})
-target_link_libraries(OpenBangla-Keyboard Layout Qt5::Core)
+add_executable(OpenBangla-Engine ${SOURCES_CPP} ${SOURCES_HPP})
+target_link_libraries(OpenBangla-Engine Layout Qt5::Core)
 
 if(OS_LINUX)
-  target_link_libraries(OpenBangla-Keyboard IM_iBus ${IBUS_LIBRARIES})
-  install(TARGETS OpenBangla-Keyboard
+  target_link_libraries(OpenBangla-Engine IM_iBus ${IBUS_LIBRARIES})
+  install(TARGETS OpenBangla-Engine
      RUNTIME DESTINATION ${LIBEXEC_DIR}
   )
 endif(OS_LINUX)

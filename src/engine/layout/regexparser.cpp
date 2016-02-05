@@ -14,7 +14,7 @@
   *  OpenBangla Keyboard.
   *  For showing respect to the Avro project and Rifat Nabi, I am
   *  releasing this code under MPL 2.0.
-  *  So this is code now dual licensed under the MPL 2 and the GNU GPL 3.
+  *  So this code is now dual licensed under the MPL 2 and the GNU GPL 3.
   *  If you have any questions about this matter, please send e-mail to
   *  me at described above.
   *  http://www.gnu.org/licenses/license-list.en.html#MPL-2.0

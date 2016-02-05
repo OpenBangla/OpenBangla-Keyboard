@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0.2)
 
 project(OpenBangla-Keyboard)
 set(APP_NAME "OpenBangla-Keyboard")
@@ -7,6 +7,7 @@ set(APP_NAME "OpenBangla-Keyboard")
 set(CMAKE_CXX_STANDARD 11)
 
 find_package(Qt5Core REQUIRED)
+find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 
 # Get system information. WIN32 and APPLE are defined by CMake
@@ -25,4 +26,5 @@ if(OS_LINUX)
   pkg_check_modules(IBUS REQUIRED ibus-1.0)
 endif(OS_LINUX)
 
-add_subdirectory(src)
+add_subdirectory(src/engine)
+add_subdirectory(src/frontend)
