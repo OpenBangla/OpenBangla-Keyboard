@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>159</width>
+    <width>184</width>
     <height>30</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <widget class="QPushButton" name="buttonAbout">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>150</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
@@ -31,7 +31,7 @@
    <widget class="QPushButton" name="buttonSetLayout">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
@@ -45,7 +45,7 @@
    <widget class="QPushButton" name="buttonViewLayout">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>60</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
@@ -59,7 +59,7 @@
    <widget class="QPushButton" name="buttonSettings">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>90</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
@@ -73,7 +73,7 @@
    <widget class="QPushButton" name="buttonInternet">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>120</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
@@ -82,6 +82,19 @@
     <property name="icon">
      <iconset resource="images.qrc">
       <normaloff>:/images/internet.png</normaloff>:/images/internet.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonIcon">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
     </property>
    </widget>
   </widget>
