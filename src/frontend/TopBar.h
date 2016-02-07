@@ -26,6 +26,8 @@ private slots:
 private:
     Ui::TopBar *ui;
     int pressedMouseX, pressedMouseY;
+
+    void SetupTopBar();
 };
 
 #endif // TOPBAR_H

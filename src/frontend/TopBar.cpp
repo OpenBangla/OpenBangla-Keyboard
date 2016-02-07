@@ -9,13 +9,17 @@ TopBar::TopBar(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //connect(ui->buttonIcon, SIGNAL(mouseMoveEvent(QMouseEvent*)), this, SLOT(mouseMoveButtonIcon(QMouseEvent*)));
-    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    SetupTopBar();
 }
 
 TopBar::~TopBar()
 {
     delete ui;
+}
+
+void TopBar::SetupTopBar() {
+  this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+  this->setFixedSize(QSize(this->width(), this->height()));
 }
 
 void TopBar::on_buttonAbout_clicked()
