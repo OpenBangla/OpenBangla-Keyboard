@@ -1,5 +1,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QMenu>
+#include <QAction>
 #include "TopBar.h"
 #include "ui_TopBar.h"
 
@@ -10,6 +12,7 @@ TopBar::TopBar(QWidget *parent) :
     ui->setupUi(this);
 
     SetupTopBar();
+    SetupPopupMenus();
 }
 
 TopBar::~TopBar()
@@ -22,6 +25,17 @@ void TopBar::SetupTopBar() {
   this->setFixedSize(QSize(this->width(), this->height()));
 }
 
+void TopBar::SetupPopupMenus() {
+  quitMenuQuit = new QAction("Quit", this);
+  connect(quitMenuQuit, SIGNAL(triggered()), this, SLOT(quitMenuQuit_clicked()));
+  quitMenu = new QMenu(this);
+  quitMenu->addAction(quitMenuQuit);
+}
+
+void TopBar::quitMenuQuit_clicked() {
+  TopBar::close();
+}
+
 void TopBar::on_buttonAbout_clicked()
 {
     QMessageBox::about(this, "About OpenBangla Keyboard",
@@ -31,16 +45,35 @@ void TopBar::on_buttonAbout_clicked()
 }
 
 void TopBar::mouseMoveEvent(QMouseEvent *event) {
-  move(event->globalX() - pressedMouseX, event->globalY() - pressedMouseY);
+  if(canMoveTopbar) {
+    this->setCursor(Qt::ClosedHandCursor);
+    move(event->globalX() - pressedMouseX, event->globalY() - pressedMouseY);
+  }
 }
 
 void TopBar::mousePressEvent(QMouseEvent *event) {
+  canMoveTopbar = true;
   pressedMouseX = event->x();
   pressedMouseY = event->y();
   event->accept();
 }
 
-void TopBar::on_buttonIcon_clicked()
+void TopBar::mouseReleaseEvent(QMouseEvent *event) {
+  canMoveTopbar = false;
+  this->unsetCursor();
+  event->accept();
+}
+
+void TopBar::on_buttonSetLayout_clicked()
 {
-    TopBar::close();
+
+}
+
+void TopBar::on_buttonShutdown_clicked()
+{
+    QPoint point;
+    point = this->pos();
+    point.setX(point.x() + ui->buttonShutdown->geometry().x());
+    point.setY(point.y() + this->height());
+    quitMenu->exec(point);
 }

@@ -6,9 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>184</width>
+    <width>162</width>
     <height>30</height>
    </rect>
+  </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
   </property>
   <property name="windowTitle">
    <string>OpenBangla Keyboard</string>
@@ -17,11 +20,14 @@
    <widget class="QPushButton" name="buttonAbout">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>100</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Help</string>
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
@@ -31,11 +37,14 @@
    <widget class="QPushButton" name="buttonSetLayout">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>10</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Change Layout</string>
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
@@ -45,11 +54,14 @@
    <widget class="QPushButton" name="buttonViewLayout">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>40</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>View information about current layout</string>
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
@@ -59,42 +71,35 @@
    <widget class="QPushButton" name="buttonSettings">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>70</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Settings</string>
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
       <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
     </property>
    </widget>
-   <widget class="QPushButton" name="buttonInternet">
+   <widget class="QPushButton" name="buttonShutdown">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>130</x>
       <y>0</y>
       <width>31</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="text">
+     <string/>
+    </property>
     <property name="icon">
      <iconset resource="images.qrc">
-      <normaloff>:/images/internet.png</normaloff>:/images/internet.png</iconset>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonIcon">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>20</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
+      <normaloff>:/images/shutdown.png</normaloff>:/images/shutdown.png</iconset>
     </property>
    </widget>
   </widget>
