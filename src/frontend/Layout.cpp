@@ -16,12 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Core of Layout Management */
+/* Layout handiling code for the frontend. */
 
 #include <QJsonDocument>
 #include <QFile>
+#include <QDir>
 #include <QByteArray>
-#include "layout.h"
+#include "Layout.h"
 
 Layout *gLayout;
 
@@ -31,9 +32,6 @@ Layout::~Layout() {
 }
 
 void Layout::loadLayout(QString path) {
-  // Check if we have already a opened file
-  if(fin.isOpen()) fin.close();
-
   // Open the given layout file
   fin.setFileName(path);
   fin.open(QIODevice::ReadOnly);
@@ -44,10 +42,8 @@ void Layout::loadLayout(QString path) {
   lf = json.object();
   // Load it's Description
   loadDesc();
-  // Set typing method
-  setMethod();
-  // Send changed layout to typing method
-  mth->setLayout(sendLayout());
+
+  fin.close();
 }
 
 void Layout::loadDesc() {
@@ -76,4 +72,37 @@ void Layout::loadDesc() {
 LayoutDesc Layout::getDesc() {
   // We have loaded Loaded LayoutDesc earlier, so just return it
   return lD;
+}
+
+LayoutList Layout::searchLayoutsEx(QDir dir) {
+  LayoutList layoutList;
+  QStringList flist = dir.entryList(QStringList("*.json"), QDir::Files);
+  for(auto& file : flist) {
+    // Actual file path
+    QString path = dir.path() + "/" + file;
+    // Load the file temporary
+    loadLayout(path);
+    // Make the internal map and list
+    layoutMap[lD.name] = path;
+    layoutList << lD.name;
+  }
+  return layoutList;
+}
+
+LayoutList Layout::searchLayouts() {
+  LayoutList lst;
+
+  // Clean the internal map and lists
+  layoutMap.clear();
+
+  QDir dir;
+  dir.setPath(PKGDATADIR "/layouts");
+  lst = searchLayoutsEx(dir);
+
+  return lst;
+}
+
+void Layout::setLayout(QString name) {
+  // Get the actual path and load the layout
+  loadLayout(layoutMap[name]);
 }

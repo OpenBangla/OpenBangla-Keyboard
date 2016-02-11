@@ -20,11 +20,14 @@
 #define LAYOUT_H
 
 #include <QFile>
+#include <QMap>
 #include <QString>
 #include <QVector>
 #include <QJsonObject>
 
-/* Core of Layout Management */
+/* Layout handiling code for the frontend */
+
+class QDir;
 
 enum LayoutType {
   Layout_Phonetic,
@@ -41,6 +44,9 @@ struct LayoutDesc {
   QString devComment;
 };
 
+/* List of available layouts */
+typedef QVector<QString> LayoutList;
+
 class Layout {
   /* File input handler */
   QFile fin;
@@ -48,20 +54,28 @@ class Layout {
   QJsonObject lf;
   /* Layout Descriptor */
   LayoutDesc lD;
+  /* Internal map of available layouts */
+  QMap<QString, QString> layoutMap;
 
   /* Load Layout Description. Used internaly */
   void loadDesc();
+  /* Search for layouts in @dir and return the list of them
+   * This also resets internal map and lists */
+  LayoutList searchLayoutsEx(QDir dir);
+  /* Load the layout from given @path */
+  void loadLayout(QString path);
 
 public:
   ~Layout();
 
-  /* Load a layout from given @path */
-  void loadLayout(QString path);
-
-  QJsonObject sendLayout();
-
   /* Get Layout Description */
   LayoutDesc getDesc();
+
+  /* Search for available layouts and return the list of them */
+  LayoutList searchLayouts();
+
+  /*  */
+  void setLayout(QString name);
 };
 
 /* Global */

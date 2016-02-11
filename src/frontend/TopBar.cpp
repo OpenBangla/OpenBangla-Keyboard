@@ -2,7 +2,9 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QAction>
+#include <QDebug>
 #include "TopBar.h"
+#include "Layout.h"
 #include "ui_TopBar.h"
 
 TopBar::TopBar(QWidget *parent) :
@@ -10,6 +12,8 @@ TopBar::TopBar(QWidget *parent) :
     ui(new Ui::TopBar)
 {
     ui->setupUi(this);
+
+    gLayout = new Layout();
 
     SetupTopBar();
     SetupPopupMenus();
@@ -28,15 +32,41 @@ void TopBar::SetupTopBar() {
 void TopBar::SetupPopupMenus() {
   // Layout Popup Menu
   layoutMenu = new QMenu(this);
-  layoutMenu->addSeparator();
   layoutMenuInstall = new QAction("Install a layout", this);
-  layoutMenu->addAction(layoutMenuInstall);
+  for (int i = 0; i < MaxLayoutFiles; ++i) {
+    layoutMenuLayouts[i] = new QAction(this);
+    layoutMenuLayouts[i]->setVisible(false);
+    connect(layoutMenuLayouts[i], SIGNAL(triggered()), this, SLOT(layoutMenuLayouts_clicked()));
+  }
+  RefreshLayouts();
 
   // Quit Popup Menu
   quitMenuQuit = new QAction("Quit", this);
   connect(quitMenuQuit, SIGNAL(triggered()), this, SLOT(quitMenuQuit_clicked()));
   quitMenu = new QMenu(this);
   quitMenu->addAction(quitMenuQuit);
+}
+
+void TopBar::RefreshLayouts() {
+  LayoutList list;
+  list = gLayout->searchLayouts();
+
+  for(int k = 0; k < MaxLayoutFiles; ++k) {
+    if(k < list.count()) {
+      layoutMenuLayouts[k]->setText(list[k]);
+      layoutMenuLayouts[k]->setVisible(true);
+    } else {
+      layoutMenuLayouts[k]->setVisible(false);
+    }
+    layoutMenu->addAction(layoutMenuLayouts[k]);
+  }
+  layoutMenu->addSeparator();
+  layoutMenu->addAction(layoutMenuInstall);
+}
+
+void TopBar::layoutMenuLayouts_clicked() {
+  QAction *action = qobject_cast<QAction *>(sender());
+  gLayout->setLayout(action->text());
 }
 
 void TopBar::quitMenuQuit_clicked() {

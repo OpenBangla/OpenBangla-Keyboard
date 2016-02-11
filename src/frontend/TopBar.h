@@ -24,6 +24,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private slots:
+    void layoutMenuLayouts_clicked();
     void quitMenuQuit_clicked();
 
     void on_buttonAbout_clicked();
@@ -38,12 +39,16 @@ private:
     int pressedMouseX, pressedMouseY;
 
     QMenu *layoutMenu;
+    enum { MaxLayoutFiles = 10 };
+    QAction *layoutMenuLayouts[MaxLayoutFiles];
     QAction *layoutMenuInstall;
     QMenu *quitMenu;
     QAction *quitMenuQuit;
 
     void SetupTopBar();
     void SetupPopupMenus();
+
+    void RefreshLayouts();
 };
 
 #endif // TOPBAR_H
