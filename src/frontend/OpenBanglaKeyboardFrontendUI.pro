@@ -9,13 +9,16 @@ TEMPLATE	= app
 LANGUAGE	= C++
 
 SOURCES += \
-    TopBar.cpp
+    TopBar.cpp \
+    AboutFile.cpp
 
 HEADERS  += \
-    TopBar.h
+    TopBar.h \
+    AboutFile.h
 
 FORMS    += \
-    TopBar.ui
+    TopBar.ui \
+    AboutFile.ui
 
 RESOURCES += \
     images.qrc

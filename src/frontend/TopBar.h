@@ -33,6 +33,8 @@ private slots:
 
     void on_buttonShutdown_clicked();
 
+    void on_buttonViewLayout_clicked();
+
 private:
     Ui::TopBar *ui;
     bool canMoveTopbar;

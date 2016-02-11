@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "TopBar.h"
 #include "Layout.h"
+#include "AboutFile.h"
 #include "ui_TopBar.h"
 
 TopBar::TopBar(QWidget *parent) :
@@ -117,4 +118,11 @@ void TopBar::on_buttonShutdown_clicked()
     point.setX(point.x() + ui->buttonShutdown->geometry().x());
     point.setY(point.y() + this->height());
     quitMenu->exec(point);
+}
+
+void TopBar::on_buttonViewLayout_clicked()
+{
+  AboutFile *aboutLayout = new AboutFile(this);
+  aboutLayout->show();
+  aboutLayout->setDialogType(AboutLayout);
 }
