@@ -26,6 +26,13 @@ void TopBar::SetupTopBar() {
 }
 
 void TopBar::SetupPopupMenus() {
+  // Layout Popup Menu
+  layoutMenu = new QMenu(this);
+  layoutMenu->addSeparator();
+  layoutMenuInstall = new QAction("Install a layout", this);
+  layoutMenu->addAction(layoutMenuInstall);
+
+  // Quit Popup Menu
   quitMenuQuit = new QAction("Quit", this);
   connect(quitMenuQuit, SIGNAL(triggered()), this, SLOT(quitMenuQuit_clicked()));
   quitMenu = new QMenu(this);
@@ -66,7 +73,11 @@ void TopBar::mouseReleaseEvent(QMouseEvent *event) {
 
 void TopBar::on_buttonSetLayout_clicked()
 {
-
+  QPoint point;
+  point = this->pos();
+  point.setX(point.x() + ui->buttonSetLayout->geometry().x());
+  point.setY(point.y() + this->height());
+  layoutMenu->exec(point);
 }
 
 void TopBar::on_buttonShutdown_clicked()

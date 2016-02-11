@@ -37,6 +37,8 @@ private:
     bool canMoveTopbar;
     int pressedMouseX, pressedMouseY;
 
+    QMenu *layoutMenu;
+    QAction *layoutMenuInstall;
     QMenu *quitMenu;
     QAction *quitMenuQuit;
 
