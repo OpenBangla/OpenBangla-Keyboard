@@ -37,6 +37,7 @@ void TopBar::SetupPopupMenus() {
   for (int i = 0; i < MaxLayoutFiles; ++i) {
     layoutMenuLayouts[i] = new QAction(this);
     layoutMenuLayouts[i]->setVisible(false);
+    layoutMenuLayouts[i]->setCheckable(true);
     connect(layoutMenuLayouts[i], SIGNAL(triggered()), this, SLOT(layoutMenuLayouts_clicked()));
   }
   RefreshLayouts();
@@ -68,6 +69,11 @@ void TopBar::RefreshLayouts() {
 void TopBar::layoutMenuLayouts_clicked() {
   QAction *action = qobject_cast<QAction *>(sender());
   gLayout->setLayout(action->text());
+  for(int k = 0; k < MaxLayoutFiles; ++k) {
+      layoutMenuLayouts[k]->setChecked(false);
+  }
+  action->setChecked(true);
+  RefreshLayouts();
 }
 
 void TopBar::quitMenuQuit_clicked() {
