@@ -28,7 +28,7 @@
   </widget>
   <widget class="QLineEdit" name="txtName">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -40,6 +40,9 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -57,7 +60,7 @@
   </widget>
   <widget class="QLineEdit" name="txtVar">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -68,6 +71,9 @@
     </rect>
    </property>
    <property name="frame">
+    <bool>true</bool>
+   </property>
+   <property name="readOnly">
     <bool>true</bool>
    </property>
   </widget>
@@ -99,7 +105,7 @@
   </widget>
   <widget class="QPlainTextEdit" name="txtDevComment">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -109,10 +115,13 @@
      <height>101</height>
     </rect>
    </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLineEdit" name="txtDevName">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -121,6 +130,9 @@
      <width>211</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="buttonOK">
