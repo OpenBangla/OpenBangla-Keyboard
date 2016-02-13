@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "TopBar.h"
 #include "Layout.h"
+#include "Settings.h"
 #include "AboutFile.h"
 #include "ui_TopBar.h"
 
@@ -15,6 +16,7 @@ TopBar::TopBar(QWidget *parent) :
     ui->setupUi(this);
 
     gLayout = new Layout();
+    gSettings = new Settings();
 
     SetupTopBar();
     SetupPopupMenus();
@@ -28,6 +30,8 @@ TopBar::~TopBar()
 void TopBar::SetupTopBar() {
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   this->setFixedSize(QSize(this->width(), this->height()));
+
+  move(gSettings->getWindowPosition());
 }
 
 void TopBar::SetupPopupMenus() {
@@ -86,6 +90,11 @@ void TopBar::on_buttonAbout_clicked()
         tr("<h2>OpenBangla Keyboard 0.1</h2>"
         "<p>Copyright &copy; 2015-2016 Muhammad Mominul Huque & OpenBangla Team."
         "<p>An OpenSource, Cross-Platform, Unicode Compliant Bengali Input Method."));
+}
+
+void TopBar::closeEvent(QCloseEvent *event) {
+  gSettings->setWindowPosition(this->pos());
+  event->accept();
 }
 
 void TopBar::mouseMoveEvent(QMouseEvent *event) {
