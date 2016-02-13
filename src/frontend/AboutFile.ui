@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>354</width>
-    <height>280</height>
+    <width>362</width>
+    <height>270</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,14 +16,14 @@
   <widget class="QLabel" name="lblName">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>40</x>
      <y>20</y>
-     <width>67</width>
+     <width>51</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Name:</string>
+    <string>Name :</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="txtName">
@@ -32,9 +32,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>100</x>
      <y>20</y>
-     <width>271</width>
+     <width>251</width>
      <height>21</height>
     </rect>
    </property>
@@ -48,14 +48,14 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>30</x>
      <y>50</y>
      <width>67</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Version:</string>
+    <string>Version :</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="txtVar">
@@ -64,9 +64,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>100</x>
      <y>50</y>
-     <width>271</width>
+     <width>251</width>
      <height>21</height>
     </rect>
    </property>
@@ -82,12 +82,12 @@
     <rect>
      <x>10</x>
      <y>80</y>
-     <width>121</width>
+     <width>91</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Developer Name:</string>
+    <string>Developer :</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -95,12 +95,12 @@
     <rect>
      <x>10</x>
      <y>110</y>
-     <width>151</width>
-     <height>17</height>
+     <width>91</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
-    <string>Developer Comment:</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Developer's &lt;/p&gt;&lt;p&gt;   comment : &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QPlainTextEdit" name="txtDevComment">
@@ -109,9 +109,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>130</y>
-     <width>331</width>
+     <x>100</x>
+     <y>110</y>
+     <width>251</width>
      <height>101</height>
     </rect>
    </property>
@@ -125,9 +125,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>100</x>
      <y>80</y>
-     <width>211</width>
+     <width>251</width>
      <height>21</height>
     </rect>
    </property>
@@ -138,8 +138,8 @@
   <widget class="QPushButton" name="buttonOK">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>240</y>
+     <x>250</x>
+     <y>230</y>
      <width>99</width>
      <height>27</height>
     </rect>
