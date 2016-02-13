@@ -7,6 +7,7 @@ namespace Ui {
 class TopBar;
 }
 
+class QActionGroup;
 class QAction;
 class QMenu;
 
@@ -45,6 +46,7 @@ private:
     QMenu *layoutMenu;
     enum { MaxLayoutFiles = 10 };
     QAction *layoutMenuLayouts[MaxLayoutFiles];
+    QActionGroup *layoutMenuLayoutsGroup;
     QAction *layoutMenuInstall;
     QMenu *quitMenu;
     QAction *quitMenuQuit;
