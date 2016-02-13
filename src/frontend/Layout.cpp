@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QByteArray>
 #include "Layout.h"
+#include "Settings.h"
 
 Layout *gLayout;
 
@@ -105,4 +106,6 @@ LayoutList Layout::searchLayouts() {
 void Layout::setLayout(QString name) {
   // Get the actual path and load the layout
   loadLayout(layoutMap[name]);
+  gSettings->setLayoutName(name);
+  gSettings->setLayoutPath(layoutMap[name]);
 }

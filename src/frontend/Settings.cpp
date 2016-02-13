@@ -45,3 +45,20 @@ QPoint Settings::getWindowPosition() {
   pos.setY(setting->value("window/position/y").toInt());
   return pos;
 }
+
+void Settings::setLayoutName(QString name) {
+  setting->setValue("layout/name", name);
+  setting->sync();
+}
+QString Settings::getLayoutName() {
+  setting->sync();
+  return setting->value("layout/name").toString();
+}
+void Settings::setLayoutPath(QString path) {
+  setting->setValue("layout/path", path);
+  setting->sync();
+}
+QString Settings::getLayoutPath() {
+  setting->sync();
+  return setting->value("layout/path").toString();
+}

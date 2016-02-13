@@ -32,8 +32,10 @@ public:
   void setWindowPosition(QPoint pos);
   QPoint getWindowPosition();
 
-  void setLayout(QString path);
-  QString getLayout();
+  void setLayoutName(QString name);
+  QString getLayoutName();
+  void setLayoutPath(QString path);
+  QString getLayoutPath();
 };
 
 /* Global */

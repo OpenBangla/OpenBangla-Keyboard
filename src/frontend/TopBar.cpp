@@ -65,6 +65,11 @@ void TopBar::RefreshLayouts() {
       layoutMenuLayouts[k]->setVisible(false);
     }
     layoutMenu->addAction(layoutMenuLayouts[k]);
+    // Select previous selected layout
+    if(layoutMenuLayouts[k]->text() == gSettings->getLayoutName()) {
+      layoutMenuLayouts[k]->setChecked(true);
+      gLayout->setLayout(layoutMenuLayouts[k]->text());
+    }
   }
   layoutMenu->addSeparator();
   layoutMenu->addAction(layoutMenuInstall);
