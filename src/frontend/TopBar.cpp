@@ -18,12 +18,18 @@ TopBar::TopBar(QWidget *parent) :
     gLayout = new Layout();
     gSettings = new Settings();
 
+    /* Dialogs */
+    aboutLayout = new AboutFile(this);
+
     SetupTopBar();
     SetupPopupMenus();
 }
 
 TopBar::~TopBar()
 {
+    /* Dialogs */
+    delete aboutLayout;
+
     delete ui;
 }
 
@@ -140,7 +146,6 @@ void TopBar::on_buttonShutdown_clicked()
 
 void TopBar::on_buttonViewLayout_clicked()
 {
-  AboutFile *aboutLayout = new AboutFile(this);
-  aboutLayout->show();
   aboutLayout->setDialogType(AboutLayout);
+  aboutLayout->show();
 }

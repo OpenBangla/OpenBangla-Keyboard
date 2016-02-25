@@ -11,6 +11,8 @@ class QActionGroup;
 class QAction;
 class QMenu;
 
+class AboutFile;
+
 class TopBar : public QMainWindow
 {
     Q_OBJECT
@@ -42,6 +44,9 @@ private:
     Ui::TopBar *ui;
     bool canMoveTopbar;
     int pressedMouseX, pressedMouseY;
+
+    /* Dialogs */
+    AboutFile *aboutLayout;
 
     QMenu *layoutMenu;
     enum { MaxLayoutFiles = 10 };
