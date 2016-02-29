@@ -24,7 +24,7 @@
 #include <QByteArray>
 #include "Layout.h"
 #include "Settings.h"
-
+#include <QDebug>
 Layout *gLayout;
 
 Layout::~Layout() {
@@ -64,6 +64,9 @@ void Layout::loadDesc() {
   lD.name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
   // Layout Version
   lD.ver = lf.value("info").toObject().value("layout").toObject().value("version").toString();
+  // Layout Image 0
+  lD.image0.clear();
+  lD.image0.append(lf.value("info").toObject().value("layout").toObject().value("image0").toString());
   // Layout Develper Name
   lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("name").toString();
   // Layout Developer Comment

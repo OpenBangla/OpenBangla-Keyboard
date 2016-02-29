@@ -29,8 +29,10 @@ public:
   Settings();
   ~Settings();
 
-  void setWindowPosition(QPoint pos);
-  QPoint getWindowPosition();
+  void setTopBarWindowPosition(QPoint pos);
+  QPoint getTopBarWindowPosition();
+  void setLayoutViewerWindowPosition(QPoint pos);
+  QPoint getLayoutViewerWindowPosition();
 
   void setLayoutName(QString name);
   QString getLayoutName();

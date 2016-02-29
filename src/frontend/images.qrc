@@ -6,5 +6,7 @@
         <file>images/keyboard_layout_viewer.png</file>
         <file>images/settings.png</file>
         <file>images/shutdown.png</file>
+        <file>images/zoom-in.png</file>
+        <file>images/zoom-out.png</file>
     </qresource>
 </RCC>

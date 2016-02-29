@@ -10,15 +10,18 @@ LANGUAGE	= C++
 
 SOURCES += \
     TopBar.cpp \
-    AboutFile.cpp
+    AboutFile.cpp \
+    LayoutViewer.cpp
 
 HEADERS  += \
     TopBar.h \
-    AboutFile.h
+    AboutFile.h \
+    LayoutViewer.h
 
 FORMS    += \
     TopBar.ui \
-    AboutFile.ui
+    AboutFile.ui \
+    LayoutViewer.ui
 
 RESOURCES += \
     images.qrc

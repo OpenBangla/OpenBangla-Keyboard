@@ -40,6 +40,7 @@ struct LayoutDesc {
   int fileVer;
   QString name;
   QString ver;
+  QByteArray image0;
   QString devName;
   QString devComment;
 };

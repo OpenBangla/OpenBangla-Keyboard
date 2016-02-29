@@ -11,6 +11,7 @@ class QActionGroup;
 class QAction;
 class QMenu;
 
+class LayoutViewer;
 class AboutFile;
 
 class TopBar : public QMainWindow
@@ -30,6 +31,8 @@ protected:
 
 private slots:
     void layoutMenuLayouts_clicked();
+    void aboutMenuLayout_clicked();
+    void aboutMenuAbout_clicked();
     void quitMenuQuit_clicked();
 
     void on_buttonAbout_clicked();
@@ -46,13 +49,16 @@ private:
     int pressedMouseX, pressedMouseY;
 
     /* Dialogs */
-    AboutFile *aboutLayout;
+    LayoutViewer *layoutViewer;
 
     QMenu *layoutMenu;
     enum { MaxLayoutFiles = 10 };
     QAction *layoutMenuLayouts[MaxLayoutFiles];
     QActionGroup *layoutMenuLayoutsGroup;
     QAction *layoutMenuInstall;
+    QMenu *aboutMenu;
+    QAction *aboutMenuLayout;
+    QAction *aboutMenuAbout;
     QMenu *quitMenu;
     QAction *quitMenuQuit;
 

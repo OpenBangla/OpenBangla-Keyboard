@@ -32,17 +32,31 @@ Settings::~Settings() {
   delete setting;
 }
 
-void Settings::setWindowPosition(QPoint pos) {
-  setting->setValue("window/position/x", pos.x());
-  setting->setValue("window/position/y", pos.y());
+void Settings::setTopBarWindowPosition(QPoint pos) {
+  setting->setValue("window/positions/TopBar/x", pos.x());
+  setting->setValue("window/positions/TopBar/y", pos.y());
   setting->sync();
 }
 
-QPoint Settings::getWindowPosition() {
+QPoint Settings::getTopBarWindowPosition() {
   QPoint pos;
   setting->sync();
-  pos.setX(setting->value("window/position/x").toInt());
-  pos.setY(setting->value("window/position/y").toInt());
+  pos.setX(setting->value("window/positions/TopBar/x").toInt());
+  pos.setY(setting->value("window/positions/TopBar/y").toInt());
+  return pos;
+}
+
+void Settings::setLayoutViewerWindowPosition(QPoint pos) {
+  setting->setValue("window/positions/LayoutViewer/x", pos.x());
+  setting->setValue("window/positions/LayoutViewer/y", pos.y());
+  setting->sync();
+}
+
+QPoint Settings::getLayoutViewerWindowPosition() {
+  QPoint pos;
+  setting->sync();
+  pos.setX(setting->value("window/positions/LayoutViewer/x").toInt());
+  pos.setY(setting->value("window/positions/LayoutViewer/y").toInt());
   return pos;
 }
 
