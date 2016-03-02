@@ -6,6 +6,7 @@ add_library(Layout
             methodphonetic.h
             phoneticparser.cpp
             phoneticparser.h
+            FixedLayoutParser.cpp
             regexparser.cpp
             regexparser.h
             autocorrect.cpp
