@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QByteArray>
 #include "Layout.h"
+#include "Settings.h"
 #include "MethodPhonetic.h"
 #include "MethodFixedLayoutModern.h"
 
@@ -82,9 +83,18 @@ void Layout::setMethod() {
   }
 }
 
+void Layout::updateWithSettings() {
+  // Check if user has changed layout
+  if(fin.fileName() != gSettings->getLayoutPath()) {
+    loadLayout(gSettings->getLayoutPath());
+  }
+}
+
 bool Layout::sendKey(int lkey, bool lshift, bool lctrl, bool lalt) {
   // Set modifiers
   bool laltgr, lshiftaltgr;
+
+  updateWithSettings();
 
   // Don't catch Ctrl without Shift
   if(lctrl && !lshift) { return false; }

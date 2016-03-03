@@ -58,6 +58,8 @@ class Layout {
   void loadDesc();
   /* Set typing method. Used internaly */
   void setMethod();
+  /* Update with current settings */
+  void updateWithSettings();
 public:
   ~Layout();
 
