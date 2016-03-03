@@ -20,7 +20,7 @@
 #define METHOD_FIXED_LAYOUT_MODERN
 
 #include <QJsonObject>
-#include "layout.h"
+#include "Layout.h"
 #include "FixedLayoutParser.h"
 
 class MethodFixedLayoutModern : public LayoutMth {

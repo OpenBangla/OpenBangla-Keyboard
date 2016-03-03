@@ -15,27 +15,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QSettings>
+#include <QString>
+#include <QPoint>
+#include "Settings.h"
 
-#ifndef METHOD_PHONETIC_H
-#define METHOD_PHONETIC_H
+Settings *gSettings;
 
-#include <QJsonObject>
-#include "Layout.h"
-#include "phoneticsuggestion.h"
+Settings::Settings() {
+  setting = new QSettings("OpenBangla", "Keyboard");
+  setting->sync();
+}
 
-class MethodPhonetic : public LayoutMth {
-  bool changedCandidateSelection = false;
-  PhoneticSuggestion suggest;
-  QVector<QString> list;
-  QString EnglishT;
+Settings::~Settings() {
+  setting->sync();
+  delete setting;
+}
 
-  void updateCache();
-  std::vector<std::string> toStdVector(QVector<QString> vec);
-  void commitCandidate();
-public:
-  // Functions inherited from class LayoutMth
-  void setLayout(QJsonObject lay);
-  bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
-};
-
-#endif /* end of include guard: METHOD_PHONETIC_H */
+QString Settings::getLayoutPath() {
+  setting->sync();
+  return setting->value("layout/path").toString();
+}

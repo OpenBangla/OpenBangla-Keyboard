@@ -22,7 +22,7 @@
 #include <glib.h>
 #include "im.h"
 #include "ibus_keycode.h"
-#include "layout.h"
+#include "Layout.h"
 #include "log.h"
 
 static IBusBus *bus = NULL;

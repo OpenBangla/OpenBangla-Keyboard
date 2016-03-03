@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,26 +16,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef METHOD_PHONETIC_H
-#define METHOD_PHONETIC_H
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
-#include <QJsonObject>
-#include "Layout.h"
-#include "phoneticsuggestion.h"
+class QSettings;
+class QString;
 
-class MethodPhonetic : public LayoutMth {
-  bool changedCandidateSelection = false;
-  PhoneticSuggestion suggest;
-  QVector<QString> list;
-  QString EnglishT;
-
-  void updateCache();
-  std::vector<std::string> toStdVector(QVector<QString> vec);
-  void commitCandidate();
+class Settings {
+  QSettings *setting;
 public:
-  // Functions inherited from class LayoutMth
-  void setLayout(QJsonObject lay);
-  bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
+  Settings();
+  ~Settings();
+  
+  QString getLayoutPath();
 };
 
-#endif /* end of include guard: METHOD_PHONETIC_H */
+/* Global */
+extern Settings *gSettings;
+
+#endif /* end of include guard: SETTINGS_H */

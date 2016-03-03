@@ -33,11 +33,6 @@ enum LayoutType {
 /* Structure for storing Layout Description */
 struct LayoutDesc {
   LayoutType type;
-  int fileVer;
-  QString name;
-  QString ver;
-  QString devName;
-  QString devComment;
 };
 
 /* A pure virtual class. Every Typing Method have to implement this.

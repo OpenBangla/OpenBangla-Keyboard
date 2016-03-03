@@ -17,11 +17,14 @@
  */
 
 #include "im.h"
-#include "layout.h"
+#include "Layout.h"
+#include "Settings.h"
 
 int main(int argc, char *argv []) {
   gLayout = new Layout();
-  gLayout->loadLayout( PKGDATADIR "/layouts/avrophonetic.json");
+  gSettings = new Settings();
+
+  gLayout->loadLayout(gSettings->getLayoutPath());
   if (argv[1] = "--ibus") {
     im_start(true);
   } else {

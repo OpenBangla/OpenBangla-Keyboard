@@ -21,7 +21,7 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QByteArray>
-#include "layout.h"
+#include "Layout.h"
 #include "methodphonetic.h"
 
 Layout *gLayout;
@@ -63,24 +63,6 @@ void Layout::loadDesc() {
   } else {
     lD.type = Layout_Fixed;
   }
-
-  // Get values
-  /*
-  int FileVer = lf["info"]["version"];
-  std::string Name = lf["info"]["layout"]["name"];
-  std::string Ver = lf["info"]["layout"]["version"];
-  std::string DevName = lf["info"]["layout"]["developer"]["name"];
-  std::string DevComment = lf["info"]["layout"]["developer"]["comment"];*/
-  // Layout File Version
-  lD.fileVer = lf.value("info").toObject().value("version").toInt();
-  // Layout Name
-  lD.name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
-  // Layout Version
-  lD.ver = lf.value("info").toObject().value("layout").toObject().value("version").toString();
-  // Layout Develper Name
-  lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("name").toString();
-  // Layout Developer Comment
-  lD.devComment = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("comment").toString();
 }
 
 QJsonObject Layout::sendLayout() {
