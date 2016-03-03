@@ -16,17 +16,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FIXED_LAYOUT_PARSER
-#define FIXED_LAYOUT_PARSER
+#ifndef METHOD_FIXED_LAYOUT_MODERN
+#define METHOD_FIXED_LAYOUT_MODERN
 
-#include <QString>
 #include <QJsonObject>
+#include "layout.h"
+#include "FixedLayoutParser.h"
 
-class FixedLayoutParser {
-  QJsonObject layout;
+class MethodFixedLayoutModern : public LayoutMth {
+  FixedLayoutParser parser;
 public:
-  void setLayout(QJsonObject l);
-  QString getCharForKey(int keyNum, bool shift, bool altgr, bool shiftaltgr);
+  // Functions inherited from class LayoutMth
+  void setLayout(QJsonObject lay);
+  bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
 };
 
-#endif /* end of include guard: FIXED_LAYOUT_PARSER */
+#endif /* end of include guard: METHOD_FIXED_LAYOUT_MODERN */

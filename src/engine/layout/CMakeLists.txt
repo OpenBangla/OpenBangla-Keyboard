@@ -4,6 +4,7 @@ add_library(Layout
             layout.h
             methodphonetic.cpp
             methodphonetic.h
+            MethodFixedLayoutModern.cpp
             phoneticparser.cpp
             phoneticparser.h
             FixedLayoutParser.cpp
