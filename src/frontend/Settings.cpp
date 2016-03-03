@@ -33,31 +33,23 @@ Settings::~Settings() {
 }
 
 void Settings::setTopBarWindowPosition(QPoint pos) {
-  setting->setValue("window/positions/TopBar/x", pos.x());
-  setting->setValue("window/positions/TopBar/y", pos.y());
+  setting->setValue("window/positions/TopBar", pos);
   setting->sync();
 }
 
 QPoint Settings::getTopBarWindowPosition() {
-  QPoint pos;
   setting->sync();
-  pos.setX(setting->value("window/positions/TopBar/x").toInt());
-  pos.setY(setting->value("window/positions/TopBar/y").toInt());
-  return pos;
+  return setting->value("window/positions/TopBar").toPoint();
 }
 
 void Settings::setLayoutViewerWindowPosition(QPoint pos) {
-  setting->setValue("window/positions/LayoutViewer/x", pos.x());
-  setting->setValue("window/positions/LayoutViewer/y", pos.y());
+  setting->setValue("window/positions/LayoutViewer", pos);
   setting->sync();
 }
 
 QPoint Settings::getLayoutViewerWindowPosition() {
-  QPoint pos;
   setting->sync();
-  pos.setX(setting->value("window/positions/LayoutViewer/x").toInt());
-  pos.setY(setting->value("window/positions/LayoutViewer/y").toInt());
-  return pos;
+  return setting->value("window/positions/LayoutViewer").toPoint();
 }
 
 void Settings::setLayoutName(QString name) {
