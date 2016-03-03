@@ -25,7 +25,10 @@
 
 class MethodFixedLayoutModern : public LayoutMth {
   FixedLayoutParser parser;
+  QString BengaliT;
 public:
+  void updateCache();
+  void makeWord(QString word);
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
   bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);

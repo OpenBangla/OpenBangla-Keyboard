@@ -23,11 +23,13 @@
 #include <QByteArray>
 #include "Layout.h"
 #include "MethodPhonetic.h"
+#include "MethodFixedLayoutModern.h"
 
 Layout *gLayout;
 
 // Available typing methods
 MethodPhonetic mPh;
+MethodFixedLayoutModern mFm;
 
 Layout::~Layout() {
   // Close the file handler
@@ -76,7 +78,7 @@ void Layout::setMethod() {
     mth = &mPh; // Phonetic Method
   } else {
     // Selected method is fixed layout
-    // TODO: implement
+    mth = &mFm;
   }
 }
 

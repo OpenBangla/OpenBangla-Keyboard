@@ -23,16 +23,53 @@ void MethodFixedLayoutModern::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
 
+void MethodFixedLayoutModern::makeWord(QString word) {
+  BengaliT += word;
+  updateCache();
+}
+
+void MethodFixedLayoutModern::updateCache() {
+  im_update(BengaliT.toStdString());
+}
+
 bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool shiftaltgr) {
   switch (key) {
     case VC_BACKSPACE:
-      /*TODO*/
+      if(BengaliT.length() > 0) {
+        QString BT = BengaliT.mid(0, BengaliT.length()-1);
+        BengaliT = BT;
+        updateCache();
+        if(BengaliT.length() <= 0) {
+          im_reset();
+        }
+        return true;
+      } else {
+        return false;
+      }
     case VC_ENTER:
-      /*TODO*/
+      if(BengaliT.length() > 0) {
+        im_commit();
+        BengaliT = "";
+        return false;
+      } else {
+        return false;
+      }
     case VC_KP_ENTER:
-      /*TODO*/
+      if(BengaliT.length() > 0) {
+        im_commit();
+        BengaliT = "";
+        return false;
+      } else {
+        return false;
+      }
     case VC_SPACE:
-      /*TODO*/
+      if(BengaliT.length() > 0) {
+        im_commit();
+        BengaliT = "";
+        return false;
+        } else {
+          return false;
+        }
     default:
       break;
   }
@@ -40,5 +77,7 @@ bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool s
   QString pressed = parser.getCharForKey(key, shift, altgr, shiftaltgr);
   if(pressed == "") {
     return false;
+  } else {
+    makeWord(pressed);
   }
 }
