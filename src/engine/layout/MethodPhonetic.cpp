@@ -19,7 +19,8 @@
 #include "im.h"
 #include "log.h"
 #include "keycode.h"
-#include "methodphonetic.h"
+#include "MethodPhonetic.h"
+#include "Settings.h"
 
 void MethodPhonetic::setLayout(QJsonObject lay) {
   suggest.setLayout(lay);
@@ -663,7 +664,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       if(EnglishT.length() > 0) {
         commitCandidate();
         EnglishT = "";
-        return false; // Close candidate window and ungrab the event
+        return gSettings->getEnterKeyClosesPrevWin();
       } else {
         return false;
       }
@@ -799,7 +800,7 @@ bool MethodPhonetic::processKey(int key, bool shift, bool altgr, bool shiftaltgr
       if(EnglishT.length() > 0) {
         commitCandidate();
         EnglishT = "";
-        return false; // Close candidate window and ungrab the event
+        return gSettings->getEnterKeyClosesPrevWin();
       } else {
         return false;
       }

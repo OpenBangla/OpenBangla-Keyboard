@@ -2,8 +2,8 @@ include_directories(. ../im ../ )
 add_library(Layout
             Layout.cpp
             Layout.h
-            methodphonetic.cpp
-            methodphonetic.h
+            MethodPhonetic.cpp
+            MethodPhonetic.h
             MethodFixedLayoutModern.cpp
             phoneticparser.cpp
             phoneticparser.h

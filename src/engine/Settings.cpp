@@ -36,3 +36,8 @@ QString Settings::getLayoutPath() {
   setting->sync();
   return setting->value("layout/path").toString();
 }
+
+bool Settings::getEnterKeyClosesPrevWin() {
+  setting->sync();
+  return setting->value("settings/EnterKeyClosesPrevWin", false).toBool();
+}

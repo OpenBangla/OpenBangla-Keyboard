@@ -27,8 +27,9 @@ class Settings {
 public:
   Settings();
   ~Settings();
-  
+
   QString getLayoutPath();
+  bool getEnterKeyClosesPrevWin();
 };
 
 /* Global */

@@ -6,6 +6,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRC_GUI TopBar.cpp
             AboutFile.cpp
             LayoutViewer.cpp
+            SettingsDialog.cpp
             images.qrc)
 
 set(SRC_MAIN main.cpp

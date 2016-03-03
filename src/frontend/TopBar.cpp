@@ -8,6 +8,7 @@
 #include "Settings.h"
 #include "LayoutViewer.h"
 #include "AboutFile.h"
+#include "SettingsDialog.h"
 #include "ui_TopBar.h"
 
 TopBar::TopBar(QWidget *parent) :
@@ -21,6 +22,7 @@ TopBar::TopBar(QWidget *parent) :
 
     /* Dialogs */
     layoutViewer = new LayoutViewer(this);
+    settingsDialog = new SettingsDialog(this);
 
     SetupTopBar();
     SetupPopupMenus();
@@ -30,6 +32,7 @@ TopBar::~TopBar()
 {
     /* Dialogs */
     delete layoutViewer;
+    delete settingsDialog;
 
     delete ui;
 }
@@ -170,4 +173,10 @@ void TopBar::on_buttonViewLayout_clicked()
 {
   layoutViewer->refreshLayoutViewer();
   layoutViewer->show();
+}
+
+void TopBar::on_buttonSettings_clicked()
+{
+    settingsDialog->updateSettings();
+    settingsDialog->show();
 }

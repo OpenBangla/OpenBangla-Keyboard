@@ -13,6 +13,7 @@ class QMenu;
 
 class LayoutViewer;
 class AboutFile;
+class SettingsDialog;
 
 class TopBar : public QMainWindow
 {
@@ -43,6 +44,8 @@ private slots:
 
     void on_buttonViewLayout_clicked();
 
+    void on_buttonSettings_clicked();
+
 private:
     Ui::TopBar *ui;
     bool canMoveTopbar;
@@ -50,6 +53,7 @@ private:
 
     /* Dialogs */
     LayoutViewer *layoutViewer;
+    SettingsDialog *settingsDialog;
 
     QMenu *layoutMenu;
     enum { MaxLayoutFiles = 10 };

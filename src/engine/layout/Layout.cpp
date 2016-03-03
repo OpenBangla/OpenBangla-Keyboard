@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QByteArray>
 #include "Layout.h"
-#include "methodphonetic.h"
+#include "MethodPhonetic.h"
 
 Layout *gLayout;
 

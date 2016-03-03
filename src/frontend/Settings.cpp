@@ -76,3 +76,13 @@ QString Settings::getLayoutPath() {
   setting->sync();
   return setting->value("layout/path").toString();
 }
+
+void Settings::setEnterKeyClosesPrevWin(bool b) {
+  setting->setValue("settings/EnterKeyClosesPrevWin", b);
+  setting->sync();
+}
+
+bool Settings::getEnterKeyClosesPrevWin() {
+  setting->sync();
+  return setting->value("settings/EnterKeyClosesPrevWin", false).toBool();
+}

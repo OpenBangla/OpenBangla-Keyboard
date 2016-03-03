@@ -38,6 +38,9 @@ public:
   QString getLayoutName();
   void setLayoutPath(QString path);
   QString getLayoutPath();
+
+  void setEnterKeyClosesPrevWin(bool b);
+  bool getEnterKeyClosesPrevWin();
 };
 
 /* Global */
