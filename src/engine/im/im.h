@@ -41,6 +41,9 @@ void im_table_hide();
 /* Updates IM engine's lookup table with given @lst */
 void im_update_suggest(std::vector<std::string> lst, std::string typed);
 
+/* Updates IM's preedit only */
+void im_update(std::string text);
+
 /* Increment selection in IM engine's lookup table */
 void im_table_sel_inc();
 

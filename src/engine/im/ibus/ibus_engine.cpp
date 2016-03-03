@@ -32,6 +32,8 @@ IBusLookupTable *table = NULL;
 gint id = 0;
 guint candidateSel = 0;
 
+bool onlyPreedit;
+
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
   ibus_quit();
   LOG_INFO("[IM:iBus]: Bus disconnected!\n");
@@ -133,8 +135,10 @@ void start_setup(bool ibus) {
 }
 
 void ibus_update_preedit() {
-  ibus_lookup_table_set_cursor_pos(table, candidateSel);
-  ibus_engine_update_lookup_table_fast(engine, table, TRUE);
+  if(!onlyPreedit) {
+    ibus_lookup_table_set_cursor_pos(table, candidateSel);
+    ibus_engine_update_lookup_table_fast(engine, table, TRUE);
+  }
   // Get current suggestion
   IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
   ibus_engine_update_preedit_text(engine, txt, ibus_text_get_length(txt), TRUE);
@@ -173,11 +177,22 @@ void im_update_suggest(std::vector<std::string> lst, std::string typed) {
     ibus_lookup_table_append_label(table, clabel);
   }
   candidateSel = 0;
+  onlyPreedit = false;
+  ibus_update_preedit();
+}
+
+void im_update(std::string text) {
+  ibus_lookup_table_clear(table); // At first, remove all candidates
+  IBusText *ctext = ibus_text_new_from_string((gchar*)text.c_str());
+  ibus_lookup_table_append_candidate(table, ctext);
+  candidateSel = 0;
+  onlyPreedit = true;
   ibus_update_preedit();
 }
 
 void im_reset() {
   // Reset all our mess
+  onlyPreedit = false;
   candidateSel = 0;
   ibus_lookup_table_clear(table);
   ibus_engine_hide_preedit_text(engine);
