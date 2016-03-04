@@ -157,8 +157,6 @@ bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool s
 
   QString pressed = parser.getCharForKey(key, shift, altgr, shiftaltgr);
   if(pressed == "") {
-    im_commit();
-    BengaliT = "";
     return false;
   } else {
     makeWord(pressed);
