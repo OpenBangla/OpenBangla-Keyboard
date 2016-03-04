@@ -32,8 +32,8 @@ static IBusLookupTable *table = NULL;
 static gint id = 0;
 static guint candidateSel = 0;
 
-bool onlyPreedit;
-std::vector<std::string> suggestions;
+static bool onlyPreedit;
+static std::vector<std::string> suggestions;
 
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
   ibus_quit();
