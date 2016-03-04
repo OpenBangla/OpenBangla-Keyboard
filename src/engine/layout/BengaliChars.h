@@ -21,6 +21,9 @@
 
 #include <QChar>
 
+class QString;
+class QRegularExpression;
+
 /* The Unicode Standard 8.0
  * http://www.unicode.org/charts/
  * http://www.unicode.org/charts/PDF/U0980.pdf
@@ -102,6 +105,7 @@ QChar b_Ukar = 0x9C1;
 QChar b_UUkar = 0x9C2;
 QChar b_RRIkar = 0x9C3; // BENGALI VOWEL SIGN VOCALIC R
 QChar bVocalic_RR = 0x9C4; // BENGALI VOWEL SIGN VOCALIC RR
+QChar b_Ekar = 0x9C7;
 QChar b_OIkar = 0x9C8;
 
 /* Two-part dependent vowel signs */
@@ -174,5 +178,10 @@ QChar bCurrencyGanda = 0x9FB;
 /* Unicode Addition */
 QChar ZWJ = 0x200D;
 QChar ZWNJ = 0x200C;
+
+bool isKar(QString c) {
+  QRegularExpression regex("^[\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}\\x{09C4}]$");
+  return c.contains(regex);
+}
 
 #endif /* end of include guard: BENGALICHARS_H */

@@ -19,7 +19,6 @@
 #include <QRegularExpression>
 #include "phoneticsuggestion.h"
 #include "qlevenshtein.hpp"
-#include "bengalichars.h"
 #include <QDebug>
 
 PhoneticSuggestion::PhoneticSuggestion() {}

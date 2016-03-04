@@ -29,6 +29,7 @@ class MethodFixedLayoutModern : public LayoutMth {
 public:
   void updateCache();
   void makeWord(QString word);
+  void internalBackspace();
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
   bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
