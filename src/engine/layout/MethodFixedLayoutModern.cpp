@@ -97,7 +97,9 @@ void MethodFixedLayoutModern::makeWord(QString word) {
 }
 
 void MethodFixedLayoutModern::updateCache() {
-  im_update(BengaliT.toStdString());
+  std::vector<std::string> v;
+  v.push_back(BengaliT.toStdString());
+  im_update_suggest(v, "", true);
 }
 
 bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool shiftaltgr) {
@@ -155,6 +157,8 @@ bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool s
 
   QString pressed = parser.getCharForKey(key, shift, altgr, shiftaltgr);
   if(pressed == "") {
+    im_commit();
+    BengaliT = "";
     return false;
   } else {
     makeWord(pressed);

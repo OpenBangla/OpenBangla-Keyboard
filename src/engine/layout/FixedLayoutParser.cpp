@@ -225,9 +225,8 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
    // End Numeric Zone
 
    case VC_UNKNOWN:
-      break;
    default:
-      break;
+      return QString("");
   }
 
   QString mod;

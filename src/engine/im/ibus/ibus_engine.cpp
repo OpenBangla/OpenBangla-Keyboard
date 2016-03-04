@@ -28,11 +28,12 @@
 static IBusBus *bus = NULL;
 static IBusFactory *factory = NULL;
 static IBusEngine *engine = NULL;
-IBusLookupTable *table = NULL;
-gint id = 0;
-guint candidateSel = 0;
+static IBusLookupTable *table = NULL;
+static gint id = 0;
+static guint candidateSel = 0;
 
 bool onlyPreedit;
+std::vector<std::string> suggestions;
 
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
   ibus_quit();
@@ -71,6 +72,12 @@ void ibus_disable_cb(IBusEngine *engine) {
   LOG_INFO("[IM:iBus]: IM disabled\n");
 }
 
+void ibus_focus_out_cb(IBusEngine *engine) {
+  if(suggestions.size() > 0) {
+    im_commit();
+  }
+}
+
 IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
                                   gchar* engine_name,
                                   gpointer     user_data) {
@@ -91,6 +98,7 @@ IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
   g_signal_connect(engine, "process-key-event", G_CALLBACK(ibus_process_key_event_cb), NULL);
   g_signal_connect(engine, "enable", G_CALLBACK(ibus_enable_cb), NULL);
   g_signal_connect(engine, "disable", G_CALLBACK(ibus_disable_cb), NULL);
+  g_signal_connect(engine, "focus-out", G_CALLBACK(ibus_focus_out_cb), NULL);
 
   return engine;
 }
@@ -140,12 +148,12 @@ void ibus_update_preedit() {
     ibus_engine_update_lookup_table_fast(engine, table, TRUE);
   }
   // Get current suggestion
-  IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
+  IBusText *txt = ibus_text_new_from_string((gchar*)suggestions[candidateSel].c_str());
   ibus_engine_update_preedit_text(engine, txt, ibus_text_get_length(txt), TRUE);
 }
 
 void im_table_sel_inc() {
-  guint lastIndex = ibus_lookup_table_get_number_of_candidates(table) -1;
+  guint lastIndex = suggestions.size() -1;
   if((candidateSel + 1) > lastIndex) {
     candidateSel = -1;
   }
@@ -155,7 +163,7 @@ void im_table_sel_inc() {
 
 void im_table_sel_dec() {
   if(candidateSel ==  0) {
-    candidateSel = ibus_lookup_table_get_number_of_candidates(table) -1;
+    candidateSel = suggestions.size() -1;
     ibus_update_preedit();
     return;
   } else {
@@ -164,35 +172,31 @@ void im_table_sel_dec() {
   }
 }
 
-void im_update_suggest(std::vector<std::string> lst, std::string typed) {
-  // Update auxiliary text
-  IBusText *caux = ibus_text_new_from_string((gchar*)typed.c_str());
-  ibus_engine_update_auxiliary_text(engine, caux, TRUE);
-  ibus_lookup_table_clear(table); // At first, remove all candidates
-  for(auto& str : lst) {
-    IBusText *ctext = ibus_text_new_from_string((gchar*)str.c_str());
-    ibus_lookup_table_append_candidate(table, ctext);
-    // Hide candidate labels // Hack learned from ibus-avro
-    IBusText *clabel = ibus_text_new_from_string("");
-    ibus_lookup_table_append_label(table, clabel);
+void im_update_suggest(std::vector<std::string> lst, std::string buffer, bool preeditOnly) {
+  // Assign suggestions
+  suggestions = lst;
+  if(!preeditOnly) {
+    // Update auxiliary text
+    IBusText *caux = ibus_text_new_from_string((gchar*)buffer.c_str());
+    ibus_engine_update_auxiliary_text(engine, caux, TRUE);
+    ibus_lookup_table_clear(table); // At first, remove all candidates
+    for(auto& str : lst) {
+      IBusText *ctext = ibus_text_new_from_string((gchar*)str.c_str());
+      ibus_lookup_table_append_candidate(table, ctext);
+      // Hide candidate labels // Hack learned from ibus-avro
+      IBusText *clabel = ibus_text_new_from_string("");
+      ibus_lookup_table_append_label(table, clabel);
+    }
   }
-  candidateSel = 0;
-  onlyPreedit = false;
-  ibus_update_preedit();
-}
 
-void im_update(std::string text) {
-  ibus_lookup_table_clear(table); // At first, remove all candidates
-  IBusText *ctext = ibus_text_new_from_string((gchar*)text.c_str());
-  ibus_lookup_table_append_candidate(table, ctext);
   candidateSel = 0;
-  onlyPreedit = true;
+  onlyPreedit = preeditOnly;
   ibus_update_preedit();
 }
 
 void im_reset() {
   // Reset all our mess
-  onlyPreedit = false;
+  suggestions.clear();
   candidateSel = 0;
   ibus_lookup_table_clear(table);
   ibus_engine_hide_preedit_text(engine);
@@ -201,9 +205,7 @@ void im_reset() {
 }
 
 std::string im_get_selection(int index) {
-  IBusText *txt = ibus_lookup_table_get_candidate(table, (guint)index);
-  std::string ret = (char*)txt->text;
-  return ret;
+  return suggestions[index];
 }
 
 int im_get_selection_id() {
@@ -216,8 +218,10 @@ void im_selectCandidate(int index) {
 }
 
 void im_commit() {
-  IBusText *txt = ibus_lookup_table_get_candidate(table, candidateSel);
-  ibus_engine_commit_text(engine,txt);
+  if(suggestions.size() > 0) {
+    IBusText *txt = ibus_text_new_from_string((gchar*)suggestions[candidateSel].c_str());
+    ibus_engine_commit_text(engine,txt);
+  }
   im_reset();
   candidateSel = 0;
 }

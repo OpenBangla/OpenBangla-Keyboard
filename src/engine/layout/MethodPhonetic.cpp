@@ -48,7 +48,7 @@ void MethodPhonetic::updateCache() {
 
     // Something we have to build
     list = suggest.Suggest(EnglishT);
-    im_update_suggest(toStdVector(list), EnglishT.toStdString());
+    im_update_suggest(toStdVector(list), EnglishT.toStdString(), false);
 
     // Is user selected any candidate before?
     QString selected = suggest.getPrevSelected();

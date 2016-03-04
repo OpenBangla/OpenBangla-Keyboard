@@ -38,11 +38,9 @@ void im_table_show();
 /* Hides IM engine's Lookup table */
 void im_table_hide();
 
-/* Updates IM engine's lookup table with given @lst */
-void im_update_suggest(std::vector<std::string> lst, std::string typed);
-
-/* Updates IM's preedit only */
-void im_update(std::string text);
+/* Updates IM engine's lookup table with given @lst.
+   If @preeditOnly is true, then only the preedit will change with the first text of @lst */
+void im_update_suggest(std::vector<std::string> lst, std::string buffer, bool preeditOnly);
 
 /* Increment selection in IM engine's lookup table */
 void im_table_sel_inc();
