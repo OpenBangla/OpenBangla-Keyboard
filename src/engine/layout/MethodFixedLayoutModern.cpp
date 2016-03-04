@@ -162,5 +162,6 @@ bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool s
     return false;
   } else {
     makeWord(pressed);
+    return true;
   }
 }
