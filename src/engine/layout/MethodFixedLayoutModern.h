@@ -31,6 +31,7 @@ public:
   MethodFixedLayoutModern();
   void updateCache();
   void processKeyPress(QString word);
+  void insertKar(QString kar);
   void internalBackspace();
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);

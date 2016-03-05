@@ -189,4 +189,9 @@ bool isVowel(QString c) {
   return c.contains(regex);
 }
 
+bool isPureConsonent(QString c) {
+  QRegularExpression regex("^[\\x{0995}\\x{0996}\\x{0997}\\x{0998}\\x{0999}\\x{099A}\\x{099B}\\x{099C}\\x{099D}\\x{099E}\\x{099F}\\x{09A0}\\x{09A1}\\x{09A2}\\x{09A3}\\x{09A4}\\x{09A5}\\x{09A6}\\x{09A7}\\x{09A8}\\x{09AA}\\x{09AB}\\x{09AC}\\x{09AD}\\x{09AE}\\x{09AF}\\x{09B0}\\x{09B2}\\x{09B6}\\x{09B7}\\x{09B8}\\x{09B9}\\x{09CE}\\x{09DC}\\x{09DD}\\x{09DF}]$");
+  return c.contains(regex);
+}
+
 #endif /* end of include guard: BENGALICHARS_H */

@@ -88,3 +88,13 @@ bool Settings::getAutoVowelFormFixed() {
   setting->sync();
   return setting->value("settings/FixedLayout/AutoVowelForm", true).toBool();
 }
+
+void Settings::setAutoChandraPosFixed(bool b) {
+  setting->setValue("settings/FixedLayout/AutoChandraPos", b);
+  setting->sync();
+}
+
+bool Settings::getAutoChandraPosFixed() {
+  setting->sync();
+  return setting->value("settings/FixedLayout/AutoChandraPos", true).toBool();
+}

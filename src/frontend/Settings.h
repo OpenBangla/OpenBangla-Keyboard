@@ -44,6 +44,9 @@ public:
 
   void setAutoVowelFormFixed(bool b);
   bool getAutoVowelFormFixed();
+
+  void setAutoChandraPosFixed(bool b);
+  bool getAutoChandraPosFixed();
 };
 
 /* Global */

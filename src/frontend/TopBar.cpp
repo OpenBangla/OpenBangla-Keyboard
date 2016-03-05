@@ -59,12 +59,17 @@ void TopBar::SetupPopupMenus() {
   RefreshLayouts();
 
   // Settings Popup Menu
-  settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Auto Vowel Forming\" (In Modern Typing Style)", this);
+  settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Automatic Vowel Forming\" (In Modern Typing Style)", this);
   settingsMenuFixedLayoutAutoVForm->setCheckable(true);
   settingsMenuFixedLayoutAutoVForm->setChecked(gSettings->getAutoVowelFormFixed());
   connect(settingsMenuFixedLayoutAutoVForm, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoVForm_clicked()));
+  settingsMenuFixedLayoutAutoChandra = new QAction("Automatically fix \"Chandrabindu\" position (In Modern Typing Style)", this);
+  settingsMenuFixedLayoutAutoChandra->setCheckable(true);
+  settingsMenuFixedLayoutAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
+  connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
   settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
+  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoChandra);
   settingsMenuShowDialog = new QAction("Settings", this);
   connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
   settingsMenu = new QMenu(this);
@@ -118,6 +123,10 @@ void TopBar::layoutMenuLayouts_clicked() {
 
 void TopBar::settingsMenuFixedLayoutAutoVForm_clicked() {
     gSettings->setAutoVowelFormFixed(settingsMenuFixedLayoutAutoVForm->isChecked());
+}
+
+void TopBar::settingsMenuFixedLayoutAutoChandra_clicked() {
+  gSettings->setAutoChandraPosFixed(settingsMenuFixedLayoutAutoChandra->isChecked());
 }
 
 void TopBar::settingsMenuShowDialog_clicked() {

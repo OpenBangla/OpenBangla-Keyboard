@@ -37,6 +37,16 @@ void MethodFixedLayoutModern::internalBackspace() {
   BengaliT = BT;
 }
 
+void MethodFixedLayoutModern::insertKar(QString kar) {
+  /* Automatic Fix of Chandra Position */
+  if(gSettings->getAutoChandraPosFixed() && BengaliT.right(1) == b_Chandra) {
+    internalBackspace();
+    BengaliT = BengaliT + kar + b_Chandra;
+  } else {
+    BengaliT += kar;
+  }
+}
+
 void MethodFixedLayoutModern::processKeyPress(QString word) {
   /* Automatic Vowel Forming */
   if(gSettings->getAutoVowelFormFixed() && (BengaliT.length() == 0 || isVowel(BengaliT.right(1)) || marks.contains(BengaliT.right(1)))) {
@@ -140,6 +150,12 @@ void MethodFixedLayoutModern::processKeyPress(QString word) {
       updateCache();
       return;
     }
+  }
+
+  if(isKar(word)) {
+    insertKar(word);
+    updateCache();
+    return;
   }
 
   BengaliT += word;

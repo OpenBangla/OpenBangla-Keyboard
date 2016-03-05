@@ -33,6 +33,7 @@ protected:
 private slots:
     void layoutMenuLayouts_clicked();
     void settingsMenuFixedLayoutAutoVForm_clicked();
+    void settingsMenuFixedLayoutAutoChandra_clicked();
     void settingsMenuShowDialog_clicked();
     void aboutMenuLayout_clicked();
     void aboutMenuAbout_clicked();
@@ -66,6 +67,7 @@ private:
     QAction *settingsMenuShowDialog;
     QMenu *settingsMenuFixedLayout;
     QAction *settingsMenuFixedLayoutAutoVForm;
+    QAction *settingsMenuFixedLayoutAutoChandra;
     QMenu *aboutMenu;
     QAction *aboutMenuLayout;
     QAction *aboutMenuAbout;

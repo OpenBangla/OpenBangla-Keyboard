@@ -31,6 +31,7 @@ public:
   QString getLayoutPath();
   bool getEnterKeyClosesPrevWin();
   bool getAutoVowelFormFixed();
+  bool getAutoChandraPosFixed();
 };
 
 /* Global */
