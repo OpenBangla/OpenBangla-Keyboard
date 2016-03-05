@@ -30,6 +30,7 @@ public:
 
   QString getLayoutPath();
   bool getEnterKeyClosesPrevWin();
+  bool getAutoVowelFormFixed();
 };
 
 /* Global */

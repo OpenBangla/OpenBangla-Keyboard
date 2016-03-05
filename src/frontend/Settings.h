@@ -41,6 +41,9 @@ public:
 
   void setEnterKeyClosesPrevWin(bool b);
   bool getEnterKeyClosesPrevWin();
+
+  void setAutoVowelFormFixed(bool b);
+  bool getAutoVowelFormFixed();
 };
 
 /* Global */

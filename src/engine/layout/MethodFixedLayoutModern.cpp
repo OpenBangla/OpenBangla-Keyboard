@@ -20,6 +20,7 @@
 #include <QRegularExpression>
 #include <QString>
 #include "im.h"
+#include "Settings.h"
 #include "BengaliChars.h"
 #include "MethodFixedLayoutModern.h"
 
@@ -38,7 +39,7 @@ void MethodFixedLayoutModern::internalBackspace() {
 
 void MethodFixedLayoutModern::processKeyPress(QString word) {
   /* Automatic Vowel Forming */
-  if(BengaliT.length() == 0 || isVowel(BengaliT.right(1)) || marks.contains(BengaliT.right(1))) {
+  if(gSettings->getAutoVowelFormFixed() && (BengaliT.length() == 0 || isVowel(BengaliT.right(1)) || marks.contains(BengaliT.right(1)))) {
     if(word == b_AAkar) {
       BengaliT += b_AA;
       updateCache();
@@ -81,7 +82,7 @@ void MethodFixedLayoutModern::processKeyPress(QString word) {
       return;
     }
   }
-  
+
   /* Vowel making with Hasanta + Kar */
   if(BengaliT.right(1) == b_Hasanta) {
     if(word == b_AAkar) {

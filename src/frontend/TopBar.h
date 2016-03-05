@@ -32,6 +32,8 @@ protected:
 
 private slots:
     void layoutMenuLayouts_clicked();
+    void settingsMenuFixedLayoutAutoVForm_clicked();
+    void settingsMenuShowDialog_clicked();
     void aboutMenuLayout_clicked();
     void aboutMenuAbout_clicked();
     void quitMenuQuit_clicked();
@@ -60,6 +62,10 @@ private:
     QAction *layoutMenuLayouts[MaxLayoutFiles];
     QActionGroup *layoutMenuLayoutsGroup;
     QAction *layoutMenuInstall;
+    QMenu *settingsMenu;
+    QAction *settingsMenuShowDialog;
+    QMenu *settingsMenuFixedLayout;
+    QAction *settingsMenuFixedLayoutAutoVForm;
     QMenu *aboutMenu;
     QAction *aboutMenuLayout;
     QAction *aboutMenuAbout;

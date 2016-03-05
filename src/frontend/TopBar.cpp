@@ -58,6 +58,20 @@ void TopBar::SetupPopupMenus() {
   }
   RefreshLayouts();
 
+  // Settings Popup Menu
+  settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Auto Vowel Forming\" (In Modern Typing Style)", this);
+  settingsMenuFixedLayoutAutoVForm->setCheckable(true);
+  settingsMenuFixedLayoutAutoVForm->setChecked(gSettings->getAutoVowelFormFixed());
+  connect(settingsMenuFixedLayoutAutoVForm, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoVForm_clicked()));
+  settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
+  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
+  settingsMenuShowDialog = new QAction("Settings", this);
+  connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
+  settingsMenu = new QMenu(this);
+  settingsMenu->addMenu(settingsMenuFixedLayout);
+  settingsMenu->addSeparator();
+  settingsMenu->addAction(settingsMenuShowDialog);
+
   // About Popup Menu
   aboutMenuLayout = new QAction("About current keyboard layout...", this);
   connect(aboutMenuLayout, SIGNAL(triggered()), this, SLOT(aboutMenuLayout_clicked()));
@@ -100,6 +114,15 @@ void TopBar::layoutMenuLayouts_clicked() {
   QAction *action = qobject_cast<QAction *>(sender());
   gLayout->setLayout(action->text());
   action->setChecked(true);
+}
+
+void TopBar::settingsMenuFixedLayoutAutoVForm_clicked() {
+    gSettings->setAutoVowelFormFixed(settingsMenuFixedLayoutAutoVForm->isChecked());
+}
+
+void TopBar::settingsMenuShowDialog_clicked() {
+    settingsDialog->updateSettings();
+    settingsDialog->show();
 }
 
 void TopBar::aboutMenuLayout_clicked() {
@@ -177,6 +200,9 @@ void TopBar::on_buttonViewLayout_clicked()
 
 void TopBar::on_buttonSettings_clicked()
 {
-    settingsDialog->updateSettings();
-    settingsDialog->show();
+    QPoint point;
+    point = this->pos();
+    point.setX(point.x() + ui->buttonSettings->geometry().x());
+    point.setY(point.y() + this->height());
+    settingsMenu->exec(point);
 }

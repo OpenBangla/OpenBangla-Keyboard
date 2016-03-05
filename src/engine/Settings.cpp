@@ -41,3 +41,8 @@ bool Settings::getEnterKeyClosesPrevWin() {
   setting->sync();
   return setting->value("settings/EnterKeyClosesPrevWin", false).toBool();
 }
+
+bool Settings::getAutoVowelFormFixed() {
+  setting->sync();
+  return setting->value("settings/FixedLayout/AutoVowelForm", true).toBool();
+}
