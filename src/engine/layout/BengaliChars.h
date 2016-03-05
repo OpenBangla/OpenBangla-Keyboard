@@ -184,4 +184,9 @@ bool isKar(QString c) {
   return c.contains(regex);
 }
 
+bool isVowel(QString c) {
+  QRegularExpression regex("^[\\x{0985}\\x{0986}\\x{0987}\\x{0988}\\x{0989}\\x{098A}\\x{098B}\\x{098F}\\x{0990}\\x{0993}\\x{0994}\\x{098C}\\x{09E1}\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}]$");
+  return c.contains(regex);
+}
+
 #endif /* end of include guard: BENGALICHARS_H */

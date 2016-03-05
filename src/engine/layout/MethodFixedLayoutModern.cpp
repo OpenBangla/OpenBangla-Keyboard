@@ -23,6 +23,10 @@
 #include "BengaliChars.h"
 #include "MethodFixedLayoutModern.h"
 
+MethodFixedLayoutModern::MethodFixedLayoutModern() {
+  marks = "`~!@#$%^+*-_=+\\|\"/;:,./?><()[]{}";
+}
+
 void MethodFixedLayoutModern::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
@@ -32,7 +36,52 @@ void MethodFixedLayoutModern::internalBackspace() {
   BengaliT = BT;
 }
 
-void MethodFixedLayoutModern::makeWord(QString word) {
+void MethodFixedLayoutModern::processKeyPress(QString word) {
+  /* Automatic Vowel Forming */
+  if(BengaliT.length() == 0 || isVowel(BengaliT.right(1)) || marks.contains(BengaliT.right(1))) {
+    if(word == b_AAkar) {
+      BengaliT += b_AA;
+      updateCache();
+      return;
+    } else if(word == b_Ikar) {
+      BengaliT += b_I;
+      updateCache();
+      return;
+    } else if(word == b_IIkar) {
+      BengaliT += b_II;
+      updateCache();
+      return;
+    } else if(word == b_Ukar) {
+      BengaliT += b_U;
+      updateCache();
+      return;
+    } else if(word == b_UUkar) {
+      BengaliT += b_UU;
+      updateCache();
+      return;
+    } else if(word == b_RRIkar) {
+      BengaliT += b_RRI;
+      updateCache();
+      return;
+    } else if(word == b_Ekar) {
+      BengaliT += b_E;
+      updateCache();
+      return;
+    } else if(word == b_OIkar) {
+      BengaliT += b_OI;
+      updateCache();
+      return;
+    } else if(word == b_Okar) {
+      BengaliT += b_O;
+      updateCache();
+      return;
+    } else if(word == b_OUkar) {
+      BengaliT += b_OU;
+      updateCache();
+      return;
+    }
+  }
+  
   /* Vowel making with Hasanta + Kar */
   if(BengaliT.right(1) == b_Hasanta) {
     if(word == b_AAkar) {
@@ -159,7 +208,7 @@ bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool s
   if(pressed == "") {
     return false;
   } else {
-    makeWord(pressed);
+    processKeyPress(pressed);
     return true;
   }
 }
