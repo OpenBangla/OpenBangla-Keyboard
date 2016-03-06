@@ -51,3 +51,8 @@ bool Settings::getAutoChandraPosFixed() {
   setting->sync();
   return setting->value("settings/FixedLayout/AutoChandraPos", true).toBool();
 }
+
+bool Settings::getTraditionalKarFixed() {
+  setting->sync();
+  return setting->value("settings/FixedLayout/TraditionalKar", false).toBool();
+}

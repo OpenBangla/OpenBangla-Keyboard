@@ -32,6 +32,7 @@ public:
   bool getEnterKeyClosesPrevWin();
   bool getAutoVowelFormFixed();
   bool getAutoChandraPosFixed();
+  bool getTraditionalKarFixed();
 };
 
 /* Global */

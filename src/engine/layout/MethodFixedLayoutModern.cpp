@@ -42,6 +42,10 @@ void MethodFixedLayoutModern::insertKar(QString kar) {
   if(gSettings->getAutoChandraPosFixed() && BengaliT.right(1) == b_Chandra) {
     internalBackspace();
     BengaliT = BengaliT + kar + b_Chandra;
+  } else if(gSettings->getTraditionalKarFixed() && isPureConsonent(BengaliT.right(1))) {
+    /* Traditional Kar Joining */
+    /* In UNICODE it is known as "Blocking Bengali Consonant-Vowel Ligature" */
+    BengaliT = BengaliT + ZWNJ + kar;
   } else {
     BengaliT += kar;
   }

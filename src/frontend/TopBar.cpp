@@ -67,9 +67,14 @@ void TopBar::SetupPopupMenus() {
   settingsMenuFixedLayoutAutoChandra->setCheckable(true);
   settingsMenuFixedLayoutAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
+  settingsMenuFixedLayoutTraditionalKar = new QAction("Enable \"Traditional Kar Joining\" (In Modern Typing Style)", this);
+  settingsMenuFixedLayoutTraditionalKar->setCheckable(true);
+  settingsMenuFixedLayoutTraditionalKar->setChecked(gSettings->getTraditionalKarFixed());
+  connect(settingsMenuFixedLayoutTraditionalKar, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutTraditionalKar_clicked()));
   settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoChandra);
+  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutTraditionalKar);
   settingsMenuShowDialog = new QAction("Settings", this);
   connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
   settingsMenu = new QMenu(this);
@@ -127,6 +132,10 @@ void TopBar::settingsMenuFixedLayoutAutoVForm_clicked() {
 
 void TopBar::settingsMenuFixedLayoutAutoChandra_clicked() {
   gSettings->setAutoChandraPosFixed(settingsMenuFixedLayoutAutoChandra->isChecked());
+}
+
+void TopBar::settingsMenuFixedLayoutTraditionalKar_clicked() {
+  gSettings->setTraditionalKarFixed(settingsMenuFixedLayoutTraditionalKar->isChecked());
 }
 
 void TopBar::settingsMenuShowDialog_clicked() {

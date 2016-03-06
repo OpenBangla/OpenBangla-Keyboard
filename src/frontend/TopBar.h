@@ -34,6 +34,7 @@ private slots:
     void layoutMenuLayouts_clicked();
     void settingsMenuFixedLayoutAutoVForm_clicked();
     void settingsMenuFixedLayoutAutoChandra_clicked();
+    void settingsMenuFixedLayoutTraditionalKar_clicked();
     void settingsMenuShowDialog_clicked();
     void aboutMenuLayout_clicked();
     void aboutMenuAbout_clicked();
@@ -58,19 +59,24 @@ private:
     LayoutViewer *layoutViewer;
     SettingsDialog *settingsDialog;
 
+    /* Layout Popup Menu */
     QMenu *layoutMenu;
     enum { MaxLayoutFiles = 10 };
     QAction *layoutMenuLayouts[MaxLayoutFiles];
     QActionGroup *layoutMenuLayoutsGroup;
     QAction *layoutMenuInstall;
+    /* Settings Popup Menu */
     QMenu *settingsMenu;
     QAction *settingsMenuShowDialog;
     QMenu *settingsMenuFixedLayout;
     QAction *settingsMenuFixedLayoutAutoVForm;
     QAction *settingsMenuFixedLayoutAutoChandra;
+    QAction *settingsMenuFixedLayoutTraditionalKar;
+    /* About Popup Menu */
     QMenu *aboutMenu;
     QAction *aboutMenuLayout;
     QAction *aboutMenuAbout;
+    /* Quit Popup Menu */
     QMenu *quitMenu;
     QAction *quitMenuQuit;
 

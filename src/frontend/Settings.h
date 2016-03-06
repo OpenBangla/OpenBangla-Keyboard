@@ -47,6 +47,9 @@ public:
 
   void setAutoChandraPosFixed(bool b);
   bool getAutoChandraPosFixed();
+
+  void setTraditionalKarFixed(bool b);
+  bool getTraditionalKarFixed();
 };
 
 /* Global */
