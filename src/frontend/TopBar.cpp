@@ -59,22 +59,27 @@ void TopBar::SetupPopupMenus() {
   RefreshLayouts();
 
   // Settings Popup Menu
-  settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Automatic Vowel Forming\" (In Modern Typing Style)", this);
+  settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Automatic Vowel Forming\"", this);
   settingsMenuFixedLayoutAutoVForm->setCheckable(true);
   settingsMenuFixedLayoutAutoVForm->setChecked(gSettings->getAutoVowelFormFixed());
   connect(settingsMenuFixedLayoutAutoVForm, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoVForm_clicked()));
-  settingsMenuFixedLayoutAutoChandra = new QAction("Automatically fix \"Chandrabindu\" position (In Modern Typing Style)", this);
+  settingsMenuFixedLayoutAutoChandra = new QAction("Automatically fix \"Chandrabindu\" position", this);
   settingsMenuFixedLayoutAutoChandra->setCheckable(true);
   settingsMenuFixedLayoutAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
-  settingsMenuFixedLayoutTraditionalKar = new QAction("Enable \"Traditional Kar Joining\" (In Modern Typing Style)", this);
+  settingsMenuFixedLayoutTraditionalKar = new QAction("Enable \"Traditional Kar Joining\"", this);
   settingsMenuFixedLayoutTraditionalKar->setCheckable(true);
   settingsMenuFixedLayoutTraditionalKar->setChecked(gSettings->getTraditionalKarFixed());
   connect(settingsMenuFixedLayoutTraditionalKar, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutTraditionalKar_clicked()));
+  settingsMenuFixedLayoutNumberPad = new QAction("Enable Bengali in NumberPad", this);
+  settingsMenuFixedLayoutNumberPad->setCheckable(true);
+  settingsMenuFixedLayoutNumberPad->setChecked(gSettings->getNumberPadFixed());
+  connect(settingsMenuFixedLayoutNumberPad, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutNumberPad_clicked()));
   settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoChandra);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutTraditionalKar);
+  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutNumberPad);
   settingsMenuShowDialog = new QAction("Settings", this);
   connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
   settingsMenu = new QMenu(this);
@@ -136,6 +141,10 @@ void TopBar::settingsMenuFixedLayoutAutoChandra_clicked() {
 
 void TopBar::settingsMenuFixedLayoutTraditionalKar_clicked() {
   gSettings->setTraditionalKarFixed(settingsMenuFixedLayoutTraditionalKar->isChecked());
+}
+
+void TopBar::settingsMenuFixedLayoutNumberPad_clicked() {
+  gSettings->setNumberPadFixed(settingsMenuFixedLayoutNumberPad->isChecked());
 }
 
 void TopBar::settingsMenuShowDialog_clicked() {

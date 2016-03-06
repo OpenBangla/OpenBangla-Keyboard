@@ -108,3 +108,13 @@ bool Settings::getTraditionalKarFixed() {
   setting->sync();
   return setting->value("settings/FixedLayout/TraditionalKar", false).toBool();
 }
+
+void Settings::setNumberPadFixed(bool b) {
+  setting->setValue("settings/FixedLayout/NumberPad", b);
+  setting->sync();
+}
+
+bool Settings::getNumberPadFixed() {
+  setting->sync();
+  return setting->value("settings/FixedLayout/NumberPad", true).toBool();
+}

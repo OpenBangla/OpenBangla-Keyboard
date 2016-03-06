@@ -33,6 +33,7 @@ public:
   bool getAutoVowelFormFixed();
   bool getAutoChandraPosFixed();
   bool getTraditionalKarFixed();
+  bool getNumberPadFixed();
 };
 
 /* Global */

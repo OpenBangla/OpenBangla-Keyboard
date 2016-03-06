@@ -50,6 +50,9 @@ public:
 
   void setTraditionalKarFixed(bool b);
   bool getTraditionalKarFixed();
+
+  void setNumberPadFixed(bool b);
+  bool getNumberPadFixed();
 };
 
 /* Global */

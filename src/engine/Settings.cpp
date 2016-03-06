@@ -56,3 +56,8 @@ bool Settings::getTraditionalKarFixed() {
   setting->sync();
   return setting->value("settings/FixedLayout/TraditionalKar", false).toBool();
 }
+
+bool Settings::getNumberPadFixed() {
+  setting->sync();
+  return setting->value("settings/FixedLayout/NumberPad", true).toBool();
+}

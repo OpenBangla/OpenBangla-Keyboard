@@ -17,6 +17,7 @@
  */
 
 #include "keycode.h"
+#include "Settings.h"
 #include "FixedLayoutParser.h"
 
 void FixedLayoutParser::setLayout(QJsonObject l) {
@@ -244,7 +245,9 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
   if(!key.contains("Num")) {
     keyName = QString("Key_%1_%2").arg(key).arg(mod);
   } else {
-    keyName = key;
+    if(gSettings->getNumberPadFixed()) {
+      keyName = key;
+    } else { return QString(""); }
   }
 
   return layout.value(keyName).toString();
