@@ -29,8 +29,8 @@ int main(int argc, char *argv []) {
   /* TODO: Move this else where           *
    * This creates some folders need by us */
   QDir dir;
-  bool b = dir.mkpath(dir.homePath() + "/OpenBangla-Keyboard/");
-  b = dir.mkpath(dir.homePath() + "/OpenBangla-Keyboard/Layouts/");
+  bool b = dir.mkpath(dir.homePath() + "/.OpenBangla-Keyboard/");
+  b = dir.mkpath(dir.homePath() + "/.OpenBangla-Keyboard/Layouts/");
   if(!b) {
     LOG_ERROR("[Main]: Unable to create needed folders, exiting..."); exit(EXIT_FAILURE);
   }

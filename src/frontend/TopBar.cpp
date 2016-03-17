@@ -10,6 +10,7 @@
 #include "LayoutViewer.h"
 #include "AboutFile.h"
 #include "SettingsDialog.h"
+#include "LayoutConverter.h"
 #include "ui_TopBar.h"
 
 TopBar::TopBar(QWidget *parent) :
@@ -133,9 +134,14 @@ void TopBar::layoutMenuLayouts_clicked() {
   action->setChecked(true);
 }
 
-void TopBar::layoutMenuInstall_clicked() {/*
-  QString fileName = QFileDialog::getOpenFileName(this,
-    tr("Open Image"), "/home/jana", tr("Image Files (*.png *.jpg *.bmp)"));*/
+void TopBar::layoutMenuInstall_clicked() {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Select Keyboard Layout"), QDir::homePath(), tr("Avro Keyboard 5 Keyboard Layout (*.avrolayout)"));
+  LayoutConverter conv;
+  if(fileName.contains(".avrolayout") && fileName != "") {
+    conv.convertLayout(fileName);
+    QMessageBox::information(this, tr("OpenBangla Keyboard"), tr("Layout Installed Successfully"), QMessageBox::Ok);
+  }
+  RefreshLayouts();
 }
 
 void TopBar::settingsMenuFixedLayoutAutoVForm_clicked() {

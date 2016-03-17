@@ -11,7 +11,9 @@ set(SRC_GUI TopBar.cpp
 
 set(SRC_MAIN main.cpp
              Layout.cpp
-             Settings.cpp)
+             Settings.cpp
+             LayoutConverter.cpp
+             LayoutConverter.h)
 
 add_executable(OpenBangla-Keyboard ${SRC_MAIN} ${SRC_GUI})
-target_link_libraries(OpenBangla-Keyboard Qt5::Widgets)
+target_link_libraries(OpenBangla-Keyboard Qt5::Widgets Qt5::Xml)

@@ -35,7 +35,7 @@ QVector<QString> CacheManager::getTempCache(QString key) {
 }
 
 void CacheManager::loadCandidateSelection() {
-  QString path = QDir::homePath() + "/OpenBangla-Keyboard/phonetic-candidate-selection.json";
+  QString path = QDir::homePath() + "/.OpenBangla-Keyboard/phonetic-candidate-selection.json";
 
   QFile loadFile(path);
   if(!loadFile.open(QIODevice::ReadOnly)) {
@@ -64,7 +64,7 @@ void CacheManager::writeCandidateSelection(QString word, QString sel) {
 }
 
 void CacheManager::saveCandidateSelection() {
-  QString path = QDir::homePath() + "/OpenBangla-Keyboard/phonetic-candidate-selection.json";
+  QString path = QDir::homePath() + "/.OpenBangla-Keyboard/phonetic-candidate-selection.json";
 
   QFile saveFile(path);
   if(!saveFile.open(QIODevice::WriteOnly)) {

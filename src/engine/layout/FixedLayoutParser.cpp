@@ -166,7 +166,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
       break;
 
    case VC_COMMA:
-      key = "COMMA";
+      key = "Comma";
       break;
    case VC_PERIOD:
       key = "Period";

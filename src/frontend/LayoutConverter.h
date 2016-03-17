@@ -15,13 +15,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#include <fstream>
+#include <QFile>
+#include <QtXml>
+#include "json.hpp"
 
-#include <QApplication>
-#include "TopBar.h"
+class LayoutConverter {
+  QFile conversionFile;
+  QByteArray data;
+  std::ofstream convertedFile;
+  QDomElement layoutRoot;
+  nlohmann::json jsonFile;
 
-int main(int argc, char *argv []) {
-  QApplication app(argc, argv);
-  TopBar w;
-  w.show();
-  return app.exec();
-}
+  void convertAvroLayout(QString path);
+  void convertAvroInfo();
+  void convertAvroKeydata();
+
+  QString UnescapeXML(QString escaped);
+public:
+  void convertLayout(QString path);
+};
