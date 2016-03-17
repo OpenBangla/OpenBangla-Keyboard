@@ -32,6 +32,7 @@ protected:
 
 private slots:
     void layoutMenuLayouts_clicked();
+    void layoutMenuInstall_clicked();
     void settingsMenuFixedLayoutAutoVForm_clicked();
     void settingsMenuFixedLayoutAutoChandra_clicked();
     void settingsMenuFixedLayoutTraditionalKar_clicked();

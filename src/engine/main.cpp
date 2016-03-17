@@ -16,13 +16,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDir>
 #include "im.h"
+#include "log.h"
 #include "Layout.h"
 #include "Settings.h"
 
 int main(int argc, char *argv []) {
   gLayout = new Layout();
   gSettings = new Settings();
+
+  /* TODO: Move this else where           *
+   * This creates some folders need by us */
+  QDir dir;
+  bool b = dir.mkpath(dir.homePath() + "/OpenBangla-Keyboard/");
+  b = dir.mkpath(dir.homePath() + "/OpenBangla-Keyboard/Layouts/");
+  if(!b) {
+    LOG_ERROR("[Main]: Unable to create needed folders, exiting..."); exit(EXIT_FAILURE);
+  }
 
   gLayout->loadLayout(gSettings->getLayoutPath());
   if (argv[1] = "--ibus") {

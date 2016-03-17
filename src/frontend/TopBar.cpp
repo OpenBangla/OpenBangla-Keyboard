@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QFileDialog>
 #include <QMenu>
 #include <QAction>
 #include <QDebug>
@@ -57,6 +58,7 @@ void TopBar::SetupPopupMenus() {
     connect(layoutMenuLayouts[i], SIGNAL(triggered()), this, SLOT(layoutMenuLayouts_clicked()));
   }
   RefreshLayouts();
+  connect(layoutMenuInstall, SIGNAL(triggered()), this, SLOT(layoutMenuInstall_clicked()));
 
   // Settings Popup Menu
   settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Automatic Vowel Forming\"", this);
@@ -129,6 +131,11 @@ void TopBar::layoutMenuLayouts_clicked() {
   QAction *action = qobject_cast<QAction *>(sender());
   gLayout->setLayout(action->text());
   action->setChecked(true);
+}
+
+void TopBar::layoutMenuInstall_clicked() {/*
+  QString fileName = QFileDialog::getOpenFileName(this,
+    tr("Open Image"), "/home/jana", tr("Image Files (*.png *.jpg *.bmp)"));*/
 }
 
 void TopBar::settingsMenuFixedLayoutAutoVForm_clicked() {
