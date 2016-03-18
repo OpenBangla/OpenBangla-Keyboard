@@ -24,12 +24,7 @@ LayoutViewer::~LayoutViewer()
 void LayoutViewer::refreshLayoutViewer() {
   desc = gLayout->getDesc();
   this->setWindowTitle(desc.name + " :: Layout Viewer");
-  image.loadFromData(QByteArray::fromBase64(desc.image0));
-  ui->labelImage->setPixmap(QPixmap::fromImage(image));
-  ui->labelImage->adjustSize();
-  ui->viewNormal->setChecked(true);
-  this->setFixedHeight(ui->labelImage->height() + ui->labelImage->y());
-  this->setFixedWidth(ui->labelImage->width());
+  on_viewNormal_clicked();
   // This refreshes Layout Info Dialog
   aboutDialog->setDialogType(AboutLayout);
 }
