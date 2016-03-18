@@ -27,6 +27,10 @@ private slots:
 
     void on_buttonAboutLayout_clicked();
 
+    void on_viewNormal_clicked();
+
+    void on_viewAltGr_clicked();
+
 private:
     Ui::LayoutViewer *ui;
 

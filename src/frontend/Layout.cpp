@@ -67,6 +67,9 @@ void Layout::loadDesc() {
   // Layout Image 0
   lD.image0.clear();
   lD.image0.append(lf.value("info").toObject().value("layout").toObject().value("image0").toString());
+  // Layout Image 0
+  lD.image1.clear();
+  lD.image1.append(lf.value("info").toObject().value("layout").toObject().value("image1").toString());
   // Layout Develper Name
   lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("name").toString();
   // Layout Developer Comment

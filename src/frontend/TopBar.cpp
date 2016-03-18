@@ -132,6 +132,7 @@ void TopBar::layoutMenuLayouts_clicked() {
   QAction *action = qobject_cast<QAction *>(sender());
   gLayout->setLayout(action->text());
   action->setChecked(true);
+  layoutViewer->refreshLayoutViewer();
 }
 
 void TopBar::layoutMenuInstall_clicked() {

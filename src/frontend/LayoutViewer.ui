@@ -32,7 +32,7 @@
   <widget class="QPushButton" name="buttonClose">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>440</x>
      <y>0</y>
      <width>99</width>
      <height>31</height>
@@ -48,7 +48,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>240</x>
      <y>0</y>
      <width>31</width>
      <height>31</height>
@@ -68,7 +68,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>270</x>
      <y>0</y>
      <width>31</width>
      <height>31</height>
@@ -85,7 +85,7 @@
   <widget class="QPushButton" name="buttonAboutLayout">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>310</x>
      <y>0</y>
      <width>121</width>
      <height>31</height>
@@ -93,6 +93,58 @@
    </property>
    <property name="text">
     <string>About Layout...</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="viewNormal">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Normal View</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/images/keyboard_layout.png</normaloff>:/images/keyboard_layout.png</iconset>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="autoExclusive">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="viewAltGr">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>0</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>AltGr View</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/images/keyboard_layout.png</normaloff>:/images/keyboard_layout.png</iconset>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="autoExclusive">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
