@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>OpenBangla Keyboard</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="images.qrc">
+    <normaloff>:/images/OpenBangla-Keyboard.png</normaloff>:/images/OpenBangla-Keyboard.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="buttonAbout">
     <property name="geometry">
