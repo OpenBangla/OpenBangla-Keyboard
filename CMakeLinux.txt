@@ -23,6 +23,7 @@ add_definitions(-DPKGDATADIR='"${PROJECT_DATADIR}"')
 
 ## Configure the XML file
 configure_file(${CMAKE_SOURCE_DIR}/data/openbangla.xml.in ${CMAKE_BINARY_DIR}/data/openbangla.xml)
+configure_file(${CMAKE_SOURCE_DIR}/data/openbangla-keyboard.desktop.in ${CMAKE_BINARY_DIR}/data/openbangla-keyboard.desktop)
 
 ## Install things
 install(FILES ${CMAKE_SOURCE_DIR}/data/OpenBangla-Keyboard.png
@@ -45,3 +46,6 @@ DESTINATION  ${PROJECT_DATADIR}/data)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/data/openbangla.xml
     DESTINATION "${datadir}/ibus/component")
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/data/openbangla-keyboard.desktop
+    DESTINATION "${datadir}/applications")

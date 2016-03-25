@@ -17,3 +17,6 @@ set(SRC_MAIN main.cpp
 
 add_executable(OpenBangla-Keyboard ${SRC_MAIN} ${SRC_GUI})
 target_link_libraries(OpenBangla-Keyboard Qt5::Widgets Qt5::Xml)
+
+install(TARGETS OpenBangla-Keyboard
+RUNTIME DESTINATION  ${PROJECT_DATADIR})

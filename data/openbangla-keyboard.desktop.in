@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=OpenBangla Keyboard
+Comment=An OpenSource, Unicode compliant Bengali Input Method.
+Exec=@PROJECT_DATADIR@/OpenBangla-Keyboard %f
+Icon=@PROJECT_DATADIR@/icons/OpenBangla-Keyboard.png
+Type=Application
+Categories=Utility;
