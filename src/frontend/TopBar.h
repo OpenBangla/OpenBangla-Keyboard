@@ -10,6 +10,7 @@ class TopBar;
 class QActionGroup;
 class QAction;
 class QMenu;
+class QSystemTrayIcon;
 
 class LayoutViewer;
 class AboutFile;
@@ -40,7 +41,10 @@ private slots:
     void settingsMenuShowDialog_clicked();
     void aboutMenuLayout_clicked();
     void aboutMenuAbout_clicked();
+    void quitMenuOnTray_clicked();
     void quitMenuQuit_clicked();
+
+    void trayMenuRestore_clicked();
 
     void on_buttonAbout_clicked();
 
@@ -56,6 +60,7 @@ private:
     Ui::TopBar *ui;
     bool canMoveTopbar;
     int pressedMouseX, pressedMouseY;
+    QSystemTrayIcon *tray;
 
     /* Dialogs */
     LayoutViewer *layoutViewer;
@@ -81,10 +86,16 @@ private:
     QAction *aboutMenuAbout;
     /* Quit Popup Menu */
     QMenu *quitMenu;
+    QAction *quitMenuOnTray;
     QAction *quitMenuQuit;
+
+    /* Tray Popup Menu */
+    QMenu *trayMenu;
+    QAction *trayMenuRestore;
 
     void SetupTopBar();
     void SetupPopupMenus();
+    void SetupTrayIcon();
 
     void RefreshLayouts();
 };

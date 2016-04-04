@@ -1,3 +1,4 @@
+#include <QSystemTrayIcon>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
@@ -28,6 +29,7 @@ TopBar::TopBar(QWidget *parent) :
 
     SetupTopBar();
     SetupPopupMenus();
+    SetupTrayIcon();
 }
 
 TopBar::~TopBar()
@@ -48,7 +50,8 @@ void TopBar::SetupTopBar() {
 
 void TopBar::SetupPopupMenus() {
   // Layout Popup Menu
-  layoutMenu = new QMenu(this);
+  layoutMenu = new QMenu("Select keyboard layout", this);
+  layoutMenu->setIcon(QIcon(":/images/keyboard_layout.png"));
   layoutMenuInstall = new QAction("Install a layout", this);
   layoutMenuLayoutsGroup = new QActionGroup(this);
   for (int i = 0; i < MaxLayoutFiles; ++i) {
@@ -66,25 +69,31 @@ void TopBar::SetupPopupMenus() {
   settingsMenuFixedLayoutAutoVForm->setCheckable(true);
   settingsMenuFixedLayoutAutoVForm->setChecked(gSettings->getAutoVowelFormFixed());
   connect(settingsMenuFixedLayoutAutoVForm, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoVForm_clicked()));
+
   settingsMenuFixedLayoutAutoChandra = new QAction("Automatically fix \"Chandrabindu\" position", this);
   settingsMenuFixedLayoutAutoChandra->setCheckable(true);
   settingsMenuFixedLayoutAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
+
   settingsMenuFixedLayoutTraditionalKar = new QAction("Enable \"Traditional Kar Joining\"", this);
   settingsMenuFixedLayoutTraditionalKar->setCheckable(true);
   settingsMenuFixedLayoutTraditionalKar->setChecked(gSettings->getTraditionalKarFixed());
   connect(settingsMenuFixedLayoutTraditionalKar, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutTraditionalKar_clicked()));
+
   settingsMenuFixedLayoutNumberPad = new QAction("Enable Bengali in NumberPad", this);
   settingsMenuFixedLayoutNumberPad->setCheckable(true);
   settingsMenuFixedLayoutNumberPad->setChecked(gSettings->getNumberPadFixed());
   connect(settingsMenuFixedLayoutNumberPad, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutNumberPad_clicked()));
+
   settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoChandra);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutTraditionalKar);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutNumberPad);
+
   settingsMenuShowDialog = new QAction("Settings", this);
   connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
+
   settingsMenu = new QMenu(this);
   settingsMenu->addMenu(settingsMenuFixedLayout);
   settingsMenu->addSeparator();
@@ -93,8 +102,10 @@ void TopBar::SetupPopupMenus() {
   // About Popup Menu
   aboutMenuLayout = new QAction("About current keyboard layout...", this);
   connect(aboutMenuLayout, SIGNAL(triggered()), this, SLOT(aboutMenuLayout_clicked()));
+
   aboutMenuAbout = new QAction("About OpenBangla Keyboard...", this);
   connect(aboutMenuAbout, SIGNAL(triggered()), this, SLOT(aboutMenuAbout_clicked()));
+
   aboutMenu = new QMenu(this);
   aboutMenu->addAction(aboutMenuLayout);
   aboutMenu->addAction(aboutMenuAbout);
@@ -102,8 +113,34 @@ void TopBar::SetupPopupMenus() {
   // Quit Popup Menu
   quitMenuQuit = new QAction("Quit", this);
   connect(quitMenuQuit, SIGNAL(triggered()), this, SLOT(quitMenuQuit_clicked()));
+
+  quitMenuOnTray = new QAction("Jump to system tray", this);
+  connect(quitMenuOnTray, SIGNAL(triggered()), this, SLOT(quitMenuOnTray_clicked()));
+
   quitMenu = new QMenu(this);
+  quitMenu->addAction(quitMenuOnTray);
   quitMenu->addAction(quitMenuQuit);
+}
+
+void TopBar::SetupTrayIcon() {
+  /* TODO: Fix Crash... */
+  tray = new QSystemTrayIcon(QIcon(":/images/keyboard_layout_viewer.png"), this);
+  tray->setToolTip("OpenBangla Keyboard");
+
+  /* Tray Menu */
+  trayMenuRestore = new QAction("Restore TopBar", this);
+  connect(trayMenuRestore, SIGNAL(triggered()), this, SLOT(trayMenuRestore_clicked()));
+
+  trayMenu = new QMenu(this);
+  trayMenu->addAction(trayMenuRestore);
+  trayMenu->addMenu(layoutMenu); // Layout Menu
+  /*
+  trayMenu->addSeparator();
+  trayMenu->addAction(aboutMenuAbout);*/
+  trayMenu->addSeparator();
+  trayMenu->addAction(quitMenuQuit);
+
+  tray->setContextMenu(trayMenu);
 }
 
 void TopBar::RefreshLayouts() {
@@ -177,8 +214,19 @@ void TopBar::aboutMenuAbout_clicked() {
       "<p>An OpenSource, Cross-Platform, Unicode Compliant Bengali Input Method."));
 }
 
+void TopBar::quitMenuOnTray_clicked() {
+  this->setVisible(false);
+  tray->setVisible(true);
+  tray->showMessage("OpenBangla Keyboard", "OpenBangla Keyboard is now running on system tray");
+}
+
 void TopBar::quitMenuQuit_clicked() {
   TopBar::close();
+}
+
+void TopBar::trayMenuRestore_clicked() {
+  tray->setVisible(false);
+  this->setVisible(true);
 }
 
 void TopBar::on_buttonAbout_clicked()
