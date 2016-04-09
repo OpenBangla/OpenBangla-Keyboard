@@ -38,22 +38,6 @@ QMap<QString, QString> PhoneticSuggestion::separatePadding(QString word) {
   }
   return cutted;
 }
-/*
-bool PhoneticSuggestion::isKar(QString word){
-  if(word.length() < 1) {
-    return false;
-  }
-  QRegularExpression rgx("^[\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}\\x{09C4}]$");
-  return word.contains(rgx);
-}
-
-bool PhoneticSuggestion::isVowel(QString word) {
-  if(word.length() < 1) {
-    return false;
-  }
-  QRegularExpression rgx("^[\\x{0985}\\x{0986}\\x{0987}\\x{0988}\\x{0989}\\x{098A}\\x{098B}\\x{098F}\\x{0990}\\x{0993}\\x{0994}\\x{098C}\\x{09E1}\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}]$");
-  return word.contains(rgx);
-}*/
 
 QVector<QString> PhoneticSuggestion::getSuggestion(QString term) {
   QVector<QString> list;
