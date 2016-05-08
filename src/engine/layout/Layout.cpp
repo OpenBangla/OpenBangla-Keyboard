@@ -90,22 +90,23 @@ void Layout::updateWithSettings() {
   }
 }
 
-bool Layout::sendKey(int lkey, bool lshift, bool lctrl, bool lalt) {
-  // Set modifiers
-  bool laltgr, lshiftaltgr;
-
+Suggestion Layout::getSuggestion(int key, bool shift, bool ctrl, bool alt) {
   updateWithSettings();
-
-  // Don't catch Ctrl without Shift
-  if(lctrl && !lshift) { return false; }
-
-  if(lctrl && lalt) { laltgr = true; } else { laltgr = false; }
-  if(lshift && laltgr) { lshiftaltgr = true; } else { lshiftaltgr = false; }
-
-  return mth->processKey(lkey, lshift, laltgr, lshiftaltgr);
+  return mth->getSuggestion(key, shift, ctrl, alt);
 }
 
-LayoutDesc Layout::getDesc() {
-  // We have loaded Loaded LayoutDesc earlier, so just return it
-  return lD;
+IMCommand Layout::handleSpecialKey(int key) {
+  return mth->handleSpecialKey(key);
+}
+
+Suggestion Layout::getCandidates() {
+  return mth->getCandidates();
+}
+
+bool Layout::handledKeyPress() {
+  return mth->handledKeyPress();
+}
+
+void Layout::candidateCommited(std::string commited) {
+  mth->candidateCommited(commited);
 }

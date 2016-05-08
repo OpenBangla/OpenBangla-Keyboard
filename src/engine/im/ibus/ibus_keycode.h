@@ -176,6 +176,9 @@ void intKeycode() {
   key[IBUS_KEY_KP_9] = VC_KP_9;
   key[IBUS_KEY_KP_0] = VC_KP_0;
   // End Numeric Zone
+
+  key[IBUS_KEY_Shift_L] = VC_SHIFT_L;
+  key[IBUS_KEY_Shift_R] = VC_SHIFT_R;
 }
 
 int ibus_keycode(guint k) {

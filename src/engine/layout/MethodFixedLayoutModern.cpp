@@ -19,7 +19,8 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include <QString>
-#include "im.h"
+#include "log.h"
+#include "keycode.h"
 #include "Settings.h"
 #include "BengaliChars.h"
 #include "MethodFixedLayoutModern.h"
@@ -169,67 +170,89 @@ void MethodFixedLayoutModern::processKeyPress(QString word) {
 void MethodFixedLayoutModern::updateCache() {
   std::vector<std::string> v;
   v.push_back(BengaliT.toStdString());
-  im_update_suggest(v, "", true);
+  // Now ready the suggestion
+  suggest = {v, "", false, 0};
 }
 
-bool MethodFixedLayoutModern::processKey(int key, bool shift, bool altgr, bool shiftaltgr) {
-  switch (key) {
-    case VC_BACKSPACE:
-      if(BengaliT.length() > 0) {
-        QString BT = BengaliT.mid(0, BengaliT.length()-1);
-        BengaliT = BT;
-        updateCache();
-        if(BengaliT.length() <= 0) {
-          im_reset();
-        }
-        return true;
-      } else {
-        return false;
-      }
-    case VC_ENTER:
-      if(BengaliT.length() > 0) {
-        im_commit();
-        BengaliT = "";
-        return false;
-      } else {
-        return false;
-      }
-    case VC_KP_ENTER:
-      if(BengaliT.length() > 0) {
-        im_commit();
-        BengaliT = "";
-        return false;
-      } else {
-        return false;
-      }
-    case VC_SPACE:
-      if(BengaliT.length() > 0) {
-        im_commit();
-        BengaliT = "";
-        return false;
-        } else {
-          return false;
-        }
-    case VC_UP:
-    case VC_LEFT:
-    case VC_RIGHT:
-    case VC_DOWN:
-      if(BengaliT.length() > 0) {
-        im_commit();
-        BengaliT = "";
-        return false;
-      } else {
-        return false;
-      }
-    default:
-      break;
+Suggestion MethodFixedLayoutModern::getSuggestion(int key, bool shift, bool ctrl, bool alt) {
+  // Set modifiers
+  bool altgr, shiftaltgr;
+  // Don't catch Ctrl without Shift
+  if(ctrl && !shift) { handledKey = false; return {}; }
+
+  if(ctrl && alt) { altgr = true; } else { altgr = false; }
+  if(shift && altgr) { shiftaltgr = true; } else { shiftaltgr = false; }
+
+  if((key == VC_SHIFT_R || key == VC_SHIFT_L) && BengaliT != "") {
+    handledKey = true; return suggest;
   }
 
   QString pressed = parser.getCharForKey(key, shift, altgr, shiftaltgr);
   if(pressed == "") {
-    return false;
+    handledKey = false;
+    return {};
   } else {
     processKeyPress(pressed);
-    return true;
+    handledKey = true;
+    return suggest;
+  }
+}
+
+Suggestion MethodFixedLayoutModern::getCandidates() {
+  return suggest;
+}
+
+bool MethodFixedLayoutModern::handledKeyPress() {
+  return handledKey;
+}
+
+void MethodFixedLayoutModern::candidateCommited(std::string commited) {
+  // Clear stored suggestion
+  suggest = {};
+}
+
+IMCommand MethodFixedLayoutModern::handleSpecialKey(int key) {
+  IMCommand ret;
+  if((key == VC_ENTER) || (key == VC_KP_ENTER)) {
+    ret.accepted = false;
+    if(BengaliT.length() > 0) {
+      BengaliT = "";
+      ret.commit = true;
+      return ret;
+    } else {
+      return ret;
+    }
+  } else if(key == VC_SPACE) {
+    ret.accepted = false;
+    if(BengaliT.length() > 0) {
+      BengaliT = "";
+      ret.commit = true;
+      return ret;
+    } else {
+      return ret;
+    }
+  } else if(key == VC_BACKSPACE) {
+    if(BengaliT.length() > 0) {
+      QString BT = BengaliT.mid(0, BengaliT.length()-1);
+      BengaliT = BT;
+      updateCache();
+      ret.needUpdate = true;
+      ret.accepted = true;
+      if(BengaliT.length() <= 0) {
+        ret.needReset = true;
+      }
+      return ret;
+    } else {
+      ret.accepted = false;
+      return ret;
+    }
+  } else if((key == VC_UP) || (key == VC_DOWN) || (key == VC_RIGHT) || (key == VC_LEFT)) {
+    ret.accepted = false;
+    if(BengaliT.length() > 0) {
+      BengaliT = "";
+      return ret;
+    } else {
+      return ret;
+    }
   }
 }

@@ -24,9 +24,11 @@
 #include "FixedLayoutParser.h"
 
 class MethodFixedLayoutModern : public LayoutMth {
+  bool handledKey;
   FixedLayoutParser parser;
   QString BengaliT;
   QString marks;
+  Suggestion suggest;
 public:
   MethodFixedLayoutModern();
   void updateCache();
@@ -35,7 +37,11 @@ public:
   void internalBackspace();
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
-  bool processKey(int key, bool shift, bool altgr, bool shiftaltgr);
+  Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+  IMCommand handleSpecialKey(int key);
+  Suggestion getCandidates();
+  bool handledKeyPress();
+  void candidateCommited(std::string commited);
 };
 
 #endif /* end of include guard: METHOD_FIXED_LAYOUT_MODERN */

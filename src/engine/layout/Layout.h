@@ -25,6 +25,50 @@
 
 /* Core of Layout Management */
 
+/* It is the Suggestion structure that contains all the informations(data)
+ * are needed by the IM to show suggestions(candidates) to the client.
+ * @candidates a std::vector that contains all the candidates
+ * @auxiliaryText a std::string that contains the auxiliary text that is going to be shown in the preview window.
+ * @showCandidateWin a bool that controls whether preview window will be shown.
+ * @prevSelection a int that contains the index number of the suggestion that was chosen by the user.
+ *
+ * @func isEmpty()
+ * @return bool
+ * @description Checks is there is any candidate in @candidates
+ */
+struct Suggestion {
+  std::vector<std::string> candidates;
+  std::string auxiliaryText;
+  bool showCandidateWin;
+  int prevSelection;
+
+  bool isEmpty() {
+    return candidates.empty();
+  }
+};
+
+struct IMCommand {
+  /* Key accepted */
+  bool accepted = false;
+  /* Commit current suggestion(candidate) */
+  bool commit = false;
+  /* IM needs to update candidates */
+  bool needUpdate = false;
+  /* IM needs to reset */
+  bool needReset = false;
+};
+
+/* Commit current suggestion(candidate) */
+#define commandCommit   (1 << 1)
+/* The key has been accepted. So don't send it to the client */
+#define commandAccept   (1 << 2)
+/* The key has been rejected. So send it to the client */
+#define commandIgnore   (1 << 3)
+/* IM needs to reset */
+#define commandIMReset  (1 << 4)
+/* IM needs to update candidates */
+#define commandIMUpdate (1 << 5)
+
 enum LayoutType {
   Layout_Phonetic,
   Layout_Fixed
@@ -40,7 +84,17 @@ struct LayoutDesc {
 class LayoutMth {
 public:
   virtual void setLayout(QJsonObject lay) = 0;
-  virtual bool processKey(int key, bool shift, bool altgr, bool shiftaltgr)  = 0;
+  /* Generates suggestions on the flow */
+  virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt)  = 0;
+  /* Handle special keys such as Enter, Backspace, Space etc keys */
+  virtual IMCommand handleSpecialKey(int key) = 0;
+  /* Get the candidates for commit */
+  virtual Suggestion getCandidates() = 0;
+  /* Is the last key was processed? */
+  virtual bool handledKeyPress() = 0;
+  /* Confirms that one of the sended candidates has been commited
+   * @commited the string that was commited */
+  virtual void candidateCommited(std::string commited) = 0;
 };
 
 class Layout {
@@ -58,6 +112,9 @@ class Layout {
   void loadDesc();
   /* Set typing method. Used internaly */
   void setMethod();
+
+  QJsonObject sendLayout();
+
   /* Update with current settings */
   void updateWithSettings();
 public:
@@ -66,15 +123,17 @@ public:
   /* Load a layout from given @path */
   void loadLayout(QString path);
 
-  QJsonObject sendLayout();
-
-  /* Get Layout Description */
-  LayoutDesc getDesc();
-
-  /* Send key event to selected method for further processing.
-   * It is usually called from IM Engine
-   */
-  bool sendKey(int lkey, bool lshift, bool lctrl, bool lalt);
+  /* Generates suggestions on the flow */
+  Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+  /* Get the candidates for commit */
+  Suggestion getCandidates();
+  /* Handle special keys such as Enter, Backspace, Space etc keys */
+  IMCommand handleSpecialKey(int key);
+  /* Is the last key was processed? */
+  bool handledKeyPress();
+  /* Confirms that one of the sended candidates has been commited
+   * @lcommited the string that was commited */
+  void candidateCommited(std::string commited);
 };
 
 /* Global */
