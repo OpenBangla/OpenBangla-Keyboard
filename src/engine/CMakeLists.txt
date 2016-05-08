@@ -1,5 +1,4 @@
 set(SOURCES_CPP
-    main.cpp
     Settings.cpp)
 set(SOURCES_HPP
     log.h)

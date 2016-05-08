@@ -20,7 +20,8 @@
 
 #include <ibus.h>
 #include <glib.h>
-#include "im.h"
+#include <QDir>
+#include <sys/stat.h>
 #include "ibus_keycode.h"
 #include "Layout.h"
 #include "log.h"
@@ -32,7 +33,6 @@ static IBusLookupTable *table = NULL;
 static gint id = 0;
 static guint candidateSel = 0;
 
-static bool onlyPreedit;
 Suggestion suggestions;
 
 void ibus_update_preedit() {
@@ -267,7 +267,28 @@ void start_setup(bool ibus) {
   ibus_main();
 }
 
-void im_start(bool executed) {
+void ibus_start(bool executed) {
   LOG_DEBUG("[IM:iBus]: Started IM facilities.\n");
   start_setup(executed);
+}
+
+int main(int argc, char *argv []) {
+  gLayout = new Layout();
+
+  /* TODO: Move this else where           *
+   * This creates some folders need by us */
+  QDir dir;
+  bool b = dir.mkpath(dir.homePath() + "/.OpenBangla-Keyboard/");
+  b = dir.mkpath(dir.homePath() + "/.OpenBangla-Keyboard/Layouts/");
+  if(!b) {
+    LOG_ERROR("[Main]: Unable to create needed folders, exiting...");
+    exit(EXIT_FAILURE);
+  }
+
+  if (argv[1] = "--ibus") {
+    ibus_start(true);
+  } else {
+    ibus_start(false);
+  }
+  return 0;
 }

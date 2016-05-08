@@ -32,9 +32,15 @@ Layout *gLayout;
 MethodPhonetic mPh;
 MethodFixedLayoutModern mFm;
 
+Layout::Layout() {
+  gSettings = new Settings();
+  loadLayout(gSettings->getLayoutPath());
+}
+
 Layout::~Layout() {
   // Close the file handler
   fin.close();
+  delete gSettings;
 }
 
 void Layout::loadLayout(QString path) {

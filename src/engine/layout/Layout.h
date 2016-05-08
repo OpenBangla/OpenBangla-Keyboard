@@ -58,17 +58,6 @@ struct IMCommand {
   bool needReset = false;
 };
 
-/* Commit current suggestion(candidate) */
-#define commandCommit   (1 << 1)
-/* The key has been accepted. So don't send it to the client */
-#define commandAccept   (1 << 2)
-/* The key has been rejected. So send it to the client */
-#define commandIgnore   (1 << 3)
-/* IM needs to reset */
-#define commandIMReset  (1 << 4)
-/* IM needs to update candidates */
-#define commandIMUpdate (1 << 5)
-
 enum LayoutType {
   Layout_Phonetic,
   Layout_Fixed
@@ -118,6 +107,7 @@ class Layout {
   /* Update with current settings */
   void updateWithSettings();
 public:
+  Layout();
   ~Layout();
 
   /* Load a layout from given @path */
