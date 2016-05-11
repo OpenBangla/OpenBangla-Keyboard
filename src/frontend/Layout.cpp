@@ -105,8 +105,11 @@ LayoutList Layout::searchLayouts() {
   QDir dir;
   dir.setPath(PKGDATADIR "/layouts");
   lst << searchLayoutsEx(dir);
-  dir.setPath(QDir::homePath() + "/.OpenBangla-Keyboard/Layouts/");
-  lst << searchLayoutsEx(dir);
+
+  dir.setPath(UWRPATH "/Layouts/");
+  if(dir.exists()) {
+    lst << searchLayoutsEx(dir);
+  } else { return lst; }
 
   return lst;
 }

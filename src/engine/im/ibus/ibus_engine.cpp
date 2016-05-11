@@ -275,16 +275,6 @@ void ibus_start(bool executed) {
 int main(int argc, char *argv []) {
   gLayout = new Layout();
 
-  /* TODO: Move this else where           *
-   * This creates some folders need by us */
-  QDir dir;
-  bool b = dir.mkpath(dir.homePath() + "/.OpenBangla-Keyboard/");
-  b = dir.mkpath(dir.homePath() + "/.OpenBangla-Keyboard/Layouts/");
-  if(!b) {
-    LOG_ERROR("[Main]: Unable to create needed folders, exiting...");
-    exit(EXIT_FAILURE);
-  }
-
   if (argv[1] = "--ibus") {
     ibus_start(true);
   } else {

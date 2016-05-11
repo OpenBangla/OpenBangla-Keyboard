@@ -21,6 +21,11 @@ ENDIF(NOT DEFINED PROJECT_DATADIR)
 add_definitions(-DPROJECT_DATADIR='"${PROJECT_DATADIR}"')
 add_definitions(-DPKGDATADIR='"${PROJECT_DATADIR}"')
 
+## Make path for user specific directory for reading and writing files
+set(UWR_PATH "$ENV{HOME}/.OpenBangla-Keyboard") # Hidden
+add_definitions(-DUWRPATH='"${UWR_PATH}"')
+message("${UWR_PATH}")
+
 ## Configure the XML file
 configure_file(${CMAKE_SOURCE_DIR}/data/openbangla.xml.in ${CMAKE_BINARY_DIR}/data/openbangla.xml)
 configure_file(${CMAKE_SOURCE_DIR}/data/openbangla-keyboard.desktop.in ${CMAKE_BINARY_DIR}/data/openbangla-keyboard.desktop)
@@ -49,3 +54,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/data/openbangla.xml
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/data/openbangla-keyboard.desktop
     DESTINATION "${datadir}/applications")
+
+## Create user specific directory
+install(DIRECTORY DESTINATION ${UWR_PATH})
