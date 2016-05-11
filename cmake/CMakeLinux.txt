@@ -24,7 +24,6 @@ add_definitions(-DPKGDATADIR='"${PROJECT_DATADIR}"')
 ## Make path for user specific directory for reading and writing files
 set(UWR_PATH "$ENV{HOME}/.OpenBangla-Keyboard") # Hidden
 add_definitions(-DUWRPATH='"${UWR_PATH}"')
-message("${UWR_PATH}")
 
 ## Configure the XML file
 configure_file(${CMAKE_SOURCE_DIR}/data/openbangla.xml.in ${CMAKE_BINARY_DIR}/data/openbangla.xml)

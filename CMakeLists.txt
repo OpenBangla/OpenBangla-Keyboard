@@ -19,7 +19,7 @@ endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 # For Linux.
 if(OS_LINUX)
   # Include our Linux specific additions
-  include(CMakeLinux.txt)
+  include(cmake/CMakeLinux.txt)
 
   include(FindPkgConfig)
   ## Find iBus ##
