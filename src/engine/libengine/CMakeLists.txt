@@ -1,5 +1,5 @@
-include_directories(. ../im ../ )
-add_library(Layout
+include_directories(. ../ )
+add_library(libEngine
             Layout.cpp
             Layout.h
             MethodPhonetic.cpp
@@ -17,6 +17,9 @@ add_library(Layout
             cachemanager.cpp
             cachemanager.h
             phoneticsuggestion.cpp
-            phoneticsuggestion.h)
+            phoneticsuggestion.h
+            keycode.h
+            Settings.cpp
+            Settings.h)
 
-target_link_libraries(Layout Qt5::Core Qt5::Sql)
+target_link_libraries(libEngine Qt5::Core Qt5::Sql)
