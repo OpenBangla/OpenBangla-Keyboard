@@ -22,7 +22,7 @@
 #include "log.h"
 
 AutoCorrect::AutoCorrect() {
-  QFile dictFile(PKGDATADIR "/data/autocorrect.json");
+  QFile dictFile(UWRPATH "/autocorrect.json");
   if (!dictFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[AutoCorrect]: Error: Couldn't open dictionary file\n");
   }
