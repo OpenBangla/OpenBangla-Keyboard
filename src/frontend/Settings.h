@@ -53,6 +53,9 @@ public:
 
   void setNumberPadFixed(bool b);
   bool getNumberPadFixed();
+
+  void setOldReph(bool b);
+  bool getOldReph();
 };
 
 /* Global */

@@ -34,6 +34,7 @@ public:
   bool getAutoChandraPosFixed();
   bool getTraditionalKarFixed();
   bool getNumberPadFixed();
+  bool getOldReph();
 };
 
 /* Global */

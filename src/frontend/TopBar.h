@@ -36,6 +36,7 @@ private slots:
     void layoutMenuInstall_clicked();
     void settingsMenuFixedLayoutAutoVForm_clicked();
     void settingsMenuFixedLayoutAutoChandra_clicked();
+    void settingsMenuFixedLayoutOldReph_clicked();
     void settingsMenuFixedLayoutTraditionalKar_clicked();
     void settingsMenuFixedLayoutNumberPad_clicked();
     void settingsMenuShowDialog_clicked();
@@ -78,6 +79,7 @@ private:
     QMenu *settingsMenuFixedLayout;
     QAction *settingsMenuFixedLayoutAutoVForm;
     QAction *settingsMenuFixedLayoutAutoChandra;
+    QAction *settingsMenuFixedLayoutOldReph;
     QAction *settingsMenuFixedLayoutTraditionalKar;
     QAction *settingsMenuFixedLayoutNumberPad;
     /* About Popup Menu */

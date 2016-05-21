@@ -98,8 +98,8 @@ void MethodFixedLayoutModern::processKeyPress(QString word) {
     }
   }
 
-  /* Vowel making with Hasanta + Kar */
   if(BengaliT.right(1) == b_Hasanta) {
+    /* Vowel making with Hasanta + Kar */
     if(word == b_AAkar) {
       internalBackspace();
       BengaliT += b_AA;
@@ -155,6 +155,28 @@ void MethodFixedLayoutModern::processKeyPress(QString word) {
       updateCache();
       return;
     }
+    /* Zo fola */
+    if(word == b_Z && BengaliT.right(2).left(1) != b_Hasanta) {
+      internalBackspace();
+      if(BengaliT.right(2).left(1) == b_R) {
+        BengaliT = BengaliT + ZWJ + b_Hasanta + b_Z;
+      } else {
+        BengaliT = BengaliT + b_Hasanta + b_Z;
+      }
+      updateCache();
+      return;
+    }
+  }
+
+  /* Zo fola */
+  if(word == QString(b_Hasanta) + QString(b_Z)) {
+    if(BengaliT.right(1) == b_R) {
+      BengaliT = BengaliT + ZWJ + word;
+    } else {
+      BengaliT = BengaliT + word;
+    }
+    updateCache();
+    return;
   }
 
   if(isKar(word)) {

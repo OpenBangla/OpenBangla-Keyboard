@@ -61,3 +61,8 @@ bool Settings::getNumberPadFixed() {
   setting->sync();
   return setting->value("settings/FixedLayout/NumberPad", true).toBool();
 }
+
+bool Settings::getOldReph() {
+  setting->sync();
+  return setting->value("settings/FixedLayout/OldReph", true).toBool();
+}
