@@ -4,6 +4,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SRC_GUI TopBar.cpp
+            AboutDialog.cpp
             AboutFile.cpp
             LayoutViewer.cpp
             SettingsDialog.cpp

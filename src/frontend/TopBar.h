@@ -13,6 +13,7 @@ class QMenu;
 class QSystemTrayIcon;
 
 class LayoutViewer;
+class AboutDialog;
 class AboutFile;
 class SettingsDialog;
 
@@ -64,6 +65,7 @@ private:
     QSystemTrayIcon *tray;
 
     /* Dialogs */
+    AboutDialog *aboutDialog;
     LayoutViewer *layoutViewer;
     SettingsDialog *settingsDialog;
 

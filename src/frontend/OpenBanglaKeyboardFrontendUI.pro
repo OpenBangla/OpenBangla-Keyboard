@@ -12,19 +12,22 @@ SOURCES += \
     TopBar.cpp \
     AboutFile.cpp \
     LayoutViewer.cpp \
-    SettingsDialog.cpp
+    SettingsDialog.cpp \
+    AboutDialog.cpp
 
 HEADERS  += \
     TopBar.h \
     AboutFile.h \
     LayoutViewer.h \
-    SettingsDialog.h
+    SettingsDialog.h \
+    AboutDialog.h
 
 FORMS    += \
     TopBar.ui \
     AboutFile.ui \
     LayoutViewer.ui \
-    SettingsDialog.ui
+    SettingsDialog.ui \
+    AboutDialog.ui
 
 RESOURCES += \
     images.qrc

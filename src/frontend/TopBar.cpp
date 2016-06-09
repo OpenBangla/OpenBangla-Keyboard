@@ -9,6 +9,7 @@
 #include "Layout.h"
 #include "Settings.h"
 #include "LayoutViewer.h"
+#include "AboutDialog.h"
 #include "AboutFile.h"
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
@@ -24,6 +25,7 @@ TopBar::TopBar(QWidget *parent) :
     gSettings = new Settings();
 
     /* Dialogs */
+    aboutDialog = new AboutDialog(this);
     layoutViewer = new LayoutViewer(this);
     settingsDialog = new SettingsDialog(this);
 
@@ -218,10 +220,7 @@ void TopBar::aboutMenuLayout_clicked() {
 }
 
 void TopBar::aboutMenuAbout_clicked() {
-  QMessageBox::about(this, "About OpenBangla Keyboard",
-      tr("<h2>OpenBangla Keyboard 0.1</h2>"
-      "<p>Copyright &copy; 2015-2016 Muhammad Mominul Huque & OpenBangla Team."
-      "<p>An OpenSource, Cross-Platform, Unicode Compliant Bengali Input Method."));
+  aboutDialog->show();
 }
 
 void TopBar::quitMenuOnTray_clicked() {

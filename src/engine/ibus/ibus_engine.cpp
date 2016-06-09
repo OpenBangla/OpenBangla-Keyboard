@@ -21,7 +21,6 @@
 #include <ibus.h>
 #include <glib.h>
 #include <QDir>
-#include <sys/stat.h>
 #include "ibus_keycode.h"
 #include "Layout.h"
 #include "log.h"
