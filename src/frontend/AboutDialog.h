@@ -17,6 +17,9 @@ public:
     explicit AboutDialog(QWidget *parent = 0);
     ~AboutDialog();
 
+protected:
+    bool eventFilter(QObject *object, QEvent *event) override;
+
 private slots:
     void scroll();
 

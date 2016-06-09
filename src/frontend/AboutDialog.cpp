@@ -12,9 +12,11 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(scroll()));
-    timer->start(30);
+    timer->setInterval(30);
+    timer->start();
 
     ui->txtLicense->setVisible(false);
+    ui->labelDesc->installEventFilter(this);
 }
 
 AboutDialog::~AboutDialog()
@@ -44,4 +46,20 @@ void AboutDialog::on_btnLicense_toggled(bool checked)
 {
     ui->txtLicense->setVisible(checked);
     ui->labelDesc->setVisible(!checked);
+}
+
+bool AboutDialog::eventFilter(QObject *object, QEvent *event) {
+    if (object == ui->labelDesc) {
+        switch (event->type()) {
+            case QEvent::Enter:
+                timer->stop();
+                break;
+            case QEvent::Leave:
+                timer->start();
+                break;
+            default:
+                break;
+        }
+    }
+    return QObject::eventFilter(object, event);
 }
