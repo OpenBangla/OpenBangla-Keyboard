@@ -1,4 +1,5 @@
 #include <QTimer>
+#include <QDesktopServices>
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
 
@@ -9,6 +10,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->setupUi(this);
 
     this->setFixedSize(this->width(),this->height());
+
+    // Set version
+    ui->labelVer->setText(PROJECT_VERSION);
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(scroll()));
@@ -27,7 +31,7 @@ AboutDialog::~AboutDialog()
 void AboutDialog::scroll() {
     QPoint point;
     point.setX(ui->labelDesc->x());
-    if(ui->labelDesc->y() != -610) {
+    if(ui->labelDesc->y() != -780) {
         int y = ui->labelDesc->y() - 1;
         point.setY(y);
         ui->labelDesc->move(point);
@@ -62,4 +66,9 @@ bool AboutDialog::eventFilter(QObject *object, QEvent *event) {
         }
     }
     return QObject::eventFilter(object, event);
+}
+
+void AboutDialog::on_labelDesc_linkActivated(const QString &link)
+{
+    QDesktopServices::openUrl(QUrl(link));
 }

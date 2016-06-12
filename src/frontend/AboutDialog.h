@@ -27,6 +27,8 @@ private slots:
 
     void on_btnLicense_toggled(bool checked);
 
+    void on_labelDesc_linkActivated(const QString &link);
+
 private:
     Ui::AboutDialog *ui;
 

@@ -58,7 +58,7 @@ void Settings::setLayoutName(QString name) {
 }
 QString Settings::getLayoutName() {
   setting->sync();
-  return setting->value("layout/name").toString();
+  return setting->value("layout/name", "Avro Phonetic").toString();
 }
 void Settings::setLayoutPath(QString path) {
   setting->setValue("layout/path", path);
@@ -66,7 +66,7 @@ void Settings::setLayoutPath(QString path) {
 }
 QString Settings::getLayoutPath() {
   setting->sync();
-  return setting->value("layout/path").toString();
+  return setting->value("layout/path", PKGDATADIR "/layouts/avrophonetic.json").toString();
 }
 
 void Settings::setEnterKeyClosesPrevWin(bool b) {

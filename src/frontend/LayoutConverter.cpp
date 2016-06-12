@@ -47,7 +47,7 @@ void LayoutConverter::convertAvroLayout(QString path) {
 
   /**/
   QFileInfo info(conversionFile);
-  QString savePath = QString(UWRPATH "/Layouts/%1").arg(info.baseName() + ".json");
+  QString savePath = folders.getUserLayoutPath() + info.baseName() + ".json";
 
   std::ofstream ofs;
   ofs.open(savePath.toStdString(), std::ofstream::out);

@@ -22,9 +22,9 @@
 #include "log.h"
 
 AutoCorrect::AutoCorrect() {
-  QFile dictFile(UWRPATH "/autocorrect.json");
+  QFile dictFile(PKGDATADIR "/data/autocorrect.json");
   if (!dictFile.open(QIODevice::ReadOnly)) {
-    LOG_ERROR("[AutoCorrect]: Error: Couldn't open dictionary file\n");
+    LOG_ERROR("[AutoCorrect]: Error: Couldn't open autocorrect dictionary file!\n");
   }
   QByteArray data = dictFile.readAll();
   QJsonDocument json(QJsonDocument::fromJson(data));

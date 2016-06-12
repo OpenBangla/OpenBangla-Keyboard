@@ -22,11 +22,14 @@
 #include <QJsonObject>
 #include <QMap>
 #include <QVector>
+#include "SpecialFolders.h"
 
 class CacheManager {
   QMap<QString, QVector<QString>> tempCache;
   QJsonObject candidateSel;
   QMap<QString, QVector<QString>> base;
+
+  SpecialFolders folders;
 public:
   CacheManager();
 

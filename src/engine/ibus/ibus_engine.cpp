@@ -243,10 +243,10 @@ void start_setup(bool ibus) {
   } else {
     component = ibus_component_new( "org.freedesktop.IBus.OpenBangla",
                                     "OpenBangla Keyboard",
-                                    "1.0",
+                                    PROJECT_VERSION,
                                     "GPL 3",
                                     "See AboutBox",
-                                    "http://openbangla.github.io",
+                                    "http://openbangla.github.io/OpenBangla-Keyboard",
                                     LIBEXEC_DIR "/OpenBangla-Engine --ibus",
                                     "openbangla-keyboard"
                                   );
@@ -257,7 +257,7 @@ void start_setup(bool ibus) {
                                                     "OpenBangla Keyboard IME for iBus",
                                                     "bn",
                                                     "GPL 3",
-                                                    "See AboutBox",
+                                                    "See About Dialog",
                                                     PKGDATADIR "/icons/OpenBangla-Keyboard.png",
                                                     "us"
                                                   ));

@@ -106,7 +106,7 @@ LayoutList Layout::searchLayouts() {
   dir.setPath(PKGDATADIR "/layouts");
   lst << searchLayoutsEx(dir);
 
-  dir.setPath(UWRPATH "/Layouts/");
+  dir.setPath(folders.getUserLayoutPath());
   if(dir.exists()) {
     lst << searchLayoutsEx(dir);
   } else { return lst; }

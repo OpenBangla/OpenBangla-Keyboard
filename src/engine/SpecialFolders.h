@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,31 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Logging functions */
+#ifndef SPECIAL_FOLDER_H
+#define SPECIAL_FOLDER_H
 
-#ifndef LOG_H
-#define LOG_H
+#include <QDir>
+#include "log.h"
 
-#include <cstdio>
+class SpecialFolders {
+  QString path;
+  QDir dir;
+public:
+  SpecialFolders() {
+    path = dir.homePath() + "/.OpenBangla-Keyboard";
+    // Create our folder in the user home folder
+    dir.mkpath(path);
+    // Create user specific layouts folder
+    dir.mkpath(path + "/Layouts/");
+  }
 
-#define LOG_INFO(a...) std::fprintf(stdout, "[OpenBangla-Info]: " a)
+  QString getCandidateSaveFile() {
+    return path + "/phonetic-candidate-selection.json";
+  }
 
-#if DEBUG
-  #define LOG_DEBUG(a...) std::fprintf(stdout, "[OpenBangla-Debug]: " a)
-#else
-  #define LOG_DEBUG(a...)
-#endif
+  QString getUserLayoutPath() {
+    return path + "/Layouts/";
+  }
+};
 
-#define LOG_ERROR(a...) std::fprintf(stderr, "[OpenBangla-Error]: " a)
-
-#endif /* end of include guard: LOG_H */
+#endif /* end of include guard: SPECIAL_FOLDER_H */

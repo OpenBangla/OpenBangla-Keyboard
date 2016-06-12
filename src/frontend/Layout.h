@@ -24,6 +24,7 @@
 #include <QString>
 #include <QVector>
 #include <QJsonObject>
+#include "SpecialFolders.h"
 
 /* Layout handiling code for the frontend */
 
@@ -58,6 +59,8 @@ class Layout {
   LayoutDesc lD;
   /* Internal map of available layouts */
   QMap<QString, QString> layoutMap;
+
+  SpecialFolders folders;
 
   /* Load Layout Description. Used internaly */
   void loadDesc();

@@ -34,7 +34,7 @@ Settings::~Settings() {
 
 QString Settings::getLayoutPath() {
   setting->sync();
-  return setting->value("layout/path").toString();
+  return setting->value("layout/path", PKGDATADIR "/layouts/avrophonetic.json").toString();
 }
 
 bool Settings::getEnterKeyClosesPrevWin() {

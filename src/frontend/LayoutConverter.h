@@ -15,11 +15,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <fstream>
 #include <QFile>
 #include <QtXml>
 #include "json.hpp"
+#include "SpecialFolders.h"
 
 class LayoutConverter {
   QFile conversionFile;
@@ -27,6 +28,7 @@ class LayoutConverter {
   std::ofstream convertedFile;
   QDomElement layoutRoot;
   nlohmann::json jsonFile;
+  SpecialFolders folders;
 
   void convertAvroLayout(QString path);
   void convertAvroInfo();

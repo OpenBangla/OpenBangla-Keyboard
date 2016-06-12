@@ -21,6 +21,7 @@
 #include <QJsonDocument>
 #include "cachemanager.h"
 #include "log.h"
+#include <QDebug>
 
 CacheManager::CacheManager() {
   loadCandidateSelection();
@@ -35,9 +36,7 @@ QVector<QString> CacheManager::getTempCache(QString key) {
 }
 
 void CacheManager::loadCandidateSelection() {
-  QString path = UWRPATH "/phonetic-candidate-selection.json";
-
-  QFile loadFile(path);
+  QFile loadFile(folders.getCandidateSaveFile());
   if(!loadFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[CacheManager:Load]: Error couldn't open save file.\n");
     return;
@@ -64,9 +63,7 @@ void CacheManager::writeCandidateSelection(QString word, QString sel) {
 }
 
 void CacheManager::saveCandidateSelection() {
-  QString path = UWRPATH "/phonetic-candidate-selection.json";
-
-  QFile saveFile(path);
+  QFile saveFile(folders.getCandidateSaveFile());
   if(!saveFile.open(QIODevice::WriteOnly)) {
     LOG_ERROR("[CacheManager:Save]: Error couldn't open save file.\n");
     return;
