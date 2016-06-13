@@ -21,7 +21,6 @@
 #include <QJsonDocument>
 #include "cachemanager.h"
 #include "log.h"
-#include <QDebug>
 
 CacheManager::CacheManager() {
   loadCandidateSelection();

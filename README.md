@@ -1,21 +1,45 @@
 # OpenBangla Keyboard
-An OpenSource, Cross-platform, Unicode compliant Bengali Input Method.
+![openbangla-keyboard](https://cloud.githubusercontent.com/assets/9459891/15998078/ead3cae2-315c-11e6-8595-df1efbe478d2.png)
 
-This is the first effort to write Bengali(Bangla) Cross-platform. With the power of Unicode, your data compatibility is sured. Get the same feeling across all platforms. Enjoy the same typing style and method in all platforms.
+An OpenSource, Unicode compliant Bengali Input Method for GNU/Linux systems.
 
-### Project Status
-OpenBangla Keyboard is in early stage of development. Currently it works on iBus supported GNU/Linux distributions.
+### Features
+* Phonetic Keyboard Layout (Avro Phonetic)
+* Fixed Keyboard Layout
+* Can use Avro Keyboard Layout file (version 5)
+* Layout Viewer
+* Preview window when using Phonetic Keyboard Layout
+* Features Avro Keyboard like Top Bar
+
+### Installing
+#### Linux
+Linux packages can be downloaded from [here](https://github.com/OpenBangla/OpenBangla-Keyboard/releases)
+
+If you need help, there is a wiki [page](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing%20OpenBangla%20Keyboard)
+
+Tested in Ubuntu 16.04
+
+**Currently Debian Package(.deb) are only supported**
 
 ### Compiling on GNU/Linux
 #### Build & Install procedures
-Clone this repository and change the directory to the cloned folder and issue the commands:
+OpenBangla Keyboard currently needs following libraries and binaries
+* GNU GCC, G++ compiler
+* GNU Make
+* CMake
+* Qt 5 libraries
+* iBus development library
+
+On a Ubuntu/Debian system you can easily install them like this
 ```
-mkdir build
-cd build
+sudo apt-get install build-essential cmake libibus-1.0-dev qt5-default qtdeclarative5-dev
+```
+
+After you have installed required libraries and binaries. Clone this repository and change the directory to the cloned folder and issue the commands:
+```
+mkdir build && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX='/usr' -DLIBEXEC_DIR='/usr/libexec'
 make
 sudo make install
 ```
-Use iBus UI or run ibus-setup to add **OpenBangla Keyboard**.
-
-**TIPS:** You can use the guides to add OpenBangla Keyboard to iBus from [ibus-avro](http://linux.omicronlab.com/) project. **Do not follow the installing instructions. Type and select OpenBangla Keyboard from the lists, not Avro Phonetic.**
+Use iBus UI or run ibus-setup to add **OpenBangla Keyboard**. You can get help on adding **OpenBangla Keyboard** in **Text entry settings** in this [page](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing%20OpenBangla%20Keyboard)
