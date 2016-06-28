@@ -155,13 +155,13 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
     }
     // We have checked all the things and we have no other options to do rather than this
     return (gboolean)command.accepted;
-  } else if((key == VC_UP) || (key == VC_DOWN) || (key == VC_RIGHT) || (key == VC_LEFT)) {
+  } else if((key == VC_UP) || (key == VC_DOWN) || (key == VC_RIGHT) || (key == VC_LEFT) || (key == VC_TAB)) {
     // Cursor keys
     IMCommand command = gLayout->handleSpecialKey(key);
     LOG_DEBUG("[IM:iBus]: Layout Management %s the event\n",(command.accepted)?"accepted":"rejected");
 
     if(command.accepted) {
-      if((key == VC_DOWN) || (key == VC_RIGHT)) {
+      if((key == VC_DOWN) || (key == VC_RIGHT) || (key == VC_TAB)) {
         ibus_table_sel_inc();
         return TRUE;
       } else {
