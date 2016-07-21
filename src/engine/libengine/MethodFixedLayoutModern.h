@@ -34,7 +34,9 @@ public:
   void updateCache();
   void processKeyPress(QString word);
   void insertKar(QString kar);
+  void insertReph();
   void internalBackspace();
+  void backspace(QString &string, int step);
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);

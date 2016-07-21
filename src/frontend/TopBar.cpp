@@ -76,12 +76,12 @@ void TopBar::SetupPopupMenus() {
   settingsMenuFixedLayoutAutoChandra->setCheckable(true);
   settingsMenuFixedLayoutAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
-  /*
+
   settingsMenuFixedLayoutOldReph = new QAction("Old Style Reph", this);
   settingsMenuFixedLayoutOldReph->setCheckable(true);
   settingsMenuFixedLayoutOldReph->setChecked(gSettings->getOldReph());
   connect(settingsMenuFixedLayoutOldReph, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutOldReph_clicked()));
-  */
+
   settingsMenuFixedLayoutTraditionalKar = new QAction("Enable \"Traditional Kar Joining\"", this);
   settingsMenuFixedLayoutTraditionalKar->setCheckable(true);
   settingsMenuFixedLayoutTraditionalKar->setChecked(gSettings->getTraditionalKarFixed());
@@ -95,7 +95,7 @@ void TopBar::SetupPopupMenus() {
   settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoChandra);
-  //settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutOldReph);
+  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutOldReph);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutTraditionalKar);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutNumberPad);
 

@@ -38,6 +38,10 @@ void MethodFixedLayoutModern::internalBackspace() {
   BengaliT = BT;
 }
 
+void MethodFixedLayoutModern::backspace(QString &string, int step) {
+  string = string.mid(0, string.length()-step);
+}
+
 void MethodFixedLayoutModern::insertKar(QString kar) {
   /* Automatic Fix of Chandra Position */
   if(gSettings->getAutoChandraPosFixed() && BengaliT.right(1) == b_Chandra) {
@@ -49,6 +53,83 @@ void MethodFixedLayoutModern::insertKar(QString kar) {
     BengaliT = BengaliT + ZWNJ + kar;
   } else {
     BengaliT += kar;
+  }
+}
+
+void MethodFixedLayoutModern::insertReph() {
+  bool rephMoveable = false;
+
+  bool encounteredConstant = false;
+  bool encounteredVowel = false;
+  bool encounteredHasanta = false;
+  bool encounteredChandra = false;
+
+  if(gSettings->getOldReph()) {
+    if(isPureConsonent(BengaliT.right(1))) {
+      rephMoveable = true;
+    } else if(isVowel(BengaliT.right(1))) {
+      if(isPureConsonent(BengaliT.right(2).left(1))) {
+        rephMoveable = true;
+      } else {
+        rephMoveable = false;
+      }
+    } else if(BengaliT.right(1) == b_Chandra) {
+      if(isPureConsonent(BengaliT.right(2).left(1))) {
+        rephMoveable = true;
+      } else if(isVowel(BengaliT.right(2).left(1)) && isPureConsonent(BengaliT.right(3).left(1))) {
+        rephMoveable = true;
+      } else {
+        rephMoveable = false;
+      }
+    }
+  } else {
+    rephMoveable = false;
+  }
+
+  if(rephMoveable) {
+    QString cache = BengaliT;
+    int step = 0;
+
+    for(int i = 1; i <= cache.length(); i++) {
+      QString letter = cache.right(i).left(1);
+
+      if(isPureConsonent(letter)) {
+        if(encounteredConstant && !encounteredHasanta) break;
+        encounteredConstant = true;
+        encounteredHasanta = false; // reset
+        step++;
+        continue;
+      } else if(letter == b_Hasanta) {
+        encounteredHasanta = true;
+        step++;
+        continue;
+      } else if(isVowel(letter)) {
+        if(encounteredVowel) break;
+
+        if((i == 1) || encounteredChandra) {
+          encounteredVowel = true;
+          step++;
+          continue;
+        }
+
+        break;
+      } else if(letter == b_Chandra) {
+        if(i == 1) {
+          encounteredChandra = true;
+          step++;
+          continue;
+        }
+        break;
+      }
+    }
+
+    QString temp = cache.right(step);
+    backspace(BengaliT, step);
+    BengaliT = BengaliT + b_R + b_Hasanta + temp;
+    return;
+  } else {
+    BengaliT = BengaliT + b_R + b_Hasanta;
+    return;
   }
 }
 
@@ -175,6 +256,13 @@ void MethodFixedLayoutModern::processKeyPress(QString word) {
     } else {
       BengaliT = BengaliT + word;
     }
+    updateCache();
+    return;
+  }
+
+  /* Reph */
+  if(word == QString(b_R) + QString(b_Hasanta)) {
+    insertReph();
     updateCache();
     return;
   }
