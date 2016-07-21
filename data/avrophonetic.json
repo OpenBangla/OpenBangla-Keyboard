@@ -1482,7 +1482,17 @@
             {
                 "find": ":",
                 "replace": "ঃ",
-                "rules": []
+                "rules": [
+                  {
+                      "matches": [
+                          {
+                              "scope": "number",
+                              "type": "suffix"
+                          }
+                      ],
+                      "replace": ":"
+                  }
+                ]
             },
             {
                 "find": "D",

@@ -747,5 +747,14 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
       ret.accepted = false;
       return ret;
     }
+  } else if(key == VC_TAB) {
+    if(EnglishT.length() > 0) {
+      ret.accepted = true;
+      changedCandidateSelection = true;
+      return ret;
+    } else {
+      ret.accepted = false;
+      return ret;
+    }
   }
 }

@@ -356,7 +356,7 @@ IMCommand MethodFixedLayoutModern::handleSpecialKey(int key) {
       ret.accepted = false;
       return ret;
     }
-  } else if((key == VC_UP) || (key == VC_DOWN) || (key == VC_RIGHT) || (key == VC_LEFT)) {
+  } else if((key == VC_UP) || (key == VC_DOWN) || (key == VC_RIGHT) || (key == VC_LEFT) || (key == VC_TAB)) {
     ret.accepted = false;
     if(BengaliT.length() > 0) {
       BengaliT = "";
