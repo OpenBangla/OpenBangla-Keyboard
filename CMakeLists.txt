@@ -20,6 +20,16 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   set(OS_LINUX 1)
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
+# Set build type to "Release" if user did not specify any build type yet
+# Other possible values: Debug, Release, RelWithDebInfo and MinSizeRel
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	add_definitions(-DDEBUG)
+endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
 # For Linux.
 if(OS_LINUX)
   # Include our Linux specific additions

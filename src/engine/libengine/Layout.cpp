@@ -116,3 +116,7 @@ bool Layout::handledKeyPress() {
 void Layout::candidateCommited(std::string commited) {
   mth->candidateCommited(commited);
 }
+
+bool Layout::isCandidateWinHorizontal() {
+  gSettings->getCandidateWinHorizontal();
+}

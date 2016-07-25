@@ -20,7 +20,6 @@
 
 #include <ibus.h>
 #include <glib.h>
-#include <QDir>
 #include "ibus_keycode.h"
 #include "Layout.h"
 #include "log.h"
@@ -33,6 +32,10 @@ static gint id = 0;
 static guint candidateSel = 0;
 
 Suggestion suggestions;
+
+void ibus_update_with_settings() {
+  ibus_lookup_table_set_orientation(table, gLayout->isCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
+}
 
 void ibus_update_preedit() {
   if(suggestions.showCandidateWin) {
@@ -134,6 +137,9 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
 
   int key = ibus_keycode(keyval);
 
+  // Update with settings
+  ibus_update_with_settings();
+
   // Special Keys
   if((key == VC_ENTER) || (key == VC_KP_ENTER) || (key == VC_BACKSPACE) || (key == VC_SPACE)) {
     IMCommand command = gLayout->handleSpecialKey(key);
@@ -143,7 +149,7 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
       ibus_commit();
       return (gboolean)command.accepted;
     }
-    // Usually it happends if the key is Backspace
+    // Usually it happens if the key is Backspace
     if(command.needUpdate && command.needReset) {
       ibus_update_suggest(gLayout->getCandidates());
       ibus_reset();
@@ -213,7 +219,7 @@ IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
 
   // Setup Lookup table
   table = ibus_lookup_table_new (9, 0, TRUE, TRUE);
-  ibus_lookup_table_set_orientation(table, IBUS_ORIENTATION_HORIZONTAL);
+  ibus_update_with_settings();
   g_object_ref_sink (table);
 
   LOG_INFO("[IM:iBus]: Creating IM Engine\n");
@@ -227,8 +233,10 @@ IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
   return engine;
 }
 
-void start_setup(bool ibus) {
+void ibus_start_setup(bool ibus) {
   IBusComponent *component;
+
+  LOG_DEBUG("[IM:iBus]: Started IM facilities.\n");
 
   ibus_init();
 
@@ -266,18 +274,13 @@ void start_setup(bool ibus) {
   ibus_main();
 }
 
-void ibus_start(bool executed) {
-  LOG_DEBUG("[IM:iBus]: Started IM facilities.\n");
-  start_setup(executed);
-}
-
 int main(int argc, char *argv []) {
   gLayout = new Layout();
 
-  if (argv[1] = "--ibus") {
-    ibus_start(true);
+  if(strcmp(argv[1], "--ibus") == 0) {
+    ibus_start_setup(true);
   } else {
-    ibus_start(false);
+    ibus_start_setup(false);
   }
   return 0;
 }

@@ -35,6 +35,7 @@ public:
   bool getTraditionalKarFixed();
   bool getNumberPadFixed();
   bool getOldReph();
+  bool getCandidateWinHorizontal();
 };
 
 /* Global */

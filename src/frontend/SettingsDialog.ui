@@ -42,6 +42,19 @@
     <string>Enter/Return key only closes preview window</string>
    </property>
   </widget>
+  <widget class="QCheckBox" name="checkBoxCandidateWinHorizontal">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>341</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Candidate window orientation is horizontal</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>

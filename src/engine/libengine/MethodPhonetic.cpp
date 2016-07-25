@@ -688,7 +688,8 @@ void MethodPhonetic::candidateCommited(std::string commited) {
     suggest.saveSelection(QString::fromStdString(commited));
     changedCandidateSelection = false;
   }
-  // Clear stored suggestion
+  // Clear cache & stored suggestions
+  EnglishT = "";
   suggested = {};
 }
 
@@ -729,21 +730,23 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
       ret.accepted = false;
       return ret;
     }
-  } else if((key == VC_UP) || (key == VC_DOWN)) {
+  } else if(((key == VC_UP) || (key == VC_DOWN)) && !gSettings->getCandidateWinHorizontal()) {
     if(EnglishT.length() > 0) {
       ret.accepted = true;
       changedCandidateSelection = true;
       return ret;
     } else {
+      if(EnglishT.length() > 0) EnglishT = "";
       ret.accepted = false;
       return ret;
     }
-  } else if((key == VC_RIGHT) || (key == VC_LEFT)) {
+  } else if(((key == VC_RIGHT) || (key == VC_LEFT)) && gSettings->getCandidateWinHorizontal()) {
     if(EnglishT.length() > 0) {
       ret.accepted = true;
       changedCandidateSelection = true;
       return ret;
     } else {
+      if(EnglishT.length() > 0) EnglishT = "";
       ret.accepted = false;
       return ret;
     }

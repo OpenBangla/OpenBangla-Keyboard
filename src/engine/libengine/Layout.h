@@ -106,13 +106,13 @@ class Layout {
 
   /* Update with current settings */
   void updateWithSettings();
-public:
-  Layout();
-  ~Layout();
 
   /* Load a layout from given @path */
   void loadLayout(QString path);
-
+public:
+  Layout();
+  ~Layout();
+  
   /* Generates suggestions on the flow */
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
   /* Get the candidates for commit */
@@ -124,6 +124,8 @@ public:
   /* Confirms that one of the sended candidates has been commited
    * @lcommited the string that was commited */
   void candidateCommited(std::string commited);
+  /* Checks is the candidate window horizontal */
+  bool isCandidateWinHorizontal();
 };
 
 /* Global */

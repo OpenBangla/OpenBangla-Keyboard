@@ -66,3 +66,8 @@ bool Settings::getOldReph() {
   setting->sync();
   return setting->value("settings/FixedLayout/OldReph", true).toBool();
 }
+
+bool Settings::getCandidateWinHorizontal() {
+  setting->sync();
+  return setting->value("settings/CandidateWin/Horizontal", true).toBool();
+}

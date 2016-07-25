@@ -128,3 +128,13 @@ bool Settings::getOldReph() {
   setting->sync();
   return setting->value("settings/FixedLayout/OldReph", true).toBool();
 }
+
+void Settings::setCandidateWinHorizontal(bool b) {
+  setting->setValue("settings/CandidateWin/Horizontal", b);
+  setting->sync();
+}
+
+bool Settings::getCandidateWinHorizontal() {
+  setting->sync();
+  return setting->value("settings/CandidateWin/Horizontal", true).toBool();
+}

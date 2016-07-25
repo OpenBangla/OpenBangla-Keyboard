@@ -317,7 +317,8 @@ bool MethodFixedLayoutModern::handledKeyPress() {
 }
 
 void MethodFixedLayoutModern::candidateCommited(std::string commited) {
-  // Clear stored suggestion
+  // Clear cache & stored suggestion
+  BengaliT = "";
   suggest = {};
 }
 

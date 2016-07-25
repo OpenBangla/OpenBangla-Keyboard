@@ -56,6 +56,9 @@ public:
 
   void setOldReph(bool b);
   bool getOldReph();
+
+  void setCandidateWinHorizontal(bool c);
+  bool getCandidateWinHorizontal();
 };
 
 /* Global */
