@@ -118,5 +118,5 @@ void Layout::candidateCommited(std::string commited) {
 }
 
 bool Layout::isCandidateWinHorizontal() {
-  gSettings->getCandidateWinHorizontal();
+  return gSettings->getCandidateWinHorizontal();
 }

@@ -205,5 +205,5 @@ QVector<QString> Database::find(QString word) {
 QString Database::banglaForSuffix(QString word) {
   if(suffix_table.contains(word)) {
     return suffix_table[word];
-  } else { QString(""); }
+  } else { return QString(""); }
 }
