@@ -1,0 +1,4 @@
+cmake_policy(SET CMP0005 OLD)
+## For temporary
+add_definitions(-DPROJECT_DATADIR='"/usr/local/openbangla-keyboard/"')
+add_definitions(-DPKGDATADIR='"/usr/local/openbangla-keyboard/"')

@@ -41,7 +41,13 @@ if(OS_LINUX)
   pkg_check_modules(IBUS REQUIRED ibus-1.0)
 endif(OS_LINUX)
 
-add_subdirectory(src/engine)
+if(APPLE)
+  include(cmake/CMakeMacOS.txt)
+endif()
+
+if(NOT APPLE)
+  add_subdirectory(src/engine)
+endif()
 add_subdirectory(src/frontend)
 
 
