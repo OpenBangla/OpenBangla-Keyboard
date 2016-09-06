@@ -45,9 +45,7 @@ if(APPLE)
   include(cmake/CMakeMacOS.txt)
 endif()
 
-if(NOT APPLE)
-  add_subdirectory(src/engine)
-endif()
+add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
 
 
