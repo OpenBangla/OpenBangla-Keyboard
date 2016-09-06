@@ -29,6 +29,26 @@ configure_file(${CMAKE_SOURCE_DIR}/data/openbangla-keyboard.desktop.in ${CMAKE_B
 install(FILES ${CMAKE_SOURCE_DIR}/data/OpenBangla-Keyboard.png
 DESTINATION  ${PROJECT_DATADIR}/icons)
 
+install(FILES ${CMAKE_SOURCE_DIR}/data/16.png
+DESTINATION ${datadir}/icons/hicolor/16x16/apps/
+RENAME openbangla-keyboard.png)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/32.png
+DESTINATION ${datadir}/icons/hicolor/32x32/apps/
+RENAME openbangla-keyboard.png)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/128.png
+DESTINATION ${datadir}/icons/hicolor/128x128/apps/
+RENAME openbangla-keyboard.png)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/512.png
+DESTINATION ${datadir}/icons/hicolor/512x512/apps/
+RENAME openbangla-keyboard.png)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/1024.png
+DESTINATION ${datadir}/icons/hicolor/1024x1024/apps/
+RENAME openbangla-keyboard.png)
+
 install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
 DESTINATION  ${PROJECT_DATADIR}/layouts)
 
