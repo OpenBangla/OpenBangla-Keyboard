@@ -2,6 +2,6 @@
 Name=OpenBangla Keyboard
 Comment=An OpenSource, Unicode compliant Bengali Input Method.
 Exec=@PROJECT_DATADIR@/OpenBangla-Keyboard %f
-Icon=@PROJECT_DATADIR@/icons/OpenBangla-Keyboard.png
+Icon=openbangla-keyboard
 Type=Application
-Categories=Utility;
+Categories=Utility;Application;
