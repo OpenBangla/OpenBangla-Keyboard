@@ -29,6 +29,10 @@ configure_file(${CMAKE_SOURCE_DIR}/data/openbangla-keyboard.desktop.in ${CMAKE_B
 install(FILES ${CMAKE_SOURCE_DIR}/data/OpenBangla-Keyboard.png
 DESTINATION  ${PROJECT_DATADIR}/icons)
 
+install(FILES ${CMAKE_SOURCE_DIR}/data/1024.png
+DESTINATION ${datadir}/pixmaps/
+RENAME openbangla-keyboard.png)
+
 install(FILES ${CMAKE_SOURCE_DIR}/data/16.png
 DESTINATION ${datadir}/icons/hicolor/16x16/apps/
 RENAME openbangla-keyboard.png)
