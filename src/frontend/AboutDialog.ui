@@ -20,10 +20,10 @@
   <widget class="QLabel" name="labelImage">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>10</y>
-     <width>41</width>
-     <height>41</height>
+     <x>130</x>
+     <y>0</y>
+     <width>61</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="text">
