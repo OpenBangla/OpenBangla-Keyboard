@@ -42,6 +42,10 @@ install(FILES ${CMAKE_SOURCE_DIR}/data/32.png
 DESTINATION ${datadir}/icons/hicolor/32x32/apps/
 RENAME openbangla-keyboard.png)
 
+install(FILES ${CMAKE_SOURCE_DIR}/data/48.png
+DESTINATION ${datadir}/icons/hicolor/48x48/apps/
+RENAME openbangla-keyboard.png)
+
 install(FILES ${CMAKE_SOURCE_DIR}/data/128.png
 DESTINATION ${datadir}/icons/hicolor/128x128/apps/
 RENAME openbangla-keyboard.png)
