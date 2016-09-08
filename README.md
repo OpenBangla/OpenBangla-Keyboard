@@ -25,8 +25,8 @@ Tested in Ubuntu 16.04
 ### Compiling on GNU/Linux
 #### Build & Install procedures
 OpenBangla Keyboard currently needs following libraries and binaries
-* GNU GCC, G++ compiler
-* GNU Make
+* GNU GCC, G++ compiler or Clang
+* GNU Make or Ninja
 * CMake
 * Qt 5 libraries
 * iBus development library

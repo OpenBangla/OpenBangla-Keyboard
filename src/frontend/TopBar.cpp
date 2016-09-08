@@ -57,6 +57,7 @@ TopBar::~TopBar()
     /* Dialogs */
     delete layoutViewer;
     delete settingsDialog;
+    delete aboutDialog;
 
     delete ui;
 }
