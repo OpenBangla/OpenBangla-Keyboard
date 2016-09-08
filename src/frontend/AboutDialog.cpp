@@ -44,19 +44,25 @@ AboutDialog::AboutDialog(QWidget *parent) :
 AboutDialog::~AboutDialog()
 {
     delete ui;
+    delete timer;
 }
 
 void AboutDialog::scroll() {
     QPoint point;
     point.setX(ui->labelDesc->x());
     if(ui->labelDesc->y() != -780) {
-        int y = ui->labelDesc->y() - 1;
-        point.setY(y);
+        point.setY(ui->labelDesc->y() - 1);
         ui->labelDesc->move(point);
     } else {
         point.setY(300);
         ui->labelDesc->move(point);
     }
+}
+
+void AboutDialog::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+    ui->labelDesc->move(ui->labelDesc->x(), 300);
+    return;
 }
 
 void AboutDialog::on_btnClose_clicked()
@@ -68,6 +74,7 @@ void AboutDialog::on_btnLicense_toggled(bool checked)
 {
     ui->txtLicense->setVisible(checked);
     ui->labelDesc->setVisible(!checked);
+    if(checked) { timer->stop(); } else { timer->start(); }
 }
 
 bool AboutDialog::eventFilter(QObject *object, QEvent *event) {

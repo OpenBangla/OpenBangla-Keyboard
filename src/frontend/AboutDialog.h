@@ -20,6 +20,7 @@
 #define ABOUTDIALOG_H
 
 #include <QDialog>
+#include <QEvent>
 
 class QTimer;
 
@@ -37,6 +38,7 @@ public:
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 private slots:
     void scroll();
