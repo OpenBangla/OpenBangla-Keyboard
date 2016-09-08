@@ -141,15 +141,18 @@ void TopBar::SetupPopupMenus() {
   quitMenuQuit = new QAction("Quit", this);
   connect(quitMenuQuit, SIGNAL(triggered()), this, SLOT(quitMenuQuit_clicked()));
 
+#if 0
   quitMenuOnTray = new QAction("Jump to system tray", this);
   connect(quitMenuOnTray, SIGNAL(triggered()), this, SLOT(quitMenuOnTray_clicked()));
+#endif
 
   quitMenu = new QMenu(this);
-  quitMenu->addAction(quitMenuOnTray);
+  //quitMenu->addAction(quitMenuOnTray);
   quitMenu->addAction(quitMenuQuit);
 }
 
 void TopBar::SetupTrayIcon() {
+#if 0
   /* TODO: Fix Crash... */
   tray = new QSystemTrayIcon(QIcon(":/images/keyboard_layout_viewer.png"), this);
   tray->setToolTip("OpenBangla Keyboard");
@@ -168,6 +171,7 @@ void TopBar::SetupTrayIcon() {
   trayMenu->addAction(quitMenuQuit);
 
   tray->setContextMenu(trayMenu);
+#endif
 }
 
 void TopBar::RefreshLayouts() {
