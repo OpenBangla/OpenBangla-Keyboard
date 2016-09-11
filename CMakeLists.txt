@@ -43,6 +43,7 @@ endif(OS_LINUX)
 
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
+add_subdirectory(src/shared)
 
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")
