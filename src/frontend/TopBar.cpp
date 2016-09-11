@@ -47,6 +47,8 @@ TopBar::TopBar(QWidget *parent) :
     layoutViewer = new LayoutViewer(this);
     settingsDialog = new SettingsDialog(this);
 
+    ui->buttonIcon->installEventFilter(this);
+
     SetupTopBar();
     SetupPopupMenus();
     SetupTrayIcon();
@@ -57,6 +59,7 @@ TopBar::~TopBar()
     /* Dialogs */
     delete layoutViewer;
     delete settingsDialog;
+    delete aboutDialog;
 
     delete ui;
 }
@@ -140,15 +143,18 @@ void TopBar::SetupPopupMenus() {
   quitMenuQuit = new QAction("Quit", this);
   connect(quitMenuQuit, SIGNAL(triggered()), this, SLOT(quitMenuQuit_clicked()));
 
+#if 0
   quitMenuOnTray = new QAction("Jump to system tray", this);
   connect(quitMenuOnTray, SIGNAL(triggered()), this, SLOT(quitMenuOnTray_clicked()));
+#endif
 
   quitMenu = new QMenu(this);
-  quitMenu->addAction(quitMenuOnTray);
+  //quitMenu->addAction(quitMenuOnTray);
   quitMenu->addAction(quitMenuQuit);
 }
 
 void TopBar::SetupTrayIcon() {
+#if 0
   /* TODO: Fix Crash... */
   tray = new QSystemTrayIcon(QIcon(":/images/keyboard_layout_viewer.png"), this);
   tray->setToolTip("OpenBangla Keyboard");
@@ -167,6 +173,7 @@ void TopBar::SetupTrayIcon() {
   trayMenu->addAction(quitMenuQuit);
 
   tray->setContextMenu(trayMenu);
+#endif
 }
 
 void TopBar::RefreshLayouts() {
@@ -270,24 +277,31 @@ void TopBar::closeEvent(QCloseEvent *event) {
   event->accept();
 }
 
-void TopBar::mouseMoveEvent(QMouseEvent *event) {
-  if(canMoveTopbar) {
-    this->setCursor(Qt::ClosedHandCursor);
-    move(event->globalX() - pressedMouseX, event->globalY() - pressedMouseY);
-  }
-}
 
-void TopBar::mousePressEvent(QMouseEvent *event) {
-  canMoveTopbar = true;
-  pressedMouseX = event->x();
-  pressedMouseY = event->y();
-  event->accept();
-}
+bool TopBar::eventFilter(QObject *object, QEvent *event) {
+    if(object == ui->buttonIcon) {
+        if(event->type() == QEvent::MouseButtonPress) {
+            canMoveTopbar = true;
+            QMouseEvent *e = (QMouseEvent *)event;
+            pressedMouseX = e->x();
+            pressedMouseY = e->y();
+            event->accept();
+        } else if (event->type() == QEvent::MouseMove) {
+            if(canMoveTopbar) {
+                QMouseEvent *e = (QMouseEvent *)event;
+                ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
+                move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+            }
+        } else if(event->type() == QEvent::MouseButtonRelease) {
+            canMoveTopbar = false;
+            ui->buttonIcon->setCursor(Qt::OpenHandCursor);
+            event->accept();
+        } else if(event->type() == QEvent::Enter) {
+            ui->buttonIcon->setCursor(Qt::OpenHandCursor);
+        }
+    }
 
-void TopBar::mouseReleaseEvent(QMouseEvent *event) {
-  canMoveTopbar = false;
-  this->unsetCursor();
-  event->accept();
+    return QObject::eventFilter(object, event);
 }
 
 void TopBar::on_buttonSetLayout_clicked()

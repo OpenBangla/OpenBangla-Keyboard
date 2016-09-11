@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-project(OpenBangla-Keyboard VERSION 0.1.0)
+project(OpenBangla-Keyboard VERSION 1.0.0)
 set(APP_NAME "OpenBangla-Keyboard")
 
 ## Set versions
@@ -47,6 +47,7 @@ endif()
 
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
+add_subdirectory(src/shared)
 
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")

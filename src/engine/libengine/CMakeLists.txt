@@ -1,4 +1,4 @@
-include_directories(. ../ )
+include_directories(. ../ ../../shared)
 add_library(libEngine
             Layout.cpp
             Layout.h
@@ -18,8 +18,6 @@ add_library(libEngine
             cachemanager.h
             phoneticsuggestion.cpp
             phoneticsuggestion.h
-            keycode.h
-            Settings.cpp
-            Settings.h)
+            keycode.h)
 
-target_link_libraries(libEngine Qt5::Core Qt5::Sql)
+target_link_libraries(libEngine libShared Qt5::Core Qt5::Sql)

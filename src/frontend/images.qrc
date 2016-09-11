@@ -9,5 +9,6 @@
         <file>images/zoom-in.png</file>
         <file>images/zoom-out.png</file>
         <file>images/OpenBangla-Keyboard.png</file>
+        <file>images/icon.png</file>
     </qresource>
 </RCC>
