@@ -32,7 +32,6 @@
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
 #include "ui_TopBar.h"
-#include <QDebug>
 
 TopBar::TopBar(QWidget *parent) :
     QMainWindow(parent),
