@@ -32,6 +32,7 @@
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
 #include "ui_TopBar.h"
+#include <QDebug>
 
 TopBar::TopBar(QWidget *parent) :
     QMainWindow(parent),
@@ -46,6 +47,8 @@ TopBar::TopBar(QWidget *parent) :
     aboutDialog = new AboutDialog(this);
     layoutViewer = new LayoutViewer(this);
     settingsDialog = new SettingsDialog(this);
+
+    ui->buttonIcon->installEventFilter(this);
 
     SetupTopBar();
     SetupPopupMenus();
@@ -275,24 +278,31 @@ void TopBar::closeEvent(QCloseEvent *event) {
   event->accept();
 }
 
-void TopBar::mouseMoveEvent(QMouseEvent *event) {
-  if(canMoveTopbar) {
-    this->setCursor(Qt::ClosedHandCursor);
-    move(event->globalX() - pressedMouseX, event->globalY() - pressedMouseY);
-  }
-}
 
-void TopBar::mousePressEvent(QMouseEvent *event) {
-  canMoveTopbar = true;
-  pressedMouseX = event->x();
-  pressedMouseY = event->y();
-  event->accept();
-}
+bool TopBar::eventFilter(QObject *object, QEvent *event) {
+    if(object == ui->buttonIcon) {
+        if(event->type() == QEvent::MouseButtonPress) {
+            canMoveTopbar = true;
+            QMouseEvent *e = (QMouseEvent *)event;
+            pressedMouseX = e->x();
+            pressedMouseY = e->y();
+            event->accept();
+        } else if (event->type() == QEvent::MouseMove) {
+            if(canMoveTopbar) {
+                QMouseEvent *e = (QMouseEvent *)event;
+                ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
+                move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+            }
+        } else if(event->type() == QEvent::MouseButtonRelease) {
+            canMoveTopbar = false;
+            ui->buttonIcon->setCursor(Qt::OpenHandCursor);
+            event->accept();
+        } else if(event->type() == QEvent::Enter) {
+            ui->buttonIcon->setCursor(Qt::OpenHandCursor);
+        }
+    }
 
-void TopBar::mouseReleaseEvent(QMouseEvent *event) {
-  canMoveTopbar = false;
-  this->unsetCursor();
-  event->accept();
+    return QObject::eventFilter(object, event);
 }
 
 void TopBar::on_buttonSetLayout_clicked()
