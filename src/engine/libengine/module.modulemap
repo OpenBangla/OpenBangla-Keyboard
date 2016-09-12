@@ -1,0 +1,5 @@
+module libEngine {
+  umbrella header "CEngine.h"
+  link "libEngine"
+  export *
+}
