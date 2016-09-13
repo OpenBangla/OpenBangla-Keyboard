@@ -19,13 +19,15 @@
 #ifndef CENGINE_H
 #define CENGINE_H
 
+#include "stdbool.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define MAX_SUGGESTION 9
 
-struct CIMCommand {
+typedef struct {
   /* Key accepted */
   bool accepted;
   /* Commit current suggestion(candidate) */
@@ -34,14 +36,14 @@ struct CIMCommand {
   bool needUpdate;
   /* IM needs to reset */
   bool needReset;
-};
+} CIMCommand;
 
-struct CSuggestion {
+typedef struct {
   char *candidates[MAX_SUGGESTION];
   char *auxiliaryText;
   bool showCandidateWin;
   int prevSelection;
-};
+} CSuggestion;
 
 void engine_init();
 CSuggestion engine_get_suggestion(int key, bool shift, bool ctrl, bool alt);
