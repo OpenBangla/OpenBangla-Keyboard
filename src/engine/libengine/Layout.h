@@ -112,7 +112,7 @@ class Layout {
 public:
   Layout();
   ~Layout();
-  
+
   /* Generates suggestions on the flow */
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
   /* Get the candidates for commit */

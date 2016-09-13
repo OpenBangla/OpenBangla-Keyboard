@@ -23,7 +23,32 @@
 extern "C" {
 #endif
 
-int five();
+#define MAX_SUGGESTION 9
+
+struct CIMCommand {
+  /* Key accepted */
+  bool accepted;
+  /* Commit current suggestion(candidate) */
+  bool commit;
+  /* IM needs to update candidates */
+  bool needUpdate;
+  /* IM needs to reset */
+  bool needReset;
+};
+
+struct CSuggestion {
+  char *candidates[MAX_SUGGESTION];
+  char *auxiliaryText;
+  bool showCandidateWin;
+  int prevSelection;
+};
+
+void engine_init();
+CSuggestion engine_get_suggestion(int key, bool shift, bool ctrl, bool alt);
+CSuggestion engine_get_candidates();
+void engine_candidate_commited(char *candidate);
+bool engine_key_handled();
+CIMCommand engine_handle_special_key(int key);
 
 #ifdef __cplusplus
 }

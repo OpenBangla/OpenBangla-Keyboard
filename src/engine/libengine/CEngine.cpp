@@ -16,9 +16,54 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
 #include "CEngine.h"
 #include "Layout.h"
 
-int five() {
-  return 5;
+void engine_init() {
+  gLayout = new Layout();
+}
+
+CSuggestion suggestion_to_c(Suggestion suggest) {
+  CSuggestion cs;
+
+  for(int i = 0; i <= MAX_SUGGESTION; i++) {
+    cs.candidates[i] = (char *)suggest.candidates[i].c_str();
+  }
+
+  cs.auxiliaryText = (char *)suggest.auxiliaryText.c_str();
+  cs.prevSelection = suggest.prevSelection;
+  cs.showCandidateWin = suggest.showCandidateWin;
+
+  return cs;
+}
+
+CSuggestion engine_get_suggestion(int key, bool shift, bool ctrl, bool alt) {
+  Suggestion suggest = gLayout->getSuggestion(key, shift, ctrl, alt);
+  return suggestion_to_c(suggest);
+}
+
+CSuggestion engine_get_candidates() {
+  Suggestion suggest = gLayout->getCandidates();
+  return suggestion_to_c(suggest);
+}
+
+void engine_candidate_commited(char *candidate) {
+  std::string str(candidate);
+  gLayout->candidateCommited(str);
+}
+
+bool engine_key_handled() {
+  return gLayout->handledKeyPress();
+}
+
+CIMCommand engine_handle_special_key(int key) {
+  IMCommand command = gLayout->handleSpecialKey(key);
+  CIMCommand cm;
+  cm.accepted = command.accepted;
+  cm.commit = command.commit;
+  cm.needReset = command.needReset;
+  cm.needUpdate = command.needUpdate;
+
+  return cm;
 }
