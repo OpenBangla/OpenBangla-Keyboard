@@ -21,7 +21,7 @@ set(Sources Layout.cpp
             keycode.h)
 
 if(APPLE)
-  list(APPEND Sources CEngine.cpp)
+  list(APPEND Sources CEngine.cpp CEngine.h)
 endif()
 
 add_library(libEngine ${Sources})
