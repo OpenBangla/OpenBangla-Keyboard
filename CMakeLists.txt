@@ -42,6 +42,14 @@ if(OS_LINUX)
 endif(OS_LINUX)
 
 if(APPLE)
+  ## Find Swift compiler
+  execute_process(
+    COMMAND xcrun --find swiftc
+    OUTPUT_VARIABLE SWIFTC_EXECUTABLE
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(SWIFTC_FOUND TRUE)
+  message(STATUS "Found swiftc: ${SWIFTC_EXECUTABLE}")
+  
   include(cmake/CMakeMacOS.txt)
 endif()
 
