@@ -17,7 +17,12 @@ set(SRC_MAIN main.cpp
              LayoutConverter.h
              SingleInstance.cpp)
 
-add_executable(OpenBangla-Keyboard ${SRC_MAIN} ${SRC_GUI})
+if(OS_LINUX)
+  add_executable(OpenBangla-Keyboard ${SRC_MAIN} ${SRC_GUI})
+elseif(APPLE)
+  add_executable(OpenBangla-Keyboard MACOSX_BUNDLE ${SRC_MAIN} ${SRC_GUI})
+endif()
+
 target_link_libraries(OpenBangla-Keyboard libShared Qt5::Widgets Qt5::Xml Qt5::Network)
 
 if(NOT APPLE)
