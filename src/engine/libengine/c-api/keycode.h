@@ -19,6 +19,10 @@
 #ifndef IM_KEYCODE_H
 #define IM_KEYCODE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Cross-platform Keycodes for OpenBangla Keyboard
  * IM sends Keycodes accroding to this file.
  * When IM gets Keycode or Key event, IM converts them to these Keycodes */
@@ -130,5 +134,9 @@
 
 #define VC_SHIFT_L								0x002A
 #define VC_SHIFT_R								0x0036
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* end of include guard: IM_KEYCODE_H */

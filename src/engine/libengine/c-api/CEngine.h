@@ -20,6 +20,7 @@
 #define CENGINE_H
 
 #include "stdbool.h"
+#include "keycode.h"
 
 #ifdef __cplusplus
 extern "C" {

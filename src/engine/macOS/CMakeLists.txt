@@ -3,6 +3,9 @@ set(NAME OpenBangla-Engine)
 set(TARGET OpenBangla)
 set(SOURCES main.swift)
 
+list(APPEND ADDITIONAL_ARGS -llibEngine)
+list(APPEND ADDITIONAL_ARGS -I ${CMAKE_CURRENT_SOURCE_DIR}/../libengine/c-api)
+
 list(APPEND ARGS -module-name ${NAME})
 list(APPEND ARGS -incremental -emit-dependencies -emit-module)
 list(APPEND ARGS -emit-module-path ${NAME}.swiftmodule)
@@ -38,6 +41,10 @@ endforeach()
 ## TODO: Check Build Types
 list(APPEND ARGS -Onone -g)
 
+foreach(arg ${ADDITIONAL_ARGS})
+  list(APPEND ARGS ${arg})
+endforeach()
+
 list(APPEND ARGS -sdk ${CMAKE_OSX_SYSROOT})
 
 ## Compile
@@ -57,6 +64,12 @@ list(APPEND EXE_ARGS -module-name ${NAME})
 list(APPEND EXE_ARGS -o ${EXE_OUTPUT})
 list(APPEND EXE_ARGS -emit-executable ${OUTPUTS})
 
+foreach(arg ${ADDITIONAL_ARGS})
+  list(APPEND EXE_ARGS ${arg})
+endforeach()
+
+list(APPEND EXE_ARGS -L $<TARGET_FILE_DIR:libEngine>)
+
 add_custom_command(
   OUTPUT    ${EXE_OUTPUT}
   COMMAND   swiftc
@@ -65,4 +78,4 @@ add_custom_command(
 )
 
 ## Add the target
-add_custom_target(${TARGET} ALL DEPENDS ${EXE_OUTPUT} ${SOURCES})
+add_custom_target(${TARGET} ALL DEPENDS libEngine ${EXE_OUTPUT} ${SOURCES})
