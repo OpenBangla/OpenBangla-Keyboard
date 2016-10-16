@@ -49,7 +49,13 @@ if(APPLE)
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   set(SWIFTC_FOUND TRUE)
   message(STATUS "Found swiftc: ${SWIFTC_EXECUTABLE}")
-  
+
+  # Get the SDK path for OSX.
+  execute_process(
+    COMMAND xcrun --sdk macosx --show-sdk-path
+    OUTPUT_VARIABLE CMAKE_OSX_SYSROOT
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
   include(cmake/CMakeMacOS.txt)
 endif()
 
