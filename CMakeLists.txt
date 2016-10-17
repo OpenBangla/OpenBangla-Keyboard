@@ -56,6 +56,14 @@ if(APPLE)
     OUTPUT_VARIABLE CMAKE_OSX_SYSROOT
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+  ## Get the Frameworks path
+  execute_process(
+    COMMAND xcrun --sdk macosx --show-sdk-platform-path
+    OUTPUT_VARIABLE PLATFORM_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  set(FRAMEWORKS_PATH ${PLATFORM_PATH}/Developer/Library/Frameworks)
+
   include(cmake/CMakeMacOS.txt)
 endif()
 

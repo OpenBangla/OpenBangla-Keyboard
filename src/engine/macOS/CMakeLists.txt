@@ -5,6 +5,7 @@ set(SOURCES main.swift)
 
 list(APPEND ADDITIONAL_ARGS -llibEngine)
 list(APPEND ADDITIONAL_ARGS -I ${CMAKE_CURRENT_SOURCE_DIR}/../libengine/c-api)
+list(APPEND ADDITIONAL_ARGS -F ${FRAMEWORKS_PATH})
 
 list(APPEND ARGS -module-name ${NAME})
 list(APPEND ARGS -incremental -emit-dependencies -emit-module)
