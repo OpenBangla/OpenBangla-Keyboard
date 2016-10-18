@@ -17,6 +17,7 @@
  */
 
 import Cocoa
+import Carbon
 //import InputMethodKit
 import libEngine
 
@@ -26,3 +27,4 @@ let kConectionName = "OpenBangla_Keyboard_Connection"
 
 print(kConectionName)
 print("MAX_SUGGESTION: ", MAX_SUGGESTION)
+print(getKeycode(key: Int(kVK_ANSI_RightBracket)), getKeycode(key: Int(kVK_ANSI_RightBracket)) == Int(VC_OPEN_BRACKET))

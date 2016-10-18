@@ -1,15 +1,16 @@
 set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY})
 set(NAME OpenBangla-Engine)
+set(MODULE OpenBangla_Engine)
 set(TARGET OpenBangla)
-set(SOURCES main.swift)
+set(SOURCES main.swift Keycodes.swift)
 
 list(APPEND ADDITIONAL_ARGS -llibEngine)
 list(APPEND ADDITIONAL_ARGS -I ${CMAKE_CURRENT_SOURCE_DIR}/../libengine/c-api)
 list(APPEND ADDITIONAL_ARGS -F ${FRAMEWORKS_PATH})
 
-list(APPEND ARGS -module-name ${NAME})
+list(APPEND ARGS -module-name ${MODULE})
 list(APPEND ARGS -incremental -emit-dependencies -emit-module)
-list(APPEND ARGS -emit-module-path ${NAME}.swiftmodule)
+list(APPEND ARGS -emit-module-path ${MODULE}.swiftmodule)
 
 set(FILEMAP ${BUILD_DIR}/output-file-map.json)
 set(OUTPUT_FILE_MAP ${FILEMAP})
@@ -61,7 +62,7 @@ set(EXE_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${NAME})
 
 list(APPEND EXE_ARGS -sdk ${CMAKE_OSX_SYSROOT})
 
-list(APPEND EXE_ARGS -module-name ${NAME})
+#list(APPEND EXE_ARGS -module-name ${NAME})
 list(APPEND EXE_ARGS -o ${EXE_OUTPUT})
 list(APPEND EXE_ARGS -emit-executable ${OUTPUTS})
 
