@@ -81,3 +81,16 @@ add_custom_command(
 
 ## Add the target
 add_custom_target(${TARGET} ALL DEPENDS libEngine ${EXE_OUTPUT} ${SOURCES})
+
+## Make the bundle
+add_custom_command(
+  TARGET ${TARGET} POST_BUILD
+  COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/OpenBangla\ Keyboard.app/Contents/Resources
+  COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/OpenBangla\ Keyboard.app/Contents/MacOS
+  COMMAND cp ${CMAKE_SOURCE_DIR}/data/openbangla.icns
+             ${CMAKE_CURRENT_BINARY_DIR}/OpenBangla\ Keyboard.app/Contents/Resources/openbangla.icns
+  COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/${NAME}
+             ${CMAKE_CURRENT_BINARY_DIR}/OpenBangla\ Keyboard.app/Contents/MacOS/${NAME}
+  COMMAND cp ${CMAKE_SOURCE_DIR}/data/Info-Engine.plist
+             ${CMAKE_CURRENT_BINARY_DIR}/OpenBangla\ Keyboard.app/Contents/Info.plist
+)
