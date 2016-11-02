@@ -1,6 +1,7 @@
 # Change Log
 ## Master
 * A new button in TopBar for easily moving it.
+* User can select candidate by clicking.
 
 ## 1.0.0
 First release! All things are new!
