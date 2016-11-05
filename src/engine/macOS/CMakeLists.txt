@@ -2,7 +2,7 @@ set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY})
 set(NAME OpenBangla-Engine)
 set(MODULE OpenBangla_Engine)
 set(TARGET OpenBangla)
-set(SOURCES main.swift Keycodes.swift)
+set(SOURCES main.swift Keycodes.swift OpenBanglaKeyboardController.swift)
 
 list(APPEND ADDITIONAL_ARGS -llibEngine)
 list(APPEND ADDITIONAL_ARGS -I ${CMAKE_CURRENT_SOURCE_DIR}/../libengine/c-api)

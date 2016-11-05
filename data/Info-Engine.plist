@@ -7,7 +7,7 @@
   <key>CFBundleExecutable</key>
   <string>OpenBangla-Engine</string>
   <key>CFBundleIdentifier</key>
-  <string>io.github.openbangla</string>
+  <string>io.github.openbangla.engine</string>
   <key>CFBundleName</key>
   <string>OpenBangla Keyboard</string>
   <key>CFBundleIconFile</key>
@@ -22,5 +22,23 @@
   <integer>0</integer>
   <key>IFMinorVersion</key>
   <integer>1</integer>
+  <key>InputMethodConnectionName</key>
+	<string>OpenBangla_Keyboard_Connection</string>
+	<key>InputMethodServerControllerClass</key>
+	<string>OpenBanglaKeyboardController</string>
+	<key>LSBackgroundOnly</key>
+	<string>1</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSSupportsSuddenTermination</key>
+	<true/>
+	<key>TISIntendedLanguage</key>
+	<string>bn</string>
+	<key>tsInputMethodCharacterRepertoireKey</key>
+	<array>
+		<string>Beng</string>
+	</array>
+	<key>tsInputMethodIconFileKey</key>
+	<string>openbangla</string>
 </dict>
 </plist>

@@ -16,27 +16,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Foundation
-import AppKit
 import InputMethodKit
-import libEngine
 
-let kConectionName = "OpenBangla_Keyboard_Connection"
-
-var server = IMKServer()
-
-class AppDelegate: NSObject, NSApplicationDelegate {
-  func applicationDidFinishLaunching(aNotification: Notification) {
-    let identifier = Bundle.main.bundleIdentifier!
-    server = IMKServer(name: kConectionName, bundleIdentifier: identifier)!
+class OpenBanglaKeyboardController: IMKInputController {
+  override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
+    super.init(server: server, delegate: delegate, client: inputClient)
   }
 
-  func applicationWillTerminate(aNotification: Notification) {
-    print("Bye!")
+  override func inputText(_ string: String!, client sender: Any!) -> Bool {
+    print(string)
+    return false
   }
 }
-
-NSApplication.shared()
-let controler = AppDelegate()
-NSApp.delegate = controler
-NSApp.run()
