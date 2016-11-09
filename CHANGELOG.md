@@ -2,6 +2,7 @@
 ## Master
 * A new button in TopBar for easily moving it.
 * User can select candidate by clicking.
+* These new layouts were added: **Munir Optima (uni)**, **Avro Easy**, **National (Jatiya)** and **Probhat**. Thanks to [OmicronLab](https://www.omicronlab.com/) because these layouts were also imported from [Avro Keyboard](https://www.omicronlab.com/avro-keyboard.html)!
 
 ## 1.0.0
 First release! All things are new!
