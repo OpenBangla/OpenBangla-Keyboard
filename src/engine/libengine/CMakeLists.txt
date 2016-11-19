@@ -16,8 +16,8 @@ add_library(libEngine
             database.h
             cachemanager.cpp
             cachemanager.h
-            phoneticsuggestion.cpp
-            phoneticsuggestion.h
+            PhoneticSuggestion.cpp
+            PhoneticSuggestion.h
             keycode.h)
 
 target_link_libraries(libEngine libShared Qt5::Core Qt5::Sql)
