@@ -8,7 +8,7 @@
  */
 
 /*
- * This suggestion making technic is highly inspaired from ibus-avro.
+ * This suggestion making mechanism is highly inspaired from ibus-avro.
  * For showing respect to ibus-avro project & Mehdi Hasan Khan, I am
  * releasing this code as MPL 2.0 . So this code is now dual licensed
  * under the MPL 2 and the GNU GPL 3 .
@@ -61,7 +61,6 @@ void PhoneticSuggestion::appendIfNotContains(QVector<QString> &array, QString it
 QVector<QString> PhoneticSuggestion::getSuggestion(QString word) {
   QVector<QString> suggestion;
   QVector<QString> dictSuggestion;
-  bool autoExact;
 
   QString phonetic = parser.parse(PadMap["term"]);
 
@@ -69,16 +68,13 @@ QVector<QString> PhoneticSuggestion::getSuggestion(QString word) {
   if (autodict.getCorrected(word) != "") {
     // Exact, its a smily
     if (autodict.getCorrected(word) == word) {
-      autoExact = true;
       suggestion.append(autodict.getCorrected(word));
     } else {
-      autoExact = false;
       dictSuggestion.append(autodict.getCorrected(word));
     }
   } else {
     // The whole word if not present. So search without padding.
     if (autodict.getCorrected(PadMap["term"]) != "") {
-      autoExact = false;
       dictSuggestion.append(autodict.getCorrected(PadMap["term"]));
     }
   }
@@ -86,9 +82,12 @@ QVector<QString> PhoneticSuggestion::getSuggestion(QString word) {
   // Add Dictionary suggestion
   QString dictKey = PadMap["term"].toLower();
   if (dictKey != "") {
-    dictSuggestion.append(db.find(dictKey));
-    // If the cache is empty fill it up with dictonary suggestion and autocorrect(for suffix)
-    if (phoneticCache[dictKey].isEmpty()) {
+    // Get cached results
+    QVector<QString> cached = phoneticCache[dictKey];
+
+    if (cached.isEmpty()) {
+      dictSuggestion.append(db.find(dictKey));
+      // Update the cache
       if (!dictSuggestion.isEmpty()) {
         phoneticCache[dictKey] = dictSuggestion;
       }
