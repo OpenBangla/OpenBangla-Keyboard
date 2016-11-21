@@ -1,5 +1,5 @@
 # Change Log
-## Master
+## 1.1.0
 * Improve Phonetic support. Resolves issue [#2](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/2). Now Phonetic support is mostly complete!
 * A new button in TopBar for easily moving it.
 * User can select candidate by clicking.
