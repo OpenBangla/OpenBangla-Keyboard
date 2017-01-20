@@ -7,7 +7,7 @@ compiler:
   - g++
   - clang
 before_install:
-  - sudo add-apt-repository ppa:beineri/opt-qt542-trusty
+  - sudo add-apt-repository --yes ppa:beineri/opt-qt542-trusty
   - sudo apt-get update -qq
   - sudo apt-get install libibus-1.0-dev qt54base
   - source /opt/qt54/bin/qt54-env.sh
