@@ -30,7 +30,7 @@ OpenBangla Keyboard currently needs following libraries and binaries
 * GNU GCC, G++ compiler or Clang
 * GNU Make or Ninja
 * CMake
-* Qt 5 libraries
+* Qt 5.5 or later
 * iBus development library
 
 On a Ubuntu/Debian system you can easily install them like this
