@@ -1,4 +1,6 @@
 # OpenBangla Keyboard
+[![Build Status](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard.svg?branch=master)](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard)
+
 ![openbangla-keyboard](https://cloud.githubusercontent.com/assets/9459891/15998078/ead3cae2-315c-11e6-8595-df1efbe478d2.png)
 
 An OpenSource, Unicode compliant Bengali Input Method for GNU/Linux systems.

@@ -1,0 +1,19 @@
+language: cpp
+
+sudo: true
+
+os:
+  - linux
+
+compiler:
+  - g++
+  - clang
+
+before_script:
+  - sudo apt-get install libibus-1.0-dev qt5-default qtdeclarative5-dev
+  - mkdir build
+  - cd build
+  - cmake .. -DCMAKE_INSTALL_PREFIX='/usr'
+
+script:
+  - make
