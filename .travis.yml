@@ -1,14 +1,11 @@
 language: cpp
-
-sudo: true
-
 os:
   - linux
-
+sudo: required
+dist: trusty
 compiler:
   - g++
   - clang
-
 before_script:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update -qq
@@ -16,6 +13,5 @@ before_script:
   - mkdir build
   - cd build
   - cmake .. -DCMAKE_INSTALL_PREFIX='/usr'
-
 script:
   - make
