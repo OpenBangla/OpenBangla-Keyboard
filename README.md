@@ -41,7 +41,7 @@ sudo apt-get install build-essential cmake libibus-1.0-dev qt5-default qtdeclara
 After you have installed required libraries and binaries. Clone this repository and change the directory to the cloned folder and issue the commands:
 ```
 mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX='/usr' -DLIBEXEC_DIR='/usr/libexec'
+cmake .. -DCMAKE_INSTALL_PREFIX='/usr'
 make
 sudo make install
 ```
