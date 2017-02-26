@@ -38,6 +38,11 @@ On a Ubuntu/Debian system you can easily install them like this
 ```
 sudo apt-get install build-essential cmake libibus-1.0-dev qt5-default qtdeclarative5-dev
 ```
+On a Arch Linux / Arch Based system you can easily install them like this
+
+```
+sudo pacman -Sy gcc make cmake qt5-base qtdeclarative libibus
+```
 
 After you have installed required libraries and binaries. Clone this repository and change the directory to the cloned folder and issue the commands:
 ```
