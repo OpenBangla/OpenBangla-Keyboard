@@ -1,7 +1,13 @@
-# OpenBangla Keyboard
-![openbangla-keyboard](https://cloud.githubusercontent.com/assets/9459891/15998078/ead3cae2-315c-11e6-8595-df1efbe478d2.png)
+<p align="center">
+<img src="https://github.com/OpenBangla/OpenBangla-Keyboard/raw/master/data/128.png">
+</p>
 
-An OpenSource, Unicode compliant Bengali Input Method for GNU/Linux systems.
+**OpenBangla Keyboard** is an OpenSource, Unicode compliant Bengali Input Method for GNU/Linux systems. It's a full fledged Bengali input method with typing automation tools, includes many famous typing methods such as Avro Phonetic, Probhat, Munir Optima, National (Jatiya) etc.
+
+Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard.html) are present in OpenBangla Keyboard. So Avro Keyboard users will feel at home with OpenBangla Keyboard in Linux.
+
+[![Build Status](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard.svg?branch=master)](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard)
+[![Downloads](https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg)]()
 
 ### Features
 * Phonetic Keyboard Layout (Avro Phonetic)
@@ -28,18 +34,23 @@ OpenBangla Keyboard currently needs following libraries and binaries
 * GNU GCC, G++ compiler or Clang
 * GNU Make or Ninja
 * CMake
-* Qt 5 libraries
+* Qt 5.5 or later
 * iBus development library
 
 On a Ubuntu/Debian system you can easily install them like this
 ```
 sudo apt-get install build-essential cmake libibus-1.0-dev qt5-default qtdeclarative5-dev
 ```
+On a Arch Linux / Arch Based system you can easily install them like this
+
+```
+sudo pacman -Sy base-devel cmake qt5-base qtdeclarative libibus
+```
 
 After you have installed required libraries and binaries. Clone this repository and change the directory to the cloned folder and issue the commands:
 ```
 mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX='/usr' -DLIBEXEC_DIR='/usr/libexec'
+cmake .. -DCMAKE_INSTALL_PREFIX='/usr'
 make
 sudo make install
 ```

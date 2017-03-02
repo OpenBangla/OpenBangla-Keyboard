@@ -21,7 +21,7 @@
 
 #include <QJsonObject>
 #include "Layout.h"
-#include "phoneticsuggestion.h"
+#include "PhoneticSuggestion.h"
 
 class MethodPhonetic : public LayoutMth {
   bool handledKey;

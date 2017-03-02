@@ -16,8 +16,8 @@ set(Sources Layout.cpp
             database.h
             cachemanager.cpp
             cachemanager.h
-            phoneticsuggestion.cpp
-            phoneticsuggestion.h
+            PhoneticSuggestion.cpp
+            PhoneticSuggestion.h
             c-api/keycode.h)
 
 if(APPLE)

@@ -61,6 +61,9 @@ TopBar::~TopBar()
     delete settingsDialog;
     delete aboutDialog;
 
+    delete gLayout;
+    delete gSettings;
+
     delete ui;
 }
 

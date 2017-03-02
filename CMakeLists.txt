@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-project(OpenBangla-Keyboard VERSION 1.0.0)
+project(OpenBangla-Keyboard VERSION 1.1.0)
 set(APP_NAME "OpenBangla-Keyboard")
 
 ## Set versions

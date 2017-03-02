@@ -64,6 +64,18 @@ DESTINATION  ${PROJECT_DATADIR}/layouts)
 install(FILES ${CMAKE_SOURCE_DIR}/data/Bornona.json
 DESTINATION  ${PROJECT_DATADIR}/layouts)
 
+install(FILES ${CMAKE_SOURCE_DIR}/data/Avro_Easy.json
+DESTINATION  ${PROJECT_DATADIR}/layouts)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/Munir_Optima_uni_.json
+DESTINATION  ${PROJECT_DATADIR}/layouts)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/National_Jatiya.json
+DESTINATION  ${PROJECT_DATADIR}/layouts)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/Probhat.json
+DESTINATION  ${PROJECT_DATADIR}/layouts)
+
 install(FILES ${CMAKE_SOURCE_DIR}/data/autocorrect.json
 DESTINATION  ${PROJECT_DATADIR}/data)
 

@@ -115,6 +115,9 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Move</string>
+    </property>
     <property name="text">
      <string/>
     </property>

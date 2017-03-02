@@ -208,6 +208,11 @@ void ibus_focus_out_cb(IBusEngine *engine) {
   }
 }
 
+void ibus_candidate_clicked_cb(IBusEngine *engine, guint index, guint button, guint state) {
+  candidateSel = index;
+  ibus_commit();
+}
+
 IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
                                   gchar* engine_name,
                                   gpointer     user_data) {
@@ -229,6 +234,7 @@ IBusEngine* ibus_create_engine_cb(IBusFactory *factory,
   g_signal_connect(engine, "enable", G_CALLBACK(ibus_enable_cb), NULL);
   g_signal_connect(engine, "disable", G_CALLBACK(ibus_disable_cb), NULL);
   g_signal_connect(engine, "focus-out", G_CALLBACK(ibus_focus_out_cb), NULL);
+  g_signal_connect(engine, "candidate-clicked", G_CALLBACK(ibus_candidate_clicked_cb), NULL);
 
   return engine;
 }
