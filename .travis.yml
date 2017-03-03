@@ -19,9 +19,10 @@ matrix:
       before_install:
         - brew update
         - brew install qt5
+        - QT5_DIR=$(brew --prefix qt5)
 before_script:
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_INSTALL_PREFIX='/usr'
+  - cmake .. -DCMAKE_INSTALL_PREFIX='/usr' -DCMAKE_PREFIX_PATH=$QT5_DIR
 script:
   - make
