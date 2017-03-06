@@ -7,7 +7,7 @@
   <key>CFBundleExecutable</key>
   <string>OpenBangla-Engine</string>
   <key>CFBundleIdentifier</key>
-  <string>io.github.openbangla.engine</string>
+  <string>com.openbangla.inputmethod.OpenBangla</string>
   <key>CFBundleName</key>
   <string>OpenBangla Keyboard</string>
   <key>CFBundleIconFile</key>
