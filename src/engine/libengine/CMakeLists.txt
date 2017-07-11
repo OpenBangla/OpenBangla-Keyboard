@@ -12,8 +12,8 @@ add_library(libEngine
             regexparser.h
             autocorrect.cpp
             autocorrect.h
-            database.cpp
-            database.h
+            Database.cpp
+            Database.h
             cachemanager.cpp
             cachemanager.h
             PhoneticSuggestion.cpp

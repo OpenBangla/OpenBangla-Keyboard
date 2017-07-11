@@ -14,7 +14,7 @@
 #include <QString>
 #include <QJsonObject>
 #include "phoneticparser.h"
-#include "database.h"
+#include "Database.h"
 #include "autocorrect.h"
 #include "cachemanager.h"
 

@@ -9,61 +9,27 @@
 
 #include <QRegularExpression>
 #include <QStringList>
-#include "database.h"
+#include "Database.h"
 #include "regexparser.h"
 #include "log.h"
 
 Database::Database() {
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
   db.setDatabaseName(PKGDATADIR "/data/database.db3");
+
+  QStringList table = {"A", "AA", "B", "BH",
+                       "C", "CH", "D", "Dd", "Ddh", "Dh",
+                       "E", "G", "Gh", "H", "I", "II",
+                       "J", "JH", "K", "KH", "Khandatta",
+                       "L", "M", "N", "NGA", "NN", "NYA",
+                       "O","OI", "OU", "P", "PH",
+                       "R", "RR", "RRH", "RRI",
+                       "S", "SH", "SS",
+                       "T", "TH", "TT", "TTH",
+                       "U", "UU", "Y", "Z"};
+
   if(db.open()) {
-    loadTableWithName("A", db);
-    loadTableWithName("AA", db);
-    loadTableWithName("B", db);
-    loadTableWithName("BH", db);
-    loadTableWithName("C", db);
-    loadTableWithName("CH", db);
-    loadTableWithName("D", db);
-    loadTableWithName("Dd", db);
-    loadTableWithName("Ddh", db);
-    loadTableWithName("Dh", db);
-    loadTableWithName("E", db);
-    loadTableWithName("G", db);
-    loadTableWithName("Gh", db);
-    loadTableWithName("H", db);
-    loadTableWithName("I", db);
-    loadTableWithName("II", db);
-    loadTableWithName("J", db);
-    loadTableWithName("JH", db);
-    loadTableWithName("K", db);
-    loadTableWithName("KH", db);
-    loadTableWithName("Khandatta", db);
-    loadTableWithName("L", db);
-    loadTableWithName("M", db);
-    loadTableWithName("N", db);
-    loadTableWithName("NGA", db);
-    loadTableWithName("NN", db);
-    loadTableWithName("NYA", db);
-    loadTableWithName("O", db);
-    loadTableWithName("OI", db);
-    loadTableWithName("OU", db);
-    loadTableWithName("P", db);
-    loadTableWithName("PH", db);
-    loadTableWithName("R", db);
-    loadTableWithName("RR", db);
-    loadTableWithName("RRH", db);
-    loadTableWithName("RRI", db);
-    loadTableWithName("S", db);
-    loadTableWithName("SH", db);
-    loadTableWithName("SS", db);
-    loadTableWithName("T", db);
-    loadTableWithName("TH", db);
-    loadTableWithName("TT", db);
-    loadTableWithName("TTH", db);
-    loadTableWithName("U", db);
-    loadTableWithName("UU", db);
-    loadTableWithName("Y", db);
-    loadTableWithName("Z", db);
+    loadTable(table, db);
 
     loadSuffixTableFromDatabase(db);
 
@@ -73,20 +39,22 @@ Database::Database() {
 
 Database::~Database() {}
 
-void Database::loadTableWithName(QString name, QSqlDatabase dbase) {
+void Database::loadTable(QStringList table, QSqlDatabase dbase) {
   QVector<QString> list;
 
-  // Make a SQL statement
-  QSqlQuery query = dbase.exec("SELECT * FROM " + name);
+  for (auto& name : table) {
+    // Make a SQL statement
+    QSqlQuery query = dbase.exec("SELECT * FROM " + name);
 
-  while(query.next()) {
-    list.push_back(query.value("Words").toString());
+    while(query.next()) {
+      list.push_back(query.value("Words").toString());
+    }
+
+    word_table[name.toLower()] = list;
+
+    // Finish the SQL statement
+    query.finish();
   }
-
-  word_table[name.toLower()] = list;
-
-  // Finish the SQL statement
-  query.finish();
 }
 
 void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
@@ -106,7 +74,7 @@ QVector<QString> Database::find(QString word) {
   QVector<QString> suggestions;
   char lmc = word.toStdString().at(0); // Left Most Character
 
-  QRegularExpression regex(rgx.parse(word), QRegularExpression::OptimizeOnFirstUsageOption);
+  QRegularExpression regex(rgx.parse(word));
 
   switch (lmc) {
     case 'a':

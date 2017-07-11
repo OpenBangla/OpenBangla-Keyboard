@@ -21,7 +21,7 @@ public:
   Database();
   ~Database();
 
-  void loadTableWithName(QString name, QSqlDatabase dbase);
+  void loadTable(QStringList table, QSqlDatabase dbase);
   void loadSuffixTableFromDatabase(QSqlDatabase dbase);
 
   QVector<QString> find(QString word);
