@@ -288,5 +288,8 @@ int main(int argc, char *argv []) {
   } else {
     ibus_start_setup(false);
   }
+
+  delete gLayout;
+  
   return 0;
 }
