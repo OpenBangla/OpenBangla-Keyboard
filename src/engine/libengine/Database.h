@@ -17,6 +17,7 @@
 class Database {
   QMap<QString, QVector<QString>> word_table;
   QMap<QString, QString> suffix_table;
+  QMap<char, QStringList> prefixTableMap;
 public:
   Database();
   ~Database();

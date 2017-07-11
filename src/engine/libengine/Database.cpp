@@ -28,6 +28,34 @@ Database::Database() {
                        "T", "TH", "TT", "TTH",
                        "U", "UU", "Y", "Z"};
 
+  prefixTableMap = {{'a', {"a", "aa", "e", "oi", "o", "nya", "y"}},
+                    {'b', {"b", "bh"}},
+                    {'c', {"c", "ch", "k"}},
+                    {'d', {"d", "dh", "dd", "ddh"}},
+                    {'e', {"i", "ii", "e", "y"}},
+                    {'f', {"ph"}},
+                    {'g', {"g", "gh", "j"}},
+                    {'h', {"h"}},
+                    {'i', {"i", "ii", "y"}},
+                    {'j', {"j", "jh", "z"}},
+                    {'k', {"k", "kh"}},
+                    {'l', {"l"}},
+                    {'m', {"h", "m"}},
+                    {'n', {"n", "nya", "nga", "nn"}},
+                    {'o', {"a", "u", "uu", "oi", "o", "ou", "y"}},
+                    {'p', {"p", "ph"}},
+                    {'q', {"k"}},
+                    {'r', {"rri", "h", "r", "rr", "rrh"}},
+                    {'s', {"s", "sh", "ss"}},
+                    {'t', {"t", "th", "tt", "tth", "khandatta"}},
+                    {'u', {"u", "uu", "y"}},
+                    {'v', {"bh"}},
+                    {'w', {"o"}},
+                    {'x', {"e", "k"}},
+                    {'y', {"i", "y"}},
+                    {'z', {"h", "j", "jh", "z"}}
+                  };
+
   if(db.open()) {
     loadTable(table, db);
 
@@ -76,90 +104,7 @@ QVector<QString> Database::find(QString word) {
 
   QRegularExpression regex(rgx.parse(word));
 
-  switch (lmc) {
-    case 'a':
-      tablelist << "a" << "aa" << "e" << "oi" << "o" << "nya" << "y";
-      break;
-    case 'b':
-      tablelist << "b" << "bh";
-      break;
-    case 'c':
-      tablelist << "c" << "ch" << "k";
-      break;
-    case 'd':
-      tablelist << "d" << "dh" << "dd" << "ddh";
-      break;
-    case 'e':
-      tablelist << "i" << "ii" << "e" << "y";
-      break;
-    case 'f':
-      tablelist << "ph";
-      break;
-    case 'g':
-      tablelist << "g" << "gh" << "j";
-      break;
-    case 'h':
-      tablelist << "h";
-      break;
-    case 'i':
-      tablelist << "i" << "ii" << "y";
-      break;
-    case 'j':
-      tablelist << "j" << "jh" << "z";
-      break;
-    case 'k':
-      tablelist << "k" << "kh";
-      break;
-    case 'l':
-      tablelist << "l";
-      break;
-    case 'm':
-      tablelist << "h" << "m";
-      break;
-    case 'n':
-      tablelist << "n" << "nya" << "nga" << "nn";
-      break;
-    case 'o':
-      tablelist << "a" << "u" << "uu" << "oi" << "o" << "ou" << "y";
-      break;
-    case 'p':
-      tablelist << "p" << "ph";
-      break;
-    case 'q':
-      tablelist << "k";
-      break;
-    case 'r':
-      tablelist << "rri" << "h" << "r" << "rr" << "rrh";
-      break;
-    case 's':
-      tablelist << "s" << "sh" << "ss";
-      break;
-    case 't':
-      tablelist << "t" << "th" << "tt" << "tth" << "khandatta";
-      break;
-    case 'u':
-      tablelist << "u" << "uu" << "y";
-      break;
-    case 'v':
-      tablelist << "bh";
-      break;
-    case 'w':
-      tablelist << "o";
-      break;
-    case 'x':
-      tablelist << "e" << "k";
-      break;
-    case 'y':
-      tablelist << "i" << "y";
-      break;
-    case 'z':
-      tablelist << "h" << "j" << "jh" << "z";
-      break;
-    default:
-      break;
-  }
-
-  for(auto& table : tablelist) {
+  for(auto& table : prefixTableMap[lmc]) {
     QVector<QString> tableData = word_table[table];
     for(auto& tmpString : tableData) {
       if(tmpString.contains(regex)) {
