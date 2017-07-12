@@ -96,10 +96,10 @@ void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
   query.finish();
 }
 
-QVector<QString> Database::find(QString word) {
+QStringList Database::find(QString word) {
   RegexParser rgx;
   QStringList tablelist;
-  QVector<QString> suggestions;
+  QStringList suggestions;
   char lmc = word.toStdString().at(0); // Left Most Character
 
   QRegularExpression regex(rgx.parse(word));

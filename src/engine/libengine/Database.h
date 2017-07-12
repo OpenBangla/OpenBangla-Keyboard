@@ -25,7 +25,7 @@ public:
   void loadTable(QStringList table, QSqlDatabase dbase);
   void loadSuffixTableFromDatabase(QSqlDatabase dbase);
 
-  QVector<QString> find(QString word);
+  QStringList find(QString word);
   QString banglaForSuffix(QString word);
 };
 

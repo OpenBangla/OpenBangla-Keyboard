@@ -86,7 +86,7 @@ QVector<QString> PhoneticSuggestion::getSuggestion(QString word) {
     QVector<QString> cached = phoneticCache[dictKey];
 
     if (cached.isEmpty()) {
-      dictSuggestion.append(db.find(dictKey));
+      dictSuggestion.append(db.find(dictKey).toVector());
       // Update the cache
       if (!dictSuggestion.isEmpty()) {
         phoneticCache[dictKey] = dictSuggestion;

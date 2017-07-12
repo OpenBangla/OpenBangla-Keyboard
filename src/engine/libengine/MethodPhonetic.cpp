@@ -47,7 +47,7 @@ Suggestion MethodPhonetic::createSuggestion() {
     }*/
 
     // Build the suggestions
-    list = suggest.Suggest(EnglishT);
+    list = suggest.Suggest(EnglishT).toVector();
 
     // Is user selected any candidate before?
     prevSelected = 0;
