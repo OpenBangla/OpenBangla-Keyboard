@@ -214,7 +214,7 @@ QString PhoneticSuggestionV2::getPrevSelected() {
     }
   }
 
-  return selected;
+  return PadMap["begin"] + selected + PadMap["end"];
 }
 
 QStringList PhoneticSuggestionV2::joinSuggestion(QMap<QString, QString> autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord) {
