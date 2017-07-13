@@ -283,13 +283,13 @@ void ibus_start_setup(bool ibus) {
 int main(int argc, char *argv []) {
   gLayout = new Layout();
 
-  if(strcmp(argv[1], "--ibus") == 0) {
+  if(argc > 1 && strcmp(argv[1], "--ibus") == 0) {
     ibus_start_setup(true);
   } else {
     ibus_start_setup(false);
   }
 
   delete gLayout;
-  
+
   return 0;
 }
