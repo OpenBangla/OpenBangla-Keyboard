@@ -247,9 +247,11 @@ void ibus_start_setup(bool ibus) {
   ibus_init();
 
   bus = ibus_bus_new();
+  g_object_ref_sink(bus);
   g_signal_connect(bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
 
   factory = ibus_factory_new(ibus_bus_get_connection(bus));
+  g_object_ref_sink(factory);
   g_signal_connect(factory, "create-engine", G_CALLBACK(ibus_create_engine_cb), NULL);
 
   if(ibus) {
@@ -276,6 +278,8 @@ void ibus_start_setup(bool ibus) {
                                                     "us"
                                                   ));
     ibus_bus_register_component(bus, component);
+    
+    ibus_bus_set_global_engine_async(bus, "OpenBangla", -1, NULL, NULL, NULL);
   }
   ibus_main();
 }
