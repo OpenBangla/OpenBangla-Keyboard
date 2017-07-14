@@ -21,14 +21,13 @@
 
 #include <QJsonObject>
 #include "Layout.h"
-//#include "PhoneticSuggestion.h"
-#include "PhoneticSuggestionV2.h"
+#include "PhoneticSuggestion.h"
 
 class MethodPhonetic : public LayoutMth {
   bool handledKey;
   bool changedCandidateSelection = false;
   int prevSelected;
-  PhoneticSuggestionV2 suggest;
+  PhoneticSuggestion suggest;
   QVector<QString> list;
   QString EnglishT;
   Suggestion suggested;

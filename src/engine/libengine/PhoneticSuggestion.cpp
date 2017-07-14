@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2017 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This Source Code Form is subject to the terms of the Mozilla Public
  *  License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,7 +8,7 @@
  */
 
 /*
- * This suggestion making mechanism is highly inspaired from ibus-avro.
+ * This suggestion making mechanism is highly inspired from ibus-avro.
  * For showing respect to ibus-avro project & Mehdi Hasan Khan, I am
  * releasing this code as MPL 2.0 . So this code is now dual licensed
  * under the MPL 2 and the GNU GPL 3 .
@@ -17,6 +17,7 @@
 #include <QRegularExpression>
 #include "PhoneticSuggestion.h"
 #include "qlevenshtein.hpp"
+#include <QDebug>
 
 PhoneticSuggestion::PhoneticSuggestion() {}
 
@@ -24,16 +25,70 @@ void PhoneticSuggestion::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
 
+QStringList PhoneticSuggestion::getDictionarySuggestion(QMap<QString, QString> splitWord) {
+  QStringList words;
+
+  QString key = splitWord["middle"].toLower();
+
+  if (phoneticCache.contains(key)) {
+    words = phoneticCache[key];
+  } else {
+    words = db.find(key);
+  }
+
+  return words;
+}
+
+QMap<QString, QString> PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> splitWord) {
+  QMap<QString, QString> corrected;
+
+  QString autoCorrect = autodict.getCorrected(word);
+
+  if (autoCorrect != "") {
+    if (autoCorrect == word) {
+      corrected["corrected"] = word;
+      corrected["exact"] = "true";
+    } else {
+      corrected["corrected"] = autoCorrect;
+      corrected["exact"] = "false";
+    }
+  } else {
+    QString withCorrection = autodict.getCorrected(splitWord["middle"]);
+    if (withCorrection != "") {
+      corrected["corrected"] = withCorrection;
+      corrected["exact"] = "false";
+    }
+  }
+
+  return corrected;
+}
+
 QMap<QString, QString> PhoneticSuggestion::separatePadding(QString word) {
   QMap<QString, QString> cutted;
   QRegularExpression rgx("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
   QRegularExpressionMatch match = rgx.match(word);
   if(match.hasMatch()) {
-    cutted["prefix"] = match.captured(1);
-    cutted["term"] = match.captured(2);
-    cutted["suffix"] = match.captured(3);
+    cutted["begin"] = match.captured(1);
+    cutted["middle"] = match.captured(2);
+    cutted["end"] = match.captured(3);
   }
   return cutted;
+}
+
+QStringList PhoneticSuggestion::sortByPhoneticRelevance(QString phonetic, QStringList dictSuggestion) {
+  std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&] (QString i, QString j) {
+    int dist1 = levenshtein_distance(phonetic, i);
+    int dist2 = levenshtein_distance(phonetic, j);
+    if(dist1 < dist2) {
+      return true;
+    } else if(dist1 > dist2) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+
+  return dictSuggestion;
 }
 
 bool PhoneticSuggestion::isKar(QString word) {
@@ -52,55 +107,26 @@ bool PhoneticSuggestion::isVowel(QString word) {
   return word.left(1).contains(QRegularExpression("^[\u0985\u0986\u0987\u0988\u0989\u098a\u098b\u098f\u0990\u0993\u0994\u098c\u09e1\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc]$"));
 }
 
-void PhoneticSuggestion::appendIfNotContains(QVector<QString> &array, QString item) {
+void PhoneticSuggestion::appendIfNotContains(QStringList &array, QString item) {
   if (!array.contains(item)) {
     array.append(item);
   }
 }
 
-QVector<QString> PhoneticSuggestion::getSuggestion(QString word) {
-  QVector<QString> suggestion;
-  QVector<QString> dictSuggestion;
-
-  QString phonetic = parser.parse(PadMap["term"]);
-
-  // Add AutoCorrect
-  if (autodict.getCorrected(word) != "") {
-    // Exact, its a smily
-    if (autodict.getCorrected(word) == word) {
-      suggestion.append(autodict.getCorrected(word));
-    } else {
-      dictSuggestion.append(autodict.getCorrected(word));
-    }
-  } else {
-    // The whole word if not present. So search without padding.
-    if (autodict.getCorrected(PadMap["term"]) != "") {
-      dictSuggestion.append(autodict.getCorrected(PadMap["term"]));
-    }
+void PhoneticSuggestion::addToTempCache(QString full, QString base, QString eng) {
+  if (!tempCache.contains(full)) {
+    tempCache[full].base = base;
+    tempCache[full].eng = eng;
   }
+}
 
-  // Add Dictionary suggestion
-  QString dictKey = PadMap["term"].toLower();
-  if (dictKey != "") {
-    // Get cached results
-    QVector<QString> cached = phoneticCache[dictKey];
-
-    if (cached.isEmpty()) {
-      dictSuggestion.append(db.find(dictKey).toVector());
-      // Update the cache
-      if (!dictSuggestion.isEmpty()) {
-        phoneticCache[dictKey] = dictSuggestion;
-      }
-    }
-  }
-
-
-  // Add suffix
-  QVector<QString> tempList;
+QStringList PhoneticSuggestion::addSuffix(QMap<QString, QString> splitWord) {
+  QStringList tempList;
   QString fullWord;
+  QString dictKey = splitWord["middle"].toLower();
   int len = dictKey.length();
 
-  QVector<QString> rList;
+  QStringList rList;
   if (!phoneticCache[dictKey].isEmpty()) {
     rList = phoneticCache[dictKey];
   }
@@ -119,16 +145,19 @@ QVector<QString> PhoneticSuggestion::getSuggestion(QString word) {
             if (isVowel(cacheRightChar) && isKar(suffixLeftChar)) {
               fullWord = cacheItem + "\u09DF" + suffix;
               tempList.append(fullWord);
+              addToTempCache(fullWord, cacheItem, key);
             } else {
               if (cacheRightChar == "\u09ce") {
                 fullWord = cacheItem.mid(0, cacheItem.length() - 1) + "\u09a4" + suffix;
                 tempList.append(fullWord);
+                addToTempCache(fullWord, cacheItem, key);
               } else if (cacheRightChar == "\u0982") {
                 fullWord = cacheItem.mid(0, cacheItem.length() - 1) + "\u0999" + suffix;
                 tempList.append(fullWord);
               } else {
                 fullWord = cacheItem + suffix;
                 tempList.append(fullWord);
+                addToTempCache(fullWord, cacheItem, key);
               }
             }
           }
@@ -141,48 +170,16 @@ QVector<QString> PhoneticSuggestion::getSuggestion(QString word) {
     }
   }
 
-  // Sort it
-  std::sort(rList.begin(), rList.end(), [&] (QString i, QString j) {
-    int dist1 = levenshtein_distance(phonetic, i);
-    int dist2 = levenshtein_distance(phonetic, j);
-    if(dist1 < dist2) {
-      return i > j;
-    } else if(dist1 > dist2) {
-      return i < j;
-    } else {
-      return i < j;
-    }
-  });
-
-  QVector<QString> tempSuggestion;
-
-  for(auto& item : rList) {
-    appendIfNotContains(tempSuggestion, item);
-  }
-
-  // Add Clasic Phonetic
-  appendIfNotContains(tempSuggestion, phonetic);
-
-  // Add padding to all
-  for (auto& item : tempSuggestion) {
-    item = PadMap["prefix"] + item + PadMap["suffix"];
-  }
-
-  // Create suggestion
-  suggestion.append(tempSuggestion);
-
-  return suggestion;
+  return rList;
 }
 
-/* TODO: Be sure that it works...
-*/
 QString PhoneticSuggestion::getPrevSelected() {
   QString selected;
-  QString word = PadMap["term"];
+  QString word = PadMap["middle"];
   int len = word.length();
 
-  if (cacheMan.getCandidateSelection(PadMap["term"]) != "") {
-    selected = cacheMan.getCandidateSelection(PadMap["term"]);
+  if (cacheMan.getCandidateSelection(word) != "") {
+    selected = cacheMan.getCandidateSelection(word);
   } else {
     //Full word was not found, try checking without suffix
     if (len >= 2) {
@@ -209,7 +206,7 @@ QString PhoneticSuggestion::getPrevSelected() {
                 selected = keyWord + suffix;
               }
             }
-
+            cacheMan.writeCandidateSelection(word, selected);
             break;
           }
         }
@@ -217,27 +214,70 @@ QString PhoneticSuggestion::getPrevSelected() {
     }
   }
 
-  return PadMap["prefix"] + selected + PadMap["suffix"];
+  return PadMap["begin"] + selected + PadMap["end"];
+}
+
+QStringList PhoneticSuggestion::joinSuggestion(QMap<QString, QString> autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord) {
+  QStringList words;
+
+  if (autoCorrect["corrected"] != "") {
+    words.append(autoCorrect["corrected"]);
+    if (autoCorrect["exact"] == "false") {
+      dictSuggestion.append(autoCorrect["corrected"]);
+    }
+  }
+
+  if (phoneticCache[splitWord["middle"].toLower()].isEmpty()) {
+    if (!dictSuggestion.isEmpty()) {
+      phoneticCache[splitWord["middle"].toLower()] = dictSuggestion;
+    }
+  }
+
+  QStringList dictSuggestionWithSuffix = addSuffix(splitWord);
+
+  for (auto& word : dictSuggestionWithSuffix) {
+    appendIfNotContains(words, word);
+  }
+
+  words = sortByPhoneticRelevance(phonetic, words);
+
+  appendIfNotContains(words, phonetic);
+
+  for (auto& word : words) {
+    if (autoCorrect["exact"] == "true") {
+      if (autoCorrect["corrected"] != word) {
+        word = splitWord["begin"] + word + splitWord["end"];
+      }
+    } else {
+      word = splitWord["begin"] + word + splitWord["end"];
+    }
+  }
+
+  return words;
 }
 
 void PhoneticSuggestion::saveSelection(QString selected) {
-  QMap<QString, QString> mapTerm = separatePadding(selected);
-  cacheMan.writeCandidateSelection(PadMap["term"], mapTerm["term"]);
+  if (tempCache.contains(selected)) {
+    QString base = tempCache[selected].base;
+    QString eng = tempCache[selected].eng;
+    if(cacheMan.getCandidateSelection(eng) == "") {
+      cacheMan.writeCandidateSelection(eng, base);
+    }
+  }
 }
 
-QVector<QString> PhoneticSuggestion::Suggest(QString cache) {
-  //Seperate begining and trailing padding characters, punctuations etc. from whole word
-  PadMap = separatePadding(cache);
+QStringList PhoneticSuggestion::Suggest(QString word) {
+  QMap<QString, QString> splitWord = separatePadding(word);
+  PadMap = splitWord;
 
-  //Convert begining and trailing padding text to phonetic Bangla
-  PadMap["prefix"] = parser.parse(PadMap["prefix"]);
-  PadMap["suffix"] = parser.parse(PadMap["suffix"]);
+  splitWord["begin"] = parser.parse(splitWord["begin"]);
+  splitWord["end"] = parser.parse(splitWord["end"]);
 
-  QVector<QString> candidates = getSuggestion(cache);
-  if(candidates.isEmpty()) {
-    candidates << PadMap["prefix"];
-  }
+  QString phonetic = parser.parse(splitWord["middle"]);
+  QStringList dictSuggestion = getDictionarySuggestion(splitWord);
+  QMap<QString, QString> autoCorrect = getAutocorrect(word, splitWord);
 
+  QStringList suggestion = joinSuggestion(autoCorrect, dictSuggestion, phonetic, splitWord);
 
-  return candidates;
+  return suggestion;
 }

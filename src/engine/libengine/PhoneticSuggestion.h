@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2017 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This Source Code Form is subject to the terms of the Mozilla Public
  *  License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,6 +18,11 @@
 #include "autocorrect.h"
 #include "cachemanager.h"
 
+struct Cache {
+  QString base;
+  QString eng;
+};
+
 class PhoneticSuggestion {
 private:
   PhoneticParser parser;
@@ -26,13 +31,20 @@ private:
   CacheManager cacheMan;
 
   QMap<QString, QString> PadMap;
-  QMap<QString, QVector<QString>> phoneticCache;
+  QMap<QString, QStringList> phoneticCache;
+  QMap<QString, Cache> tempCache;
 
   QMap<QString, QString> separatePadding(QString word);
   bool isKar(QString word);
   bool isVowel(QString word);
-  QVector<QString> getSuggestion(QString word);
-  void appendIfNotContains(QVector<QString> &array, QString item);
+  QStringList joinSuggestion(QMap<QString, QString> autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord);
+  void appendIfNotContains(QStringList &array, QString item);
+  QStringList sortByPhoneticRelevance(QString phonetic, QStringList dictSuggestion);
+  QStringList getDictionarySuggestion(QMap<QString, QString> splitWord);
+  QMap<QString, QString> getAutocorrect(QString word, QMap<QString, QString> splitWord);
+  QStringList addSuffix(QMap<QString, QString> splitWord);
+  void addToTempCache(QString full, QString base, QString eng);
+
 public:
   PhoneticSuggestion();
   void setLayout(QJsonObject lay);
@@ -40,7 +52,7 @@ public:
   QString getPrevSelected();
   void saveSelection(QString selected);
 
-  QVector<QString> Suggest(QString cache);
+  QStringList Suggest(QString word);
 };
 
 #endif /* end of include guard: PHONETIC_SUGGESTION_H */
