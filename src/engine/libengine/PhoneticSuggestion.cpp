@@ -39,24 +39,21 @@ QStringList PhoneticSuggestion::getDictionarySuggestion(QMap<QString, QString> s
   return words;
 }
 
-QMap<QString, QString> PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> splitWord) {
-  QMap<QString, QString> corrected;
+QString PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> splitWord) {
+  QString corrected;
 
   QString autoCorrect = autodict.getCorrected(word);
 
   if (autoCorrect != "") {
     if (autoCorrect == word) {
-      corrected["corrected"] = word;
-      corrected["exact"] = "true";
+      corrected = word;
     } else {
-      corrected["corrected"] = autoCorrect;
-      corrected["exact"] = "false";
+      corrected = autoCorrect;
     }
   } else {
     QString withCorrection = autodict.getCorrected(splitWord["middle"]);
     if (withCorrection != "") {
-      corrected["corrected"] = withCorrection;
-      corrected["exact"] = "false";
+      corrected = withCorrection;
     }
   }
 
@@ -217,13 +214,13 @@ QString PhoneticSuggestion::getPrevSelected() {
   return PadMap["begin"] + selected + PadMap["end"];
 }
 
-QStringList PhoneticSuggestion::joinSuggestion(QMap<QString, QString> autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord) {
+QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord) {
   QStringList words;
 
-  if (autoCorrect["corrected"] != "") {
-    words.append(autoCorrect["corrected"]);
-    if (autoCorrect["exact"] == "false") {
-      dictSuggestion.append(autoCorrect["corrected"]);
+  if (autoCorrect != "") {
+    words.append(autoCorrect);
+    if (autoCorrect != writtenWord) {
+      dictSuggestion.append(autoCorrect);
     }
   }
 
@@ -244,8 +241,9 @@ QStringList PhoneticSuggestion::joinSuggestion(QMap<QString, QString> autoCorrec
   appendIfNotContains(words, phonetic);
 
   for (auto& word : words) {
-    if (autoCorrect["exact"] == "true") {
-      if (autoCorrect["corrected"] != word) {
+    // smiley rule
+    if (autoCorrect == writtenWord) {
+      if (autoCorrect != word) {
         word = splitWord["begin"] + word + splitWord["end"];
       }
     } else {
@@ -275,9 +273,9 @@ QStringList PhoneticSuggestion::Suggest(QString word) {
 
   QString phonetic = parser.parse(splitWord["middle"]);
   QStringList dictSuggestion = getDictionarySuggestion(splitWord);
-  QMap<QString, QString> autoCorrect = getAutocorrect(word, splitWord);
+  QString autoCorrect = getAutocorrect(word, splitWord);
 
-  QStringList suggestion = joinSuggestion(autoCorrect, dictSuggestion, phonetic, splitWord);
+  QStringList suggestion = joinSuggestion(word, autoCorrect, dictSuggestion, phonetic, splitWord);
 
   return suggestion;
 }

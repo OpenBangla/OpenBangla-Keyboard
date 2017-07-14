@@ -37,11 +37,11 @@ private:
   QMap<QString, QString> separatePadding(QString word);
   bool isKar(QString word);
   bool isVowel(QString word);
-  QStringList joinSuggestion(QMap<QString, QString> autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord);
+  QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord);
   void appendIfNotContains(QStringList &array, QString item);
   QStringList sortByPhoneticRelevance(QString phonetic, QStringList dictSuggestion);
   QStringList getDictionarySuggestion(QMap<QString, QString> splitWord);
-  QMap<QString, QString> getAutocorrect(QString word, QMap<QString, QString> splitWord);
+  QString getAutocorrect(QString word, QMap<QString, QString> splitWord);
   QStringList addSuffix(QMap<QString, QString> splitWord);
   void addToTempCache(QString full, QString base, QString eng);
 
