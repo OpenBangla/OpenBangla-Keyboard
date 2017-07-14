@@ -17,7 +17,6 @@
 #include <QRegularExpression>
 #include "PhoneticSuggestion.h"
 #include "qlevenshtein.hpp"
-#include <QDebug>
 
 PhoneticSuggestion::PhoneticSuggestion() {}
 

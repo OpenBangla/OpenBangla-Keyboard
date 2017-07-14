@@ -24,7 +24,7 @@ Linux packages can be downloaded from [here](https://github.com/OpenBangla/OpenB
 
 If you need help, there is a wiki [page](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing%20OpenBangla%20Keyboard)
 
-Tested in Ubuntu 16.04
+Tested in Ubuntu 17.04
 
 **Currently Debian Package(.deb) are only supported**
 
