@@ -97,22 +97,26 @@ void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
 }
 
 QStringList Database::find(QString word) {
-  RegexParser rgx;
-  QStringList tablelist;
-  QStringList suggestions;
-  char lmc = word.toStdString().at(0); // Left Most Character
+  if(word != "") {
+    RegexParser rgx;
+    QStringList tablelist;
+    QStringList suggestions;
+    char lmc = word.toStdString().at(0); // Left Most Character
 
-  QRegularExpression regex(rgx.parse(word));
+    QRegularExpression regex(rgx.parse(word));
 
-  for(auto& table : prefixTableMap[lmc]) {
-    QVector<QString> tableData = word_table[table];
-    for(auto& tmpString : tableData) {
-      if(tmpString.contains(regex)) {
-        suggestions.push_back(tmpString);
+    for(auto& table : prefixTableMap[lmc]) {
+      QVector<QString> tableData = word_table[table];
+      for(auto& tmpString : tableData) {
+        if(tmpString.contains(regex)) {
+          suggestions.push_back(tmpString);
+        }
       }
     }
+    return suggestions;
+  } else {
+    return {""};
   }
-  return suggestions;
 }
 
 QString Database::banglaForSuffix(QString word) {
