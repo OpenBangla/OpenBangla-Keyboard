@@ -1,6 +1,7 @@
 # Change Log
 ## 1.2.0
 * Fixed a memory leak.
+* Fixed a long standing bug [#8](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/8).
 ## 1.1.0
 * Improve Phonetic support. Resolves issue [#2](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/2). Now Phonetic support is mostly complete!
 * A new button in TopBar for easily moving it.
