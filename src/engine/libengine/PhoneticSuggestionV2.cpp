@@ -80,11 +80,11 @@ QStringList PhoneticSuggestionV2::sortByPhoneticRelevance(QString phonetic, QStr
     int dist1 = levenshtein_distance(phonetic, i);
     int dist2 = levenshtein_distance(phonetic, j);
     if(dist1 < dist2) {
-      return i > j;
+      return true;
     } else if(dist1 > dist2) {
-      return i < j;
+      return false;
     } else {
-      return i < j;
+      return true;
     }
   });
 
@@ -235,10 +235,11 @@ QStringList PhoneticSuggestionV2::joinSuggestion(QMap<QString, QString> autoCorr
 
   QStringList dictSuggestionWithSuffix = addSuffix(splitWord);
 
-  QStringList sortedWords = sortByPhoneticRelevance(phonetic, dictSuggestionWithSuffix);
-  for (auto& word : sortedWords) {
+  for (auto& word : dictSuggestionWithSuffix) {
     appendIfNotContains(words, word);
   }
+
+  words = sortByPhoneticRelevance(phonetic, words);
 
   appendIfNotContains(words, phonetic);
 
@@ -251,7 +252,6 @@ QStringList PhoneticSuggestionV2::joinSuggestion(QMap<QString, QString> autoCorr
       word = splitWord["begin"] + word + splitWord["end"];
     }
   }
-  qDebug() << words;
 
   return words;
 }
