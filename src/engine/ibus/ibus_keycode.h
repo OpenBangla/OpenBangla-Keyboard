@@ -30,7 +30,7 @@
 
 std::map<guint,int> key;
 
-void intKeycode() {
+void initKeycode() {
   // Begin Alphanumeric Zone
   key[IBUS_KEY_grave] = VC_BACKQUOTE;
   key[IBUS_KEY_asciitilde] = VC_BACKQUOTE;
@@ -182,7 +182,6 @@ void intKeycode() {
 }
 
 int ibus_keycode(guint k) {
-  intKeycode();
   try
   {
     return key.at(k);

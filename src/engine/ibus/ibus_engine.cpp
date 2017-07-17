@@ -278,7 +278,7 @@ void ibus_start_setup(bool ibus) {
                                                     "us"
                                                   ));
     ibus_bus_register_component(bus, component);
-    
+
     ibus_bus_set_global_engine_async(bus, "OpenBangla", -1, NULL, NULL, NULL);
   }
   ibus_main();
@@ -286,6 +286,7 @@ void ibus_start_setup(bool ibus) {
 
 int main(int argc, char *argv []) {
   gLayout = new Layout();
+  initKeycode();
 
   if(argc > 1 && strcmp(argv[1], "--ibus") == 0) {
     ibus_start_setup(true);
