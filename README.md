@@ -41,8 +41,12 @@ On a Ubuntu/Debian system you can easily install them like this
 ```
 sudo apt-get install build-essential cmake libibus-1.0-dev qt5-default qtdeclarative5-dev
 ```
-On a Arch Linux / Arch Based system you can easily install them like this
 
+On a Fedora system you can easily install them like this
+```
+sudo dnf install @buildsys-build cmake qt5-qtdeclarative-devel ibus-devel
+```
+On a Arch Linux / Arch Based system you can easily install them like this
 ```
 sudo pacman -Sy base-devel cmake qt5-base qtdeclarative libibus
 ```
