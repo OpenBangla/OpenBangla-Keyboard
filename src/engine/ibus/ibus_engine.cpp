@@ -262,7 +262,7 @@ void ibus_start_setup(bool ibus) {
                                     PROJECT_VERSION,
                                     "GPL 3",
                                     "See AboutBox",
-                                    "http://openbangla.github.io/OpenBangla-Keyboard",
+                                    "http://openbangla.github.io/",
                                     LIBEXEC_DIR "/OpenBangla-Engine --ibus",
                                     "openbangla-keyboard"
                                   );
