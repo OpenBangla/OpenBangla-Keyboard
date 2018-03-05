@@ -8,7 +8,7 @@
     <version>@PROJECT_VERSION@</version>
     <author>See About Dialog</author>
     <license>GPL 3</license>
-    <homepage>http://openbangla.github.io/</homepage>
+    <homepage>http://openbangla.github.io</homepage>
     <textdomain>openbangla-keyboard</textdomain>
     <engines>
         <engine>
