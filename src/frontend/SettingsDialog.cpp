@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,12 +38,14 @@ SettingsDialog::~SettingsDialog()
 void SettingsDialog::updateSettings() {
     ui->checkBoxPrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
     ui->checkBoxCandidateWinHorizontal->setChecked(gSettings->getCandidateWinHorizontal());
+    ui->checkBoxCWPhonetic->setChecked(gSettings->getShowCWPhonetic());
 }
 
 void SettingsDialog::on_buttonBox_accepted()
 {
     gSettings->setEnterKeyClosesPrevWin(ui->checkBoxPrevWin->isChecked());
     gSettings->setCandidateWinHorizontal(ui->checkBoxCandidateWinHorizontal->isChecked());
+    gSettings->setShowCWPhonetic(ui->checkBoxCWPhonetic->isChecked());
 }
 
 void SettingsDialog::on_buttonBox_rejected()

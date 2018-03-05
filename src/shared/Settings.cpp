@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2015-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -137,4 +137,14 @@ void Settings::setCandidateWinHorizontal(bool b) {
 bool Settings::getCandidateWinHorizontal() {
   setting->sync();
   return setting->value("settings/CandidateWin/Horizontal", true).toBool();
+}
+
+void Settings::setShowCWPhonetic(bool b) {
+  setting->setValue("settings/CandidateWin/Phonetic", b);
+  setting->sync();
+}
+
+bool Settings::getShowCWPhonetic() {
+  setting->sync();
+  return setting->value("settings/CandidateWin/Phonetic", true).toBool();
 }

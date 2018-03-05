@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2017 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2017-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This Source Code Form is subject to the terms of the Mozilla Public
  *  License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,6 +16,7 @@
 
 #include <QRegularExpression>
 #include "PhoneticSuggestion.h"
+#include "Settings.h"
 #include "qlevenshtein.hpp"
 
 PhoneticSuggestion::PhoneticSuggestion() {}
@@ -264,6 +265,7 @@ void PhoneticSuggestion::saveSelection(QString selected) {
 }
 
 QStringList PhoneticSuggestion::Suggest(QString word) {
+  QStringList suggestion;
   QMap<QString, QString> splitWord = separatePadding(word);
   PadMap = splitWord;
 
@@ -271,10 +273,16 @@ QStringList PhoneticSuggestion::Suggest(QString word) {
   splitWord["end"] = parser.parse(splitWord["end"]);
 
   QString phonetic = parser.parse(splitWord["middle"]);
-  QStringList dictSuggestion = getDictionarySuggestion(splitWord);
-  QString autoCorrect = getAutocorrect(word, splitWord);
 
-  QStringList suggestion = joinSuggestion(word, autoCorrect, dictSuggestion, phonetic, splitWord);
+  if(!gSettings->getShowCWPhonetic()) {
+    // Return only phonetic suggestion
+    suggestion.append(splitWord["begin"] + phonetic + splitWord["end"]);
+  } else {
+    QStringList dictSuggestion = getDictionarySuggestion(splitWord);
+    QString autoCorrect = getAutocorrect(word, splitWord);
+
+    suggestion = joinSuggestion(word, autoCorrect, dictSuggestion, phonetic, splitWord);
+  }
 
   return suggestion;
 }

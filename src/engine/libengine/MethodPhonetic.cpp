@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2015-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,18 +49,26 @@ Suggestion MethodPhonetic::createSuggestion() {
     // Build the suggestions
     list = suggest.Suggest(EnglishT).toVector();
 
-    // Is user selected any candidate before?
     prevSelected = 0;
-    QString selected = suggest.getPrevSelected();
-    if(selected != "") {
-      // User has selected a candidate before
-      int index = list.indexOf(selected);
-      if(index != -1) {
-        prevSelected = index;
+
+    // Check if user wants the candidate window, otherwise don't show it.
+    if(gSettings->getShowCWPhonetic()) {
+      // Is user selected any candidate before?
+      QString selected = suggest.getPrevSelected();
+      if(selected != "") {
+        // User has selected a candidate before
+        int index = list.indexOf(selected);
+        if(index != -1) {
+          prevSelected = index;
+        }
       }
+
+      suggested = {toStdVector(list), EnglishT.toStdString(), true, prevSelected};
+    } else {
+      // The first candidate will be shown.
+      suggested = {toStdVector(list), EnglishT.toStdString(), false, prevSelected};
     }
 
-    suggested = {toStdVector(list), EnglishT.toStdString(), true, prevSelected};
     return suggested;
   }
 }
