@@ -1,4 +1,8 @@
 # Change Log
+## 1.3.0 - In development
+* Let users turn off candidate box [#11](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/11)
+* Build system improvement. There is no need to pass `CMAKE_INSTALL_PREFIX` when building.
+
 ## 1.2.0
 * Fixed a memory leak.
 * Fixed a long standing bug [#8](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/8).

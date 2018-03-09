@@ -54,7 +54,7 @@ sudo pacman -Sy base-devel cmake qt5-base qtdeclarative libibus
 After you have installed required libraries and binaries. Clone this repository and change the directory to the cloned folder and issue the commands:
 ```
 mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX='/usr'
+cmake ..
 make
 sudo make install
 ```
