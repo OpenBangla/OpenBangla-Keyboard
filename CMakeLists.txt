@@ -32,8 +32,25 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 # For Linux.
 if(OS_LINUX)
-  # Include our Linux specific additions
-  include(cmake/CMakeLinux.txt)
+  ## Additions for Linux ##
+  ## Set Directories for installing and storing files
+  set(CMAKE_INSTALL_PREFIX "/usr")
+
+  if(NOT DEFINED datadir)
+    set(datadir "${CMAKE_INSTALL_PREFIX}/share")
+  endif()
+  add_definitions(-DDATADIR="${datadir}")
+
+  if(NOT DEFINED LIBEXEC_DIR)
+    set(LIBEXEC_DIR "${CMAKE_INSTALL_PREFIX}/libexec")
+  endif()
+  add_definitions(-DLIBEXEC_DIR="${LIBEXEC_DIR}")
+
+  if(NOT DEFINED PROJECT_DATADIR)
+    set(PROJECT_DATADIR "${datadir}/openbangla-keyboard")
+  endif(NOT DEFINED PROJECT_DATADIR)
+  add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
+  add_definitions(-DPKGDATADIR="${PROJECT_DATADIR}")
 
   include(FindPkgConfig)
   ## Find iBus ##
