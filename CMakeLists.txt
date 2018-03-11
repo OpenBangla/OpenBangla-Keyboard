@@ -30,6 +30,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_definitions(-DDEBUG)
 endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
+# Sanity check our source directory to make sure that we are not trying to
+# generate an in-tree build (it pollutes the source tree with a lot of CMake
+# related files).
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR "In-source builds are not allowed.\nPlease create a build directory and initiate cmake from there.")
+endif()
+
 # For Linux.
 if(OS_LINUX)
   ## Additions for Linux ##
