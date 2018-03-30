@@ -53,12 +53,23 @@ QPoint Settings::getLayoutViewerWindowPosition() {
 }
 
 void Settings::setLayoutName(QString name) {
+  // A workaround against issue #17
+  if (name.contains("&")) {
+    name.replace("&", "");
+  }
+
   setting->setValue("layout/name", name);
   setting->sync();
 }
 QString Settings::getLayoutName() {
   setting->sync();
-  return setting->value("layout/name", "Avro Phonetic").toString();
+  QString name = setting->value("layout/name", "Avro Phonetic").toString();
+  // A workaround against issue #17
+  if (name.contains("&")) {
+    name.replace("&", "");
+  }
+
+  return name;
 }
 void Settings::setLayoutPath(QString path) {
   setting->setValue("layout/path", path);

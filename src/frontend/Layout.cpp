@@ -116,6 +116,12 @@ LayoutList Layout::searchLayouts() {
 
 void Layout::setLayout(QString name) {
   // Get the actual path and load the layout
+
+  // A workaround against issue #17
+  if (name.contains("&")) {
+    name.replace("&", "");
+  }
+
   loadLayout(layoutMap[name]);
   gSettings->setLayoutName(name);
   gSettings->setLayoutPath(layoutMap[name]);
