@@ -183,27 +183,45 @@ void TopBar::RefreshLayouts() {
   LayoutList list;
   list = gLayout->searchLayouts();
 
+  QString selectedLayout = gSettings->getLayoutName();
+
   for(int k = 0; k < MaxLayoutFiles; ++k) {
     if(k < list.count()) {
-      layoutMenuLayouts[k]->setText(list[k]);
+      QString name = list[k];
+      layoutMenuLayouts[k]->setText(name);
       layoutMenuLayouts[k]->setVisible(true);
+      // Select previously selected layout
+      if(name == selectedLayout) {
+        layoutMenuLayouts[k]->setChecked(true);
+        gLayout->setLayout(name);
+      }
     } else {
       layoutMenuLayouts[k]->setVisible(false);
     }
     layoutMenu->addAction(layoutMenuLayouts[k]);
-    // Select previous selected layout
-    if(layoutMenuLayouts[k]->text() == gSettings->getLayoutName()) {
-      layoutMenuLayouts[k]->setChecked(true);
-      gLayout->setLayout(layoutMenuLayouts[k]->text());
-    }
   }
   layoutMenu->addSeparator();
   layoutMenu->addAction(layoutMenuInstall);
 }
 
 void TopBar::layoutMenuLayouts_clicked() {
+  /** 
+   * From Qt version 5.10, Qt automatically adds shortcuts to
+   * menu items. For that Qt includes a `&` character. So when
+   * we use QAction::text() function, we get a string including
+   * a `&` character and we mess all things up.
+   *
+   * See issue #17
+   */
+
   QAction *action = qobject_cast<QAction *>(sender());
-  gLayout->setLayout(action->text());
+
+  QString layoutName = action->text();
+  if(layoutName.contains("&")) {
+    layoutName.replace("&", "");
+  }
+
+  gLayout->setLayout(layoutName);
   action->setChecked(true);
   layoutViewer->refreshLayoutViewer();
 }
