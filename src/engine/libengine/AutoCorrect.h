@@ -28,7 +28,10 @@ class AutoCorrect {
 public:
   AutoCorrect();
   QString getCorrected(QString word);
+  /* Get AutoCorrect entries */
   QJsonObject getEntries();
+  /* Convert Banglish to Avro Phonetic */
+  QString convertBanglish(QString text);
 };
 
 #endif /* end of include guard: AUTO_CORRECT_H */

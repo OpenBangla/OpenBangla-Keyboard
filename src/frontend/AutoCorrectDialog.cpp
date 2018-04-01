@@ -77,7 +77,7 @@ void AutoCorrectDialog::on_autoCorrect_itemClicked(QTreeWidgetItem *item, int co
     ui->txtReplace->setText(item->text(0));
     ui->txtWith->setText(item->text(1));
     ui->lblPreviewR->setText(item->text(0));
-    ui->lblPreviewW->setText(item->text(1));
+    ui->lblPreviewW->setText(dict.convertBanglish(item->text(1)));
 }
 
 void AutoCorrectDialog::on_btnClear_clicked()

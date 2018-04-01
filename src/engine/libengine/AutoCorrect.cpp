@@ -57,3 +57,7 @@ QString AutoCorrect::getCorrected(QString word) {
 QJsonObject AutoCorrect::getEntries() {
   return dict;
 }
+
+QString AutoCorrect::convertBanglish(QString text) {
+  return parser.parse(text);
+}
