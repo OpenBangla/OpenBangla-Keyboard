@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #include <QFileDialog>
 #include <QMenu>
 #include <QAction>
-#include <QDebug>
 #include "TopBar.h"
 #include "Layout.h"
 #include "Settings.h"
@@ -31,6 +30,7 @@
 #include "AboutFile.h"
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
+#include "AutoCorrectDialog.h"
 #include "ui_TopBar.h"
 
 TopBar::TopBar(QWidget *parent) :
@@ -46,6 +46,7 @@ TopBar::TopBar(QWidget *parent) :
     aboutDialog = new AboutDialog(this);
     layoutViewer = new LayoutViewer(this);
     settingsDialog = new SettingsDialog(this);
+    autoCorrectDialog = new AutoCorrectDialog(this);
 
     ui->buttonIcon->installEventFilter(this);
 
@@ -60,6 +61,7 @@ TopBar::~TopBar()
     delete layoutViewer;
     delete settingsDialog;
     delete aboutDialog;
+    delete autoCorrectDialog;
 
     delete gLayout;
     delete gSettings;
@@ -126,8 +128,12 @@ void TopBar::SetupPopupMenus() {
   settingsMenuShowDialog = new QAction("Settings", this);
   connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
 
+  settingsMenuAutoCorrect = new QAction("Edit Phonetic AutoCorrect entries", this);
+  connect(settingsMenuAutoCorrect, SIGNAL(triggered()), this, SLOT(settingsMenuAutoCorrect_clicked()));
+
   settingsMenu = new QMenu(this);
   settingsMenu->addMenu(settingsMenuFixedLayout);
+  settingsMenu->addAction(settingsMenuAutoCorrect);
   settingsMenu->addSeparator();
   settingsMenu->addAction(settingsMenuShowDialog);
 
@@ -254,6 +260,10 @@ void TopBar::settingsMenuFixedLayoutTraditionalKar_clicked() {
 
 void TopBar::settingsMenuFixedLayoutNumberPad_clicked() {
   gSettings->setNumberPadFixed(settingsMenuFixedLayoutNumberPad->isChecked());
+}
+
+void TopBar::settingsMenuAutoCorrect_clicked() {
+  autoCorrectDialog->show();
 }
 
 void TopBar::settingsMenuShowDialog_clicked() {
