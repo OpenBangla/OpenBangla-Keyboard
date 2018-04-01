@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QTreeWidget>
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
 
@@ -28,7 +29,8 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     ui->autoCorrect->setColumnCount(2);
     ui->autoCorrect->setHeaderLabels({"Relplace", "With"});
 
-    loadEntries();
+    int items = loadEntries();
+    ui->lblEntries->setText("Total entries: " + QString::number(items));
 }
 
 AutoCorrectDialog::~AutoCorrectDialog()
@@ -36,13 +38,17 @@ AutoCorrectDialog::~AutoCorrectDialog()
     delete ui;
 }
 
-void AutoCorrectDialog::loadEntries() {
+int AutoCorrectDialog::loadEntries() {
+    int items = 0;
     QJsonObject acList = dict.getEntries();
     QJsonObject::const_iterator iter = acList.constBegin();
     while(iter != acList.constEnd()) {
         addEntries(iter.key(), iter.value().toString());
         ++iter;
+        ++items;
     }
+
+    return items;
 }
 
 void AutoCorrectDialog::addEntries(QString replace, QString with) {
@@ -64,4 +70,18 @@ void AutoCorrectDialog::on_buttonBox_rejected()
 void AutoCorrectDialog::on_btnUpdate_clicked()
 {
     //
+}
+
+void AutoCorrectDialog::on_autoCorrect_itemClicked(QTreeWidgetItem *item, int column)
+{
+    ui->txtReplace->setText(item->text(0));
+    ui->txtWith->setText(item->text(1));
+    ui->lblPreviewR->setText(item->text(0));
+    ui->lblPreviewW->setText(item->text(1));
+}
+
+void AutoCorrectDialog::on_btnClear_clicked()
+{
+    ui->txtReplace->setText("");
+    ui->txtWith->setText("");
 }

@@ -6,6 +6,7 @@
         "array": "cpp",
         "initializer_list": "cpp",
         "chrono": "cpp",
-        "qmessagebox": "cpp"
+        "qmessagebox": "cpp",
+        "qtreewidget": "cpp"
     }
 }

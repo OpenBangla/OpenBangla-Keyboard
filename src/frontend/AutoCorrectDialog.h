@@ -22,6 +22,8 @@
 #include <QDialog>
 #include "AutoCorrect.h"
 
+class QTreeWidgetItem;
+
 namespace Ui {
 class AutoCorrectDialog;
 }
@@ -41,11 +43,15 @@ private slots:
 
     void on_btnUpdate_clicked();
 
+    void on_autoCorrect_itemClicked(QTreeWidgetItem *item, int column);
+
+    void on_btnClear_clicked();
+
 private:
     Ui::AutoCorrectDialog *ui;
     AutoCorrect dict;
     
-    void loadEntries();
+    int loadEntries();
     void addEntries(QString replace, QString with);
 };
 
