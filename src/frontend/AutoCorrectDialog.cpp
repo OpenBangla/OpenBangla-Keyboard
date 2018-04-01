@@ -18,15 +18,40 @@
 
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
+#include <QDebug>
 
 AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AutoCorrectDialog)
 {
     ui->setupUi(this);
+
+    ui->autoCorrect->setColumnCount(2);
+    ui->autoCorrect->setHeaderLabels({"Relplace", "With"});
+
+    for(int i = 0; i < 5; i++) {
+        addEntries("R " + QString::number(i), "W " + QString::number(i));
+    }
 }
 
 AutoCorrectDialog::~AutoCorrectDialog()
 {
     delete ui;
+}
+
+void AutoCorrectDialog::addEntries(QString replace, QString with) {
+    QTreeWidgetItem *item = new QTreeWidgetItem(ui->autoCorrect);
+    item->setText(0, replace);
+    item->setText(1, with);
+}
+
+void AutoCorrectDialog::on_buttonBox_accepted()
+{
+   qDebug() << "Yay Saved!";
+}
+
+void AutoCorrectDialog::on_buttonBox_rejected()
+{
+    qDebug() << "Closing";
+    AutoCorrectDialog::close();
 }

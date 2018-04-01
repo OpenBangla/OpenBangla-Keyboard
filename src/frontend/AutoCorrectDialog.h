@@ -33,8 +33,15 @@ public:
     explicit AutoCorrectDialog(QWidget *parent = 0);
     ~AutoCorrectDialog();
 
+private slots:
+    void on_buttonBox_accepted();
+
+    void on_buttonBox_rejected();
+
 private:
     Ui::AutoCorrectDialog *ui;
+
+    void addEntries(QString replace, QString with);
 };
 
 #endif // AUTOCORRECTDIALOG_H
