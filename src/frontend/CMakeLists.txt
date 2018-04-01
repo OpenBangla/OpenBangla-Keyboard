@@ -9,6 +9,7 @@ set(SRC_GUI TopBar.cpp
             AboutFile.cpp
             LayoutViewer.cpp
             SettingsDialog.cpp
+            AutoCorrectDialog.cpp
             images.qrc)
 
 set(SRC_MAIN main.cpp
