@@ -31,13 +31,24 @@ AutoCorrect::AutoCorrect() {
 
   dict = json.object().value("autocorrect").toObject();
   dictFile.close();
+
+  // Now load Avro Phonetic
+  dictFile.setFileName(PKGDATADIR "/layouts/avrophonetic.json");
+  if (!dictFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[AutoCorrect]: Error: Couldn't open Avro Phonetic layout file!\n");
+  }
+
+  data = dictFile.readAll();
+  json = QJsonDocument::fromJson(data);
+  parser.setLayout(json.object().value("layout").toObject());
+  dictFile.close();
 }
 
 QString AutoCorrect::getCorrected(QString word) {
   QString fixed = parser.fixString(word);
   QJsonValue corrected = dict.value(fixed);
   if(!(corrected.type() == QJsonValue::Undefined)) {
-    return corrected.toString();
+    return parser.parse(corrected.toString());
   } else {
     return QString("");
   }
