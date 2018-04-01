@@ -47,6 +47,10 @@ private slots:
 
     void on_btnClear_clicked();
 
+    void on_txtReplace_textChanged(const QString &arg1);
+
+    void on_txtWith_textChanged(const QString &arg1);
+
 private:
     Ui::AutoCorrectDialog *ui;
     AutoCorrect dict;

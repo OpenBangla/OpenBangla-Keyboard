@@ -29,6 +29,9 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     ui->autoCorrect->setColumnCount(2);
     ui->autoCorrect->setHeaderLabels({"Replace", "With"});
 
+    ui->btnClear->setEnabled(false);
+    ui->btnUpdate->setEnabled(false);
+
     int items = loadEntries();
     ui->lblEntries->setText("Total entries: " + QString::number(items));
 }
@@ -75,8 +78,8 @@ void AutoCorrectDialog::on_btnUpdate_clicked()
 void AutoCorrectDialog::on_autoCorrect_itemClicked(QTreeWidgetItem *item, int column)
 {
     ui->txtReplace->setText(item->text(0));
+    ui->lblPreviewR->setText(dict.convertBanglish(item->text(0)));
     ui->txtWith->setText(item->text(1));
-    ui->lblPreviewR->setText(item->text(0));
     ui->lblPreviewW->setText(dict.convertBanglish(item->text(1)));
 }
 
@@ -84,4 +87,38 @@ void AutoCorrectDialog::on_btnClear_clicked()
 {
     ui->txtReplace->setText("");
     ui->txtWith->setText("");
+}
+
+void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1)
+{
+    if(arg1 != "") {
+        ui->lblPreviewR->setText(dict.convertBanglish(arg1));
+        if(!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
+        if(ui->txtWith->text() != "") {
+            ui->btnUpdate->setEnabled(true);
+        } else {
+            ui->btnUpdate->setEnabled(false);
+        }
+    } else {
+        ui->lblPreviewR->setText("");
+        ui->btnClear->setEnabled(false);
+        ui->btnUpdate->setEnabled(false);
+    }
+}
+
+void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1)
+{
+    if(arg1 != "") {
+        ui->lblPreviewW->setText(dict.convertBanglish(arg1));
+        if(!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
+        if(ui->txtReplace->text() != "") {
+            ui->btnUpdate->setEnabled(true);
+        } else {
+            ui->btnUpdate->setEnabled(false);
+        }
+    } else {
+        ui->lblPreviewW->setText("");
+        ui->btnClear->setEnabled(false);
+        ui->btnUpdate->setEnabled(false);
+    }
 }
