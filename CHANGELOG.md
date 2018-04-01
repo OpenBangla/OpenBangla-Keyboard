@@ -3,7 +3,7 @@
 * Let users turn off candidate box [#11](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/11)
 * Build system improvement. There is no need to pass `CMAKE_INSTALL_PREFIX` when building.
 * Now supports RPM packaging.
-* Fixed issue [#17](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/17). OpenBangla Keyboard was failing to store Layout setting in KDE environment. 
+* Fixed issue [#17](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/17). OpenBangla Keyboard was failing to store Layout setting when using Qt 5.10 version.
 
 ## 1.2.0
 * Fixed a memory leak.
