@@ -18,7 +18,7 @@
 #include <QFile>
 #include <QByteArray>
 #include <QJsonDocument>
-#include "autocorrect.h"
+#include "AutoCorrect.h"
 #include "log.h"
 
 AutoCorrect::AutoCorrect() {

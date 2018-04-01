@@ -10,8 +10,8 @@ add_library(libEngine
             FixedLayoutParser.cpp
             regexparser.cpp
             regexparser.h
-            autocorrect.cpp
-            autocorrect.h
+            AutoCorrect.cpp
+            AutoCorrect.h
             Database.cpp
             Database.h
             cachemanager.cpp
