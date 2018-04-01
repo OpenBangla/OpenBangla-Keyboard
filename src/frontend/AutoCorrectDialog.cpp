@@ -18,7 +18,6 @@
 
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
-#include <QDebug>
 
 AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     QDialog(parent),
@@ -29,14 +28,21 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     ui->autoCorrect->setColumnCount(2);
     ui->autoCorrect->setHeaderLabels({"Relplace", "With"});
 
-    for(int i = 0; i < 5; i++) {
-        addEntries("R " + QString::number(i), "W " + QString::number(i));
-    }
+    loadEntries();
 }
 
 AutoCorrectDialog::~AutoCorrectDialog()
 {
     delete ui;
+}
+
+void AutoCorrectDialog::loadEntries() {
+    QJsonObject acList = dict.getEntries();
+    QJsonObject::const_iterator iter = acList.constBegin();
+    while(iter != acList.constEnd()) {
+        addEntries(iter.key(), iter.value().toString());
+        ++iter;
+    }
 }
 
 void AutoCorrectDialog::addEntries(QString replace, QString with) {
@@ -47,11 +53,15 @@ void AutoCorrectDialog::addEntries(QString replace, QString with) {
 
 void AutoCorrectDialog::on_buttonBox_accepted()
 {
-   qDebug() << "Yay Saved!";
+   //
 }
 
 void AutoCorrectDialog::on_buttonBox_rejected()
 {
-    qDebug() << "Closing";
     AutoCorrectDialog::close();
+}
+
+void AutoCorrectDialog::on_btnUpdate_clicked()
+{
+    //
 }

@@ -5,6 +5,7 @@
         "string_view": "cpp",
         "array": "cpp",
         "initializer_list": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "qmessagebox": "cpp"
     }
 }

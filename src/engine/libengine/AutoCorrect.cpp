@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2015-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,4 +41,8 @@ QString AutoCorrect::getCorrected(QString word) {
   } else {
     return QString("");
   }
+}
+
+QJsonObject AutoCorrect::getEntries() {
+  return dict;
 }

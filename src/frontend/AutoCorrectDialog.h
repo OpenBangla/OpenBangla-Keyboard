@@ -20,6 +20,7 @@
 #define AUTOCORRECTDIALOG_H
 
 #include <QDialog>
+#include "AutoCorrect.h"
 
 namespace Ui {
 class AutoCorrectDialog;
@@ -38,9 +39,13 @@ private slots:
 
     void on_buttonBox_rejected();
 
+    void on_btnUpdate_clicked();
+
 private:
     Ui::AutoCorrectDialog *ui;
-
+    AutoCorrect dict;
+    
+    void loadEntries();
     void addEntries(QString replace, QString with);
 };
 

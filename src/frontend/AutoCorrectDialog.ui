@@ -33,9 +33,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>50</y>
      <width>381</width>
-     <height>221</height>
+     <height>171</height>
     </rect>
    </property>
    <column>
@@ -43,6 +43,19 @@
      <string notr="true">1</string>
     </property>
    </column>
+  </widget>
+  <widget class="QPushButton" name="btnUpdate">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>10</y>
+     <width>105</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
   </widget>
  </widget>
  <resources/>
