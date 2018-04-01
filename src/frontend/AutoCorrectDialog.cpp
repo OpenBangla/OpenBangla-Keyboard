@@ -27,7 +27,7 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     ui->setupUi(this);
 
     ui->autoCorrect->setColumnCount(2);
-    ui->autoCorrect->setHeaderLabels({"Relplace", "With"});
+    ui->autoCorrect->setHeaderLabels({"Replace", "With"});
 
     int items = loadEntries();
     ui->lblEntries->setText("Total entries: " + QString::number(items));
