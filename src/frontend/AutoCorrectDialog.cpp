@@ -46,8 +46,8 @@ AutoCorrectDialog::~AutoCorrectDialog()
 
 void AutoCorrectDialog::loadEntries() {
     int items = 0;
-    QJsonObject acList = dict.getEntries();
-    QJsonObject::const_iterator iter = acList.constBegin();
+    QVariantMap acList = dict.getEntries();
+    QVariantMap::const_iterator iter = acList.constBegin();
     while(iter != acList.constEnd()) {
         addEntries(iter.key(), iter.value().toString());
         ++iter;
@@ -79,7 +79,7 @@ void AutoCorrectDialog::on_buttonBox_rejected()
 void AutoCorrectDialog::on_btnUpdate_clicked()
 {
     dict.setEntry(ui->txtReplace->text(), ui->txtWith->text());
-    addEntries(ui->txtReplace->text(), ui->txtWith->text());
+    loadEntries();
 }
 
 void AutoCorrectDialog::on_btnClear_clicked()

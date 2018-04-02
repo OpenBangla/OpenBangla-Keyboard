@@ -20,6 +20,8 @@
 
 #include <QString>
 #include <QJsonObject>
+#include <QMap>
+#include <QVariant>
 #include "phoneticparser.h"
 #include "SpecialFolders.h"
 
@@ -32,7 +34,7 @@ public:
   AutoCorrect();
   QString getCorrected(QString word);
   /* Get AutoCorrect entries */
-  QJsonObject getEntries();
+  QVariantMap getEntries();
   /* Load Avro Phonetic to convert Banglish to Bangla */
   void loadAvroPhonetic();
   /* Convert Banglish to Avro Phonetic */

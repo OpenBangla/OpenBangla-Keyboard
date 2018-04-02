@@ -62,8 +62,9 @@ QString AutoCorrect::getCorrected(QString word) {
   }
 }
 
-QJsonObject AutoCorrect::getEntries() {
-  return dict;
+QVariantMap AutoCorrect::getEntries() {
+  QVariantMap dct = dict.toVariantMap();
+  return dct.unite(usrDict.toVariantMap());
 }
 
 void AutoCorrect::loadAvroPhonetic() {

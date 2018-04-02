@@ -8,6 +8,8 @@
         "chrono": "cpp",
         "qmessagebox": "cpp",
         "qtreewidget": "cpp",
-        "atomic": "cpp"
+        "atomic": "cpp",
+        "qvariant": "cpp",
+        "qmap": "cpp"
     }
 }
