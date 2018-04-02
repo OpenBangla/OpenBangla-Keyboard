@@ -42,7 +42,7 @@ QStringList PhoneticSuggestion::getDictionarySuggestion(QMap<QString, QString> s
 QString PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> splitWord) {
   QString corrected;
 
-  QString autoCorrect = autodict.getCorrected(word);
+  QString autoCorrect = autodict.getCorrected(parser.fixString(word));
 
   if (autoCorrect != "") {
     if (autoCorrect == word) {

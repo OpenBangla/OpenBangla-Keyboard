@@ -41,6 +41,10 @@ public:
   QString getUserLayoutPath() {
     return path + "/Layouts/";
   }
+
+  QString getUserAutoCorrectFile() {
+    return path + "/autocorrect.json";
+  }
 };
 
 #endif /* end of include guard: SPECIAL_FOLDER_H */

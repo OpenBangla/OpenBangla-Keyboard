@@ -31,15 +31,34 @@ AutoCorrect::AutoCorrect() {
 
   dict = json.object().value("autocorrect").toObject();
   dictFile.close();
+
+  // Now load user specific AutoCorrect file
+  dictFile.setFileName(folders.getUserAutoCorrectFile());
+  if (!dictFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[AutoCorrect]: Error: Couldn't open user specific AutoCorrect file!\n");
+  }
+
+  data = dictFile.readAll();
+  json = QJsonDocument::fromJson(data);
+  usrDict = json.object();
+  dictFile.close();
 }
 
 QString AutoCorrect::getCorrected(QString word) {
-  QString fixed = parser.fixString(word);
-  QJsonValue corrected = dict.value(fixed);
-  if(!(corrected.type() == QJsonValue::Undefined)) {
+  // Always prefer user edited Autocorrect file
+  QJsonValue corrected = usrDict.value(word);
+
+  if(corrected.type() != QJsonValue::Undefined) {
     return corrected.toString();
   } else {
-    return QString("");
+    // Not found in user's AutoCorrect file. So use the
+    // default AutoCorrect file.
+    corrected = dict.value(word);
+    if(corrected.type() != QJsonValue::Undefined) {
+      return corrected.toString();
+    } else {
+      return QString("");
+    }
   }
 }
 
@@ -62,4 +81,21 @@ void AutoCorrect::loadAvroPhonetic() {
 
 QString AutoCorrect::convertBanglish(QString text) {
   return parser.parse(text);
+}
+
+void AutoCorrect::setEntry(QString replace, QString with) {
+  usrDict[replace] = with;
+}
+
+void AutoCorrect::saveUserAutoCorrectFile() {
+  QFile saveFile(folders.getUserAutoCorrectFile());
+  if(!saveFile.open(QIODevice::WriteOnly)) {
+    LOG_ERROR("[AutoCorrect:Save]: Error couldn't open save file.\n");
+    return;
+  }
+
+  QJsonDocument json(usrDict);
+  saveFile.write(json.toJson());
+
+  saveFile.close();
 }

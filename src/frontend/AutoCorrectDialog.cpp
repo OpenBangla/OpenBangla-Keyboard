@@ -66,7 +66,7 @@ void AutoCorrectDialog::addEntries(QString replace, QString with) {
 
 void AutoCorrectDialog::on_buttonBox_accepted()
 {
-   //
+   dict.saveUserAutoCorrectFile();
 }
 
 void AutoCorrectDialog::on_buttonBox_rejected()
@@ -76,7 +76,8 @@ void AutoCorrectDialog::on_buttonBox_rejected()
 
 void AutoCorrectDialog::on_btnUpdate_clicked()
 {
-    //
+    dict.setEntry(ui->txtReplace->text(), ui->txtWith->text());
+    addEntries(ui->txtReplace->text(), ui->txtWith->text());
 }
 
 void AutoCorrectDialog::on_btnClear_clicked()
