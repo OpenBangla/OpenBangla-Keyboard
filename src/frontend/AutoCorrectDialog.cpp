@@ -55,6 +55,9 @@ int AutoCorrectDialog::loadEntries() {
         ++items;
     }
 
+    // Sort list
+    ui->autoCorrect->sortItems(0, Qt::SortOrder::AscendingOrder);
+
     return items;
 }
 
