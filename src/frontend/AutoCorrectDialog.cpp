@@ -26,6 +26,8 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setFixedSize(QSize(this->width(), this->height()));
+
     ui->autoCorrect->setColumnCount(2);
     ui->autoCorrect->setHeaderLabels({"Replace", "With"});
 
