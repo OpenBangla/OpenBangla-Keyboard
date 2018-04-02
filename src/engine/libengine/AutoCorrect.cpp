@@ -48,7 +48,7 @@ QString AutoCorrect::getCorrected(QString word) {
   QString fixed = parser.fixString(word);
   QJsonValue corrected = dict.value(fixed);
   if(!(corrected.type() == QJsonValue::Undefined)) {
-    return parser.parse(corrected.toString());
+    return corrected.toString();
   } else {
     return QString("");
   }

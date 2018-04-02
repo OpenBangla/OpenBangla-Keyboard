@@ -48,12 +48,12 @@ QString PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> 
     if (autoCorrect == word) {
       corrected = word;
     } else {
-      corrected = autoCorrect;
+      corrected = parser.parse(autoCorrect);
     }
   } else {
     QString withCorrection = autodict.getCorrected(splitWord["middle"]);
     if (withCorrection != "") {
-      corrected = withCorrection;
+      corrected = parser.parse(withCorrection);
     }
   }
 
