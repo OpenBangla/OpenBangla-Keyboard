@@ -75,14 +75,6 @@ void AutoCorrectDialog::on_btnUpdate_clicked()
     //
 }
 
-void AutoCorrectDialog::on_autoCorrect_itemClicked(QTreeWidgetItem *item, int column)
-{
-    ui->txtReplace->setText(item->text(0));
-    ui->lblPreviewR->setText(dict.convertBanglish(item->text(0)));
-    ui->txtWith->setText(item->text(1));
-    ui->lblPreviewW->setText(dict.convertBanglish(item->text(1)));
-}
-
 void AutoCorrectDialog::on_btnClear_clicked()
 {
     ui->txtReplace->setText("");
@@ -120,5 +112,22 @@ void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1)
         ui->lblPreviewW->setText("");
         ui->btnClear->setEnabled(false);
         ui->btnUpdate->setEnabled(false);
+    }
+}
+
+void AutoCorrectDialog::on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    QString replace = current->text(0);
+    QString with = current->text(1);
+
+    ui->txtReplace->setText(replace);
+    ui->lblPreviewR->setText(dict.convertBanglish(replace));
+
+    ui->txtWith->setText(with);
+    // smiley rule
+    if(replace == with) {
+        ui->lblPreviewW->setText(with);
+    } else {
+        ui->lblPreviewW->setText(dict.convertBanglish(with));
     }
 }

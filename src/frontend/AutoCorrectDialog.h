@@ -43,13 +43,13 @@ private slots:
 
     void on_btnUpdate_clicked();
 
-    void on_autoCorrect_itemClicked(QTreeWidgetItem *item, int column);
-
     void on_btnClear_clicked();
 
     void on_txtReplace_textChanged(const QString &arg1);
 
     void on_txtWith_textChanged(const QString &arg1);
+
+    void on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 private:
     Ui::AutoCorrectDialog *ui;
