@@ -101,7 +101,13 @@ void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1)
 void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1)
 {
     if(arg1 != "") {
-        ui->lblPreviewW->setText(dict.convertBanglish(arg1));
+        // smiley rule
+        if(ui->txtReplace->text() == arg1) {
+            ui->lblPreviewW->setText(arg1);
+        } else {
+            ui->lblPreviewW->setText(dict.convertBanglish(arg1));
+        }
+
         if(!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
         if(ui->txtReplace->text() != "") {
             ui->btnUpdate->setEnabled(true);
@@ -117,17 +123,6 @@ void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1)
 
 void AutoCorrectDialog::on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-    QString replace = current->text(0);
-    QString with = current->text(1);
-
-    ui->txtReplace->setText(replace);
-    ui->lblPreviewR->setText(dict.convertBanglish(replace));
-
-    ui->txtWith->setText(with);
-    // smiley rule
-    if(replace == with) {
-        ui->lblPreviewW->setText(with);
-    } else {
-        ui->lblPreviewW->setText(dict.convertBanglish(with));
-    }
+    ui->txtReplace->setText(current->text(0));
+    ui->txtWith->setText(current->text(1));
 }
