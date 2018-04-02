@@ -34,6 +34,8 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     ui->btnClear->setEnabled(false);
     ui->btnUpdate->setEnabled(false);
 
+    dict.loadAvroPhonetic();
+
     int items = loadEntries();
     ui->lblEntries->setText("Total entries: " + QString::number(items));
 }

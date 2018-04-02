@@ -31,17 +31,6 @@ AutoCorrect::AutoCorrect() {
 
   dict = json.object().value("autocorrect").toObject();
   dictFile.close();
-
-  // Now load Avro Phonetic
-  dictFile.setFileName(PKGDATADIR "/layouts/avrophonetic.json");
-  if (!dictFile.open(QIODevice::ReadOnly)) {
-    LOG_ERROR("[AutoCorrect]: Error: Couldn't open Avro Phonetic layout file!\n");
-  }
-
-  data = dictFile.readAll();
-  json = QJsonDocument::fromJson(data);
-  parser.setLayout(json.object().value("layout").toObject());
-  dictFile.close();
 }
 
 QString AutoCorrect::getCorrected(QString word) {
@@ -56,6 +45,19 @@ QString AutoCorrect::getCorrected(QString word) {
 
 QJsonObject AutoCorrect::getEntries() {
   return dict;
+}
+
+void AutoCorrect::loadAvroPhonetic() {
+  // Now load Avro Phonetic
+  QFile layoutFile(PKGDATADIR "/layouts/avrophonetic.json");
+  if (!layoutFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[AutoCorrect]: Error: Couldn't open Avro Phonetic layout file!\n");
+  }
+
+  QByteArray data = layoutFile.readAll();
+  QJsonDocument json = QJsonDocument::fromJson(data);
+  parser.setLayout(json.object().value("layout").toObject());
+  layoutFile.close();
 }
 
 QString AutoCorrect::convertBanglish(QString text) {
