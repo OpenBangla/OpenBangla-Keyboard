@@ -36,8 +36,7 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
 
     dict.loadAvroPhonetic();
 
-    int items = loadEntries();
-    ui->lblEntries->setText("Total entries: " + QString::number(items));
+    loadEntries();
 }
 
 AutoCorrectDialog::~AutoCorrectDialog()
@@ -45,7 +44,7 @@ AutoCorrectDialog::~AutoCorrectDialog()
     delete ui;
 }
 
-int AutoCorrectDialog::loadEntries() {
+void AutoCorrectDialog::loadEntries() {
     int items = 0;
     QJsonObject acList = dict.getEntries();
     QJsonObject::const_iterator iter = acList.constBegin();
@@ -57,8 +56,8 @@ int AutoCorrectDialog::loadEntries() {
 
     // Sort list
     ui->autoCorrect->sortItems(0, Qt::SortOrder::AscendingOrder);
-
-    return items;
+    // Update
+    ui->lblEntries->setText("Total entries: " + QString::number(items));
 }
 
 void AutoCorrectDialog::addEntries(QString replace, QString with) {

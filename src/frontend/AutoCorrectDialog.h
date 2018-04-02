@@ -55,7 +55,7 @@ private:
     Ui::AutoCorrectDialog *ui;
     AutoCorrect dict;
     
-    int loadEntries();
+    void loadEntries();
     void addEntries(QString replace, QString with);
 };
 
