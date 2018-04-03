@@ -64,7 +64,18 @@ QString AutoCorrect::getCorrected(QString word) {
 
 QVariantMap AutoCorrect::getEntries() {
   QVariantMap dct = dict.toVariantMap();
-  return dct.unite(usrDict.toVariantMap());
+
+  /* Insert user's AutoCorrect entries.
+   * If a conflict is found, we prefer user's entry.
+   */
+  QJsonObject::const_iterator iter = usrDict.constBegin();
+  while(iter != usrDict.constEnd()) {
+    dct.insert(iter.key(), iter.value());
+
+    ++iter;
+  }
+
+  return dct;
 }
 
 void AutoCorrect::loadAvroPhonetic() {
