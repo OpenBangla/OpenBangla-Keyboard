@@ -46,6 +46,9 @@ AutoCorrectDialog::~AutoCorrectDialog()
 
 void AutoCorrectDialog::loadEntries() {
     int items = 0;
+    // Clear the treelist
+    ui->autoCorrect->clear();
+
     QVariantMap acList = dict.getEntries();
     QVariantMap::const_iterator iter = acList.constBegin();
     while(iter != acList.constEnd()) {
