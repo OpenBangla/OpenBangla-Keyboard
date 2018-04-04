@@ -102,7 +102,7 @@ void AutoCorrectDialog::on_buttonBox_rejected()
 
 void AutoCorrectDialog::on_btnUpdate_clicked()
 {
-    dict.setEntry(ui->txtReplace->text(), ui->txtWith->text());
+    dict.setEntry(ui->txtReplace->text().trimmed(), ui->txtWith->text().trimmed());
     loadEntries();
 }
 
