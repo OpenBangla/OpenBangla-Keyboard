@@ -15,7 +15,7 @@
 #include <QJsonObject>
 #include "phoneticparser.h"
 #include "Database.h"
-#include "autocorrect.h"
+#include "AutoCorrect.h"
 #include "cachemanager.h"
 
 struct Cache {

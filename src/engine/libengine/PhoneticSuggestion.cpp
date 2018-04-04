@@ -42,18 +42,18 @@ QStringList PhoneticSuggestion::getDictionarySuggestion(QMap<QString, QString> s
 QString PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> splitWord) {
   QString corrected;
 
-  QString autoCorrect = autodict.getCorrected(word);
+  QString autoCorrect = autodict.getCorrected(parser.fixString(word));
 
   if (autoCorrect != "") {
     if (autoCorrect == word) {
       corrected = word;
     } else {
-      corrected = autoCorrect;
+      corrected = parser.parse(autoCorrect);
     }
   } else {
     QString withCorrection = autodict.getCorrected(splitWord["middle"]);
     if (withCorrection != "") {
-      corrected = withCorrection;
+      corrected = parser.parse(withCorrection);
     }
   }
 
