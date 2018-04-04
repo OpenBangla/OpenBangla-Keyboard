@@ -96,7 +96,7 @@ QString AutoCorrect::convertBanglish(QString text) {
 }
 
 void AutoCorrect::setEntry(QString replace, QString with) {
-  usrDict[replace] = with;
+  usrDict.insert(replace, with);
 }
 
 void AutoCorrect::saveUserAutoCorrectFile() {

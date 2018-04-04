@@ -17,6 +17,7 @@
  */
 
 #include <QTreeWidget>
+#include <QSignalBlocker>
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
 
@@ -46,7 +47,12 @@ AutoCorrectDialog::~AutoCorrectDialog()
 
 void AutoCorrectDialog::loadEntries() {
     int items = 0;
+    /* Block any signals for the treelist.
+     * Otherwise it causes a Segmentation fault.
+     */
+    const QSignalBlocker blocker(ui->autoCorrect);
     // Clear the treelist
+    ui->autoCorrect->clearSelection();
     ui->autoCorrect->clear();
 
     QVariantMap acList = dict.getEntries();
