@@ -27,6 +27,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->setupUi(this);
 
     this->setFixedSize(QSize(this->width(), this->height()));
+    ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
     updateSettings();
 }
 
@@ -36,19 +37,29 @@ SettingsDialog::~SettingsDialog()
 }
 
 void SettingsDialog::updateSettings() {
-    ui->checkBoxPrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
-    ui->checkBoxCandidateWinHorizontal->setChecked(gSettings->getCandidateWinHorizontal());
-    ui->checkBoxCWPhonetic->setChecked(gSettings->getShowCWPhonetic());
+    ui->btnClosePrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
+    ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
+    ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
 }
 
 void SettingsDialog::on_buttonBox_accepted()
 {
-    gSettings->setEnterKeyClosesPrevWin(ui->checkBoxPrevWin->isChecked());
-    gSettings->setCandidateWinHorizontal(ui->checkBoxCandidateWinHorizontal->isChecked());
-    gSettings->setShowCWPhonetic(ui->checkBoxCWPhonetic->isChecked());
+    gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
+    gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
+    gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
 }
 
 void SettingsDialog::on_buttonBox_rejected()
 {
     SettingsDialog::close();
+}
+
+void SettingsDialog::on_btnClosePrevWin_toggled(bool checked)
+{
+    ui->btnClosePrevWin->setText(checked ? "On" : "Off");
+}
+
+void SettingsDialog::on_btnShowPrevWin_toggled(bool checked)
+{
+    ui->btnShowPrevWin->setText(checked ? "On" : "Off");
 }

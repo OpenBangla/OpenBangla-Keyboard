@@ -40,6 +40,10 @@ private slots:
 
     void on_buttonBox_rejected();
 
+    void on_btnClosePrevWin_toggled(bool checked);
+
+    void on_btnShowPrevWin_toggled(bool checked);
+
 private:
     Ui::SettingsDialog *ui;
 };
