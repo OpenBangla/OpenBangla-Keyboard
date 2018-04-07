@@ -5,6 +5,7 @@
 * Build system improvement. There is no need to pass `CMAKE_INSTALL_PREFIX` when building.
 * Now supports RPM packaging.
 * Fixed issue [#17](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/17). OpenBangla Keyboard was failing to store Layout setting when using Qt 5.10 version.
+* Improved Settings dialog UI.
 
 ## 1.2.0
 * Fixed a memory leak.
