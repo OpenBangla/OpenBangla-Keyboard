@@ -70,7 +70,16 @@ TopBar::~TopBar()
 }
 
 void TopBar::SetupTopBar() {
+  #if defined(linux) || defined(__linux__) || defined(__linux)
+  this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint|Qt::X11BypassWindowManagerHint|Qt::WindowDoesNotAcceptFocus|Qt::NoDropShadowWindowHint);
+  /* Added:
+   * X11 Window Manager Bypass TaskBar -> Qt::X11BypassWindowManagerHint
+   * No Focus Window -> Qt::WindowDoesNotAcceptFocus
+   * Disable Shadowed Window -> Qt::NoDropShadowWindowHint
+   */
+  #else
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+  #endif
   this->setFixedSize(QSize(this->width(), this->height()));
 
   move(gSettings->getTopBarWindowPosition());
