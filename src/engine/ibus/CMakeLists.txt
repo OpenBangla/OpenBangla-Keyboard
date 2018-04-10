@@ -77,6 +77,9 @@ install(FILES ${CMAKE_BINARY_DIR}/data/openbangla.xml
 install(FILES ${CMAKE_BINARY_DIR}/data/openbangla-keyboard.desktop
     DESTINATION "${datadir}/applications")
 
+install(FILES ${CMAKE_SOURCE_DIR}/data/io.github.openbangla.keyboard.metainfo.xml
+    DESTINATION ${datadir}/metainfo)
+
 install(TARGETS OpenBangla-Engine
         RUNTIME DESTINATION ${LIBEXEC_DIR}
         )

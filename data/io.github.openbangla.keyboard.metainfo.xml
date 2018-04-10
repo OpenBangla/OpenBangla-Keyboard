@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+​<component type="inputmethod">
+​  <id>io.github.openbangla.keyboard</id>
+​  <metadata_license>FSFAP</metadata_license>
+​  <name>OpenBangla Keyboard</name>
+​  <summary>An OpenSource, Unicode compliant Bengali Input Method</summary>
+​  <description>
+​    <p>
+​      OpenBangla Keyboard is an OpenSource, Unicode compliant Bengali Input Method for GNU/Linux systems.
+      It's a full fledged Bengali input method with typing automation tools, includes many famous 
+      typing methods such as Avro Phonetic, Probhat, Munir Optima, National (Jatiya) etc.
+​    </p>
+​    <p>
+​      Most of the features of Avro Keyboard are present in OpenBangla Keyboard. 
+      So Avro Keyboard users will feel at home with OpenBangla Keyboard in Linux.
+​    </p>
+​  </description>
+  <project_license>GPL-3.0-or-later</project_license>
+​  <url type="homepage">http://openbangla.github.io/</url>
+  <url type="bugtracker">https://github.com/OpenBangla/OpenBangla-Keyboard/issues</url>
+​</component>
