@@ -260,7 +260,6 @@ void TopBar::layoutMenuInstall_clicked() {
         QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occured when saving the file!", QMessageBox::Ok);
         break;
     }
-    
   }
   RefreshLayouts();
 }

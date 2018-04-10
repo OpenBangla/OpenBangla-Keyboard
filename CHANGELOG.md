@@ -6,6 +6,7 @@
 * Now supports RPM packaging.
 * Fixed issue [#17](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/17). OpenBangla Keyboard was failing to store Layout setting when using Qt 5.10 version.
 * Improved Settings dialog UI.
+* Rewritten Avro Layout conversion code. OpenBangla Keyboard now handles errors more gracefully and reports them to the user.
 
 ## 1.2.0
 * Fixed a memory leak.
