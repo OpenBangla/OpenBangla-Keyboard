@@ -20,14 +20,21 @@
 #include <QJsonObject>
 #include "SpecialFolders.h"
 
+enum ConversionResult {
+  Ok,
+  UnsupportedLayout,
+  OpenError,
+  SaveError
+};
+
 class LayoutConverter {
   SpecialFolders folders;
 
-  void convertAvroLayout(QString path);
+  ConversionResult convertAvroLayout(QString path);
   
-  void saveLayout(QJsonObject obj, QString path);
+  ConversionResult saveLayout(QJsonObject obj, QString path);
 
   QString unescapeXML(QString escaped);
 public:
-  void convertLayout(QString path);
+  ConversionResult convertLayout(QString path);
 };

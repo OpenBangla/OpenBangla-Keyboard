@@ -23,9 +23,9 @@
 #include <QJsonObject>
 #include "LayoutConverter.h"
 
-void LayoutConverter::convertLayout(QString path)
+ConversionResult LayoutConverter::convertLayout(QString path)
 {
-  convertAvroLayout(path);
+  return convertAvroLayout(path);
 }
 
 QString LayoutConverter::unescapeXML(QString escaped)
@@ -38,10 +38,13 @@ QString LayoutConverter::unescapeXML(QString escaped)
   return escaped;
 }
 
-void LayoutConverter::convertAvroLayout(QString path)
+ConversionResult LayoutConverter::convertAvroLayout(QString path)
 {
   QFile xmlFile(path);
-  xmlFile.open(QIODevice::ReadOnly | QIODevice::Text);
+  if(!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text))
+  {
+    return OpenError;
+  }
   QByteArray xmlData = xmlFile.readAll();
   QXmlStreamReader *xmlReader = new QXmlStreamReader(xmlData);
   QJsonObject layoutDev, infoLayout, info, keys;
@@ -57,12 +60,25 @@ void LayoutConverter::convertAvroLayout(QString path)
     if (xmlReader->isStartElement())
     {
       QStringRef name = xmlReader->name();
-      if (name == "Layout" || name == "KeyData" || name == "AvroKeyboardVersion")
+      if (name == "Layout" || name == "KeyData")
       {
         continue;
       }
 
       QString data = xmlReader->readElementText().trimmed();
+
+      // Check layout version, we only support Avro Keyboard 5 layout.
+      if(name == "AvroKeyboardVersion")
+      {
+        if(data != "5")
+        {
+          xmlReader->clear();
+          xmlFile.close();
+          delete xmlReader;
+          return UnsupportedLayout;
+        }
+      }
+
       if (!name.contains("Key") && !name.contains("Num"))
       {
         // Meta data conversion
@@ -132,21 +148,25 @@ void LayoutConverter::convertAvroLayout(QString path)
   layout["info"] = info;
   layout["layout"] = keys;
 
-  QFileInfo fileInfo(xmlFile);
-  QString savePath = folders.getUserLayoutPath() + fileInfo.baseName() + ".json";
-  saveLayout(layout, savePath);
-
   xmlReader->clear();
   xmlFile.close();
   delete xmlReader;
+
+  QFileInfo fileInfo(xmlFile);
+  QString savePath = folders.getUserLayoutPath() + fileInfo.baseName() + ".json";
+  return saveLayout(layout, savePath);
 }
 
-void LayoutConverter::saveLayout(QJsonObject obj, QString path) 
+ConversionResult LayoutConverter::saveLayout(QJsonObject obj, QString path) 
 {
   QFile saveFile(path);
-    saveFile.open(QIODevice::WriteOnly);
+  if(!saveFile.open(QIODevice::WriteOnly)) {
+    return SaveError;
+  }
 
-    QJsonDocument json(obj);
-    saveFile.write(json.toJson());
-    saveFile.close();
+  QJsonDocument json(obj);
+  saveFile.write(json.toJson());
+  saveFile.close();
+
+  return Ok;
 }

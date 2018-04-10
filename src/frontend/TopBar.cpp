@@ -242,11 +242,25 @@ void TopBar::layoutMenuLayouts_clicked() {
 }
 
 void TopBar::layoutMenuInstall_clicked() {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Select Keyboard Layout"), QDir::homePath(), tr("Avro Keyboard 5 Keyboard Layout (*.avrolayout)"));
+  QString fileName = QFileDialog::getOpenFileName(Q_NULLPTR, "Select Keyboard Layout", QDir::homePath(), "Avro Keyboard 5 Keyboard Layout (*.avrolayout)");
   LayoutConverter conv;
   if(fileName.contains(".avrolayout") && fileName != "") {
-    conv.convertLayout(fileName);
-    QMessageBox::information(this, tr("OpenBangla Keyboard"), tr("Layout Installed Successfully"), QMessageBox::Ok);
+    ConversionResult res = conv.convertLayout(fileName);
+    switch(res) {
+      case Ok:
+        QMessageBox::information(Q_NULLPTR, "OpenBangla Keyboard", "Layout Installed Successfully", QMessageBox::Ok);
+        break;
+      case UnsupportedLayout:
+        QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Unsupported Layout file!\nOpenBangla Keyboard only supports Avro Keyboard 5 layouts.", QMessageBox::Ok);
+        break;
+      case OpenError:
+        QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "An error occured when opening the layout file!", QMessageBox::Ok);
+        break;
+      case SaveError:
+        QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occured when saving the file!", QMessageBox::Ok);
+        break;
+    }
+    
   }
   RefreshLayouts();
 }
