@@ -10,6 +10,7 @@
         "qtreewidget": "cpp",
         "atomic": "cpp",
         "qvariant": "cpp",
-        "qmap": "cpp"
+        "qmap": "cpp",
+        "system_error": "cpp"
     }
 }
