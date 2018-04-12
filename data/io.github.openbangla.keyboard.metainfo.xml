@@ -15,7 +15,7 @@
       So Avro Keyboard users will feel at home with OpenBangla Keyboard in Linux.
 ​    </p>
 ​  </description>
-  <project_license>GPL-3.0-or-later</project_license>
+  <project_license>GPL-3.0+</project_license>
 ​  <url type="homepage">http://openbangla.github.io/</url>
   <url type="bugtracker">https://github.com/OpenBangla/OpenBangla-Keyboard/issues</url>
 ​</component>
