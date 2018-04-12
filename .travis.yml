@@ -7,10 +7,10 @@ compiler:
   - g++
   - clang
 before_install:
-  - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
+  - sudo add-apt-repository --yes ppa:beineri/opt-qt591-trusty
   - sudo apt-get update -qq
-  - sudo apt-get install libibus-1.0-dev qt510base qt510declarative
-  - source /opt/qt510/bin/qt510-env.sh
+  - sudo apt-get install libibus-1.0-dev qt59base qt59declarative
+  - source /opt/qt59/bin/qt59-env.sh
 before_script:
   - mkdir build
   - cd build
