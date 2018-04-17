@@ -81,5 +81,4 @@ install(FILES ${CMAKE_SOURCE_DIR}/data/io.github.openbangla.keyboard.metainfo.xm
     DESTINATION ${datadir}/metainfo)
 
 install(TARGETS OpenBangla-Engine
-        RUNTIME DESTINATION ${LIBEXEC_DIR}
-        )
+    RUNTIME DESTINATION ${PROJECT_DATADIR})
