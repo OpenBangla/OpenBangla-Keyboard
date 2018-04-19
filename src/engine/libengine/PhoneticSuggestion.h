@@ -53,6 +53,7 @@ public:
   void saveSelection(QString selected);
 
   QStringList Suggest(QString word);
+  void updateEngine();
 };
 
 #endif /* end of include guard: PHONETIC_SUGGESTION_H */

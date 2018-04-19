@@ -769,3 +769,7 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
     }
   }
 }
+
+void MethodPhonetic::updateEngine() {
+  suggest.updateEngine();
+}

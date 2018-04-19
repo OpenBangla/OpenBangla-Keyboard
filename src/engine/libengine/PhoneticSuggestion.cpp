@@ -286,3 +286,7 @@ QStringList PhoneticSuggestion::Suggest(QString word) {
 
   return suggestion;
 }
+
+void PhoneticSuggestion::updateEngine() {
+  autodict.loadUserAutoCorrectFile();
+}

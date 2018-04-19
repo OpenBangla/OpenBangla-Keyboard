@@ -33,13 +33,17 @@ AutoCorrect::AutoCorrect() {
   dictFile.close();
 
   // Now load user specific AutoCorrect file
-  dictFile.setFileName(folders.getUserAutoCorrectFile());
+  loadUserAutoCorrectFile();
+}
+
+void AutoCorrect::loadUserAutoCorrectFile() {
+  QFile dictFile(folders.getUserAutoCorrectFile());
   if (!dictFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[AutoCorrect]: Error: Couldn't open user specific AutoCorrect file!\n");
   }
+  QByteArray data = dictFile.readAll();
+  QJsonDocument json(QJsonDocument::fromJson(data));
 
-  data = dictFile.readAll();
-  json = QJsonDocument::fromJson(data);
   usrDict = json.object();
   dictFile.close();
 }

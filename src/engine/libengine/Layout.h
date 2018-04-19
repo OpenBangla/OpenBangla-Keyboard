@@ -84,6 +84,8 @@ public:
   /* Confirms that one of the sended candidates has been commited
    * @commited the string that was commited */
   virtual void candidateCommited(std::string commited) = 0;
+  /* Update internal suggestion making mechanism */
+  virtual void updateEngine() = 0;
 };
 
 class Layout {
@@ -126,6 +128,8 @@ public:
   void candidateCommited(std::string commited);
   /* Checks is the candidate window horizontal */
   bool isCandidateWinHorizontal();
+  /* Update internal suggestion making mechanism */
+  void updateEngine();
 };
 
 /* Global */

@@ -44,6 +44,10 @@ public:
   Suggestion getCandidates();
   bool handledKeyPress();
   void candidateCommited(std::string commited);
+  
+  void updateEngine() {
+    // Nothing to do :)
+  }
 };
 
 #endif /* end of include guard: METHOD_FIXED_LAYOUT_MODERN */

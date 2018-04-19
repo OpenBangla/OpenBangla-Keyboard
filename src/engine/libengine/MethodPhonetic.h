@@ -42,6 +42,7 @@ public:
   Suggestion getCandidates();
   bool handledKeyPress();
   void candidateCommited(std::string commited);
+  void updateEngine();
 };
 
 #endif /* end of include guard: METHOD_PHONETIC_H */

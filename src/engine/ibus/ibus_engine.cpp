@@ -196,6 +196,8 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
 
 void ibus_enable_cb(IBusEngine *engine) {
   LOG_INFO("[IM:iBus]: IM enabled\n");
+  // Update Engine
+  gLayout->updateEngine();
 }
 
 void ibus_disable_cb(IBusEngine *engine) {

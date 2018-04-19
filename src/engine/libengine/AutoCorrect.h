@@ -35,6 +35,8 @@ public:
   QString getCorrected(QString word);
   /* Get AutoCorrect entries */
   QVariantMap getEntries();
+  /* Load user AutoCorrect file */
+  void loadUserAutoCorrectFile();
   /* Load Avro Phonetic to convert Banglish to Bangla */
   void loadAvroPhonetic();
   /* Convert Banglish to Avro Phonetic */

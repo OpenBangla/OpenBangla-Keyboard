@@ -18,7 +18,6 @@
 
 #include <QTreeWidget>
 #include <QSignalBlocker>
-#include <QProcess>
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
 
@@ -79,20 +78,6 @@ void AutoCorrectDialog::addEntries(QString replace, QString with) {
 void AutoCorrectDialog::on_buttonBox_accepted()
 {
    dict.saveUserAutoCorrectFile();
-
-   /* OpenBangla-Engine needs to be restarted to load autocorrect file
-    * again and produce suggestions based on the modifications made by
-    * the user. To restart OpenBangla-Engine, we have to restart ibus
-    * itself.
-    */
-   QProcess *process = new QProcess(this);
-   process->start("/usr/bin/ibus", {"restart"});
-   connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-    [=](int exitCode, QProcess::ExitStatus exitStatus){
-        if(exitStatus == QProcess::CrashExit) {
-            // TODO: View a messagebox
-        }
-     });
 }
 
 void AutoCorrectDialog::on_buttonBox_rejected()

@@ -120,3 +120,7 @@ void Layout::candidateCommited(std::string commited) {
 bool Layout::isCandidateWinHorizontal() {
   return gSettings->getCandidateWinHorizontal();
 }
+
+void Layout::updateEngine() {
+  mth->updateEngine();
+}
