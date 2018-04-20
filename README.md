@@ -7,7 +7,7 @@
 Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard.html) are present in OpenBangla Keyboard. So Avro Keyboard users will feel at home with OpenBangla Keyboard in Linux.
 
 [![Build Status](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard.svg?branch=master)](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard)
-[![Downloads](https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg)]()
+[![Downloads](https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg)](https://github.com/OpenBangla/OpenBangla-Keyboard/releases/latest)
 [![Discord](https://img.shields.io/discord/436879388362014740.svg)](https://discord.gg/HXK7QnJ)
 
 ### Features
