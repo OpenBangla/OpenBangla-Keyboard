@@ -8,7 +8,7 @@ Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard
 
 [![Build Status](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard.svg?branch=master)](https://travis-ci.org/OpenBangla/OpenBangla-Keyboard)
 [![Downloads](https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg)]()
-![Discord](https://img.shields.io/discord/436879388362014740.svg)
+[![Discord](https://img.shields.io/discord/436879388362014740.svg)](https://discord.gg/HXK7QnJ)
 
 ### Features
 * Phonetic Keyboard Layout (Avro Phonetic)
