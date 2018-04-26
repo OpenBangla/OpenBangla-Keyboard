@@ -12,7 +12,7 @@ Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard
 
 > This project is powered by github 🌟s ^ go ahead and [star it please](https://github.com/OpenBangla/OpenBangla-Keyboard/stargazers).
 
-### Features
+## Features
 * Features Avro Keyboard like Top Bar for easy configuration.
 * Phonetic Keyboard Layout (Avro Phonetic)
   - 100% compatibility with the current Avro Phonetic scheme.
@@ -30,29 +30,29 @@ Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard
   - Automatic fixing of "Chandrabindu" position.
 * Layout Viewer
 
-### Installing
+## Installing
 > If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
-#### Ubuntu
+### Ubuntu
 OpenBangla Keyboard supports Ubuntu 16.04 LTS, 17.10 and 18.04 LTS version. Install OpenBangla Keyboard on your system by running the following commands:
 ```bash
 $ curl -s https://packagecloud.io/install/repositories/mominul/OpenBangla/script.deb.sh | sudo bash
 $ sudo apt install openbangla-keyboard
 ```
 After the installation completes, you have to log out from your session. If your Ubuntu version is 17.04 or earlier visit [Configure on Unity DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Unity-DE) otherwise visit [Configure on Gnome DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Gnome-DE).
-#### Fedora
+### Fedora
 OpenBangla Keyboard supports Fedora 27 version. Install OpenBangla Keyboard on your system by running the following commands:
 ```bash
 $ curl -s https://packagecloud.io/install/repositories/mominul/OpenBangla/script.rpm.sh | sudo bash
 $ sudo dnf install openbangla-keyboard
 ```
 After the installation completes, you have to log out from your session. You will need to [configure Gnome DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Gnome-DE) for OpenBangla Keyboard to work.
-#### Other
+### Other
 Linux packages can be downloaded from [here](https://github.com/OpenBangla/OpenBangla-Keyboard/releases)
 
 If you need help, there is a wiki [page](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard)
 
-### Compiling on GNU/Linux
-#### Build & Install procedures
+## Compiling on GNU/Linux
+### Build & Install procedures
 OpenBangla Keyboard currently needs following libraries and binaries
 * GNU GCC, G++ compiler or Clang
 * GNU Make or Ninja
