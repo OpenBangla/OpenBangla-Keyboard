@@ -69,7 +69,7 @@ add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
 
 
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "An OpenSource Bengali input method")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")
 set(CPACK_PACKAGE_VENDOR "Muhammad Mominul Huque")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Muhammad Mominul Huque <mominul2082@gmail.com>")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/data/Readme.txt")
