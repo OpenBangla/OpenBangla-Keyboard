@@ -39,7 +39,7 @@ void Settings::setTopBarWindowPosition(QPoint pos) {
 
 QPoint Settings::getTopBarWindowPosition() {
   setting->sync();
-  return setting->value("window/positions/TopBar").toPoint();
+  return setting->value("window/positions/TopBar", QPoint(0, 0)).toPoint();
 }
 
 void Settings::setLayoutViewerWindowPosition(QPoint pos) {

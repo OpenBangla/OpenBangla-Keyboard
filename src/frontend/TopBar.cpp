@@ -17,6 +17,7 @@
  */
 
 #include <QSystemTrayIcon>
+#include <QDesktopWidget>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
@@ -72,17 +73,23 @@ TopBar::~TopBar()
 void TopBar::SetupTopBar() {
   #if defined(linux) || defined(__linux__) || defined(__linux)
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint|Qt::X11BypassWindowManagerHint|Qt::WindowDoesNotAcceptFocus|Qt::NoDropShadowWindowHint);
-  /* Added:
-   * X11 Window Manager Bypass TaskBar -> Qt::X11BypassWindowManagerHint
-   * No Focus Window -> Qt::WindowDoesNotAcceptFocus
-   * Disable Shadowed Window -> Qt::NoDropShadowWindowHint
-   */
   #else
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   #endif
   this->setFixedSize(QSize(this->width(), this->height()));
 
-  move(gSettings->getTopBarWindowPosition());
+  if(gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
+    int width = this->frameGeometry().width();
+    int height = this->frameGeometry().height();
+    QDesktopWidget wid;
+
+    int screenWidth = wid.screen()->width();
+    int screenHeight = wid.screen()->height();
+
+    this->setGeometry((screenWidth/2)-(width/2),(screenHeight/2)-(height/2),width,height);
+  } else {
+    move(gSettings->getTopBarWindowPosition());
+  }
 }
 
 void TopBar::SetupPopupMenus() {
