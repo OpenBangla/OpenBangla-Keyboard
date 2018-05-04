@@ -23,6 +23,8 @@
 
 int main(int argc, char *argv []) {
   QApplication app(argc, argv);
+  app.setApplicationName("OpenBangla Keyboard");
+  app.setApplicationVersion(PROJECT_VERSION);
 
   // Prevent many instances of the app to be launched
   QString name = "com.openbangla.keyboard";

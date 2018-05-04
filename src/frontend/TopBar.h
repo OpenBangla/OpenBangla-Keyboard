@@ -35,6 +35,7 @@ class AboutDialog;
 class AboutFile;
 class SettingsDialog;
 class AutoCorrectDialog;
+class QSimpleUpdater;
 
 class TopBar : public QMainWindow
 {
@@ -81,6 +82,7 @@ private:
     bool canMoveTopbar;
     int pressedMouseX, pressedMouseY;
     QSystemTrayIcon *tray;
+    QSimpleUpdater *updater;
 
     /* Dialogs */
     AboutDialog *aboutDialog;
@@ -120,6 +122,7 @@ private:
     void SetupTopBar();
     void SetupPopupMenus();
     void SetupTrayIcon();
+    void checkForUpdate();
 
     void RefreshLayouts();
 };

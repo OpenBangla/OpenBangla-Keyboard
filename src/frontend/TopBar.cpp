@@ -32,7 +32,10 @@
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
 #include "AutoCorrectDialog.h"
+#include "QSimpleUpdater.h"
 #include "ui_TopBar.h"
+
+static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
 TopBar::TopBar(QWidget *parent) :
     QMainWindow(parent),
@@ -42,6 +45,7 @@ TopBar::TopBar(QWidget *parent) :
 
     gLayout = new Layout();
     gSettings = new Settings();
+    updater = QSimpleUpdater::getInstance();
 
     /* Dialogs */
     aboutDialog = new AboutDialog(this);
@@ -54,6 +58,7 @@ TopBar::TopBar(QWidget *parent) :
     SetupTopBar();
     SetupPopupMenus();
     SetupTrayIcon();
+    checkForUpdate();
 }
 
 TopBar::~TopBar()
@@ -90,6 +95,13 @@ void TopBar::SetupTopBar() {
   } else {
     move(gSettings->getTopBarWindowPosition());
   }
+}
+
+void TopBar::checkForUpdate() {
+  updater->setModuleVersion(DEFS_URL, PROJECT_VERSION);
+  updater->setNotifyOnUpdate(DEFS_URL, true);
+  updater->setDownloaderEnabled(DEFS_URL, false);
+  updater->checkForUpdates(DEFS_URL);
 }
 
 void TopBar::SetupPopupMenus() {

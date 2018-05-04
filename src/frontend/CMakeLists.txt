@@ -1,4 +1,4 @@
-include_directories(../engine/ ../shared ../engine/libengine)
+include_directories(../engine/ ../shared ../engine/libengine 3rdParty)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)

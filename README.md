@@ -87,7 +87,8 @@ Use iBus UI or run `ibus-setup` to add **OpenBangla Keyboard**. To get help on c
 ## Acknowledgements
  - Mehdi Hasan Khan for originally developing and maintaining Avro Keyboard,
  - Rifat Nabi for porting Avro Phonetic to Javascript,
- - [Sarim Khan](https://github.com/sarim) for writing ibus-avro.
+ - [Sarim Khan](https://github.com/sarim) for writing ibus-avro,
+ - [QSimpleUpdater](https://github.com/alex-spataru/QSimpleUpdater) for providing update mechanism.
 
 ## License
 Licensed under [GPL 3 Licence](https://opensource.org/licenses/GPL-3.0).
