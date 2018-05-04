@@ -32,18 +32,16 @@ Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard
 
 ## Installing
 > If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
-### Ubuntu
-OpenBangla Keyboard supports Ubuntu 16.04 LTS, 17.10 and 18.04 LTS version. Install OpenBangla Keyboard on your system by running the following commands:
+### Ubuntu and it's derivatives
+We provide Deb packages for Ubuntu 16.04 LTS, 17.10 and 18.04 LTS version. Download installation package from [releases page](https://github.com/OpenBangla/OpenBangla-Keyboard/releases) and install OpenBangla Keyboard on your system by opening the file in Software Installer or by running the following command:
 ```bash
-$ curl -s https://packagecloud.io/install/repositories/mominul/OpenBangla/script.deb.sh | sudo bash
-$ sudo apt install openbangla-keyboard
+$ sudo apt install ./path/to/OpenBanglaKeyboard/package
 ```
 After the installation completes, you have to log out from your session. If your Ubuntu version is 17.04 or earlier visit [Configure on Unity DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Unity-DE) otherwise visit [Configure on Gnome DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Gnome-DE).
-### Fedora
-OpenBangla Keyboard supports Fedora 27 version. Install OpenBangla Keyboard on your system by running the following commands:
+### Fedora and it's derivatives
+We provide RPM package for Fedora 27 version. Download installation package from [releases page](https://github.com/OpenBangla/OpenBangla-Keyboard/releases) and install OpenBangla Keyboard on your system by opening the file in Software Installer or by running the following command:
 ```bash
-$ curl -s https://packagecloud.io/install/repositories/mominul/OpenBangla/script.rpm.sh | sudo bash
-$ sudo dnf install openbangla-keyboard
+$ sudo dnf install ./path/to/OpenBanglaKeyboard/package
 ```
 After the installation completes, you have to log out from your session. You will need to [configure Gnome DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Gnome-DE) for OpenBangla Keyboard to work.
 ### Other
