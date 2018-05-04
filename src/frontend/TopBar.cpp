@@ -48,10 +48,10 @@ TopBar::TopBar(QWidget *parent) :
     updater = QSimpleUpdater::getInstance();
 
     /* Dialogs */
-    aboutDialog = new AboutDialog(this);
-    layoutViewer = new LayoutViewer(this);
-    settingsDialog = new SettingsDialog(this);
-    autoCorrectDialog = new AutoCorrectDialog(this);
+    aboutDialog = new AboutDialog(Q_NULLPTR);
+    layoutViewer = new LayoutViewer(Q_NULLPTR);
+    settingsDialog = new SettingsDialog(Q_NULLPTR);
+    autoCorrectDialog = new AutoCorrectDialog(Q_NULLPTR);
 
     ui->buttonIcon->installEventFilter(this);
 
