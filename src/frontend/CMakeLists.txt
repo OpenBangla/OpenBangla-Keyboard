@@ -1,8 +1,10 @@
-include_directories(../engine/ ../shared ../engine/libengine)
+include_directories(../engine/ ../shared ../engine/libengine 3rdParty)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+add_subdirectory(3rdParty)
 
 set(SRC_GUI TopBar.cpp
             AboutDialog.cpp
@@ -19,7 +21,7 @@ set(SRC_MAIN main.cpp
              SingleInstance.cpp)
 
 add_executable(OpenBangla-Keyboard ${SRC_MAIN} ${SRC_GUI})
-target_link_libraries(OpenBangla-Keyboard libEngine libShared Qt5::Widgets Qt5::Network)
+target_link_libraries(OpenBangla-Keyboard libEngine libShared 3rdParty Qt5::Widgets Qt5::Network)
 
 install(TARGETS OpenBangla-Keyboard
 RUNTIME DESTINATION  ${PROJECT_DATADIR})

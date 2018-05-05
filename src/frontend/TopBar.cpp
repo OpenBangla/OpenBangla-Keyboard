@@ -17,6 +17,7 @@
  */
 
 #include <QSystemTrayIcon>
+#include <QDesktopWidget>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
@@ -31,7 +32,10 @@
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
 #include "AutoCorrectDialog.h"
+#include "QSimpleUpdater.h"
 #include "ui_TopBar.h"
+
+static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
 TopBar::TopBar(QWidget *parent) :
     QMainWindow(parent),
@@ -41,18 +45,20 @@ TopBar::TopBar(QWidget *parent) :
 
     gLayout = new Layout();
     gSettings = new Settings();
+    updater = QSimpleUpdater::getInstance();
 
     /* Dialogs */
-    aboutDialog = new AboutDialog(this);
-    layoutViewer = new LayoutViewer(this);
-    settingsDialog = new SettingsDialog(this);
-    autoCorrectDialog = new AutoCorrectDialog(this);
+    aboutDialog = new AboutDialog(Q_NULLPTR);
+    layoutViewer = new LayoutViewer(Q_NULLPTR);
+    settingsDialog = new SettingsDialog(Q_NULLPTR);
+    autoCorrectDialog = new AutoCorrectDialog(Q_NULLPTR);
 
     ui->buttonIcon->installEventFilter(this);
 
     SetupTopBar();
     SetupPopupMenus();
     SetupTrayIcon();
+    checkForUpdate();
 }
 
 TopBar::~TopBar()
@@ -72,17 +78,30 @@ TopBar::~TopBar()
 void TopBar::SetupTopBar() {
   #if defined(linux) || defined(__linux__) || defined(__linux)
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint|Qt::X11BypassWindowManagerHint|Qt::WindowDoesNotAcceptFocus|Qt::NoDropShadowWindowHint);
-  /* Added:
-   * X11 Window Manager Bypass TaskBar -> Qt::X11BypassWindowManagerHint
-   * No Focus Window -> Qt::WindowDoesNotAcceptFocus
-   * Disable Shadowed Window -> Qt::NoDropShadowWindowHint
-   */
   #else
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   #endif
   this->setFixedSize(QSize(this->width(), this->height()));
 
-  move(gSettings->getTopBarWindowPosition());
+  if(gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
+    int width = this->frameGeometry().width();
+    int height = this->frameGeometry().height();
+    QDesktopWidget wid;
+
+    int screenWidth = wid.screen()->width();
+    int screenHeight = wid.screen()->height();
+
+    this->setGeometry((screenWidth/2)-(width/2),(screenHeight/2)-(height/2),width,height);
+  } else {
+    move(gSettings->getTopBarWindowPosition());
+  }
+}
+
+void TopBar::checkForUpdate() {
+  updater->setModuleVersion(DEFS_URL, PROJECT_VERSION);
+  updater->setNotifyOnUpdate(DEFS_URL, true);
+  updater->setDownloaderEnabled(DEFS_URL, false);
+  updater->checkForUpdates(DEFS_URL);
 }
 
 void TopBar::SetupPopupMenus() {
