@@ -30,8 +30,13 @@ Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard
   - Automatic fixing of "Chandrabindu" position.
 * Layout Viewer
 
-## Installing
+## Before you start
 > If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
+
+### Fast installation
+Just run the command below, it will download and install OpenBangla-Keyboard for you.
+
+
 ### Ubuntu and it's derivatives
 We provide Deb packages for Ubuntu 16.04 LTS, 17.10 and 18.04 LTS version. Download installation package from [releases page](https://github.com/OpenBangla/OpenBangla-Keyboard/releases) and install OpenBangla Keyboard on your system by opening the file in Software Installer or by running the following command:
 ```bash
