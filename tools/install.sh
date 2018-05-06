@@ -59,7 +59,7 @@ if [ $os = "Ubuntu" ]; then
     wget https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/OpenBangla-Keyboard_1.4.0-ubuntu18.04.deb -O /tmp/OpenBangla.deb
     sudo apt install /tmp/OpenBangla.deb
 
-elif [$os = "ManjaroLinux"];then
+elif [ $os = "ManjaroLinux" ];then
       wget https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/openbangla-keyboard-1.4.0-1-x86_64-archlinux.pkg.tar.xz -O /tmp/OpenBangla.pkg.tar.xz
       sudo pacman -U /tmp/OpenBangla.pkg.tar.xz
 
