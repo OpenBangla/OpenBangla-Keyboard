@@ -46,11 +46,17 @@ $ sudo dnf install ./path/to/OpenBanglaKeyboard/package.rpm
 ```
 After the installation completes, you have to log out from your session. You will need to [configure Gnome DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Gnome-DE) for OpenBangla Keyboard to work.
 ### Arch Linux and it's derivatives
-There is a package for OpenBangla-Keyboard in the Arch User Repository (aur). You can install it in one command with your favorite aur helper. Example commands for some popular tools:
+There are two packages for OpenBangla-Keyboard in the Arch User Repository(AUR). Use `openbangla-keyboard` if you want to make and install the package from source. Otherwise, use `openbangla-keyboard-bin` to use the binary package released for Arch and its derivatives by the maintainer. You can install it in one command with your favorite aur helper. Example commands for some popular tools:
 ```
+$ ## openbangla-keyboard
 $ pacaur -S openbangla-keyboard
 $ yay -S openbangla-keyboard
 $ yaourt -S openbangla-keyboard
+
+$ ## openbangla-keyboard-bin
+$ pacaur -S openbangla-keyboard-bin
+$ yay -S openbangla-keyboard-bin
+$ yaourt -S openbangla-keyboard-bin
 ```
 Or install manually:
 ```
@@ -59,7 +65,7 @@ git clone https://aur.archlinux.org/openbangla-keyboard.git
 cd openbangla-keyboard
 makepkg -risc
 ```
-We also provide a `.pkg.tar.xz` package for Arch Linux. Download installation package from [releases page](https://github.com/OpenBangla/OpenBangla-Keyboard/releases) and install OpenBangla Keyboard on your system by running the following command:
+We also provide a `.pkg.tar.xz` package for Arch Linux which you can easily install by following any of the above instruction for `openbangla-keyboard-bin`. If you want to install it manually, download the installation package from [releases page](https://github.com/OpenBangla/OpenBangla-Keyboard/releases) and install OpenBangla Keyboard on your system by running the following command:
 ```bash
 $ sudo pacman -U /path/to/OpenBanglaKeyboard/package.pkg.tar.xz
 ```
