@@ -46,7 +46,20 @@ $ sudo dnf install ./path/to/OpenBanglaKeyboard/package.rpm
 ```
 After the installation completes, you have to log out from your session. You will need to [configure Gnome DE](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Gnome-DE) for OpenBangla Keyboard to work.
 ### Arch Linux and it's derivatives
-We provide `.pkg.tar.xz` package for Arch Linux. Download installation package from [releases page](https://github.com/OpenBangla/OpenBangla-Keyboard/releases) and install OpenBangla Keyboard on your system by running the following command:
+There is a package for OpenBangla-Keyboard in the Arch User Repository (aur). You can install it in one command with your favorite aur helper. Example commands for some popular tools:
+```
+$ pacaur -S openbangla-keyboard
+$ yay -S openbangla-keyboard
+$ yaourt -S openbangla-keyboard
+```
+Or install manually:
+```
+sudo pacman -S base-devel git
+git clone https://aur.archlinux.org/openbangla-keyboard.git
+cd openbangla-keyboard
+makepkg -risc
+```
+We also provide a `.pkg.tar.xz` package for Arch Linux. Download installation package from [releases page](https://github.com/OpenBangla/OpenBangla-Keyboard/releases) and install OpenBangla Keyboard on your system by running the following command:
 ```bash
 $ sudo pacman -U /path/to/OpenBanglaKeyboard/package.pkg.tar.xz
 ```
