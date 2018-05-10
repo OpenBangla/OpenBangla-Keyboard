@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # detect OS
-os=$(python3 -c "exec(\"import platform\\nprint(platform.linux_distribution()[0])\")" )
+os=$(python -c "exec(\"import platform\\nprint(platform.linux_distribution()[0])\")" )
 echo Downloading $os Binary
 
 # get super user access 
