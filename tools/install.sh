@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-os=$(python -c "exec(\"import platform\\nprint(platform.linux_distribution()[0])\")" )
+os=$(python3 -c "exec(\"import platform\\nprint(platform.linux_distribution()[0])\")" )
 echo $os
 
 
