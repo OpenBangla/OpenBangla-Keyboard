@@ -18,7 +18,6 @@ case $os in
 ("arch")
       wget -q --show-progress https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/openbangla-keyboard-1.4.0-1-x86_64-archlinux.pkg.tar.xz -O /tmp/OpenBangla.pkg.tar.xz
       sudo pacman -U /tmp/OpenBangla.pkg.tar.xz
-      sudo rm -f /tmp/OpenBangla.pkg.tar.xz
       ;;
       
 ("Fedora")
