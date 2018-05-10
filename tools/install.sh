@@ -5,14 +5,13 @@ os=$(python -c "exec(\"import platform\\nprint(platform.linux_distribution()[0])
 echo Downloading $os Binary
 
 # get super user access 
-[ "$UID" -eq 0 ] || exec sudo "$0" "$@"
 
 # start downloading and install
 case $os in
 
 ("Ubuntu")
       wget -q --show-progress https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/OpenBangla-Keyboard_1.4.0-ubuntu18.04.deb -O ./OpenBangla.deb
-      apt install ./OpenBangla.deb
+      sudo apt install ./OpenBangla.deb
       rm -f ./OpenBangla.deb
       ;;
 
