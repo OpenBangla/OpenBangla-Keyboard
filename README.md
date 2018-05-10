@@ -41,7 +41,7 @@ Open your terminal and run this command on your bash shell. NB : It has to be **
 bash -c "$(wget -q --show-progress  https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh -O -)"
 ```
 
-If this does not workout for you please check the [Wiki](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard) for manual installation.
+If this does not workout for you please create an [issue](https://github.com/OpenBangla/OpenBangla-Keyboard/issues). While we look into the problem you can check the [Wiki](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard) for manual installation.
 
 ## Compiling on GNU/Linux
 ### Build & Install procedures
