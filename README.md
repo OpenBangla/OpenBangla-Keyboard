@@ -31,8 +31,8 @@ Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard
 * Layout Viewer
 
 ## Installing
-> If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
-> Make sure you have a working internet connection. Your package manager might need to download dependencies when installing.
+> If you had installed OpenBangla Keyboard's earlier version, please uninstall it first.
+> Make sure you have a **working internet connection**. Your package manager might need to download dependencies when installing.
 
 ## Simple Install
 
@@ -41,7 +41,7 @@ Open your terminal and run this command on your bash shell. NB : It has to be **
 bash -c "$(wget -q --show-progress  https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh -O -)"
 ```
 
-if this does not workout for you please check the [Wiki](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard) for manual installation.
+If this does not workout for you please check the [Wiki](https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard) for manual installation.
 
 ## Compiling on GNU/Linux
 ### Build & Install procedures
