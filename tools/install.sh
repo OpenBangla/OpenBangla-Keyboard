@@ -11,13 +11,13 @@ echo $os
 case $os in
 
 ("Ubuntu")
-      wget https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/OpenBangla-Keyboard_1.4.0-ubuntu18.04.deb -O ./OpenBangla.deb
+      wget -q --show-progress https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/OpenBangla-Keyboard_1.4.0-ubuntu18.04.deb -O ./OpenBangla.deb
       apt install ./OpenBangla.deb
       rm -f ./OpenBangla.deb
       ;;
 
 ("arch")
-      wget https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/openbangla-keyboard-1.4.0-1-x86_64-archlinux.pkg.tar.xz -O /tmp/OpenBangla.pkg.tar.xz
+      wget -q --show-progress https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/1.4.0/openbangla-keyboard-1.4.0-1-x86_64-archlinux.pkg.tar.xz -O /tmp/OpenBangla.pkg.tar.xz
       pacman -U /tmp/OpenBangla.pkg.tar.xz
       ;;
 
