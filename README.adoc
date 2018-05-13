@@ -14,7 +14,13 @@ endif::[]
 :toc:
 :toc-placement!:
 
-image::https://avatars3.githubusercontent.com/u/3137042?v=3&s=200[float="center"]
+++++
+<p align="center">
+<img src="https://github.com/OpenBangla/OpenBangla-Keyboard/raw/master/data/128.png">
+</p>
+++++
+
+//image::https://avatars3.githubusercontent.com/u/3137042?v=3&s=200[float="right"]
 
 This gist is to capture some of the semantics of GitHub-Flavored Asciidoc. GitHub uses Asciidoctor in safe mode to render files with the extension `.adoc`,
 `.ad`, and `.asciidoc`. This works in standard repositories as well as gists.
