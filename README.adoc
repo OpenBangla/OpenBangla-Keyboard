@@ -60,7 +60,7 @@ toc::[]
 * Layout Viewer
 
 
-== Installing
+== Installation
 
 WARNING: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first. Make sure you have a **working internet connection**. Your package manager might need to download dependencies when installing.
 
@@ -70,3 +70,52 @@ bash -c "$(wget -q --show-progress  https://raw.githubusercontent.com/OpenBangla
 ```
 
 If this does not workout for you please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue]. While we look into the problem you can check the https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[Wiki] for Distrowise/Distro-specific Install Instructions. After you have installed OpenBangla Keyboard, you will need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
+
+== Compiling on GNU/Linux
+
+OpenBangla Keyboard currently needs following libraries and binaries
+
+* GNU GCC, G++ compiler or Clang
+* GNU Make or Ninja
+* CMake
+* Qt 5.5 or later
+* iBus development library
+
+On a Ubuntu/Debian system you can easily install them like this
+```bash
+sudo apt-get install build-essential cmake libibus-1.0-dev qt5-default
+```
+
+On a Fedora system you can easily install them like this
+```bash
+sudo dnf install @buildsys-build cmake qt5-qtdeclarative-devel ibus-devel
+```
+On a Arch Linux / Arch Based system you can easily install them like this
+```bash
+sudo pacman -Sy base-devel cmake qt5-base libibus
+```
+
+After you have installed required libraries and binaries. Clone this repository and change the directory to the cloned folder and issue the commands:
+```bash
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+```
+
+Use iBus UI or run `ibus-setup` to add **OpenBangla Keyboard**. To get help on configuring OpenBangla Keyboard, visit https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Gnome-DE[Configure on Gnome DE] or https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configure-on-Unity-DE[Configure on Unity DE].
+
+
+== Acknowledgements
+ * Mehdi Hasan Khan for originally developing and maintaining Avro Keyboard,
+ * Rifat Nabi for porting Avro Phonetic to Javascript,
+ * https://github.com/sarim[Sarim Khan] for writing ibus-avro,
+ * https://github.com/alex-spataru/QSimpleUpdater[QSimpleUpdater] for providing update mechanism.
+ 
+
+== License
+Licensed under [GPL 3 Licence](https://opensource.org/licenses/GPL-3.0).
+
+Made with ❤️ by https://github.com/mominul[Muhammad Mominul Huque].
+
+ 
