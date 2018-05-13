@@ -35,43 +35,41 @@ image:https://travis-ci.org/OpenBangla/OpenBangla-Keyboard.svg?branch=master[Bui
 image:https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg[Downloads, link=https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg] {nbsp}
 image:https://img.shields.io/discord/436879388362014740.svg[Discord, link=https://discord.gg/HXK7QnJ]
 
+CAUTION: This project is powered by github 🌟s. Go ahead and *star* it please
 
-
+ 
 toc::[]
 
-I think most people use Markdown when creating documentation on GitHub. Markdown is great and easy, but I often create technical documentation or training material where some of the additional semantics of Asciidoc are really helpful.
 
-== GitHub-Specific customizations
-Often you might need to adjust some settings whether your document is being rendered on GitHub or offline using link::http://asciidoctor.org/[Asciidoctor] or similar. In your header simply use the `ifdef` preprocessor macro:
+== Features
+* Features Avro Keyboard like Top Bar for easy configuration.
+* Phonetic Keyboard Layout (Avro Phonetic)
+  ** 100% compatibility with the current Avro Phonetic scheme.
+  ** Dictionary support can predict and suggest phonetically similar words with correct spelling on the fly.
+  ** Autocorrect support brings commonly used English words to Bangla (like, Facebook, download etc.) even with their original English spelling.
+  ** User can add and edit Autocorrect entries.
+  ** Support for preview window to see originally typed text right under the cursor.
+* Fixed Keyboard Layout
+  ** OpenBangla Keyboard comes with Probhat, Munir Optima, Avro Easy, Bornona, National (Jatiya) keyboard layout out of the box.
+  ** OpenBangla Keyboard supports Avro Keyboard Layout file (version 5).
+* Typing Automation tools for Fixed Keyboard layout
+  ** Automatic Vowel Forming.
+  ** Old Style “Reph”.
+  ** Traditional Kar Joining.
+  ** Automatic fixing of "Chandrabindu" position.
+* Layout Viewer
 
-[source,asciidoc]
-----
-\ifdef::env-github[]
-:imagesdir: foo/
-\endif::[]
-----
 
-Everything within the `ifdef` and `endif` will only be processed if you are on GitHub.
+== Installing
 
-== Table of Contents
+WARNING: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first. Make sure you have a **working internet connection**. Your package manager might need to download dependencies when installing.
 
-Often, I will write long documents that could use some extra organization (like this one). Asciidoc can automatically render a _Table of Contents (TOC)_ for you, based upon the heading structure you have used. This is especially handy for web content or PDFs (when rendered offline).
+Open your terminal and run this command on your bash shell. NB : It has to be **BASH**, otherwise it won't work.
+```bash
+bash -c "$(wget -q --show-progress  https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh -O -)"
+```
 
-To use TOC on GitHub, I use the following: 
-
-[source,asciidoc]
-----
-:toc:
-:toc-placement!:
-
-Here is my preamble paragraph, but I could really place the TOC anywhere! Lorem ipsum foo bar baz.
-
-toc::[]
-----
-
-The `:toc:` directive states that I want to enable the `:toc:` processor. The `:toc-placement!:` directive undefines the current placement strategy, which doesn't work on GitHub. This indicates that we will specify where the TOC should be placed.
-
-Lastly, the `toc::[]` tells Asciidoctor to render a Table of Contents for the whole document here.
+If this does not workout for you please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue]. While we look into the problem you can check the https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[Wiki] for Distrowise/Distro-specific Install Instructions. After you have installed OpenBangla Keyboard, you will need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
 
 == Admonitions
 
