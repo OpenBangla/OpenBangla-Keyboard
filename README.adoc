@@ -1,4 +1,5 @@
-= GitHub Flavored Asciidoc (GFA)
+//Ref : https://gist.github.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74
+= OpenBangla Keyboard (OBK)
 ifdef::env-github[]
 :imagesdir:
  https://gist.githubusercontent.com/path/to/gist/revision/dir/with/all/images
@@ -9,10 +10,12 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 ifndef::env-github[]
-:imagesdir: ./
+:imagesdir: .
 endif::[]
 :toc:
 :toc-placement!:
+
+//HTML for formating the logo
 
 ++++
 <p align="center">
@@ -20,10 +23,13 @@ endif::[]
 </p>
 ++++
 
-//image::https://avatars3.githubusercontent.com/u/3137042?v=3&s=200[float="right"]
 
-This gist is to capture some of the semantics of GitHub-Flavored Asciidoc. GitHub uses Asciidoctor in safe mode to render files with the extension `.adoc`,
-`.ad`, and `.asciidoc`. This works in standard repositories as well as gists.
+*OpenBangla Keyboard* is an OpenSource, Unicode compliant Bengali Input Method for GNU/Linux systems.
+It's a full fledged Bengali input method with typing automation tools, includes many famous typing methods such as Avro Phonetic,
+Probhat, Munir Optima, National (Jatiya) etc.
+
+Most of the features of https://www.omicronlab.com/avro-keyboard.html[Avro Keyboard] are present in OpenBangla Keyboard. 
+So Avro Keyboard users will feel at home with OpenBangla Keyboard in Linux.
 
 toc::[]
 
