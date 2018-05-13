@@ -1,3 +1,104 @@
+= GitHub Flavored Asciidoc (GFA)
+ifdef::env-github[]
+:imagesdir:
+ https://gist.githubusercontent.com/path/to/gist/revision/dir/with/all/images
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+ifndef::env-github[]
+:imagesdir: ./
+endif::[]
+:toc:
+:toc-placement!:
+
+image::https://avatars3.githubusercontent.com/u/3137042?v=3&s=200[float="right"]
+
+This gist is to capture some of the semantics of GitHub-Flavored Asciidoc. GitHub uses Asciidoctor in safe mode to render files with the extension `.adoc`,
+`.ad`, and `.asciidoc`. This works in standard repositories as well as gists.
+
+toc::[]
+
+I think most people use Markdown when creating documentation on GitHub. Markdown is great and easy, but I often create technical documentation or training material where some of the additional semantics of Asciidoc are really helpful.
+
+== GitHub-Specific customizations
+Often you might need to adjust some settings whether your document is being rendered on GitHub or offline using link::http://asciidoctor.org/[Asciidoctor] or similar. In your header simply use the `ifdef` preprocessor macro:
+
+[source,asciidoc]
+----
+\ifdef::env-github[]
+:imagesdir: foo/
+\endif::[]
+----
+
+Everything within the `ifdef` and `endif` will only be processed if you are on GitHub.
+
+== Table of Contents
+
+Often, I will write long documents that could use some extra organization (like this one). Asciidoc can automatically render a _Table of Contents (TOC)_ for you, based upon the heading structure you have used. This is especially handy for web content or PDFs (when rendered offline).
+
+To use TOC on GitHub, I use the following: 
+
+[source,asciidoc]
+----
+:toc:
+:toc-placement!:
+
+Here is my preamble paragraph, but I could really place the TOC anywhere! Lorem ipsum foo bar baz.
+
+toc::[]
+----
+
+The `:toc:` directive states that I want to enable the `:toc:` processor. The `:toc-placement!:` directive undefines the current placement strategy, which doesn't work on GitHub. This indicates that we will specify where the TOC should be placed.
+
+Lastly, the `toc::[]` tells Asciidoctor to render a Table of Contents for the whole document here.
+
+== Admonitions
+
+Admonitions are handy blocks that are rendered seperate from the rest of the content. This is really helpful for explaining something that doesn't quite fit the flow, but you need to get the readers' attention. The `ifdef` portion and the rest of the lines that start with `:` go in your header.
+
+The pre-processor directive `ifdef` checks to see if the GitHub environment is being used. To account for the opposite, create a block using `ifndef`. You can look at the header of this document to see how I managed it for this document.
+
+.Example conditional enabling of icons for admonitions
+[source,asciidoc]
+----
+\ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+\endif::[]
+  
+[NOTE]
+====
+A sample note admonition.
+We can use gemoji icons in the Asciidoctor markup.
+We assign an icon name to the document
+attributes `tip-caption`, `note-caption` and `important-caption`.
+====
+ 
+TIP: It works!
+ 
+IMPORTANT: Asciidoctor is awesome, don't forget!
+ 
+CAUTION: Don't forget to add the `...-caption` document attributes in the header of the document on GitHub.
+ 
+WARNING: You have no reason not to use Asciidoctor.
+----
+
+Will be rendered as:
+ 
+[NOTE]
+====
+A sample note admonition.
+We can use gemoji icons in the Asciidoctor markup.
+We assign an icon name to the document
+attributes `tip-caption`, `note-caption` and `important-caption`.
+====
+ 
 TIP: It works!
  
 IMPORTANT: Asciidoctor is awesome, don't forget!
@@ -6,3 +107,54 @@ CAUTION: Don't forget to add the `...-caption` document attributes in the header
  
 WARNING: You have no reason not to use Asciidoctor.
 
+
+== Images 
+
+Images work as you would expect using the normal image syntax:
+
+[source,asciidoc]
+----
+image::my_filename.png[]
+----
+
+You can also give an absolute URL:
+
+[source,asciidoc]
+----
+image::https://avatars3.githubusercontent.com/u/3137042?v=3&s=200[]
+----
+
+There is a caveat, however. In order for them to be rendered inline, you must provide an absolute path to the `:imagesdir:` directive. On GitHub this consists of a full _HTTPS_ path to the image's parent directory. Once you have all of your images uploaded into your repository, look at the raw link for one of the images. Select just the directory portion of the URL and put that into:
+
+[source,asciidoc]
+----
+\ifdef::env-github[]
+:imagesdir: https://gist.githubusercontent.com/path/to/gist/revision/dir/with/all/images
+\endif::[]
+----
+
+NOTE: When writing a Gist, all files must be in a single, flat directory. To upload images, you must first create a file in the Gist and then you can clone it. Once you've cloned it locally, you can add anything you like as long as you do not create any subdirectories.
+
+== Callouts
+
+Callouts are a great way to explain code segment and are, in fact, the one of the two main reasons I even looked into asciidoc (the other being the admonition blocks). Asciidoctor will place numbers in the code listing, which you can uses as references following the code listing.
+
+[source,asciidoc]
+----
+[source]
+ ----
+\ifdef::env-github[] \<1> <1>
+:imagesdir: https://gist.githubusercontent.com/path/to/gist/revision/dir/with/all/images
+\endif::[]
+\ifndef::env-github[] \<2> 
+:imagesdir: ./
+\endif::[]
+ ----
+<1> Use the `ifdef` to customize for online rendering <2>
+<2> Use the `ifndef` to customize for offline
+----
+<1> Callouts in the body of the listing appear as either an icon or within parentheses.
+<2> The block underneath allows you to explain the code sample without getting in the way
+
+== What Next?
+I'll add more comments here as I write and find interesting nuances. In the meantime, the link::http://asciidoctor.org[Asciidoctor project] has _GREAT_ link::http://asciidoctor.org/docs/user-manual/[user manual] and link::http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[Quick Reference]!
