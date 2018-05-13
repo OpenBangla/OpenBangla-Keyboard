@@ -62,6 +62,9 @@ public:
 
   void setShowCWPhonetic(bool b);
   bool getShowCWPhonetic();
+
+  void setUpdateCheck(bool b);
+  bool getUpdateCheck();
 };
 
 /* Global */

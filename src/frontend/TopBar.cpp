@@ -58,7 +58,10 @@ TopBar::TopBar(QWidget *parent) :
     SetupTopBar();
     SetupPopupMenus();
     SetupTrayIcon();
-    checkForUpdate();
+    
+    if(gSettings->getUpdateCheck()) {
+      checkForUpdate();
+    }
 }
 
 TopBar::~TopBar()
@@ -166,15 +169,21 @@ void TopBar::SetupPopupMenus() {
   settingsMenu->addAction(settingsMenuShowDialog);
 
   // About Popup Menu
-  aboutMenuLayout = new QAction("About current keyboard layout...", this);
+  aboutMenuLayout = new QAction("About current keyboard layout", this);
   connect(aboutMenuLayout, SIGNAL(triggered()), this, SLOT(aboutMenuLayout_clicked()));
 
-  aboutMenuAbout = new QAction("About OpenBangla Keyboard...", this);
+  aboutMenuAbout = new QAction("About OpenBangla Keyboard", this);
   connect(aboutMenuAbout, SIGNAL(triggered()), this, SLOT(aboutMenuAbout_clicked()));
+
+  aboutMenuUpdate = new QAction("Check for Updates", this);
+  connect(aboutMenuUpdate, &QAction::triggered, [=]() {
+    checkForUpdate();
+  });
 
   aboutMenu = new QMenu(this);
   aboutMenu->addAction(aboutMenuLayout);
   aboutMenu->addAction(aboutMenuAbout);
+  aboutMenu->addAction(aboutMenuUpdate);
 
   // Quit Popup Menu
   quitMenuQuit = new QAction("Quit", this);

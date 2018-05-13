@@ -149,3 +149,13 @@ bool Settings::getShowCWPhonetic() {
   setting->sync();
   return setting->value("settings/CandidateWin/Phonetic", true).toBool();
 }
+
+void Settings::setUpdateCheck(bool b) {
+  setting->setValue("settings/UpdateCheck", b);
+  setting->sync();
+}
+
+bool Settings::getUpdateCheck() {
+  setting->sync();
+  return setting->value("settings/UpdateCheck", true).toBool();
+}

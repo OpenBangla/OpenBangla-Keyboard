@@ -44,6 +44,8 @@ private slots:
 
     void on_btnShowPrevWin_toggled(bool checked);
 
+    void on_btnCheckUpdate_toggled(bool checked);
+
 private:
     Ui::SettingsDialog *ui;
 };

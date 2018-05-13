@@ -110,6 +110,7 @@ private:
     QMenu *aboutMenu;
     QAction *aboutMenuLayout;
     QAction *aboutMenuAbout;
+    QAction *aboutMenuUpdate;
     /* Quit Popup Menu */
     QMenu *quitMenu;
     QAction *quitMenuOnTray;
