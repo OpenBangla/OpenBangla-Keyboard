@@ -31,7 +31,7 @@ Most of the features of [Avro Keyboard](https://www.omicronlab.com/avro-keyboard
 * Layout Viewer
 
 ## Installing
-> If you had installed OpenBangla Keyboard's earlier version, please uninstall it first.
+> If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
 > Make sure you have a **working internet connection**. Your package manager might need to download dependencies when installing.
 
 ## Simple Install
