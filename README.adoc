@@ -114,7 +114,7 @@ Use iBus UI or run `ibus-setup` to add **OpenBangla Keyboard**. To get help on c
  
 
 == License
-Licensed under [GPL 3 Licence](https://opensource.org/licenses/GPL-3.0).
+Licensed under https://opensource.org/licenses/GPL-3.0[GPL 3 Licence].
 
 Made with ❤️ by https://github.com/mominul[Muhammad Mominul Huque].
 
