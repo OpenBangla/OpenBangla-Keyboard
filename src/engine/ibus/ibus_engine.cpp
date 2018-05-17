@@ -277,7 +277,7 @@ void ibus_start_setup(bool ibus) {
                                                     "GPL 3",
                                                     "See About Dialog",
                                                     PKGDATADIR "/icons/OpenBangla-Keyboard.png",
-                                                    "us"
+                                                    "default"
                                                   ));
     ibus_bus_register_component(bus, component);
 
