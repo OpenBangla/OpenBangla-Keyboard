@@ -26,7 +26,10 @@
 /* From libUIOHook */
 
 // Begin Alphanumeric Zone
-#define VC_BACKQUOTE							0x0029  // '`` , '~'
+// BACKQUTE
+#define VC_GRAVE							    0x0029  // '`'
+//ESC
+#define VC_TILDE	                            0x0001  // '~'
 
 #define VC_1									0x0002
 #define VC_2									0x0003
@@ -39,8 +42,22 @@
 #define VC_9									0x000A
 #define VC_0									0x000B
 
-#define VC_MINUS								0x000C	// '-' , '_'
-#define VC_EQUALS								0x000D	// '=' , '+'
+// F1-F12
+#define VC_EXCLAM								0x003B
+#define VC_AT									0x003C
+#define VC_HASH									0x003D
+#define VC_DOLLAR								0x003E
+#define VC_PERCENT								0x003F
+#define VC_CIRCUM								0x0040
+#define VC_AMPERSAND							0x0041
+#define VC_ASTERISK								0x0042
+#define VC_PAREN_LEFT							0x0043
+#define VC_PAREN_RIGHT	                        0x0044
+#define VC_UNDERSCORE							0x0057
+#define VC_PLUS									0x0058
+
+#define VC_MINUS								0x000C	// '-'
+#define VC_EQUALS								0x000D	// '='
 #define VC_BACKSPACE							0x000E
 
 #define VC_TAB									0x000F
@@ -72,17 +89,29 @@
 #define VC_Y									0x0015
 #define VC_Z									0x002C
 
-#define VC_OPEN_BRACKET							0x001A	// '[' , '{'
-#define VC_CLOSE_BRACKET						0x001B	// ']' , '}'
-#define VC_BACK_SLASH							0x002B	// '\' , '|'
+#define VC_BRACKET_LEFT							0x001A	// '['
+#define VC_BRACKET_RIGHT						0x001B	// ']'
+#define VC_BACK_SLASH							0x002B	// '\'
+
+//F13-F15
+#define VC_BRACE_LEFT							0x005B  // '{'
+#define VC_BRACE_RIGHT							0x005C  // '}'
+#define VC_BAR 	                                0x005D  // '|'
 
 #define VC_SEMICOLON							0x0027	// ';'
-#define VC_QUOTE								0x0028 // ''' , '"'
+#define VC_APOSTROPHE							0x0028  // '''
 #define VC_ENTER								0x001C
 
-#define VC_COMMA								0x0033	// ',' , '<'
-#define VC_PERIOD								0x0034	// '.' , '>'
-#define VC_SLASH								0x0035	// '/' , '?'
+#define VC_COMMA								0x0033	// ','
+#define VC_PERIOD								0x0034	// '.'
+#define VC_SLASH								0x0035	// '/'
+
+// F16-F20
+#define VC_COLON								0x0063 // ':'
+#define VC_QUOTE								0x0064 // '"'
+#define VC_LESS									0x0065 // '<'
+#define VC_GREATER								0x0066 // '>'
+#define VC_QUESTION                         	0x0067 // '?'
 
 #define VC_SPACE								0x0039
 // End Alphanumeric Zone
