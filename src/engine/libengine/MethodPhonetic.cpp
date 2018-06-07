@@ -669,8 +669,7 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
         handledKey = false; return {};
       }
    // End Numeric Zone
-   case VC_SHIFT_R:
-   case VC_SHIFT_L:
+   case VC_SHIFT:
       if(EnglishT != "") {
         handledKey = true; return suggested;
       }

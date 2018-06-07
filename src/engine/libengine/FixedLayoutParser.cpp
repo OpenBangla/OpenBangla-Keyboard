@@ -233,12 +233,12 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
   QString mod;
   if(!shift && !altgr && !shiftaltgr) {
     mod = "Normal";
+  } else if(shiftaltgr) {
+    mod = "ShiftAltGr";
   } else if(shift) {
     mod = "Shift";
   } else if(altgr) {
     mod = "AltGr";
-  } else if(shiftaltgr) {
-    mod = "ShiftAltGr";
   }
 
   QString keyName;
