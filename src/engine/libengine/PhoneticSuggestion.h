@@ -33,6 +33,7 @@ private:
   QMap<QString, QString> PadMap;
   QMap<QString, QStringList> phoneticCache;
   QMap<QString, Cache> tempCache;
+  QStringList prevSuggestion;
 
   QMap<QString, QString> separatePadding(QString word);
   bool isKar(QString word);
@@ -50,7 +51,7 @@ public:
   void setLayout(QJsonObject lay);
 
   QString getPrevSelected();
-  void saveSelection(QString selected);
+  void saveSelection(int index);
 
   QStringList Suggest(QString word);
   void updateEngine();

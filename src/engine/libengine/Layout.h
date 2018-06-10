@@ -81,9 +81,9 @@ public:
   virtual Suggestion getCandidates() = 0;
   /* Is the last key was processed? */
   virtual bool handledKeyPress() = 0;
-  /* Confirms that one of the sended candidates has been commited
-   * @commited the string that was commited */
-  virtual void candidateCommited(std::string commited) = 0;
+  /* Confirms that one of the send candidates has been commited
+   * @index index of the candidate string that was commited */
+  virtual void candidateCommited(int index) = 0;
   /* Update internal suggestion making mechanism */
   virtual void updateEngine() = 0;
 };
@@ -123,9 +123,9 @@ public:
   IMCommand handleSpecialKey(int key);
   /* Is the last key was processed? */
   bool handledKeyPress();
-  /* Confirms that one of the sended candidates has been commited
-   * @lcommited the string that was commited */
-  void candidateCommited(std::string commited);
+  /* Confirms that one of the send candidates has been commited
+   * @index index of the candidate string that was commited */
+  void candidateCommited(int index);
   /* Checks is the candidate window horizontal */
   bool isCandidateWinHorizontal();
   /* Update internal suggestion making mechanism */

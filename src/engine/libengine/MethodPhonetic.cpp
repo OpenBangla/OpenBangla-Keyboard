@@ -16,8 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#include "im.h"
-#include "log.h"
 #include "keycode.h"
 #include "MethodPhonetic.h"
 #include "Settings.h"
@@ -39,12 +37,9 @@ Suggestion MethodPhonetic::createSuggestion() {
   if(EnglishT == "") {
     // If there is no text available, don't do anything
     return {};
-  } else {/*
-    if(changedCandidateSelection) {
-      // User selected other candidate, save current selection
-      suggest.saveSelection(QString::fromStdString(im_get_selection(im_get_selection_id())));
-      changedCandidateSelection = false;
-    }*/
+  } else {
+    // Reset
+    changedCandidateSelection = false;
 
     // Build the suggestions
     list = suggest.Suggest(EnglishT).toVector();
@@ -689,10 +684,10 @@ bool MethodPhonetic::handledKeyPress() {
   return handledKey;
 }
 
-void MethodPhonetic::candidateCommited(std::string commited) {
+void MethodPhonetic::candidateCommited(int index) {
   if(changedCandidateSelection) {
     // User selected other candidates
-    suggest.saveSelection(QString::fromStdString(commited));
+    suggest.saveSelection(index);
     changedCandidateSelection = false;
   }
   // Clear cache & stored suggestions
