@@ -57,7 +57,7 @@ QString CacheManager::getCandidateSelection(QString word) {
 }
 
 void CacheManager::writeCandidateSelection(QString word, QString sel) {
-  candidateSel[word] = sel;
+  candidateSel.insert(word, sel);
   saveCandidateSelection();
 }
 

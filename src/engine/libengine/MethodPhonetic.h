@@ -41,7 +41,7 @@ public:
   IMCommand handleSpecialKey(int key);
   Suggestion getCandidates();
   bool handledKeyPress();
-  void candidateCommited(std::string commited);
+  void candidateCommited(int index);
   void updateEngine();
 };
 

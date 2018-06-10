@@ -113,8 +113,8 @@ bool Layout::handledKeyPress() {
   return mth->handledKeyPress();
 }
 
-void Layout::candidateCommited(std::string commited) {
-  mth->candidateCommited(commited);
+void Layout::candidateCommited(int index) {
+  mth->candidateCommited(index);
 }
 
 bool Layout::isCandidateWinHorizontal() {

@@ -112,8 +112,7 @@ void PhoneticSuggestion::appendIfNotContains(QStringList &array, QString item) {
 
 void PhoneticSuggestion::addToTempCache(QString full, QString base, QString eng) {
   if (!tempCache.contains(full)) {
-    tempCache[full].base = base;
-    tempCache[full].eng = eng;
+    tempCache[full] = {base, eng};
   }
 }
 
@@ -240,6 +239,8 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
 
   appendIfNotContains(words, phonetic);
 
+  prevSuggestion << words;
+
   for (auto& word : words) {
     // smiley rule
     if (autoCorrect == writtenWord) {
@@ -254,23 +255,19 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
   return words;
 }
 
-void PhoneticSuggestion::saveSelection(QString selected) {
-  if (tempCache.contains(selected)) {
-    QString base = tempCache[selected].base;
-    QString eng = tempCache[selected].eng;
-    if(cacheMan.getCandidateSelection(eng) == "") {
-      cacheMan.writeCandidateSelection(eng, base);
-    }
-  }
+void PhoneticSuggestion::saveSelection(int index) {
+  cacheMan.writeCandidateSelection(PadMap["middle"], prevSuggestion[index]);
 }
 
 QStringList PhoneticSuggestion::Suggest(QString word) {
   QStringList suggestion;
   QMap<QString, QString> splitWord = separatePadding(word);
-  PadMap = splitWord;
+  prevSuggestion.clear();
 
   splitWord["begin"] = parser.parse(splitWord["begin"]);
   splitWord["end"] = parser.parse(splitWord["end"]);
+
+  PadMap = splitWord;
 
   QString phonetic = parser.parse(splitWord["middle"]);
 
