@@ -44,7 +44,6 @@ private:
   bool isVowel(QString word);
   QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic);
   void appendIfNotContains(QStringList &array, QString item);
-  QStringList sortByPhoneticRelevance(QString phonetic, QStringList dictSuggestion);
   QStringList getDictionarySuggestion();
   QString getAutocorrect(QString word);
   QStringList addSuffix();

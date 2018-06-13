@@ -77,22 +77,6 @@ void PhoneticSuggestion::separatePadding(QString word) {
   }
 }
 
-QStringList PhoneticSuggestion::sortByPhoneticRelevance(QString phonetic, QStringList dictSuggestion) {
-  std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&] (QString i, QString j) {
-    int dist1 = levenshtein_distance(phonetic, i);
-    int dist2 = levenshtein_distance(phonetic, j);
-    if(dist1 < dist2) {
-      return true;
-    } else if(dist1 > dist2) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-
-  return dictSuggestion;
-}
-
 bool PhoneticSuggestion::isKar(QString word) {
   if (word.length() < 1) {
     return false;
@@ -221,7 +205,18 @@ QString PhoneticSuggestion::getPrevSelected() {
 QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic) {
   QStringList words;
 
-  dictSuggestion = sortByPhoneticRelevance(phonetic, dictSuggestion);
+  // Sort dictionary suggestion
+  std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&] (QString i, QString j) {
+    int dist1 = levenshtein_distance(phonetic, i);
+    int dist2 = levenshtein_distance(phonetic, j);
+    if(dist1 < dist2) {
+      return true;
+    } else if(dist1 > dist2) {
+      return false;
+    } else {
+      return true;
+    }
+  });
 
   if (autoCorrect != "") {
     words.append(autoCorrect);
