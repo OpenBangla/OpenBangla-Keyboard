@@ -10,7 +10,6 @@
 #include <QRegularExpression>
 #include <QStringList>
 #include "Database.h"
-#include "regexparser.h"
 #include "log.h"
 
 Database::Database() {
@@ -98,7 +97,6 @@ void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
 
 QStringList Database::find(QString word) {
   if(word != "") {
-    RegexParser rgx;
     QStringList tablelist;
     QStringList suggestions;
     char lmc = word.toStdString().at(0); // Left Most Character

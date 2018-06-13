@@ -24,7 +24,7 @@ void MethodPhonetic::setLayout(QJsonObject lay) {
   suggest.setLayout(lay);
 }
 
-std::vector<std::string> MethodPhonetic::toStdVector(QVector<QString> vec) {
+std::vector<std::string> MethodPhonetic::toStdVector(QStringList vec) {
   std::vector<std::string> v;
   for(auto& str : vec) {
     v.push_back(str.toStdString());
@@ -42,7 +42,7 @@ Suggestion MethodPhonetic::createSuggestion() {
     changedCandidateSelection = false;
 
     // Build the suggestions
-    list = suggest.Suggest(EnglishT).toVector();
+    list = suggest.Suggest(EnglishT);
 
     prevSelected = 0;
 
