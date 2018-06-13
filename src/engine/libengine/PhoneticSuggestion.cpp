@@ -221,10 +221,12 @@ QString PhoneticSuggestion::getPrevSelected() {
 QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic) {
   QStringList words;
 
+  dictSuggestion = sortByPhoneticRelevance(phonetic, dictSuggestion);
+
   if (autoCorrect != "") {
     words.append(autoCorrect);
     if (autoCorrect != writtenWord) {
-      dictSuggestion.append(autoCorrect);
+      dictSuggestion.prepend(autoCorrect);
     }
   }
 
@@ -239,8 +241,6 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
   for (auto& word : dictSuggestionWithSuffix) {
     appendIfNotContains(words, word);
   }
-
-  words = sortByPhoneticRelevance(phonetic, words);
 
   appendIfNotContains(words, phonetic);
 
