@@ -18,7 +18,7 @@
 class Database {
   QMap<QString, QVector<QString>> word_table;
   QMap<QString, QString> suffix_table;
-  QMap<char, QStringList> prefixTableMap;
+  QMap<QChar, QStringList> prefixTableMap;
   RegexParser rgx;
 public:
   Database();
