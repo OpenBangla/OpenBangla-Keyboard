@@ -19,16 +19,24 @@
 #include "Settings.h"
 #include "qlevenshtein.hpp"
 
-PhoneticSuggestion::PhoneticSuggestion() {}
+PhoneticSuggestion::PhoneticSuggestion() {
+  // Set patterns and optimize them
+  rgxPadding.setPattern("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
+  rgxKar.setPattern("^[\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc\u09c4]$");
+  rgxVowel.setPattern("^[\u0985\u0986\u0987\u0988\u0989\u098a\u098b\u098f\u0990\u0993\u0994\u098c\u09e1\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc]$");
+  rgxPadding.optimize();
+  rgxKar.optimize();
+  rgxVowel.optimize();
+}
 
 void PhoneticSuggestion::setLayout(QJsonObject lay) {
   parser.setLayout(lay);
 }
 
-QStringList PhoneticSuggestion::getDictionarySuggestion(QMap<QString, QString> splitWord) {
+QStringList PhoneticSuggestion::getDictionarySuggestion() {
   QStringList words;
 
-  QString key = splitWord["middle"].toLower();
+  QString key = padMiddle.toLower();
 
   if (phoneticCache.contains(key)) {
     words = phoneticCache[key];
@@ -39,7 +47,7 @@ QStringList PhoneticSuggestion::getDictionarySuggestion(QMap<QString, QString> s
   return words;
 }
 
-QString PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> splitWord) {
+QString PhoneticSuggestion::getAutocorrect(QString word) {
   QString corrected;
 
   QString autoCorrect = autodict.getCorrected(parser.fixString(word));
@@ -51,7 +59,7 @@ QString PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> 
       corrected = parser.parse(autoCorrect);
     }
   } else {
-    QString withCorrection = autodict.getCorrected(splitWord["middle"]);
+    QString withCorrection = autodict.getCorrected(padMiddle);
     if (withCorrection != "") {
       corrected = parser.parse(withCorrection);
     }
@@ -60,32 +68,13 @@ QString PhoneticSuggestion::getAutocorrect(QString word, QMap<QString, QString> 
   return corrected;
 }
 
-QMap<QString, QString> PhoneticSuggestion::separatePadding(QString word) {
-  QMap<QString, QString> cutted;
-  QRegularExpression rgx("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
-  QRegularExpressionMatch match = rgx.match(word);
+void PhoneticSuggestion::separatePadding(QString word) {
+  QRegularExpressionMatch match = rgxPadding.match(word);
   if(match.hasMatch()) {
-    cutted["begin"] = match.captured(1);
-    cutted["middle"] = match.captured(2);
-    cutted["end"] = match.captured(3);
+    padBegin = match.captured(1);
+    padMiddle = match.captured(2);
+    padEnd = match.captured(3);
   }
-  return cutted;
-}
-
-QStringList PhoneticSuggestion::sortByPhoneticRelevance(QString phonetic, QStringList dictSuggestion) {
-  std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&] (QString i, QString j) {
-    int dist1 = levenshtein_distance(phonetic, i);
-    int dist2 = levenshtein_distance(phonetic, j);
-    if(dist1 < dist2) {
-      return true;
-    } else if(dist1 > dist2) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-
-  return dictSuggestion;
 }
 
 bool PhoneticSuggestion::isKar(QString word) {
@@ -93,7 +82,7 @@ bool PhoneticSuggestion::isKar(QString word) {
     return false;
   }
 
-  return word.left(1).contains(QRegularExpression("^[\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc\u09c4]$"));
+  return word.left(1).contains(rgxKar);
 }
 
 bool PhoneticSuggestion::isVowel(QString word) {
@@ -101,7 +90,7 @@ bool PhoneticSuggestion::isVowel(QString word) {
     return false;
   }
 
-  return word.left(1).contains(QRegularExpression("^[\u0985\u0986\u0987\u0988\u0989\u098a\u098b\u098f\u0990\u0993\u0994\u098c\u09e1\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc]$"));
+  return word.left(1).contains(rgxVowel);
 }
 
 void PhoneticSuggestion::appendIfNotContains(QStringList &array, QString item) {
@@ -116,10 +105,10 @@ void PhoneticSuggestion::addToTempCache(QString full, QString base, QString eng)
   }
 }
 
-QStringList PhoneticSuggestion::addSuffix(QMap<QString, QString> splitWord) {
+QStringList PhoneticSuggestion::addSuffix() {
   QStringList tempList;
   QString fullWord;
-  QString dictKey = splitWord["middle"].toLower();
+  QString dictKey = padMiddle.toLower();
   int len = dictKey.length();
 
   QStringList rList;
@@ -171,7 +160,7 @@ QStringList PhoneticSuggestion::addSuffix(QMap<QString, QString> splitWord) {
 
 QString PhoneticSuggestion::getPrevSelected() {
   QString selected;
-  QString word = PadMap["middle"];
+  QString word = padMiddle;
   int len = word.length();
 
   if (cacheMan.getCandidateSelection(word) != "") {
@@ -210,32 +199,43 @@ QString PhoneticSuggestion::getPrevSelected() {
     }
   }
 
-  return PadMap["begin"] + selected + PadMap["end"];
+  return padBegin + selected + padEnd;
 }
 
-QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord) {
+QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic) {
   QStringList words;
+
+  // Sort dictionary suggestion
+  std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&] (QString i, QString j) {
+    int dist1 = levenshtein_distance(phonetic, i);
+    int dist2 = levenshtein_distance(phonetic, j);
+    if(dist1 < dist2) {
+      return true;
+    } else if(dist1 > dist2) {
+      return false;
+    } else {
+      return true;
+    }
+  });
 
   if (autoCorrect != "") {
     words.append(autoCorrect);
     if (autoCorrect != writtenWord) {
-      dictSuggestion.append(autoCorrect);
+      dictSuggestion.prepend(autoCorrect);
     }
   }
 
-  if (phoneticCache[splitWord["middle"].toLower()].isEmpty()) {
+  if (phoneticCache[padMiddle.toLower()].isEmpty()) {
     if (!dictSuggestion.isEmpty()) {
-      phoneticCache[splitWord["middle"].toLower()] = dictSuggestion;
+      phoneticCache[padMiddle.toLower()] = dictSuggestion;
     }
   }
 
-  QStringList dictSuggestionWithSuffix = addSuffix(splitWord);
+  QStringList dictSuggestionWithSuffix = addSuffix();
 
   for (auto& word : dictSuggestionWithSuffix) {
     appendIfNotContains(words, word);
   }
-
-  words = sortByPhoneticRelevance(phonetic, words);
 
   appendIfNotContains(words, phonetic);
 
@@ -245,10 +245,10 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
     // smiley rule
     if (autoCorrect == writtenWord) {
       if (autoCorrect != word) {
-        word = splitWord["begin"] + word + splitWord["end"];
+        word = padBegin + word + padEnd;
       }
     } else {
-      word = splitWord["begin"] + word + splitWord["end"];
+      word = padBegin + word + padEnd;
     }
   }
 
@@ -256,29 +256,27 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
 }
 
 void PhoneticSuggestion::saveSelection(int index) {
-  cacheMan.writeCandidateSelection(PadMap["middle"], prevSuggestion[index]);
+  cacheMan.writeCandidateSelection(padMiddle, prevSuggestion[index]);
 }
 
 QStringList PhoneticSuggestion::Suggest(QString word) {
   QStringList suggestion;
-  QMap<QString, QString> splitWord = separatePadding(word);
+  separatePadding(word);
   prevSuggestion.clear();
 
-  splitWord["begin"] = parser.parse(splitWord["begin"]);
-  splitWord["end"] = parser.parse(splitWord["end"]);
+  padBegin = parser.parse(padBegin);
+  padEnd = parser.parse(padEnd);
 
-  PadMap = splitWord;
-
-  QString phonetic = parser.parse(splitWord["middle"]);
+  QString phonetic = parser.parse(padMiddle);
 
   if(!gSettings->getShowCWPhonetic()) {
     // Return only phonetic suggestion
-    suggestion.append(splitWord["begin"] + phonetic + splitWord["end"]);
+    suggestion.append(padBegin + phonetic + padEnd);
   } else {
-    QStringList dictSuggestion = getDictionarySuggestion(splitWord);
-    QString autoCorrect = getAutocorrect(word, splitWord);
+    QStringList dictSuggestion = getDictionarySuggestion();
+    QString autoCorrect = getAutocorrect(word);
 
-    suggestion = joinSuggestion(word, autoCorrect, dictSuggestion, phonetic, splitWord);
+    suggestion = joinSuggestion(word, autoCorrect, dictSuggestion, phonetic);
   }
 
   return suggestion;
