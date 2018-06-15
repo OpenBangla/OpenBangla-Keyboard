@@ -33,6 +33,7 @@ std::map<guint,int> key;
 void initKeycode() {
   // Begin Alphanumeric Zone
   key[IBUS_KEY_grave] = VC_GRAVE;
+  key[IBUS_KEY_dead_grave] = VC_GRAVE;
   key[IBUS_KEY_asciitilde] = VC_TILDE;
 
   key[IBUS_KEY_0] = VC_0;
