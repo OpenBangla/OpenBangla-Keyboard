@@ -116,7 +116,7 @@
 #define VC_SPACE								0x0039
 // End Alphanumeric Zone
 
-#define VC_UNKNOWN							0x0046
+#define VC_UNKNOWN							    0x0046
 
 // Begin Edit Key Zone
 #define VC_INSERT								0x0E52
