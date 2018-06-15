@@ -200,6 +200,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
       break;
     case VC_PAREN_RIGHT:
       key = "0_Shift";
+      break;
    case VC_MINUS:
       key = "Minus_Normal";
       break;
