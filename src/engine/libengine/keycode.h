@@ -43,7 +43,7 @@
 #define VC_0									0x000B
 
 // F1-F12
-#define VC_EXCLAM								0x003B
+#define VC_EXCLAIM								0x003B
 #define VC_AT									0x003C
 #define VC_HASH									0x003D
 #define VC_DOLLAR								0x003E

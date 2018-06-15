@@ -87,7 +87,7 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
       handledKey = true;
       return createSuggestion();
 
-    case VC_EXCLAM:
+    case VC_EXCLAIM:
       EnglishT += "!";
       handledKey = true;
       return createSuggestion();

@@ -144,7 +144,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
     case VC_1:
       key = "1_Normal";
       break;
-    case VC_EXCLAM:
+    case VC_EXCLAIM:
       key = "1_Shift";
       break;
     case VC_2:

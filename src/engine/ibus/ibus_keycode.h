@@ -47,7 +47,7 @@ void initKeycode() {
   key[IBUS_KEY_9] = VC_9;
 
   key[IBUS_KEY_parenright] = VC_PAREN_RIGHT;
-  key[IBUS_KEY_exclam] = VC_EXCLAM;
+  key[IBUS_KEY_exclam] = VC_EXCLAIM;
   key[IBUS_KEY_at] = VC_AT;
   key[IBUS_KEY_numbersign] = VC_HASH;
   key[IBUS_KEY_dollar] = VC_DOLLAR;
