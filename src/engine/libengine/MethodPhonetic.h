@@ -28,12 +28,12 @@ class MethodPhonetic : public LayoutMth {
   bool changedCandidateSelection = false;
   int prevSelected;
   PhoneticSuggestion suggest;
-  QVector<QString> list;
+  QStringList list;
   QString EnglishT;
   Suggestion suggested;
 
   Suggestion createSuggestion();
-  std::vector<std::string> toStdVector(QVector<QString> vec);
+  std::vector<std::string> toStdVector(QStringList vec);
 public:
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
@@ -41,7 +41,7 @@ public:
   IMCommand handleSpecialKey(int key);
   Suggestion getCandidates();
   bool handledKeyPress();
-  void candidateCommited(std::string commited);
+  void candidateCommited(int index);
   void updateEngine();
 };
 

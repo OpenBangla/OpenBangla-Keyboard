@@ -30,19 +30,23 @@ private:
   Database db;
   CacheManager cacheMan;
 
-  QMap<QString, QString> PadMap;
+  QRegularExpression rgxPadding;
+  QRegularExpression rgxKar;
+  QRegularExpression rgxVowel;
+
+  QString padBegin, padMiddle, padEnd;
   QMap<QString, QStringList> phoneticCache;
   QMap<QString, Cache> tempCache;
+  QStringList prevSuggestion;
 
-  QMap<QString, QString> separatePadding(QString word);
+  void separatePadding(QString word);
   bool isKar(QString word);
   bool isVowel(QString word);
-  QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic, QMap<QString, QString> splitWord);
+  QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic);
   void appendIfNotContains(QStringList &array, QString item);
-  QStringList sortByPhoneticRelevance(QString phonetic, QStringList dictSuggestion);
-  QStringList getDictionarySuggestion(QMap<QString, QString> splitWord);
-  QString getAutocorrect(QString word, QMap<QString, QString> splitWord);
-  QStringList addSuffix(QMap<QString, QString> splitWord);
+  QStringList getDictionarySuggestion();
+  QString getAutocorrect(QString word);
+  QStringList addSuffix();
   void addToTempCache(QString full, QString base, QString eng);
 
 public:
@@ -50,7 +54,7 @@ public:
   void setLayout(QJsonObject lay);
 
   QString getPrevSelected();
-  void saveSelection(QString selected);
+  void saveSelection(int index);
 
   QStringList Suggest(QString word);
   void updateEngine();

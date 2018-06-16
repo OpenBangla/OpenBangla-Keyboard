@@ -114,12 +114,12 @@ QString FixedLayoutParser::processAlphabetKey(int keyNum, bool shift, bool altgr
   QString mod;
   if(!shift && !altgr && !shiftaltgr) {
     mod = "Normal";
+  } else if(shiftaltgr) {
+    mod = "ShiftAltGr";
   } else if(shift) {
     mod = "Shift";
   } else if(altgr) {
     mod = "AltGr";
-  } else if(shiftaltgr) {
-    mod = "ShiftAltGr";
   }
 
   return QString("Key_%1_%2").arg(key).arg(mod);
@@ -316,7 +316,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
    default:
       return QString("");
   }
-
+  
   QString keyName;
   if(!key.contains("Num")) {
     keyName = QString("Key_%1").arg(key);

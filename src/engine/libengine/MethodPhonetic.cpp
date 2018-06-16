@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "log.h"
 #include "keycode.h"
 #include "MethodPhonetic.h"
 #include "Settings.h"
@@ -25,7 +24,7 @@ void MethodPhonetic::setLayout(QJsonObject lay) {
   suggest.setLayout(lay);
 }
 
-std::vector<std::string> MethodPhonetic::toStdVector(QVector<QString> vec) {
+std::vector<std::string> MethodPhonetic::toStdVector(QStringList vec) {
   std::vector<std::string> v;
   for(auto& str : vec) {
     v.push_back(str.toStdString());
@@ -38,15 +37,12 @@ Suggestion MethodPhonetic::createSuggestion() {
   if(EnglishT == "") {
     // If there is no text available, don't do anything
     return {};
-  } else {/*
-    if(changedCandidateSelection) {
-      // User selected other candidate, save current selection
-      suggest.saveSelection(QString::fromStdString(im_get_selection(im_get_selection_id())));
-      changedCandidateSelection = false;
-    }*/
+  } else {
+    // Reset
+    changedCandidateSelection = false;
 
     // Build the suggestions
-    list = suggest.Suggest(EnglishT).toVector();
+    list = suggest.Suggest(EnglishT);
 
     prevSelected = 0;
 
@@ -626,8 +622,7 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
         handledKey = false; return {};
       }
    // End Numeric Zone
-   case VC_SHIFT_R:
-   case VC_SHIFT_L:
+   case VC_SHIFT:
       if(EnglishT != "") {
         handledKey = true; return suggested;
       }
@@ -647,10 +642,10 @@ bool MethodPhonetic::handledKeyPress() {
   return handledKey;
 }
 
-void MethodPhonetic::candidateCommited(std::string commited) {
+void MethodPhonetic::candidateCommited(int index) {
   if(changedCandidateSelection) {
     // User selected other candidates
-    suggest.saveSelection(QString::fromStdString(commited));
+    suggest.saveSelection(index);
     changedCandidateSelection = false;
   }
   // Clear cache & stored suggestions

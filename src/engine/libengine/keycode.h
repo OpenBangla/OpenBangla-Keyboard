@@ -157,7 +157,11 @@
 #define VC_KP_0									0x0052
 // End Numeric Zone
 
-#define VC_SHIFT_L								0x002A
-#define VC_SHIFT_R								0x0036
+#define VC_SHIFT								0x002A
+//#define VC_SHIFT_R							0x0036
+#define VC_CONTROL							    0x001D
+//#define VC_CONTROL_R							0x0E1D
+#define VC_ALT								    0x0038
+//#define VC_ALT_R	                            0x0E38
 
 #endif /* end of include guard: IM_KEYCODE_H */

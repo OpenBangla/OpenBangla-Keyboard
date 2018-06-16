@@ -106,7 +106,7 @@ void ibus_commit() {
     std::string candidate = suggestions.candidates[candidateSel];
     IBusText *txt = ibus_text_new_from_string((gchar*)candidate.c_str());
     ibus_engine_commit_text(engine,txt);
-    gLayout->candidateCommited(candidate);
+    gLayout->candidateCommited(candidateSel);
   }
   ibus_reset();
   candidateSel = 0;

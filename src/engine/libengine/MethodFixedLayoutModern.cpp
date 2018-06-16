@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
 #include <QRegularExpression>
 #include <QString>
 #include "log.h"
@@ -287,14 +286,29 @@ void MethodFixedLayoutModern::updateCache() {
 Suggestion MethodFixedLayoutModern::getSuggestion(int key, bool shift, bool ctrl, bool alt) {
   // Set modifiers
   bool altgr, shiftaltgr;
-  // Don't catch Ctrl without Shift
-  if(ctrl && !shift) { handledKey = false; return {}; }
+  // Don't catch Ctrl or Alt without AltGr combination.
+  if((ctrl && !alt) || (!ctrl && alt)) {
+    // Handle edge cases
+    if(key == VC_SHIFT || key == VC_ALT) {
+      if(BengaliT != "") {
+        handledKey = true; return suggest;
+      } else {
+        handledKey = false; return {};
+      }
+    } else {
+      handledKey = false; return {};
+    }
+  }
 
   if(ctrl && alt) { altgr = true; } else { altgr = false; }
   if(shift && altgr) { shiftaltgr = true; } else { shiftaltgr = false; }
 
-  if((key == VC_SHIFT_R || key == VC_SHIFT_L) && BengaliT != "") {
-    handledKey = true; return suggest;
+  if((key == VC_SHIFT || key == VC_CONTROL || key == VC_ALT)) {
+    if(BengaliT != "") {
+      handledKey = true; return suggest;
+    } else {
+      handledKey = false; return {};
+    }
   }
 
   QString pressed = parser.getCharForKey(key, shift, altgr, shiftaltgr);
@@ -316,7 +330,7 @@ bool MethodFixedLayoutModern::handledKeyPress() {
   return handledKey;
 }
 
-void MethodFixedLayoutModern::candidateCommited(std::string commited) {
+void MethodFixedLayoutModern::candidateCommited(int index) {
   // Clear cache & stored suggestion
   BengaliT = "";
   suggest = {};

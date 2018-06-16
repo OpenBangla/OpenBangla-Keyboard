@@ -178,8 +178,12 @@ void initKeycode() {
   key[IBUS_KEY_KP_0] = VC_KP_0;
   // End Numeric Zone
 
-  key[IBUS_KEY_Shift_L] = VC_SHIFT_L;
-  key[IBUS_KEY_Shift_R] = VC_SHIFT_R;
+  key[IBUS_KEY_Shift_L] = VC_SHIFT;
+  key[IBUS_KEY_Shift_R] = VC_SHIFT;
+  key[IBUS_KEY_Control_L] = VC_CONTROL;
+  key[IBUS_KEY_Control_R] = VC_CONTROL;
+  key[IBUS_KEY_Alt_L] = VC_ALT;
+  key[IBUS_KEY_Alt_R] = VC_ALT;
 }
 
 int ibus_keycode(guint k) {
