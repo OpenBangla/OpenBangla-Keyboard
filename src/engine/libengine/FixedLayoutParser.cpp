@@ -131,135 +131,159 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
     return layout.value(result).toString();
   }
 
+  bool emulateShift = false;
+
   QString key;
   switch(keyNum) {
     // Begin Alphanumeric Zone
     case VC_GRAVE:
-      key = "BackQuote_Normal";
+      key = "BackQuote";
       break;
     case VC_TILDE:
-      key = "BackQuote_Shift";
+      key = "BackQuote";
+      emulateShift = true;
       break;
 
     case VC_1:
-      key = "1_Normal";
+      key = "1";
       break;
     case VC_EXCLAIM:
-      key = "1_Shift";
+      key = "1";
+      emulateShift = true;
       break;
     case VC_2:
-      key = "2_Normal";
+      key = "2";
       break;
     case VC_AT:
-      key = "2_Shift";
+      key = "2";
+      emulateShift = true;
       break;
     case VC_3:
-      key = "3_Normal";
+      key = "3";
       break;
     case VC_HASH:
-      key = "3_Shift";
+      key = "3";
+      emulateShift = true;
       break;
     case VC_4:
-      key = "4_Normal";
+      key = "4";
       break;
     case VC_DOLLAR:
-      key = "4_Shift";
+      key = "4";
+      emulateShift = true;
       break;
     case VC_5:
-      key = "5_Normal";
+      key = "5";
       break;
     case VC_PERCENT:
-      key = "5_Shift";
+      key = "5";
+      emulateShift = "Shift";
       break;
     case VC_6:
-      key = "6_Normal";
+      key = "6";
       break;
     case VC_CIRCUM:
-      key = "6_Shift";
+      key = "6";
+      emulateShift = true;
       break;
     case VC_7:
-      key = "7_Normal";
+      key = "7";
       break;
     case VC_AMPERSAND:
-      key = "7_Shift";
+      key = "7";
+      emulateShift = true;
       break;
     case VC_8:
-      key = "8_Normal";
+      key = "8";
       break;
     case VC_ASTERISK:
-      key = "8_Shift";
+      key = "8";
+      emulateShift = true;
       break;
     case VC_9:
-      key = "9_Normal";
+      key = "9";
       break;
     case VC_PAREN_LEFT:
-      key = "9_Shift";
+      key = "9";
+      emulateShift = true;
       break;
    case VC_0:
-      key = "0_Normal";
+      key = "0";
       break;
     case VC_PAREN_RIGHT:
-      key = "0_Shift";
+      key = "0";
+      emulateShift = true;
       break;
    case VC_MINUS:
-      key = "Minus_Normal";
+      key = "Minus";
       break;
     case VC_UNDERSCORE:
-      key = "Minus_Shift";
+      key = "Minus";
+      emulateShift = true;
    case VC_EQUALS:
-      key = "Equals_Normal";
+      key = "Equals";
       break;
     case VC_PLUS:
-      key = "Equals_Shift";
+      key = "Equals";
+      emulateShift = true;
       break;
 
    case VC_BRACKET_LEFT:
-      key = "OpenBracket_Normal";
+      key = "OpenBracket";
       break;
     case VC_BRACE_LEFT:
-      key = "OpenBracket_Shift";
+      key = "OpenBracket";
+      emulateShift = true;
       break;
    case VC_BRACKET_RIGHT:
-      key = "CloseBracket_Normal";
+      key = "CloseBracket";
       break;
     case VC_BRACE_RIGHT:
-      key = "CloseBracket_Shift";
+      key = "CloseBracket";
+      emulateShift = true;
       break;
    case VC_BACK_SLASH:
-      key = "BlackSlash_Normal";
+      key = "BlackSlash";
       break;
     case VC_BAR:
-      key = "BlackSlash_Shift";
+      key = "BlackSlash";
+      emulateShift = true;
       break;
    case VC_SEMICOLON:
-      key = "Semicolon_Normal";
+      key = "Semicolon";
       break;
    case VC_COLON:
-      key = "Semicolon_Shift";
+      key = "Semicolon";
+      emulateShift = true;
       break;
    case VC_APOSTROPHE:
-      key = "Quote_Normal";
+      key = "Quote";
       break;
     case VC_QUOTE:
-      key = "Quote_Shift";
+      key = "Quote";
+      emulateShift = true;
       break;
 
    case VC_COMMA:
-      key = "Comma_Normal";
+      key = "Comma";
       break;
     case VC_LESS:
-      key = "Comma_Shift";
+      key = "Comma";
+      emulateShift = true;
       break;
    case VC_PERIOD:
-      key = "Period_Normal";
+      key = "Period";
       break;
     case VC_GREATER:
-      key = "Period_Shift";
+      key = "Period";
+      emulateShift = true;
+      break;
    case VC_SLASH:
-      key = "Slash_Normal";
+      key = "Slash";
       break;
     case VC_QUESTION:
-      key = "Slash_Shift";
+      key = "Slash";
+      emulateShift = true;
       break;
    // End Alphanumeric Zone
 
@@ -316,10 +340,20 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
    default:
       return QString("");
   }
-  
+
   QString keyName;
   if(!key.contains("Num")) {
-    keyName = QString("Key_%1").arg(key);
+    QString mod;
+    if(!emulateShift && !altgr) {
+      keyName = QString("Key_%1_Normal").arg(key);
+    } else if(emulateShift && altgr) {
+      keyName = QString("Key_%1_%2").arg(key).arg("ShiftAltGr");
+    } else if(altgr) {
+      keyName = QString("Key_%1_%2").arg(key).arg("AltGr");
+    } else if(emulateShift) {
+      keyName = QString("Key_%1_%2").arg(key).arg("Shift");
+    }
+    
   } else {
     if(gSettings->getNumberPadFixed()) {
       keyName = key;
