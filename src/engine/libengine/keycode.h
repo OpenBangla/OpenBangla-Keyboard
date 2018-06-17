@@ -20,7 +20,7 @@
 #define IM_KEYCODE_H
 
 /* Cross-platform Keycodes for OpenBangla Keyboard
- * IM sends Keycodes accroding to this file.
+ * IM sends Keycodes according to this file.
  * When IM gets Keycode or Key event, IM converts them to these Keycodes */
 
 /* From libUIOHook */
@@ -62,32 +62,32 @@
 
 #define VC_TAB									0x000F
 
-#define VC_A									0x001E
-#define VC_B									0x0030
-#define VC_C									0x002E
-#define VC_D									0x0020
-#define VC_E									0x0012
-#define VC_F									0x0021
-#define VC_G									0x0022
-#define VC_H									0x0023
-#define VC_I									0x0017
-#define VC_J									0x0024
-#define VC_K									0x0025
-#define VC_L									0x0026
-#define VC_M									0x0032
-#define VC_N									0x0031
-#define VC_O									0x0018
-#define VC_P									0x0019
-#define VC_Q									0x0010
-#define VC_R									0x0013
-#define VC_S									0x001F
-#define VC_T									0x0014
-#define VC_U									0x0016
-#define VC_V									0x002F
-#define VC_W									0x0011
-#define VC_X									0x002D
-#define VC_Y									0x0015
-#define VC_Z									0x002C
+#define VC_A									41140
+#define VC_B									41141
+#define VC_C									41142
+#define VC_D									41143
+#define VC_E									41144
+#define VC_F									41145
+#define VC_G									41146
+#define VC_H									41147
+#define VC_I									41148
+#define VC_J									41149
+#define VC_K									41150
+#define VC_L									41151
+#define VC_M									41152
+#define VC_N									41153
+#define VC_O									41154
+#define VC_P									41155
+#define VC_Q									41156
+#define VC_R									41157
+#define VC_S									41158
+#define VC_T									41159
+#define VC_U									41160
+#define VC_V									41161
+#define VC_W									41162
+#define VC_X									41163
+#define VC_Y									41164
+#define VC_Z									41165
 
 #define VC_BRACKET_LEFT							0x001A	// '['
 #define VC_BRACKET_RIGHT						0x001B	// ']'

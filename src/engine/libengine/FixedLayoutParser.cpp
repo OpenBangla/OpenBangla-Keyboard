@@ -24,8 +24,9 @@ void FixedLayoutParser::setLayout(QJsonObject l) {
   layout = l;
 }
 
-QString FixedLayoutParser::processAlphabetKey(int keyNum, bool shift, bool altgr, bool shiftaltgr) {
+QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, bool shiftaltgr) {
   QString key;
+  bool emulateShift = false;
   switch(keyNum) {
     // Begin Alphabet Zone
    case VC_A:
@@ -106,36 +107,6 @@ QString FixedLayoutParser::processAlphabetKey(int keyNum, bool shift, bool altgr
    case VC_Z:
       key = "Z";
       break;
-
-   default:
-      return QString("");
-  }
-
-  QString mod;
-  if(!shift && !altgr && !shiftaltgr) {
-    mod = "Normal";
-  } else if(shiftaltgr) {
-    mod = "ShiftAltGr";
-  } else if(shift) {
-    mod = "Shift";
-  } else if(altgr) {
-    mod = "AltGr";
-  }
-
-  return QString("Key_%1_%2").arg(key).arg(mod);
-}
-
-QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, bool shiftaltgr) {
-  QString result = processAlphabetKey(keyNum, shift, altgr, shiftaltgr);
-  if(result != "") {
-    return layout.value(result).toString();
-  }
-
-  bool emulateShift = false;
-
-  QString key;
-  switch(keyNum) {
-    // Begin Alphanumeric Zone
     case VC_GRAVE:
       key = "BackQuote";
       break;
@@ -177,7 +148,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
       break;
     case VC_PERCENT:
       key = "5";
-      emulateShift = "Shift";
+      emulateShift = true;
       break;
     case VC_6:
       key = "6";
@@ -285,7 +256,6 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
       key = "Slash";
       emulateShift = true;
       break;
-   // End Alphanumeric Zone
 
    // Begin Numeric Zone
    case VC_KP_DIVIDE:
@@ -343,17 +313,30 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
 
   QString keyName;
   if(!key.contains("Num")) {
-    QString mod;
-    if(!emulateShift && !altgr) {
-      keyName = QString("Key_%1_Normal").arg(key);
-    } else if(emulateShift && altgr) {
-      keyName = QString("Key_%1_%2").arg(key).arg("ShiftAltGr");
-    } else if(altgr) {
-      keyName = QString("Key_%1_%2").arg(key).arg("AltGr");
-    } else if(emulateShift) {
-      keyName = QString("Key_%1_%2").arg(key).arg("Shift");
+    // Check if the key is an alphabet key.
+    if(keyNum >= 41140 && keyNum <= 41165) {
+      // We accept Shift, AltGr and ShiftAltGr when the kei
+      // is an alphabet key.
+      if(!shift && !altgr && !shiftaltgr) {
+        keyName = QString("Key_%1_Normal").arg(key);
+      } else if(shiftaltgr) {
+        keyName = QString("Key_%1_ShiftAltGr").arg(key);
+      } else if(shift) {
+        keyName = QString("Key_%1_Shift").arg(key);
+      } else if(altgr) {
+        keyName = QString("Key_%1_AltGr").arg(key);
+      }
+    } else {
+      if(!emulateShift && !altgr) {
+        keyName = QString("Key_%1_Normal").arg(key);
+      } else if(emulateShift && altgr) {
+        keyName = QString("Key_%1_ShiftAltGr").arg(key);
+      } else if(altgr) {
+        keyName = QString("Key_%1_AltGr").arg(key);
+      } else if(emulateShift) {
+        keyName = QString("Key_%1_Shift").arg(key);
+      }
     }
-    
   } else {
     if(gSettings->getNumberPadFixed()) {
       keyName = key;
