@@ -110,6 +110,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
   case VC_Z:
     key = "Z";
     break;
+    // End Alphabet Zone
   case VC_GRAVE:
     key = "BackQuote";
     break;
