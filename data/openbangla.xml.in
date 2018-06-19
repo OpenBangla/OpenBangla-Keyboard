@@ -17,7 +17,7 @@
             <license>GPL 3</license>
             <author>See AboutBox</author>
             <icon>@PROJECT_DATADIR@/icons/OpenBangla-Keyboard.png</icon>
-            <layout>us</layout>
+            <layout>default</layout>
             <longname>OpenBangla Keyboard</longname>
             <description>OpenBangla Keyboard IME for iBus</description>
             <rank>0</rank>

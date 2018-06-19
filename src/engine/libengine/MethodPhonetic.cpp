@@ -74,138 +74,112 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
 
   switch(key) {
     // Begin Alphanumeric Zone
-    case VC_BACKQUOTE:
-    if(shift) {
+    case VC_TILDE:
       EnglishT += "~";
       handledKey = true;
       return createSuggestion();
-    } else if(!shift) {
+    case VC_GRAVE:
       EnglishT += "`";
       handledKey = true;
       return createSuggestion();
-    }
 
+    case VC_EXCLAIM:
+      EnglishT += "!";
+      handledKey = true;
+      return createSuggestion();
     case VC_1:
-      if(shift) {
-        EnglishT += "!";
-        handledKey = true;
-        return createSuggestion();
-      } else if(!shift) {
-        EnglishT += "1";
-        handledKey = true;
-        return createSuggestion();
-      }
-    case VC_2:
-      if(shift) {
+      EnglishT += "1";
+      handledKey = true;
+      return createSuggestion();
+    case VC_AT:
         EnglishT += "@";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_2:
         EnglishT += "2";
         handledKey = true;
         return createSuggestion();
-      }
-    case VC_3:
-      if(shift) {
+    case VC_HASH:
         EnglishT += "#";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_3:
         EnglishT += "3";
         handledKey = true;
         return createSuggestion();
-      }
-    case VC_4:
-      if(shift) {
+    case VC_DOLLAR:
         EnglishT += "$";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_4:
         EnglishT += "4";
         handledKey = true;
         return createSuggestion();
-      }
-    case VC_5:
-      if(shift) {
+    case VC_PERCENT:
         EnglishT += "%";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_5:
         EnglishT += "5";
         handledKey = true;
         return createSuggestion();
-      }
-    case VC_6:
-      if(shift) {
+    case VC_CIRCUM:
         EnglishT += "^";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_6:
         EnglishT += "6";
         handledKey = true;
         return createSuggestion();
-      }
-    case VC_7:
-      if(shift) {
+    case VC_AMPERSAND:
         EnglishT += "&";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_7:
         EnglishT += "7";
         handledKey = true;
         return createSuggestion();
-      }
-    case VC_8:
-      if(shift) {
+    case VC_ASTERISK:
         EnglishT += "*";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_8:
         EnglishT += "8";
         handledKey = true;
         return createSuggestion();
-      }
-    case VC_9:
-      if(shift) {
+    case VC_PAREN_LEFT:
         EnglishT += "(";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_9:
         EnglishT += "9";
         handledKey = true;
         return createSuggestion();
-      }
-   case VC_0:
-      if(shift) {
+    case VC_PAREN_RIGHT:
         EnglishT += ")";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_0:
         EnglishT += "0";
         handledKey = true;
         return createSuggestion();
-      }
 
-   case VC_MINUS:
-      if(shift) {
+    case VC_UNDERSCORE:
         EnglishT += "_";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_MINUS:
         EnglishT += "-";
         handledKey = true;
         return createSuggestion();
-      }
-   case VC_EQUALS:
-      if(shift) {
+    case VC_PLUS:
         EnglishT += "+";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_EQUALS:
         EnglishT += "=";
         handledKey = true;
         return createSuggestion();
-      }
 
    case VC_A:
       if(shift) {
@@ -468,87 +442,71 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
         return createSuggestion();
       }
 
-   case VC_OPEN_BRACKET:
-      if(shift) {
+    case VC_BRACE_LEFT:
         EnglishT += "{";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_BRACKET_LEFT:
         EnglishT += "[";
         handledKey = true;
         return createSuggestion();
-      }
-   case VC_CLOSE_BRACKET:
-      if(shift) {
+   case VC_BRACE_RIGHT:
         EnglishT += "}";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_BRACKET_RIGHT:
         EnglishT += "]";
         handledKey = true;
         return createSuggestion();
-      }
-   case VC_BACK_SLASH:
-      if(shift) {
+   case VC_BAR:
         EnglishT += "|";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_BACK_SLASH:
         EnglishT += "\\";
         handledKey = true;
         return createSuggestion();
-      }
 
-   case VC_SEMICOLON:
-      if(shift) {
+   case VC_COLON:
         EnglishT += ":";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_SEMICOLON:
         EnglishT += ";";
         handledKey = true;
         return createSuggestion();
-      }
    case VC_QUOTE:
-      if(shift) {
         EnglishT += "\"";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_APOSTROPHE:
         EnglishT += "\'";
         handledKey = true;
         return createSuggestion();
-      }
-   case VC_COMMA:
-      if(shift) {
+   case VC_LESS:
         EnglishT += "<";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_COMMA:
         EnglishT += ",";
         handledKey = true;
         return createSuggestion();
-      }
-   case VC_PERIOD:
-      if(shift) {
+   case VC_GREATER:
         EnglishT += ">";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_PERIOD:
         EnglishT += ".";
         handledKey = true;
         return createSuggestion();
-      }
-   case VC_SLASH:
-      if(shift) {
+   case VC_QUESTION:
         EnglishT += "?";
         handledKey = true;
         return createSuggestion();
-      } else if(!shift) {
+    case VC_SLASH:
         EnglishT += "/";
         handledKey = true;
         return createSuggestion();
-      }
    // End Alphanumeric Zone
 
    // Begin Numeric Zone

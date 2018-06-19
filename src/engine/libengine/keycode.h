@@ -20,13 +20,16 @@
 #define IM_KEYCODE_H
 
 /* Cross-platform Keycodes for OpenBangla Keyboard
- * IM sends Keycodes accroding to this file.
+ * IM sends Keycodes according to this file.
  * When IM gets Keycode or Key event, IM converts them to these Keycodes */
 
 /* From libUIOHook */
 
 // Begin Alphanumeric Zone
-#define VC_BACKQUOTE							0x0029  // '`` , '~'
+// BACKQUTE
+#define VC_GRAVE							    0x0029  // '`'
+//ESC
+#define VC_TILDE	                            0x0001  // '~'
 
 #define VC_1									0x0002
 #define VC_2									0x0003
@@ -39,55 +42,81 @@
 #define VC_9									0x000A
 #define VC_0									0x000B
 
-#define VC_MINUS								0x000C	// '-' , '_'
-#define VC_EQUALS								0x000D	// '=' , '+'
+// F1-F12
+#define VC_EXCLAIM								0x003B
+#define VC_AT									0x003C
+#define VC_HASH									0x003D
+#define VC_DOLLAR								0x003E
+#define VC_PERCENT								0x003F
+#define VC_CIRCUM								0x0040
+#define VC_AMPERSAND							0x0041
+#define VC_ASTERISK								0x0042
+#define VC_PAREN_LEFT							0x0043
+#define VC_PAREN_RIGHT	                        0x0044
+#define VC_UNDERSCORE							0x0057
+#define VC_PLUS									0x0058
+
+#define VC_MINUS								0x000C	// '-'
+#define VC_EQUALS								0x000D	// '='
 #define VC_BACKSPACE							0x000E
 
 #define VC_TAB									0x000F
 
-#define VC_A									0x001E
-#define VC_B									0x0030
-#define VC_C									0x002E
-#define VC_D									0x0020
-#define VC_E									0x0012
-#define VC_F									0x0021
-#define VC_G									0x0022
-#define VC_H									0x0023
-#define VC_I									0x0017
-#define VC_J									0x0024
-#define VC_K									0x0025
-#define VC_L									0x0026
-#define VC_M									0x0032
-#define VC_N									0x0031
-#define VC_O									0x0018
-#define VC_P									0x0019
-#define VC_Q									0x0010
-#define VC_R									0x0013
-#define VC_S									0x001F
-#define VC_T									0x0014
-#define VC_U									0x0016
-#define VC_V									0x002F
-#define VC_W									0x0011
-#define VC_X									0x002D
-#define VC_Y									0x0015
-#define VC_Z									0x002C
+#define VC_A									41140
+#define VC_B									41141
+#define VC_C									41142
+#define VC_D									41143
+#define VC_E									41144
+#define VC_F									41145
+#define VC_G									41146
+#define VC_H									41147
+#define VC_I									41148
+#define VC_J									41149
+#define VC_K									41150
+#define VC_L									41151
+#define VC_M									41152
+#define VC_N									41153
+#define VC_O									41154
+#define VC_P									41155
+#define VC_Q									41156
+#define VC_R									41157
+#define VC_S									41158
+#define VC_T									41159
+#define VC_U									41160
+#define VC_V									41161
+#define VC_W									41162
+#define VC_X									41163
+#define VC_Y									41164
+#define VC_Z									41165
 
-#define VC_OPEN_BRACKET							0x001A	// '[' , '{'
-#define VC_CLOSE_BRACKET						0x001B	// ']' , '}'
-#define VC_BACK_SLASH							0x002B	// '\' , '|'
+#define VC_BRACKET_LEFT							0x001A	// '['
+#define VC_BRACKET_RIGHT						0x001B	// ']'
+#define VC_BACK_SLASH							0x002B	// '\'
+
+//F13-F15
+#define VC_BRACE_LEFT							0x005B  // '{'
+#define VC_BRACE_RIGHT							0x005C  // '}'
+#define VC_BAR 	                                0x005D  // '|'
 
 #define VC_SEMICOLON							0x0027	// ';'
-#define VC_QUOTE								0x0028 // ''' , '"'
+#define VC_APOSTROPHE							0x0028  // '''
 #define VC_ENTER								0x001C
 
-#define VC_COMMA								0x0033	// ',' , '<'
-#define VC_PERIOD								0x0034	// '.' , '>'
-#define VC_SLASH								0x0035	// '/' , '?'
+#define VC_COMMA								0x0033	// ','
+#define VC_PERIOD								0x0034	// '.'
+#define VC_SLASH								0x0035	// '/'
+
+// F16-F20
+#define VC_COLON								0x0063 // ':'
+#define VC_QUOTE								0x0064 // '"'
+#define VC_LESS									0x0065 // '<'
+#define VC_GREATER								0x0066 // '>'
+#define VC_QUESTION                         	0x0067 // '?'
 
 #define VC_SPACE								0x0039
 // End Alphanumeric Zone
 
-#define VC_UNKNOWN							0x0046
+#define VC_UNKNOWN							    0x0046
 
 // Begin Edit Key Zone
 #define VC_INSERT								0x0E52

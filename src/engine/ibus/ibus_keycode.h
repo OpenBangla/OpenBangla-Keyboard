@@ -32,8 +32,9 @@ std::map<guint,int> key;
 
 void initKeycode() {
   // Begin Alphanumeric Zone
-  key[IBUS_KEY_grave] = VC_BACKQUOTE;
-  key[IBUS_KEY_asciitilde] = VC_BACKQUOTE;
+  key[IBUS_KEY_grave] = VC_GRAVE;
+  key[IBUS_KEY_dead_grave] = VC_GRAVE;
+  key[IBUS_KEY_asciitilde] = VC_TILDE;
 
   key[IBUS_KEY_0] = VC_0;
   key[IBUS_KEY_1] = VC_1;
@@ -46,22 +47,22 @@ void initKeycode() {
   key[IBUS_KEY_8] = VC_8;
   key[IBUS_KEY_9] = VC_9;
 
-  key[IBUS_KEY_parenright] = VC_0;
-  key[IBUS_KEY_exclam] = VC_1;
-  key[IBUS_KEY_at] = VC_2;
-  key[IBUS_KEY_numbersign] = VC_3;
-  key[IBUS_KEY_dollar] = VC_4;
-  key[IBUS_KEY_percent] = VC_5;
-  key[IBUS_KEY_asciicircum] = VC_6;
-  key[IBUS_KEY_ampersand] = VC_7;
-  key[IBUS_KEY_asterisk] = VC_8;
-  key[IBUS_KEY_parenleft] = VC_9;
+  key[IBUS_KEY_parenright] = VC_PAREN_RIGHT;
+  key[IBUS_KEY_exclam] = VC_EXCLAIM;
+  key[IBUS_KEY_at] = VC_AT;
+  key[IBUS_KEY_numbersign] = VC_HASH;
+  key[IBUS_KEY_dollar] = VC_DOLLAR;
+  key[IBUS_KEY_percent] = VC_PERCENT;
+  key[IBUS_KEY_asciicircum] = VC_CIRCUM;
+  key[IBUS_KEY_ampersand] = VC_AMPERSAND;
+  key[IBUS_KEY_asterisk] = VC_ASTERISK;
+  key[IBUS_KEY_parenleft] = VC_PAREN_LEFT;
 
   key[IBUS_KEY_minus] = VC_MINUS;
-  key[IBUS_KEY_underscore] = VC_MINUS;
+  key[IBUS_KEY_underscore] = VC_UNDERSCORE;
 
   key[IBUS_KEY_equal] = VC_EQUALS;
-  key[IBUS_KEY_plus] = VC_EQUALS;
+  key[IBUS_KEY_plus] = VC_PLUS;
 
   key[IBUS_KEY_BackSpace] = VC_BACKSPACE;
 
@@ -121,28 +122,28 @@ void initKeycode() {
   key[IBUS_KEY_y] = VC_Y;
   key[IBUS_KEY_z] = VC_Z;
 
-  key[IBUS_KEY_bracketleft] = VC_OPEN_BRACKET;
-  key[IBUS_KEY_braceleft] = VC_OPEN_BRACKET;
+  key[IBUS_KEY_bracketleft] = VC_BRACKET_LEFT;
+  key[IBUS_KEY_braceleft] = VC_BRACE_LEFT;
 
-  key[IBUS_KEY_bracketright] = VC_CLOSE_BRACKET;
-  key[IBUS_KEY_braceright] = VC_CLOSE_BRACKET;
+  key[IBUS_KEY_bracketright] = VC_BRACKET_RIGHT;
+  key[IBUS_KEY_braceright] = VC_BRACE_RIGHT;
 
   key[IBUS_KEY_backslash] = VC_BACK_SLASH;
-  key[IBUS_KEY_bar] = VC_BACK_SLASH;
+  key[IBUS_KEY_bar] = VC_BAR;
 
   key[IBUS_KEY_slash] = VC_SLASH;
-  key[IBUS_KEY_question] = VC_SLASH;
+  key[IBUS_KEY_question] = VC_QUESTION;
 
   key[IBUS_KEY_semicolon] = VC_SEMICOLON;
-  key[IBUS_KEY_colon] = VC_SEMICOLON;
+  key[IBUS_KEY_colon] = VC_COLON;
 
   key[IBUS_KEY_comma] = VC_COMMA;
-  key[IBUS_KEY_less] = VC_COMMA;
+  key[IBUS_KEY_less] = VC_LESS;
 
   key[IBUS_KEY_period] = VC_PERIOD;
-  key[IBUS_KEY_greater] = VC_PERIOD;
+  key[IBUS_KEY_greater] = VC_GREATER;
 
-  key[IBUS_KEY_apostrophe] = VC_QUOTE;
+  key[IBUS_KEY_apostrophe] = VC_APOSTROPHE;
   key[IBUS_KEY_quotedbl] = VC_QUOTE;
 
   key[IBUS_KEY_Return] = VC_ENTER;
