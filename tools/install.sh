@@ -14,14 +14,19 @@ echo "Visit https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-E
 echo
 
 # detect OS
-os=$(python -c "exec(\"import platform\\nprint(platform.linux_distribution()[0])\")" )
+os=$(python -c "exec(\"import platform\\nprint(platform.linux_distribution()[0])\")")
 echo "Downloading installation package for $os"
 
 # start downloading and install
 case $os in
 
 ("Ubuntu")
-      wget -q --show-progress https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/$VERSION/OpenBangla-Keyboard_$VERSION-ubuntu18.04.deb -O ./OpenBangla.deb
+      OS_VER=$(python -c "exec(\"import platform\\nprint(platform.linux_distribution()[1])\")")
+      if [[ $OS_VER = "18.04" ]]; then
+            wget -q --show-progress https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/$VERSION/OpenBangla-Keyboard_$VERSION-ubuntu18.04.deb -O ./OpenBangla.deb
+      elif [[ $OS_VER = "16.04" ]]; then
+            wget -q --show-progress https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/$VERSION/OpenBangla-Keyboard_$VERSION-ubuntu16.04.deb -O ./OpenBangla.deb
+      fi
       sudo apt install ./OpenBangla.deb
       sudo rm -f ./OpenBangla.deb
       ;;
