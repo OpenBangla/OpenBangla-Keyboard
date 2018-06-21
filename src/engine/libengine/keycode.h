@@ -62,32 +62,32 @@
 
 #define VC_TAB									0x000F
 
-#define VC_A									41140
-#define VC_B									41141
-#define VC_C									41142
-#define VC_D									41143
-#define VC_E									41144
-#define VC_F									41145
-#define VC_G									41146
-#define VC_H									41147
-#define VC_I									41148
-#define VC_J									41149
-#define VC_K									41150
-#define VC_L									41151
-#define VC_M									41152
-#define VC_N									41153
-#define VC_O									41154
-#define VC_P									41155
-#define VC_Q									41156
-#define VC_R									41157
-#define VC_S									41158
-#define VC_T									41159
-#define VC_U									41160
-#define VC_V									41161
-#define VC_W									41162
-#define VC_X									41163
-#define VC_Y									41164
-#define VC_Z									41165
+#define VC_A									0xA0B4
+#define VC_B									0xA0B5
+#define VC_C									0xA0B6
+#define VC_D									0xA0B7
+#define VC_E									0xA0B8
+#define VC_F									0xA0B9
+#define VC_G									0xA0BA
+#define VC_H									0xA0BB
+#define VC_I									0xA0BC
+#define VC_J									0xA0BD
+#define VC_K									0xA0BE
+#define VC_L									0xA0BF
+#define VC_M									0xA0C0
+#define VC_N									0xA0C1
+#define VC_O									0xA0C2
+#define VC_P									0xA0C3
+#define VC_Q									0xA0C4
+#define VC_R									0xA0C5
+#define VC_S									0xA0C6
+#define VC_T									0xA0C7
+#define VC_U									0xA0C8
+#define VC_V									0xA0C9
+#define VC_W									0xA0CA
+#define VC_X									0xA0CB
+#define VC_Y									0xA0CC
+#define VC_Z									0xA0CD
 
 #define VC_BRACKET_LEFT							0x001A	// '['
 #define VC_BRACKET_RIGHT						0x001B	// ']'
