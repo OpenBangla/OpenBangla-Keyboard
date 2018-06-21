@@ -319,7 +319,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
   if (!key.contains("Num"))
   {
     // Check if the key is an alphabet key.
-    if (keyNum >= 41140 && keyNum <= 41165)
+    if (keyNum >= VC_A && keyNum <= VC_Z)
     {
       // We accept Shift, AltGr and ShiftAltGr when the key
       // is an alphabet key.
