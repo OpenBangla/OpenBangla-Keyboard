@@ -39,6 +39,10 @@ endif()
 # For Linux.
 if(OS_LINUX)
   ## Additions for Linux ##
+  
+  #Generate compile_commands.json to satisfy vscode linux configuration
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
   ## Set Directories for installing and storing files
   set(CMAKE_INSTALL_PREFIX "/usr")
 
