@@ -690,8 +690,8 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
       ret.accepted = false;
       return ret;
     }
-  } else if(((key == VC_UP) || (key == VC_DOWN)) && !gSettings->getCandidateWinHorizontal()) {
-    if(EnglishT.length() > 0) {
+  } else if((key == VC_UP) || (key == VC_DOWN)) {
+    if((EnglishT.length() > 0) && !gSettings->getCandidateWinHorizontal()) {
       ret.accepted = true;
       changedCandidateSelection = true;
       return ret;
@@ -700,8 +700,8 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
       ret.accepted = false;
       return ret;
     }
-  } else if(((key == VC_RIGHT) || (key == VC_LEFT)) && gSettings->getCandidateWinHorizontal()) {
-    if(EnglishT.length() > 0) {
+  } else if((key == VC_RIGHT) || (key == VC_LEFT)) {
+    if((EnglishT.length() > 0) && gSettings->getCandidateWinHorizontal()) {
       ret.accepted = true;
       changedCandidateSelection = true;
       return ret;
@@ -720,6 +720,9 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
       return ret;
     }
   }
+
+  // Control flow should not reach here.
+  return ret;
 }
 
 void MethodPhonetic::updateEngine() {

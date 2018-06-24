@@ -73,7 +73,7 @@ struct LayoutDesc {
 class LayoutMth {
 public:
   virtual void setLayout(QJsonObject lay) = 0;
-  /* Generates suggestions on the flow */
+  /* Generates suggestions on the fly */
   virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt)  = 0;
   /* Handle special keys such as Enter, Backspace, Space etc keys */
   virtual IMCommand handleSpecialKey(int key) = 0;
@@ -99,9 +99,9 @@ class Layout {
   /* Layout Descriptor */
   LayoutDesc lD;
 
-  /* Load Layout Description. Used internaly */
+  /* Load Layout Description. Used internally */
   void loadDesc();
-  /* Set typing method. Used internaly */
+  /* Set typing method. Used internally */
   void setMethod();
 
   QJsonObject sendLayout();
@@ -115,7 +115,7 @@ public:
   Layout();
   ~Layout();
   
-  /* Generates suggestions on the flow */
+  /* Generates suggestions on the fly */
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
   /* Get the candidates for commit */
   Suggestion getCandidates();

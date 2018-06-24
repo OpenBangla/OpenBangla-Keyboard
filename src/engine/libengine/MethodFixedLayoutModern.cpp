@@ -380,4 +380,7 @@ IMCommand MethodFixedLayoutModern::handleSpecialKey(int key) {
       return ret;
     }
   }
+
+  // Control flow should not reach here.
+  return ret;
 }
