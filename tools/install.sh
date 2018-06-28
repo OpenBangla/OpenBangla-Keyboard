@@ -1,5 +1,5 @@
 #!/bin/bash
-## MUST: Always update this whenever a new version is released. Also remember to update download URLs if needed
+##  Note for Maintainter: Always update this whenever a new version is released. Also remember to update download URLs if needed
 APP_VERSION=1.4.0
 URL_STUB="https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/${APP_VERSION}"
 
@@ -88,18 +88,19 @@ case $DISTRO_NAME in
       
       case $yn in
             
-            (Yes)
-                  URL="https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard"
-                  [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
-                  path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
-                  echo "Can't find browser"
-                  break
-                  ;; 
-            (No)
-                  exit
-                  ;; 
-            esac
+        (Yes)
+          URL="https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard"
+          [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
+          path=$(command -v xdg-open || command -v gnome-open) && exec "$path" "$URL"
+          echo "Can't find browser"
+          break
+          ;; 
+        (No)
+          exit
+          ;; 
+        esac
+      
       done
-      ;; 
+    ;; 
 
 esac
