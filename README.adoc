@@ -66,7 +66,7 @@ WARNING: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, plea
 
 Open your terminal and run this command on your bash shell. NB : It has to be **BASH**, otherwise it won't work.
 ```bash
-bash -c "$(wget -q --show-progress  https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh -O -)"
+bash -c "$(wget -q https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh -O -)"
 ```
 
 If this does not workout for you please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue]. While we look into the problem you can check the https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[Wiki] for Distrowise/Distro-specific Install Instructions. After you have installed OpenBangla Keyboard, you will need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
