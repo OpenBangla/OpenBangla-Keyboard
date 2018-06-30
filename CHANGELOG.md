@@ -1,5 +1,5 @@
 # Change Log
-## 1.5.0 - In development
+## 1.5.0
 * AutoCorrect item is shown as the first suggestion item if available when writing using Avro Phonetic method. ([#42](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/42))
 * Performance update for Avro Phonetic suggestion making code. ([#42](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/42))
 * Be less restrictive when saving users selection. ([#41](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/41)) 
