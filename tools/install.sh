@@ -1,6 +1,6 @@
 #!/bin/bash
 ## MUST: Always update this whenever a new version is released. Also remember to update download URLs if needed
-APP_VERSION=1.4.0
+APP_VERSION=1.5.0
 URL_STUB="https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/${APP_VERSION}"
 
 cat <<"EOF"
@@ -67,13 +67,12 @@ case $DISTRO_NAME in
   fi
   ;;
 ("arch")
-  # this url should proably be normalized soon
-  wget -q --show-progress "${URL_STUB}/openbangla-keyboard-${APP_VERSION}-1-x86_64-archlinux.pkg.tar.xz" -O /tmp/OpenBangla.pkg.tar.xz
+  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-archlinux.pkg.tar.xz" -O /tmp/OpenBangla.pkg.tar.xz
   sudo pacman -U /tmp/OpenBangla.pkg.tar.xz
   ;;
 ("fedora")
   # fedora version check ?
-  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora27.rpm" -O /tmp/OpenBangla.rpm
+  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora28.rpm" -O /tmp/OpenBangla.rpm
   sudo dnf install /tmp/OpenBangla.rpm
   ;;
 (*)

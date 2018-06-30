@@ -3,8 +3,8 @@
 * AutoCorrect item is shown as the first suggestion item if available when writing using Avro Phonetic method. ([#42](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/42))
 * Performance update for Avro Phonetic suggestion making code. ([#42](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/42))
 * Be less restrictive when saving users selection. ([#41](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/41)) 
-* Now it is possible write using AltGr and ShiftAltGr layer when using Fixed layout methods. Fixes bug [#40](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/40).
-* Auto update checking is now configurable from settings dialog. There is now also a menu item in the TopBar for instant update checking. ([#32](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/32))
+* Now it is possible to write using AltGr and ShiftAltGr layer when using Fixed layout methods. Fixes bug [#40](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/40).
+* Auto-update checking is now configurable from settings dialog. There is now also a menu item in the TopBar for instant update checking. ([#32](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/32))
 * Fixed a crash. ([#52](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/52))
 ## 1.4.0
 * Fixes a serious bug [#26](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/26).
