@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 project(OpenBangla-Keyboard VERSION 1.5.0)
 set(APP_NAME "OpenBangla-Keyboard")
@@ -39,7 +40,7 @@ endif()
 # For Linux.
 if(OS_LINUX)
   ## Additions for Linux ##
-  
+
   #Generate compile_commands.json to satisfy vscode linux configuration
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -71,6 +72,17 @@ endif(OS_LINUX)
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
+
+# uninstall target
+if(NOT TARGET uninstall)
+    configure_file(
+        "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+        IMMEDIATE @ONLY)
+
+    add_custom_target(uninstall
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()
 
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")
