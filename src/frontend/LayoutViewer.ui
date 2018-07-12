@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>587</width>
-    <height>327</height>
+    <width>779</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
    <item row="0" column="3">
     <widget class="QPushButton" name="buttonZoomOut">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="text">
       <string/>
@@ -71,7 +71,7 @@
    <item row="0" column="2">
     <widget class="QPushButton" name="buttomZoomIn">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="text">
       <string/>
@@ -89,6 +89,9 @@
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
