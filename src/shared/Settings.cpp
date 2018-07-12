@@ -22,141 +22,141 @@
 Settings *gSettings;
 
 Settings::Settings() {
-    setting = new QSettings("OpenBangla", "Keyboard");
-    setting->sync();
+  setting = new QSettings("OpenBangla", "Keyboard");
+  setting->sync();
 }
 
 Settings::~Settings() {
-    setting->sync();
-    delete setting;
+  setting->sync();
+  delete setting;
 }
 
 void Settings::setTopBarWindowPosition(QPoint pos) {
-    setting->setValue("window/positions/TopBar", pos);
-    setting->sync();
+  setting->setValue("window/positions/TopBar", pos);
+  setting->sync();
 }
 
 QPoint Settings::getTopBarWindowPosition() {
-    setting->sync();
-    return setting->value("window/positions/TopBar", QPoint(0, 0)).toPoint();
+  setting->sync();
+  return setting->value("window/positions/TopBar", QPoint(0, 0)).toPoint();
 }
 
 void Settings::setLayoutViewerWindowPosition(QPoint pos) {
-    setting->setValue("window/positions/LayoutViewer", pos);
-    setting->sync();
+  setting->setValue("window/positions/LayoutViewer", pos);
+  setting->sync();
 }
 
 QPoint Settings::getLayoutViewerWindowPosition() {
-    setting->sync();
-    return setting->value("window/positions/LayoutViewer").toPoint();
+  setting->sync();
+  return setting->value("window/positions/LayoutViewer").toPoint();
 }
 
 void Settings::setLayoutName(QString name) {
-    setting->setValue("layout/name", name);
-    setting->sync();
+  setting->setValue("layout/name", name);
+  setting->sync();
 }
 
 QString Settings::getLayoutName() {
-    setting->sync();
-    return setting->value("layout/name", "Avro Phonetic").toString();
+  setting->sync();
+  return setting->value("layout/name", "Avro Phonetic").toString();
 }
 
 void Settings::setLayoutPath(QString path) {
-    setting->setValue("layout/path", path);
-    setting->sync();
+  setting->setValue("layout/path", path);
+  setting->sync();
 }
 
 QString Settings::getLayoutPath() {
-    setting->sync();
-    return setting->value("layout/path", PKGDATADIR "/layouts/avrophonetic.json").toString();
+  setting->sync();
+  return setting->value("layout/path", PKGDATADIR "/layouts/avrophonetic.json").toString();
 }
 
 void Settings::setEnterKeyClosesPrevWin(bool b) {
-    setting->setValue("settings/EnterKeyClosesPrevWin", b);
-    setting->sync();
+  setting->setValue("settings/EnterKeyClosesPrevWin", b);
+  setting->sync();
 }
 
 bool Settings::getEnterKeyClosesPrevWin() {
-    setting->sync();
-    return setting->value("settings/EnterKeyClosesPrevWin", false).toBool();
+  setting->sync();
+  return setting->value("settings/EnterKeyClosesPrevWin", false).toBool();
 }
 
 void Settings::setAutoVowelFormFixed(bool b) {
-    setting->setValue("settings/FixedLayout/AutoVowelForm", b);
-    setting->sync();
+  setting->setValue("settings/FixedLayout/AutoVowelForm", b);
+  setting->sync();
 }
 
 bool Settings::getAutoVowelFormFixed() {
-    setting->sync();
-    return setting->value("settings/FixedLayout/AutoVowelForm", true).toBool();
+  setting->sync();
+  return setting->value("settings/FixedLayout/AutoVowelForm", true).toBool();
 }
 
 void Settings::setAutoChandraPosFixed(bool b) {
-    setting->setValue("settings/FixedLayout/AutoChandraPos", b);
-    setting->sync();
+  setting->setValue("settings/FixedLayout/AutoChandraPos", b);
+  setting->sync();
 }
 
 bool Settings::getAutoChandraPosFixed() {
-    setting->sync();
-    return setting->value("settings/FixedLayout/AutoChandraPos", true).toBool();
+  setting->sync();
+  return setting->value("settings/FixedLayout/AutoChandraPos", true).toBool();
 }
 
 void Settings::setTraditionalKarFixed(bool b) {
-    setting->setValue("settings/FixedLayout/TraditionalKar", b);
-    setting->sync();
+  setting->setValue("settings/FixedLayout/TraditionalKar", b);
+  setting->sync();
 }
 
 bool Settings::getTraditionalKarFixed() {
-    setting->sync();
-    return setting->value("settings/FixedLayout/TraditionalKar", false).toBool();
+  setting->sync();
+  return setting->value("settings/FixedLayout/TraditionalKar", false).toBool();
 }
 
 void Settings::setNumberPadFixed(bool b) {
-    setting->setValue("settings/FixedLayout/NumberPad", b);
-    setting->sync();
+  setting->setValue("settings/FixedLayout/NumberPad", b);
+  setting->sync();
 }
 
 bool Settings::getNumberPadFixed() {
-    setting->sync();
-    return setting->value("settings/FixedLayout/NumberPad", true).toBool();
+  setting->sync();
+  return setting->value("settings/FixedLayout/NumberPad", true).toBool();
 }
 
 void Settings::setOldReph(bool b) {
-    setting->setValue("settings/FixedLayout/OldReph", b);
-    setting->sync();
+  setting->setValue("settings/FixedLayout/OldReph", b);
+  setting->sync();
 }
 
 bool Settings::getOldReph() {
-    setting->sync();
-    return setting->value("settings/FixedLayout/OldReph", true).toBool();
+  setting->sync();
+  return setting->value("settings/FixedLayout/OldReph", true).toBool();
 }
 
 void Settings::setCandidateWinHorizontal(bool b) {
-    setting->setValue("settings/CandidateWin/Horizontal", b);
-    setting->sync();
+  setting->setValue("settings/CandidateWin/Horizontal", b);
+  setting->sync();
 }
 
 bool Settings::getCandidateWinHorizontal() {
-    setting->sync();
-    return setting->value("settings/CandidateWin/Horizontal", true).toBool();
+  setting->sync();
+  return setting->value("settings/CandidateWin/Horizontal", true).toBool();
 }
 
 void Settings::setShowCWPhonetic(bool b) {
-    setting->setValue("settings/CandidateWin/Phonetic", b);
-    setting->sync();
+  setting->setValue("settings/CandidateWin/Phonetic", b);
+  setting->sync();
 }
 
 bool Settings::getShowCWPhonetic() {
-    setting->sync();
-    return setting->value("settings/CandidateWin/Phonetic", true).toBool();
+  setting->sync();
+  return setting->value("settings/CandidateWin/Phonetic", true).toBool();
 }
 
 void Settings::setUpdateCheck(bool b) {
-    setting->setValue("settings/UpdateCheck", b);
-    setting->sync();
+  setting->setValue("settings/UpdateCheck", b);
+  setting->sync();
 }
 
 bool Settings::getUpdateCheck() {
-    setting->sync();
-    return setting->value("settings/UpdateCheck", true).toBool();
+  setting->sync();
+  return setting->value("settings/UpdateCheck", true).toBool();
 }

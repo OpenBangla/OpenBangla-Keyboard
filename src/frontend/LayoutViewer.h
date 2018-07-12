@@ -23,7 +23,7 @@
 #include "Layout.h"
 
 namespace Ui {
-    class LayoutViewer;
+class LayoutViewer;
 }
 
 class QImage;
@@ -34,30 +34,30 @@ class LayoutViewer : public QDialog {
 Q_OBJECT
 
 public:
-    explicit LayoutViewer(QWidget *parent = 0);
+  explicit LayoutViewer(QWidget *parent = 0);
 
-    ~LayoutViewer();
+  ~LayoutViewer();
 
-    void refreshLayoutViewer();
+  void refreshLayoutViewer();
 
-    void showLayoutInfoDialog();
+  void showLayoutInfoDialog();
 
 private slots:
 
-    void on_buttonClose_clicked();
+  void on_buttonClose_clicked();
 
-    void on_buttonAboutLayout_clicked();
+  void on_buttonAboutLayout_clicked();
 
-    void on_viewNormal_clicked();
+  void on_viewNormal_clicked();
 
-    void on_viewAltGr_clicked();
+  void on_viewAltGr_clicked();
 
 private:
-    Ui::LayoutViewer *ui;
+  Ui::LayoutViewer *ui;
 
-    AboutFile *aboutDialog;
-    QImage image;
-    LayoutDesc desc;
+  AboutFile *aboutDialog;
+  QImage image;
+  LayoutDesc desc;
 };
 
 #endif // LAYOUTVIEWER_H

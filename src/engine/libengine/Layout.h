@@ -37,114 +37,114 @@
  * @description Checks is there is any candidate in @candidates
  */
 struct Suggestion {
-    std::vector<std::string> candidates;
-    std::string auxiliaryText;
-    bool showCandidateWin;
-    int prevSelection;
+  std::vector<std::string> candidates;
+  std::string auxiliaryText;
+  bool showCandidateWin;
+  int prevSelection;
 
-    bool isEmpty() {
-        return candidates.empty();
-    }
+  bool isEmpty() {
+    return candidates.empty();
+  }
 };
 
 struct IMCommand {
-    /* Key accepted */
-    bool accepted = false;
-    /* Commit current suggestion(candidate) */
-    bool commit = false;
-    /* IM needs to update candidates */
-    bool needUpdate = false;
-    /* IM needs to reset */
-    bool needReset = false;
+  /* Key accepted */
+  bool accepted = false;
+  /* Commit current suggestion(candidate) */
+  bool commit = false;
+  /* IM needs to update candidates */
+  bool needUpdate = false;
+  /* IM needs to reset */
+  bool needReset = false;
 };
 
 enum LayoutType {
-    Layout_Phonetic,
-    Layout_Fixed
+  Layout_Phonetic,
+  Layout_Fixed
 };
 
 /* Structure for storing Layout Description */
 struct LayoutDesc {
-    LayoutType type;
+  LayoutType type;
 };
 
 /* A pure virtual class. Every Typing Method have to implement this.
  */
 class LayoutMth {
 public:
-    virtual void setLayout(QJsonObject lay) = 0;
+  virtual void setLayout(QJsonObject lay) = 0;
 
-    /* Generates suggestions on the fly */
-    virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt)  = 0;
+  /* Generates suggestions on the fly */
+  virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt)  = 0;
 
-    /* Handle special keys such as Enter, Backspace, Space etc keys */
-    virtual IMCommand handleSpecialKey(int key) = 0;
+  /* Handle special keys such as Enter, Backspace, Space etc keys */
+  virtual IMCommand handleSpecialKey(int key) = 0;
 
-    /* Get the candidates for commit */
-    virtual Suggestion getCandidates() = 0;
+  /* Get the candidates for commit */
+  virtual Suggestion getCandidates() = 0;
 
-    /* Is the last key was processed? */
-    virtual bool handledKeyPress() = 0;
+  /* Is the last key was processed? */
+  virtual bool handledKeyPress() = 0;
 
-    /* Confirms that one of the send candidates has been commited
-     * @index index of the candidate string that was commited */
-    virtual void candidateCommited(int index) = 0;
+  /* Confirms that one of the send candidates has been commited
+   * @index index of the candidate string that was commited */
+  virtual void candidateCommited(int index) = 0;
 
-    /* Update internal suggestion making mechanism */
-    virtual void updateEngine() = 0;
+  /* Update internal suggestion making mechanism */
+  virtual void updateEngine() = 0;
 };
 
 class Layout {
-    /* Layout Method handler */
-    LayoutMth *mth;
+  /* Layout Method handler */
+  LayoutMth *mth;
 
-    /* File input handler */
-    QFile fin;
-    /* Layout File */
-    QJsonObject lf;
-    /* Layout Descriptor */
-    LayoutDesc lD;
+  /* File input handler */
+  QFile fin;
+  /* Layout File */
+  QJsonObject lf;
+  /* Layout Descriptor */
+  LayoutDesc lD;
 
-    /* Load Layout Description. Used internally */
-    void loadDesc();
+  /* Load Layout Description. Used internally */
+  void loadDesc();
 
-    /* Set typing method. Used internally */
-    void setMethod();
+  /* Set typing method. Used internally */
+  void setMethod();
 
-    QJsonObject sendLayout();
+  QJsonObject sendLayout();
 
-    /* Update with current settings */
-    void updateWithSettings();
+  /* Update with current settings */
+  void updateWithSettings();
 
-    /* Load a layout from given @path */
-    void loadLayout(QString path);
+  /* Load a layout from given @path */
+  void loadLayout(QString path);
 
 public:
-    Layout();
+  Layout();
 
-    ~Layout();
+  ~Layout();
 
-    /* Generates suggestions on the fly */
-    Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+  /* Generates suggestions on the fly */
+  Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
 
-    /* Get the candidates for commit */
-    Suggestion getCandidates();
+  /* Get the candidates for commit */
+  Suggestion getCandidates();
 
-    /* Handle special keys such as Enter, Backspace, Space etc keys */
-    IMCommand handleSpecialKey(int key);
+  /* Handle special keys such as Enter, Backspace, Space etc keys */
+  IMCommand handleSpecialKey(int key);
 
-    /* Is the last key was processed? */
-    bool handledKeyPress();
+  /* Is the last key was processed? */
+  bool handledKeyPress();
 
-    /* Confirms that one of the send candidates has been commited
-     * @index index of the candidate string that was commited */
-    void candidateCommited(int index);
+  /* Confirms that one of the send candidates has been commited
+   * @index index of the candidate string that was commited */
+  void candidateCommited(int index);
 
-    /* Checks is the candidate window horizontal */
-    bool isCandidateWinHorizontal();
+  /* Checks is the candidate window horizontal */
+  bool isCandidateWinHorizontal();
 
-    /* Update internal suggestion making mechanism */
-    void updateEngine();
+  /* Update internal suggestion making mechanism */
+  void updateEngine();
 };
 
 /* Global */

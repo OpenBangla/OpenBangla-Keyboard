@@ -21,53 +21,53 @@
 #include "cachemanager.h"
 
 CacheManager::CacheManager() {
-    loadCandidateSelection();
+  loadCandidateSelection();
 }
 
 void CacheManager::setTempCache(QString key, QVector<QString> suggestions) {
-    tempCache[key] = suggestions;
+  tempCache[key] = suggestions;
 }
 
 QVector<QString> CacheManager::getTempCache(QString key) {
-    return tempCache.value(key);
+  return tempCache.value(key);
 }
 
 void CacheManager::loadCandidateSelection() {
-    QFile loadFile(folders.getCandidateSaveFile());
-    if (!loadFile.open(QIODevice::ReadOnly)) {
-        LOG_ERROR("[CacheManager:Load]: Error couldn't open save file.\n");
-        return;
-    }
-    QByteArray jsonData = loadFile.readAll();
+  QFile loadFile(folders.getCandidateSaveFile());
+  if (!loadFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[CacheManager:Load]: Error couldn't open save file.\n");
+    return;
+  }
+  QByteArray jsonData = loadFile.readAll();
 
-    QJsonDocument json(QJsonDocument::fromJson(jsonData));
-    candidateSel = json.object();
+  QJsonDocument json(QJsonDocument::fromJson(jsonData));
+  candidateSel = json.object();
 
-    loadFile.close();
+  loadFile.close();
 }
 
 QString CacheManager::getCandidateSelection(QString word) {
-    if (candidateSel.contains(word)) {
-        return candidateSel[word].toString();
-    } else {
-        return QString("");
-    }
+  if (candidateSel.contains(word)) {
+    return candidateSel[word].toString();
+  } else {
+    return QString("");
+  }
 }
 
 void CacheManager::writeCandidateSelection(QString word, QString sel) {
-    candidateSel.insert(word, sel);
-    saveCandidateSelection();
+  candidateSel.insert(word, sel);
+  saveCandidateSelection();
 }
 
 void CacheManager::saveCandidateSelection() {
-    QFile saveFile(folders.getCandidateSaveFile());
-    if (!saveFile.open(QIODevice::WriteOnly)) {
-        LOG_ERROR("[CacheManager:Save]: Error couldn't open save file.\n");
-        return;
-    }
+  QFile saveFile(folders.getCandidateSaveFile());
+  if (!saveFile.open(QIODevice::WriteOnly)) {
+    LOG_ERROR("[CacheManager:Save]: Error couldn't open save file.\n");
+    return;
+  }
 
-    QJsonDocument json(candidateSel);
-    saveFile.write(json.toJson());
+  QJsonDocument json(candidateSel);
+  saveFile.write(json.toJson());
 
-    saveFile.close();
+  saveFile.close();
 }

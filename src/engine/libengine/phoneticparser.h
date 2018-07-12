@@ -29,35 +29,35 @@
 
 class PhoneticParser {
 private:
-    QJsonObject layout;
+  QJsonObject layout;
 
-    QJsonArray patterns;
-    QString vowel;
-    QString cons;
-    QString num;
-    QString csen;
-    int maxPatternLength;
+  QJsonArray patterns;
+  QString vowel;
+  QString cons;
+  QString num;
+  QString csen;
+  int maxPatternLength;
 
-    bool isVowel(QChar c);
+  bool isVowel(QChar c);
 
-    bool isConsonant(QChar c);
+  bool isConsonant(QChar c);
 
-    bool isPunctuation(QChar c);
+  bool isPunctuation(QChar c);
 
-    bool isNumber(QChar c);
+  bool isNumber(QChar c);
 
-    bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
+  bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
 
-    bool isCaseSensitive(QChar c);
+  bool isCaseSensitive(QChar c);
 
 public:
-    ~PhoneticParser();
+  ~PhoneticParser();
 
-    void setLayout(QJsonObject l);
+  void setLayout(QJsonObject l);
 
-    QString parse(QString input);
+  QString parse(QString input);
 
-    QString fixString(QString input);
+  QString fixString(QString input);
 };
 
 #endif /* end of include guard: PHONETIC_PARSER_H */

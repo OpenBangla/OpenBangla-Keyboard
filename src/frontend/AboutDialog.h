@@ -25,36 +25,36 @@
 class QTimer;
 
 namespace Ui {
-    class AboutDialog;
+class AboutDialog;
 }
 
 class AboutDialog : public QDialog {
 Q_OBJECT
 
 public:
-    explicit AboutDialog(QWidget *parent = 0);
+  explicit AboutDialog(QWidget *parent = 0);
 
-    ~AboutDialog();
+  ~AboutDialog();
 
 protected:
-    bool eventFilter(QObject *object, QEvent *event) override;
+  bool eventFilter(QObject *object, QEvent *event) override;
 
-    void showEvent(QShowEvent *event) override;
+  void showEvent(QShowEvent *event) override;
 
 private slots:
 
-    void scroll();
+  void scroll();
 
-    void on_btnClose_clicked();
+  void on_btnClose_clicked();
 
-    void on_btnLicense_toggled(bool checked);
+  void on_btnLicense_toggled(bool checked);
 
-    void on_labelDesc_linkActivated(const QString &link);
+  void on_labelDesc_linkActivated(const QString &link);
 
 private:
-    Ui::AboutDialog *ui;
+  Ui::AboutDialog *ui;
 
-    QTimer *timer;
+  QTimer *timer;
 };
 
 #endif // ABOUTDIALOG_H

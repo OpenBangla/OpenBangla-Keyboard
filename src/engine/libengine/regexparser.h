@@ -29,32 +29,32 @@
 
 class RegexParser {
 private:
-    QJsonArray patterns;
-    QString vowel;
-    QString cons;
-    QString ign;
-    int maxPatternLength;
+  QJsonArray patterns;
+  QString vowel;
+  QString cons;
+  QString ign;
+  int maxPatternLength;
 
-    bool isVowel(QChar c);
+  bool isVowel(QChar c);
 
-    bool isConsonant(QChar c);
+  bool isConsonant(QChar c);
 
-    bool isPunctuation(QChar c);
+  bool isPunctuation(QChar c);
 
-    bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
+  bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
 
-    bool isIgnore(QChar c);
+  bool isIgnore(QChar c);
 
-    QString cleanString(QString input);
+  QString cleanString(QString input);
 
-    QString makeRegexCompatible(QString input);
+  QString makeRegexCompatible(QString input);
 
 public:
-    RegexParser();
+  RegexParser();
 
-    ~RegexParser();
+  ~RegexParser();
 
-    QString parse(QString input);
+  QString parse(QString input);
 };
 
 #endif /* end of include guard: REGEX_PARSER_H */

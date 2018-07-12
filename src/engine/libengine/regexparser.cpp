@@ -25,216 +25,219 @@
 #include "log.h"
 
 RegexParser::RegexParser() {
-    QFile grammarFile(PKGDATADIR "/data/regex.json");
-    if (!grammarFile.open(QIODevice::ReadOnly)) {
-        LOG_ERROR("[RegexParser]: Error: Couldn't open grammar file\n");
-    }
-    QByteArray data = grammarFile.readAll();
-    QJsonDocument json(QJsonDocument::fromJson(data));
+  QFile grammarFile(PKGDATADIR "/data/regex.json");
+  if (!grammarFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[RegexParser]: Error: Couldn't open grammar file\n");
+  }
+  QByteArray data = grammarFile.readAll();
+  QJsonDocument json(QJsonDocument::fromJson(data));
 
-    QJsonObject grammar = json.object();
+  QJsonObject grammar = json.object();
 
-    patterns = grammar.value("patterns").toArray();
-    QString _find = patterns.at(0).toObject().value("find").toString();
-    maxPatternLength = _find.length();
-    vowel = grammar.value("vowel").toString();
-    cons = grammar.value("consonant").toString();
-    ign = grammar.value("ignore").toString();
+  patterns = grammar.value("patterns").toArray();
+  QString _find = patterns.at(0).toObject().value("find").toString();
+  maxPatternLength = _find.length();
+  vowel = grammar.value("vowel").toString();
+  cons = grammar.value("consonant").toString();
+  ign = grammar.value("ignore").toString();
 
-    grammarFile.close();
+  grammarFile.close();
 }
 
 RegexParser::~RegexParser() {}
 
 QString RegexParser::parse(QString input) {
-    // Check
-    if (input.length() == 0) return input;
+  // Check
+  if (input.length() == 0)
+    return input;
 
-    QString fixed = cleanString(input);
-    QString output;
+  QString fixed = cleanString(input);
+  QString output;
 
-    int len = fixed.length();
-    for (int cur = 0; cur < len; ++cur) {
-        int start = cur, end;
-        bool matched = false;
+  int len = fixed.length();
+  for (int cur = 0; cur < len; ++cur) {
+    int start = cur, end;
+    bool matched = false;
 
-        int chunkLen;
-        for (int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
-            end = start + chunkLen;
-            if (end <= len) {
-                QString chunk = fixed.mid(start, chunkLen);
+    int chunkLen;
+    for (int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
+      end = start + chunkLen;
+      if (end <= len) {
+        QString chunk = fixed.mid(start, chunkLen);
 
-                // Binary Search
-                int left = 0, right = patterns.size() - 1, mid;
-                while (right >= left) {
-                    mid = (right + left) / 2;
-                    QJsonObject pattern = patterns.at(mid).toObject();
-                    QString find = pattern.value("find").toString();
-                    if (find == chunk) {
-                        QJsonArray rules = pattern.value("rules").toArray();
-                        if (!(rules.isEmpty())) {
-                            for (QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
-                                QJsonValue rul = *r;
-                                QJsonObject rule = rul.toObject();
-                                bool replace = true;
-                                int chk = 0;
-                                QJsonArray matches = rule.value("matches").toArray();
-                                for (QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
-                                    QJsonValue mch = *m;
-                                    QJsonObject match = mch.toObject();
-                                    QString value = match.value("value").toString();
-                                    QString type = match.value("type").toString();
-                                    QString scope = match.value("scope").toString();
-                                    bool isNegative = match.value("negative").toBool();
+        // Binary Search
+        int left = 0, right = patterns.size() - 1, mid;
+        while (right >= left) {
+          mid = (right + left) / 2;
+          QJsonObject pattern = patterns.at(mid).toObject();
+          QString find = pattern.value("find").toString();
+          if (find == chunk) {
+            QJsonArray rules = pattern.value("rules").toArray();
+            if (!(rules.isEmpty())) {
+              for (QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
+                QJsonValue rul = *r;
+                QJsonObject rule = rul.toObject();
+                bool replace = true;
+                int chk = 0;
+                QJsonArray matches = rule.value("matches").toArray();
+                for (QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
+                  QJsonValue mch = *m;
+                  QJsonObject match = mch.toObject();
+                  QString value = match.value("value").toString();
+                  QString type = match.value("type").toString();
+                  QString scope = match.value("scope").toString();
+                  bool isNegative = match.value("negative").toBool();
 
-                                    if (type == "suffix") {
-                                        chk = end;
-                                    }
-                                        // Prefix
-                                    else {
-                                        chk = start - 1;
-                                    }
+                  if (type == "suffix") {
+                    chk = end;
+                  }
+                    // Prefix
+                  else {
+                    chk = start - 1;
+                  }
 
-                                    // Beginning
-                                    if (scope == "punctuation") {
-                                        if (
-                                                !(
-                                                        (chk < 0 && (type == "prefix")) ||
-                                                        (chk >= len && (type == "suffix")) ||
-                                                        isPunctuation(fixed.at(chk))
-                                                ) ^ isNegative
-                                                ) {
-                                            replace = false;
-                                            break;
-                                        }
-                                    }
-                                        // Vowel
-                                    else if (scope == "vowel") {
-                                        if (
-                                                !(
-                                                        (
-                                                                (chk >= 0 && (type == "prefix")) ||
-                                                                (chk < len && (type == "suffix"))
-                                                        ) &&
-                                                        isVowel(fixed.at(chk))
-                                                ) ^ isNegative
-                                                ) {
-                                            replace = false;
-                                            break;
-                                        }
-                                    }
-                                        // Consonant
-                                    else if (scope == "consonant") {
-                                        if (
-                                                !(
-                                                        (
-                                                                (chk >= 0 && (type == "prefix")) ||
-                                                                (chk < len && (type == "suffix"))
-                                                        ) &&
-                                                        isConsonant(fixed.at(chk))
-                                                ) ^ isNegative
-                                                ) {
-                                            replace = false;
-                                            break;
-                                        }
-                                    }
-                                        // Exact
-                                    else if (scope == "exact") {
-                                        int s, e;
-                                        if (type == "suffix") {
-                                            s = end;
-                                            e = end + value.length();
-                                        }
-                                            // Prefix
-                                        else {
-                                            s = start - value.length();
-                                            e = start;
-                                        }
-                                        if (!(isExact(value, fixed, s, e, isNegative))) {
-                                            replace = false;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (replace) {
-                                    QString rl = rule.value("replace").toString();
-                                    output += rl;
-                                    output += "(্[যবম])?(্?)([ঃঁ]?)";
-                                    cur = end - 1;
-                                    matched = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (matched == true) break;
-
-                        // Default
-                        QString rl = pattern.value("replace").toString();
-                        output += rl;
-                        output += "(্[যবম])?(্?)([ঃঁ]?)";
-                        cur = end - 1;
-                        matched = true;
-                        break;
-                    } else if (find.length() > chunk.length() ||
-                               (find.length() == chunk.length() && find.compare(chunk, Qt::CaseSensitive) < 0)) {
-                        left = mid + 1;
-                    } else {
-                        right = mid - 1;
+                  // Beginning
+                  if (scope == "punctuation") {
+                    if (
+                        !(
+                            (chk < 0 && (type == "prefix")) ||
+                                (chk >= len && (type == "suffix")) ||
+                                isPunctuation(fixed.at(chk))
+                        ) ^ isNegative
+                        ) {
+                      replace = false;
+                      break;
                     }
+                  }
+                    // Vowel
+                  else if (scope == "vowel") {
+                    if (
+                        !(
+                            (
+                                (chk >= 0 && (type == "prefix")) ||
+                                    (chk < len && (type == "suffix"))
+                            ) &&
+                                isVowel(fixed.at(chk))
+                        ) ^ isNegative
+                        ) {
+                      replace = false;
+                      break;
+                    }
+                  }
+                    // Consonant
+                  else if (scope == "consonant") {
+                    if (
+                        !(
+                            (
+                                (chk >= 0 && (type == "prefix")) ||
+                                    (chk < len && (type == "suffix"))
+                            ) &&
+                                isConsonant(fixed.at(chk))
+                        ) ^ isNegative
+                        ) {
+                      replace = false;
+                      break;
+                    }
+                  }
+                    // Exact
+                  else if (scope == "exact") {
+                    int s, e;
+                    if (type == "suffix") {
+                      s = end;
+                      e = end + value.length();
+                    }
+                      // Prefix
+                    else {
+                      s = start - value.length();
+                      e = start;
+                    }
+                    if (!(isExact(value, fixed, s, e, isNegative))) {
+                      replace = false;
+                      break;
+                    }
+                  }
                 }
-                if (matched == true) break;
-            }
-        }
 
-        if (!matched) {
-            output += fixed.at(cur);
+                if (replace) {
+                  QString rl = rule.value("replace").toString();
+                  output += rl;
+                  output += "(্[যবম])?(্?)([ঃঁ]?)";
+                  cur = end - 1;
+                  matched = true;
+                  break;
+                }
+              }
+            }
+
+            if (matched == true)
+              break;
+
+            // Default
+            QString rl = pattern.value("replace").toString();
+            output += rl;
+            output += "(্[যবম])?(্?)([ঃঁ]?)";
+            cur = end - 1;
+            matched = true;
+            break;
+          } else if (find.length() > chunk.length() ||
+              (find.length() == chunk.length() && find.compare(chunk, Qt::CaseSensitive) < 0)) {
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
         }
+        if (matched == true)
+          break;
+      }
     }
 
-    return makeRegexCompatible(output);
+    if (!matched) {
+      output += fixed.at(cur);
+    }
+  }
+
+  return makeRegexCompatible(output);
 }
 
 QString RegexParser::makeRegexCompatible(QString input) {
-    QString output;
-    for (auto &str : input) {
-        if (str.unicode() >= 255) {
-            output += "\\x{0" + QString::number(str.unicode(), 16).toUpper() + "}";
-        } else {
-            output += str;
-        }
+  QString output;
+  for (auto &str : input) {
+    if (str.unicode() >= 255) {
+      output += "\\x{0" + QString::number(str.unicode(), 16).toUpper() + "}";
+    } else {
+      output += str;
     }
-    return QString("^" + output + "$");
+  }
+  return QString("^" + output + "$");
 }
 
 QString RegexParser::cleanString(QString input) {
-    QString fixed;
-    for (const auto &c : input) {
-        if (!isIgnore(c)) {
-            fixed += c.toLower();
-        }
+  QString fixed;
+  for (const auto &c : input) {
+    if (!isIgnore(c)) {
+      fixed += c.toLower();
     }
-    return fixed;
+  }
+  return fixed;
 }
 
 bool RegexParser::isVowel(QChar c) {
-    return vowel.contains(c, Qt::CaseInsensitive);
+  return vowel.contains(c, Qt::CaseInsensitive);
 }
 
 bool RegexParser::isConsonant(QChar c) {
-    return cons.contains(c, Qt::CaseInsensitive);
+  return cons.contains(c, Qt::CaseInsensitive);
 }
 
 bool RegexParser::isPunctuation(QChar c) {
-    return (!(isVowel(c) || isConsonant(c)));
+  return (!(isVowel(c) || isConsonant(c)));
 }
 
 bool RegexParser::isExact(QString needle, QString heystack, int start, int end, bool strnot) {
-    int len = end - start;
-    return ((start >= 0 && end < heystack.length() && (heystack.mid(start, len) == needle)) ^ strnot);
+  int len = end - start;
+  return ((start >= 0 && end < heystack.length() && (heystack.mid(start, len) == needle)) ^ strnot);
 }
 
 bool RegexParser::isIgnore(QChar c) {
-    return ign.contains(c, Qt::CaseInsensitive);
+  return ign.contains(c, Qt::CaseInsensitive);
 }

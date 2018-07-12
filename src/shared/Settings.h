@@ -26,63 +26,63 @@ class QPoint;
 class QString;
 
 class Settings {
-    QSettings *setting;
+  QSettings *setting;
 public:
-    Settings();
+  Settings();
 
-    ~Settings();
+  ~Settings();
 
-    void setTopBarWindowPosition(QPoint pos);
+  void setTopBarWindowPosition(QPoint pos);
 
-    QPoint getTopBarWindowPosition();
+  QPoint getTopBarWindowPosition();
 
-    void setLayoutViewerWindowPosition(QPoint pos);
+  void setLayoutViewerWindowPosition(QPoint pos);
 
-    QPoint getLayoutViewerWindowPosition();
+  QPoint getLayoutViewerWindowPosition();
 
-    void setLayoutName(QString name);
+  void setLayoutName(QString name);
 
-    QString getLayoutName();
+  QString getLayoutName();
 
-    void setLayoutPath(QString path);
+  void setLayoutPath(QString path);
 
-    QString getLayoutPath();
+  QString getLayoutPath();
 
-    void setEnterKeyClosesPrevWin(bool b);
+  void setEnterKeyClosesPrevWin(bool b);
 
-    bool getEnterKeyClosesPrevWin();
+  bool getEnterKeyClosesPrevWin();
 
-    void setAutoVowelFormFixed(bool b);
+  void setAutoVowelFormFixed(bool b);
 
-    bool getAutoVowelFormFixed();
+  bool getAutoVowelFormFixed();
 
-    void setAutoChandraPosFixed(bool b);
+  void setAutoChandraPosFixed(bool b);
 
-    bool getAutoChandraPosFixed();
+  bool getAutoChandraPosFixed();
 
-    void setTraditionalKarFixed(bool b);
+  void setTraditionalKarFixed(bool b);
 
-    bool getTraditionalKarFixed();
+  bool getTraditionalKarFixed();
 
-    void setNumberPadFixed(bool b);
+  void setNumberPadFixed(bool b);
 
-    bool getNumberPadFixed();
+  bool getNumberPadFixed();
 
-    void setOldReph(bool b);
+  void setOldReph(bool b);
 
-    bool getOldReph();
+  bool getOldReph();
 
-    void setCandidateWinHorizontal(bool c);
+  void setCandidateWinHorizontal(bool c);
 
-    bool getCandidateWinHorizontal();
+  bool getCandidateWinHorizontal();
 
-    void setShowCWPhonetic(bool b);
+  void setShowCWPhonetic(bool b);
 
-    bool getShowCWPhonetic();
+  bool getShowCWPhonetic();
 
-    void setUpdateCheck(bool b);
+  void setUpdateCheck(bool b);
 
-    bool getUpdateCheck();
+  bool getUpdateCheck();
 };
 
 /* Global */

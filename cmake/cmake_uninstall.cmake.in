@@ -44,7 +44,7 @@ OR EXISTS
 endforeach(file)
 
 execute_process(
-        COMMAND
+    COMMAND
 "${CMAKE_COMMAND}" -
 E remove
 "@CMAKE_BINARY_DIR@/install_manifest.txt"

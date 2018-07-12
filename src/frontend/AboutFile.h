@@ -23,31 +23,31 @@
 #include "Layout.h"
 
 namespace Ui {
-    class AboutFile;
+class AboutFile;
 }
 
 enum DialogType {
-    AboutLayout
+  AboutLayout
 };
 
 class AboutFile : public QDialog {
 Q_OBJECT
 
 public:
-    explicit AboutFile(QWidget *parent = 0);
+  explicit AboutFile(QWidget *parent = 0);
 
-    ~AboutFile();
+  ~AboutFile();
 
-    void setDialogType(DialogType type);
+  void setDialogType(DialogType type);
 
 private slots:
 
-    void on_buttonOK_clicked();
+  void on_buttonOK_clicked();
 
 private:
-    Ui::AboutFile *ui;
+  Ui::AboutFile *ui;
 
-    void loadLayoutInfo();
+  void loadLayoutInfo();
 };
 
 #endif // ABOUTFILE_H

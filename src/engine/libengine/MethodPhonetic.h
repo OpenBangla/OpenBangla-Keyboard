@@ -24,33 +24,33 @@
 #include "PhoneticSuggestion.h"
 
 class MethodPhonetic : public LayoutMth {
-    bool handledKey;
-    bool changedCandidateSelection = false;
-    int prevSelected;
-    PhoneticSuggestion suggest;
-    QStringList list;
-    QString EnglishT;
-    Suggestion suggested;
+  bool handledKey;
+  bool changedCandidateSelection = false;
+  int prevSelected;
+  PhoneticSuggestion suggest;
+  QStringList list;
+  QString EnglishT;
+  Suggestion suggested;
 
-    Suggestion createSuggestion();
+  Suggestion createSuggestion();
 
-    std::vector<std::string> toStdVector(QStringList vec);
+  std::vector<std::string> toStdVector(QStringList vec);
 
 public:
-    // Functions inherited from class LayoutMth
-    void setLayout(QJsonObject lay);
+  // Functions inherited from class LayoutMth
+  void setLayout(QJsonObject lay);
 
-    Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+  Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
 
-    IMCommand handleSpecialKey(int key);
+  IMCommand handleSpecialKey(int key);
 
-    Suggestion getCandidates();
+  Suggestion getCandidates();
 
-    bool handledKeyPress();
+  bool handledKeyPress();
 
-    void candidateCommited(int index);
+  void candidateCommited(int index);
 
-    void updateEngine();
+  void updateEngine();
 };
 
 #endif /* end of include guard: METHOD_PHONETIC_H */

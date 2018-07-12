@@ -31,58 +31,58 @@
 class QDir;
 
 enum LayoutType {
-    Layout_Phonetic,
-    Layout_Fixed
+  Layout_Phonetic,
+  Layout_Fixed
 };
 
 /* Structure for storing Layout Description */
 struct LayoutDesc {
-    LayoutType type;
-    int fileVer;
-    QString name;
-    QString ver;
-    QByteArray image0;
-    QByteArray image1;
-    QString devName;
-    QString devComment;
+  LayoutType type;
+  int fileVer;
+  QString name;
+  QString ver;
+  QByteArray image0;
+  QByteArray image1;
+  QString devName;
+  QString devComment;
 };
 
 /* List of available layouts */
 typedef QVector<QString> LayoutList;
 
 class Layout {
-    /* File input handler */
-    QFile fin;
-    /* Layout File */
-    QJsonObject lf;
-    /* Layout Descriptor */
-    LayoutDesc lD;
-    /* Internal map of available layouts */
-    QMap<QString, QString> layoutMap;
+  /* File input handler */
+  QFile fin;
+  /* Layout File */
+  QJsonObject lf;
+  /* Layout Descriptor */
+  LayoutDesc lD;
+  /* Internal map of available layouts */
+  QMap<QString, QString> layoutMap;
 
-    SpecialFolders folders;
+  SpecialFolders folders;
 
-    /* Load Layout Description. Used internaly */
-    void loadDesc();
+  /* Load Layout Description. Used internaly */
+  void loadDesc();
 
-    /* Search for layouts in @dir and return the list of them
-     * This also resets internal map and lists */
-    LayoutList searchLayoutsEx(QDir dir);
+  /* Search for layouts in @dir and return the list of them
+   * This also resets internal map and lists */
+  LayoutList searchLayoutsEx(QDir dir);
 
-    /* Load the layout from given @path */
-    void loadLayout(QString path);
+  /* Load the layout from given @path */
+  void loadLayout(QString path);
 
 public:
-    ~Layout();
+  ~Layout();
 
-    /* Get Layout Description */
-    LayoutDesc getDesc();
+  /* Get Layout Description */
+  LayoutDesc getDesc();
 
-    /* Search for available layouts and return the list of them */
-    LayoutList searchLayouts();
+  /* Search for available layouts and return the list of them */
+  LayoutList searchLayouts();
 
-    /*  */
-    void setLayout(QString name);
+  /*  */
+  void setLayout(QString name);
 };
 
 /* Global */

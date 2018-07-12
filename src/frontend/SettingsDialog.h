@@ -22,33 +22,33 @@
 #include <QDialog>
 
 namespace Ui {
-    class SettingsDialog;
+class SettingsDialog;
 }
 
 class SettingsDialog : public QDialog {
 Q_OBJECT
 
 public:
-    explicit SettingsDialog(QWidget *parent = 0);
+  explicit SettingsDialog(QWidget *parent = 0);
 
-    ~SettingsDialog();
+  ~SettingsDialog();
 
-    void updateSettings();
+  void updateSettings();
 
 private slots:
 
-    void on_buttonBox_accepted();
+  void on_buttonBox_accepted();
 
-    void on_buttonBox_rejected();
+  void on_buttonBox_rejected();
 
-    void on_btnClosePrevWin_toggled(bool checked);
+  void on_btnClosePrevWin_toggled(bool checked);
 
-    void on_btnShowPrevWin_toggled(bool checked);
+  void on_btnShowPrevWin_toggled(bool checked);
 
-    void on_btnCheckUpdate_toggled(bool checked);
+  void on_btnCheckUpdate_toggled(bool checked);
 
 private:
-    Ui::SettingsDialog *ui;
+  Ui::SettingsDialog *ui;
 };
 
 #endif // SETTINGSDIALOG_H

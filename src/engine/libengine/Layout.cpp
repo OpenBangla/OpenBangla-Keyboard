@@ -32,94 +32,95 @@ MethodPhonetic mPh;
 MethodFixedLayoutModern mFm;
 
 Layout::Layout() {
-    gSettings = new Settings();
-    loadLayout(gSettings->getLayoutPath());
+  gSettings = new Settings();
+  loadLayout(gSettings->getLayoutPath());
 }
 
 Layout::~Layout() {
-    // Close the file handler
-    fin.close();
-    delete gSettings;
+  // Close the file handler
+  fin.close();
+  delete gSettings;
 }
 
 void Layout::loadLayout(QString path) {
-    // Check if we have already a opened file
-    if (fin.isOpen()) fin.close();
+  // Check if we have already a opened file
+  if (fin.isOpen())
+    fin.close();
 
-    // Open the given layout file
-    fin.setFileName(path);
-    fin.open(QIODevice::ReadOnly);
-    QByteArray data = fin.readAll();
+  // Open the given layout file
+  fin.setFileName(path);
+  fin.open(QIODevice::ReadOnly);
+  QByteArray data = fin.readAll();
 
-    // Load Layout(Json) file
-    QJsonDocument json(QJsonDocument::fromJson(data));
-    lf = json.object();
-    // Load it's Description
-    loadDesc();
-    // Set typing method
-    setMethod();
-    // Send changed layout to typing method
-    mth->setLayout(sendLayout());
+  // Load Layout(Json) file
+  QJsonDocument json(QJsonDocument::fromJson(data));
+  lf = json.object();
+  // Load it's Description
+  loadDesc();
+  // Set typing method
+  setMethod();
+  // Send changed layout to typing method
+  mth->setLayout(sendLayout());
 }
 
 void Layout::loadDesc() {
-    // Load Layout Description
-    // Layout File Type
-    QString type = lf.value("info").toObject().value("type").toString();
-    if (type == "phonetic") {
-        lD.type = Layout_Phonetic;
-    } else {
-        lD.type = Layout_Fixed;
-    }
+  // Load Layout Description
+  // Layout File Type
+  QString type = lf.value("info").toObject().value("type").toString();
+  if (type == "phonetic") {
+    lD.type = Layout_Phonetic;
+  } else {
+    lD.type = Layout_Fixed;
+  }
 }
 
 QJsonObject Layout::sendLayout() {
-    return lf.value("layout").toObject();
+  return lf.value("layout").toObject();
 }
 
 void Layout::setMethod() {
-    // Check layout type and set methods
-    if (lD.type == Layout_Phonetic) {
-        // Selected method is phonetic
-        mth = &mPh; // Phonetic Method
-    } else {
-        // Selected method is fixed layout
-        mth = &mFm;
-    }
+  // Check layout type and set methods
+  if (lD.type == Layout_Phonetic) {
+    // Selected method is phonetic
+    mth = &mPh; // Phonetic Method
+  } else {
+    // Selected method is fixed layout
+    mth = &mFm;
+  }
 }
 
 void Layout::updateWithSettings() {
-    // Check if user has changed layout
-    if (fin.fileName() != gSettings->getLayoutPath()) {
-        loadLayout(gSettings->getLayoutPath());
-    }
+  // Check if user has changed layout
+  if (fin.fileName() != gSettings->getLayoutPath()) {
+    loadLayout(gSettings->getLayoutPath());
+  }
 }
 
 Suggestion Layout::getSuggestion(int key, bool shift, bool ctrl, bool alt) {
-    updateWithSettings();
-    return mth->getSuggestion(key, shift, ctrl, alt);
+  updateWithSettings();
+  return mth->getSuggestion(key, shift, ctrl, alt);
 }
 
 IMCommand Layout::handleSpecialKey(int key) {
-    return mth->handleSpecialKey(key);
+  return mth->handleSpecialKey(key);
 }
 
 Suggestion Layout::getCandidates() {
-    return mth->getCandidates();
+  return mth->getCandidates();
 }
 
 bool Layout::handledKeyPress() {
-    return mth->handledKeyPress();
+  return mth->handledKeyPress();
 }
 
 void Layout::candidateCommited(int index) {
-    mth->candidateCommited(index);
+  mth->candidateCommited(index);
 }
 
 bool Layout::isCandidateWinHorizontal() {
-    return gSettings->getCandidateWinHorizontal();
+  return gSettings->getCandidateWinHorizontal();
 }
 
 void Layout::updateEngine() {
-    mth->updateEngine();
+  mth->updateEngine();
 }
