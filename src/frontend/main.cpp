@@ -21,23 +21,25 @@
 #include "TopBar.h"
 #include "SingleInstance.h"
 
-int main(int argc, char *argv []) {
-  QApplication app(argc, argv);
-  app.setApplicationName("OpenBangla Keyboard");
-  app.setApplicationVersion(PROJECT_VERSION);
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    app.setApplicationName("OpenBangla Keyboard");
+    app.setApplicationVersion(PROJECT_VERSION);
 
-  // Prevent many instances of the app to be launched
-  QString name = "com.openbangla.keyboard";
-  SingleInstance instance;
-  if(instance.hasPrevious(name)){
-    QMessageBox msgBox(QMessageBox::Information, "OpenBangla Keyboard", "OpenBangla Keyboard is already running on this system and\nrunning more than one instance is not allowed.", QMessageBox::Ok);
-    msgBox.exec();
-    return 0;
-  }
+    // Prevent many instances of the app to be launched
+    QString name = "com.openbangla.keyboard";
+    SingleInstance instance;
+    if (instance.hasPrevious(name)) {
+        QMessageBox msgBox(QMessageBox::Information, "OpenBangla Keyboard",
+                           "OpenBangla Keyboard is already running on this system and\nrunning more than one instance is not allowed.",
+                           QMessageBox::Ok);
+        msgBox.exec();
+        return 0;
+    }
 
-  instance.listen(name);
+    instance.listen(name);
 
-  TopBar w;
-  w.show();
-  return app.exec();
+    TopBar w;
+    w.show();
+    return app.exec();
 }

@@ -26,25 +26,32 @@
 #include "SpecialFolders.h"
 
 class AutoCorrect {
-  QJsonObject dict;
-  QJsonObject usrDict;
-  PhoneticParser parser;
-  SpecialFolders folders;
+    QJsonObject dict;
+    QJsonObject usrDict;
+    PhoneticParser parser;
+    SpecialFolders folders;
 public:
-  AutoCorrect();
-  QString getCorrected(QString word);
-  /* Get AutoCorrect entries */
-  QVariantMap getEntries();
-  /* Load user AutoCorrect file */
-  void loadUserAutoCorrectFile();
-  /* Load Avro Phonetic to convert Banglish to Bangla */
-  void loadAvroPhonetic();
-  /* Convert Banglish to Avro Phonetic */
-  QString convertBanglish(QString text);
-  /* Add an entry into users's AutoCorrect dictionary */
-  void setEntry(QString replace, QString with);
-  /* Save user specific AutoCorrect file */
-  void saveUserAutoCorrectFile();
+    AutoCorrect();
+
+    QString getCorrected(QString word);
+
+    /* Get AutoCorrect entries */
+    QVariantMap getEntries();
+
+    /* Load user AutoCorrect file */
+    void loadUserAutoCorrectFile();
+
+    /* Load Avro Phonetic to convert Banglish to Bangla */
+    void loadAvroPhonetic();
+
+    /* Convert Banglish to Avro Phonetic */
+    QString convertBanglish(QString text);
+
+    /* Add an entry into users's AutoCorrect dictionary */
+    void setEntry(QString replace, QString with);
+
+    /* Save user specific AutoCorrect file */
+    void saveUserAutoCorrectFile();
 };
 
 #endif /* end of include guard: AUTO_CORRECT_H */

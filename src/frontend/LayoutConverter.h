@@ -21,20 +21,21 @@
 #include "SpecialFolders.h"
 
 enum ConversionResult {
-  Ok,
-  UnsupportedLayout,
-  OpenError,
-  SaveError
+    Ok,
+    UnsupportedLayout,
+    OpenError,
+    SaveError
 };
 
 class LayoutConverter {
-  SpecialFolders folders;
+    SpecialFolders folders;
 
-  ConversionResult convertAvroLayout(QString path);
-  
-  ConversionResult saveLayout(QJsonObject obj, QString path);
+    ConversionResult convertAvroLayout(QString path);
 
-  QString unescapeXML(QString escaped);
+    ConversionResult saveLayout(QJsonObject obj, QString path);
+
+    QString unescapeXML(QString escaped);
+
 public:
-  ConversionResult convertLayout(QString path);
+    ConversionResult convertLayout(QString path);
 };

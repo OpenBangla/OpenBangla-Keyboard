@@ -22,27 +22,35 @@
 #include <QMainWindow>
 
 namespace Ui {
-class TopBar;
+    class TopBar;
 }
 
 class QActionGroup;
+
 class QAction;
+
 class QMenu;
+
 class QSystemTrayIcon;
 
 class LayoutViewer;
+
 class AboutDialog;
+
 class AboutFile;
+
 class SettingsDialog;
+
 class AutoCorrectDialog;
+
 class QSimpleUpdater;
 
-class TopBar : public QMainWindow
-{
-    Q_OBJECT
+class TopBar : public QMainWindow {
+Q_OBJECT
 
 public:
     explicit TopBar(QWidget *parent = 0);
+
     ~TopBar();
 
 protected:
@@ -51,18 +59,31 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
 
 private slots:
+
     void layoutMenuLayouts_clicked();
+
     void layoutMenuInstall_clicked();
+
     void settingsMenuAutoCorrect_clicked();
+
     void settingsMenuFixedLayoutAutoVForm_clicked();
+
     void settingsMenuFixedLayoutAutoChandra_clicked();
+
     void settingsMenuFixedLayoutOldReph_clicked();
+
     void settingsMenuFixedLayoutTraditionalKar_clicked();
+
     void settingsMenuFixedLayoutNumberPad_clicked();
+
     void settingsMenuShowDialog_clicked();
+
     void aboutMenuLayout_clicked();
+
     void aboutMenuAbout_clicked();
+
     void quitMenuOnTray_clicked();
+
     void quitMenuQuit_clicked();
 
     void trayMenuRestore_clicked();
@@ -92,7 +113,9 @@ private:
 
     /* Layout Popup Menu */
     QMenu *layoutMenu;
-    enum { MaxLayoutFiles = 10 };
+    enum {
+        MaxLayoutFiles = 10
+    };
     QAction *layoutMenuLayouts[MaxLayoutFiles];
     QActionGroup *layoutMenuLayoutsGroup;
     QAction *layoutMenuInstall;
@@ -121,8 +144,11 @@ private:
     QAction *trayMenuRestore;
 
     void SetupTopBar();
+
     void SetupPopupMenus();
+
     void SetupTrayIcon();
+
     void checkForUpdate();
 
     void RefreshLayouts();

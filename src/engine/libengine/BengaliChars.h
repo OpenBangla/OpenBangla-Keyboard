@@ -22,6 +22,7 @@
 #include <QChar>
 
 class QString;
+
 class QRegularExpression;
 
 /* The Unicode Standard 8.0
@@ -180,18 +181,21 @@ QChar ZWJ = 0x200D;
 QChar ZWNJ = 0x200C;
 
 bool isKar(QString c) {
-  QRegularExpression regex("^[\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}\\x{09C4}]$");
-  return c.contains(regex);
+    QRegularExpression regex(
+            "^[\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}\\x{09C4}]$");
+    return c.contains(regex);
 }
 
 bool isVowel(QString c) {
-  QRegularExpression regex("^[\\x{0985}\\x{0986}\\x{0987}\\x{0988}\\x{0989}\\x{098A}\\x{098B}\\x{098F}\\x{0990}\\x{0993}\\x{0994}\\x{098C}\\x{09E1}\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}]$");
-  return c.contains(regex);
+    QRegularExpression regex(
+            "^[\\x{0985}\\x{0986}\\x{0987}\\x{0988}\\x{0989}\\x{098A}\\x{098B}\\x{098F}\\x{0990}\\x{0993}\\x{0994}\\x{098C}\\x{09E1}\\x{09BE}\\x{09BF}\\x{09C0}\\x{09C1}\\x{09C2}\\x{09C3}\\x{09C7}\\x{09C8}\\x{09CB}\\x{09CC}]$");
+    return c.contains(regex);
 }
 
 bool isPureConsonent(QString c) {
-  QRegularExpression regex("^[\\x{0995}\\x{0996}\\x{0997}\\x{0998}\\x{0999}\\x{099A}\\x{099B}\\x{099C}\\x{099D}\\x{099E}\\x{099F}\\x{09A0}\\x{09A1}\\x{09A2}\\x{09A3}\\x{09A4}\\x{09A5}\\x{09A6}\\x{09A7}\\x{09A8}\\x{09AA}\\x{09AB}\\x{09AC}\\x{09AD}\\x{09AE}\\x{09AF}\\x{09B0}\\x{09B2}\\x{09B6}\\x{09B7}\\x{09B8}\\x{09B9}\\x{09CE}\\x{09DC}\\x{09DD}\\x{09DF}]$");
-  return c.contains(regex);
+    QRegularExpression regex(
+            "^[\\x{0995}\\x{0996}\\x{0997}\\x{0998}\\x{0999}\\x{099A}\\x{099B}\\x{099C}\\x{099D}\\x{099E}\\x{099F}\\x{09A0}\\x{09A1}\\x{09A2}\\x{09A3}\\x{09A4}\\x{09A5}\\x{09A6}\\x{09A7}\\x{09A8}\\x{09AA}\\x{09AB}\\x{09AC}\\x{09AD}\\x{09AE}\\x{09AF}\\x{09B0}\\x{09B2}\\x{09B6}\\x{09B7}\\x{09B8}\\x{09B9}\\x{09CE}\\x{09DC}\\x{09DD}\\x{09DF}]$");
+    return c.contains(regex);
 }
 
 #endif /* end of include guard: BENGALICHARS_H */

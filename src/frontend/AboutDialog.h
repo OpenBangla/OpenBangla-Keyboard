@@ -25,22 +25,24 @@
 class QTimer;
 
 namespace Ui {
-class AboutDialog;
+    class AboutDialog;
 }
 
-class AboutDialog : public QDialog
-{
-    Q_OBJECT
+class AboutDialog : public QDialog {
+Q_OBJECT
 
 public:
     explicit AboutDialog(QWidget *parent = 0);
+
     ~AboutDialog();
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
+
     void showEvent(QShowEvent *event) override;
 
 private slots:
+
     void scroll();
 
     void on_btnClose_clicked();

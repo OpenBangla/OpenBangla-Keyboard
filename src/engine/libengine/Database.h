@@ -16,19 +16,22 @@
 #include "regexparser.h"
 
 class Database {
-  QMap<QString, QVector<QString>> word_table;
-  QMap<QString, QString> suffix_table;
-  QMap<QChar, QStringList> prefixTableMap;
-  RegexParser rgx;
+    QMap<QString, QVector<QString>> word_table;
+    QMap<QString, QString> suffix_table;
+    QMap<QChar, QStringList> prefixTableMap;
+    RegexParser rgx;
 public:
-  Database();
-  ~Database();
+    Database();
 
-  void loadTable(QStringList table, QSqlDatabase dbase);
-  void loadSuffixTableFromDatabase(QSqlDatabase dbase);
+    ~Database();
 
-  QStringList find(QString word);
-  QString banglaForSuffix(QString word);
+    void loadTable(QStringList table, QSqlDatabase dbase);
+
+    void loadSuffixTableFromDatabase(QSqlDatabase dbase);
+
+    QStringList find(QString word);
+
+    QString banglaForSuffix(QString word);
 };
 
 #endif /* end of include guard: DATABASE_H */

@@ -22,12 +22,11 @@
 #include "ui_AboutDialog.h"
 
 AboutDialog::AboutDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AboutDialog)
-{
+        QDialog(parent),
+        ui(new Ui::AboutDialog) {
     ui->setupUi(this);
 
-    this->setFixedSize(this->width(),this->height());
+    this->setFixedSize(this->width(), this->height());
 
     // Set version
     ui->labelVer->setText(PROJECT_VERSION);
@@ -41,8 +40,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->labelDesc->installEventFilter(this);
 }
 
-AboutDialog::~AboutDialog()
-{
+AboutDialog::~AboutDialog() {
     delete ui;
     delete timer;
 }
@@ -50,7 +48,7 @@ AboutDialog::~AboutDialog()
 void AboutDialog::scroll() {
     QPoint point;
     point.setX(ui->labelDesc->x());
-    if(ui->labelDesc->y() != -780) {
+    if (ui->labelDesc->y() != -780) {
         point.setY(ui->labelDesc->y() - 1);
         ui->labelDesc->move(point);
     } else {
@@ -65,16 +63,14 @@ void AboutDialog::showEvent(QShowEvent *event) {
     return;
 }
 
-void AboutDialog::on_btnClose_clicked()
-{
+void AboutDialog::on_btnClose_clicked() {
     this->close();
 }
 
-void AboutDialog::on_btnLicense_toggled(bool checked)
-{
+void AboutDialog::on_btnLicense_toggled(bool checked) {
     ui->txtLicense->setVisible(checked);
     ui->labelDesc->setVisible(!checked);
-    if(checked) { timer->stop(); } else { timer->start(); }
+    if (checked) { timer->stop(); } else { timer->start(); }
 }
 
 bool AboutDialog::eventFilter(QObject *object, QEvent *event) {
@@ -93,7 +89,6 @@ bool AboutDialog::eventFilter(QObject *object, QEvent *event) {
     return QObject::eventFilter(object, event);
 }
 
-void AboutDialog::on_labelDesc_linkActivated(const QString &link)
-{
+void AboutDialog::on_labelDesc_linkActivated(const QString &link) {
     QDesktopServices::openUrl(QUrl(link));
 }

@@ -24,30 +24,42 @@
 #include "FixedLayoutParser.h"
 
 class MethodFixedLayoutModern : public LayoutMth {
-  bool handledKey;
-  FixedLayoutParser parser;
-  QString BengaliT;
-  QString marks;
-  Suggestion suggest;
+    bool handledKey;
+    FixedLayoutParser parser;
+    QString BengaliT;
+    QString marks;
+    Suggestion suggest;
 public:
-  MethodFixedLayoutModern();
-  void updateCache();
-  void processKeyPress(QString word);
-  void insertKar(QString kar);
-  void insertReph();
-  void internalBackspace();
-  void backspace(QString &string, int step);
-  // Functions inherited from class LayoutMth
-  void setLayout(QJsonObject lay);
-  Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
-  IMCommand handleSpecialKey(int key);
-  Suggestion getCandidates();
-  bool handledKeyPress();
-  void candidateCommited(int index);
-  
-  void updateEngine() {
-    // Nothing to do :)
-  }
+    MethodFixedLayoutModern();
+
+    void updateCache();
+
+    void processKeyPress(QString word);
+
+    void insertKar(QString kar);
+
+    void insertReph();
+
+    void internalBackspace();
+
+    void backspace(QString &string, int step);
+
+    // Functions inherited from class LayoutMth
+    void setLayout(QJsonObject lay);
+
+    Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+
+    IMCommand handleSpecialKey(int key);
+
+    Suggestion getCandidates();
+
+    bool handledKeyPress();
+
+    void candidateCommited(int index);
+
+    void updateEngine() {
+        // Nothing to do :)
+    }
 };
 
 #endif /* end of include guard: METHOD_FIXED_LAYOUT_MODERN */

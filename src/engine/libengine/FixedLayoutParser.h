@@ -23,10 +23,11 @@
 #include <QJsonObject>
 
 class FixedLayoutParser {
-  QJsonObject layout;
+    QJsonObject layout;
 public:
-  void setLayout(QJsonObject l);
-  QString getCharForKey(int keyNum, bool shift, bool altgr, bool shiftaltgr);
+    void setLayout(QJsonObject l);
+
+    QString getCharForKey(int keyNum, bool shift, bool altgr, bool shiftaltgr);
 };
 
 #endif /* end of include guard: FIXED_LAYOUT_PARSER */

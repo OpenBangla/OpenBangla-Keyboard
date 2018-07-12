@@ -25,18 +25,19 @@
 class QTreeWidgetItem;
 
 namespace Ui {
-class AutoCorrectDialog;
+    class AutoCorrectDialog;
 }
 
-class AutoCorrectDialog : public QDialog
-{
-    Q_OBJECT
+class AutoCorrectDialog : public QDialog {
+Q_OBJECT
 
 public:
     explicit AutoCorrectDialog(QWidget *parent = 0);
+
     ~AutoCorrectDialog();
 
 private slots:
+
     void on_buttonBox_accepted();
 
     void on_buttonBox_rejected();
@@ -54,8 +55,9 @@ private slots:
 private:
     Ui::AutoCorrectDialog *ui;
     AutoCorrect dict;
-    
+
     void loadEntries();
+
     void addEntries(QString replace, QString with);
 };
 

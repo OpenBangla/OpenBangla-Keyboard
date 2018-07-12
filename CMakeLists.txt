@@ -16,73 +16,73 @@ find_package(Qt5Sql REQUIRED)
 find_package(Qt5Network REQUIRED)
 
 # Get system information. WIN32 and APPLE are defined by CMake
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  set(OS_LINUX 1)
-endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(OS_LINUX 1)
+endif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
 # Set build type to "Release" if user did not specify any build type yet
 # Other possible values: Debug, Release, RelWithDebInfo and MinSizeRel
-if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Release)
-endif(NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif (NOT CMAKE_BUILD_TYPE)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	add_definitions(-DDEBUG)
-endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG)
+endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 # Sanity check our source directory to make sure that we are not trying to
 # generate an in-tree build (it pollutes the source tree with a lot of CMake
 # related files).
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  message(FATAL_ERROR "In-source builds are not allowed.\nPlease create a build directory and initiate cmake from there.")
-endif()
+    message(FATAL_ERROR "In-source builds are not allowed.\nPlease create a build directory and initiate cmake from there.")
+endif ()
 
 # For Linux.
-if(OS_LINUX)
-  ## Additions for Linux ##
+if (OS_LINUX)
+    ## Additions for Linux ##
 
-  #Generate compile_commands.json to satisfy vscode linux configuration
-  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+    #Generate compile_commands.json to satisfy vscode linux configuration
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-  ## Set Directories for installing and storing files
-  set(CMAKE_INSTALL_PREFIX "/usr")
+    ## Set Directories for installing and storing files
+    set(CMAKE_INSTALL_PREFIX "/usr")
 
-  if(NOT DEFINED datadir)
-    set(datadir "${CMAKE_INSTALL_PREFIX}/share")
-  endif()
-  add_definitions(-DDATADIR="${datadir}")
+    if (NOT DEFINED datadir)
+        set(datadir "${CMAKE_INSTALL_PREFIX}/share")
+    endif ()
+    add_definitions(-DDATADIR="${datadir}")
 
-  if(NOT DEFINED LIBEXEC_DIR)
-    set(LIBEXEC_DIR "${CMAKE_INSTALL_PREFIX}/libexec")
-  endif()
-  add_definitions(-DLIBEXEC_DIR="${LIBEXEC_DIR}")
+    if (NOT DEFINED LIBEXEC_DIR)
+        set(LIBEXEC_DIR "${CMAKE_INSTALL_PREFIX}/libexec")
+    endif ()
+    add_definitions(-DLIBEXEC_DIR="${LIBEXEC_DIR}")
 
-  if(NOT DEFINED PROJECT_DATADIR)
-    set(PROJECT_DATADIR "${datadir}/openbangla-keyboard")
-  endif(NOT DEFINED PROJECT_DATADIR)
-  add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
-  add_definitions(-DPKGDATADIR="${PROJECT_DATADIR}")
+    if (NOT DEFINED PROJECT_DATADIR)
+        set(PROJECT_DATADIR "${datadir}/openbangla-keyboard")
+    endif (NOT DEFINED PROJECT_DATADIR)
+    add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
+    add_definitions(-DPKGDATADIR="${PROJECT_DATADIR}")
 
-  include(FindPkgConfig)
-  ## Find iBus ##
-  find_package(PkgConfig)
-  pkg_check_modules(IBUS REQUIRED ibus-1.0)
-endif(OS_LINUX)
+    include(FindPkgConfig)
+    ## Find iBus ##
+    find_package(PkgConfig)
+    pkg_check_modules(IBUS REQUIRED ibus-1.0)
+endif (OS_LINUX)
 
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
 
 # uninstall target
-if(NOT TARGET uninstall)
+if (NOT TARGET uninstall)
     configure_file(
-        "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-        IMMEDIATE @ONLY)
+            "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+            IMMEDIATE @ONLY)
 
     add_custom_target(uninstall
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-endif()
+            COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif ()
 
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")

@@ -7,18 +7,18 @@
  *  file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
- /*
-  *  Actually this parser is originated from the parser written by
-  *  Rifat Nabi for iAvro under MPL 1.1. It was written in Objective C.
-  *  I(Muhammad Mominul Huque) have re-written the parser in C++ for using with
-  *  OpenBangla Keyboard.
-  *  For showing respect to the Avro project and Rifat Nabi, I am
-  *  releasing this code under MPL 2.0.
-  *  So this code is now dual licensed under the MPL 2 and the GNU GPL 3.
-  *  If you have any questions about this matter, please send e-mail to
-  *  me at described above.
-  *  http://www.gnu.org/licenses/license-list.en.html#MPL-2.0
-  */
+/*
+ *  Actually this parser is originated from the parser written by
+ *  Rifat Nabi for iAvro under MPL 1.1. It was written in Objective C.
+ *  I(Muhammad Mominul Huque) have re-written the parser in C++ for using with
+ *  OpenBangla Keyboard.
+ *  For showing respect to the Avro project and Rifat Nabi, I am
+ *  releasing this code under MPL 2.0.
+ *  So this code is now dual licensed under the MPL 2 and the GNU GPL 3.
+ *  If you have any questions about this matter, please send e-mail to
+ *  me at described above.
+ *  http://www.gnu.org/licenses/license-list.en.html#MPL-2.0
+ */
 
 #ifndef PHONETIC_PARSER_H
 #define PHONETIC_PARSER_H
@@ -29,26 +29,35 @@
 
 class PhoneticParser {
 private:
-  QJsonObject layout;
+    QJsonObject layout;
 
-  QJsonArray patterns;
-  QString vowel;
-  QString cons;
-  QString num;
-  QString csen;
-  int maxPatternLength;
+    QJsonArray patterns;
+    QString vowel;
+    QString cons;
+    QString num;
+    QString csen;
+    int maxPatternLength;
 
-  bool isVowel(QChar c);
-  bool isConsonant(QChar c);
-  bool isPunctuation(QChar c);
-  bool isNumber(QChar c);
-  bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
-  bool isCaseSensitive(QChar c);
+    bool isVowel(QChar c);
+
+    bool isConsonant(QChar c);
+
+    bool isPunctuation(QChar c);
+
+    bool isNumber(QChar c);
+
+    bool isExact(QString needle, QString heystack, int start, int end, bool strnot);
+
+    bool isCaseSensitive(QChar c);
+
 public:
-  ~PhoneticParser();
-  void setLayout(QJsonObject l);
-  QString parse(QString input);
-  QString fixString(QString input);
+    ~PhoneticParser();
+
+    void setLayout(QJsonObject l);
+
+    QString parse(QString input);
+
+    QString fixString(QString input);
 };
 
 #endif /* end of include guard: PHONETIC_PARSER_H */

@@ -20,51 +20,69 @@
 #define SETTINGS_H
 
 class QSettings;
+
 class QPoint;
+
 class QString;
 
 class Settings {
-  QSettings *setting;
+    QSettings *setting;
 public:
-  Settings();
-  ~Settings();
+    Settings();
 
-  void setTopBarWindowPosition(QPoint pos);
-  QPoint getTopBarWindowPosition();
-  void setLayoutViewerWindowPosition(QPoint pos);
-  QPoint getLayoutViewerWindowPosition();
+    ~Settings();
 
-  void setLayoutName(QString name);
-  QString getLayoutName();
-  void setLayoutPath(QString path);
-  QString getLayoutPath();
+    void setTopBarWindowPosition(QPoint pos);
 
-  void setEnterKeyClosesPrevWin(bool b);
-  bool getEnterKeyClosesPrevWin();
+    QPoint getTopBarWindowPosition();
 
-  void setAutoVowelFormFixed(bool b);
-  bool getAutoVowelFormFixed();
+    void setLayoutViewerWindowPosition(QPoint pos);
 
-  void setAutoChandraPosFixed(bool b);
-  bool getAutoChandraPosFixed();
+    QPoint getLayoutViewerWindowPosition();
 
-  void setTraditionalKarFixed(bool b);
-  bool getTraditionalKarFixed();
+    void setLayoutName(QString name);
 
-  void setNumberPadFixed(bool b);
-  bool getNumberPadFixed();
+    QString getLayoutName();
 
-  void setOldReph(bool b);
-  bool getOldReph();
+    void setLayoutPath(QString path);
 
-  void setCandidateWinHorizontal(bool c);
-  bool getCandidateWinHorizontal();
+    QString getLayoutPath();
 
-  void setShowCWPhonetic(bool b);
-  bool getShowCWPhonetic();
+    void setEnterKeyClosesPrevWin(bool b);
 
-  void setUpdateCheck(bool b);
-  bool getUpdateCheck();
+    bool getEnterKeyClosesPrevWin();
+
+    void setAutoVowelFormFixed(bool b);
+
+    bool getAutoVowelFormFixed();
+
+    void setAutoChandraPosFixed(bool b);
+
+    bool getAutoChandraPosFixed();
+
+    void setTraditionalKarFixed(bool b);
+
+    bool getTraditionalKarFixed();
+
+    void setNumberPadFixed(bool b);
+
+    bool getNumberPadFixed();
+
+    void setOldReph(bool b);
+
+    bool getOldReph();
+
+    void setCandidateWinHorizontal(bool c);
+
+    bool getCandidateWinHorizontal();
+
+    void setShowCWPhonetic(bool b);
+
+    bool getShowCWPhonetic();
+
+    void setUpdateCheck(bool b);
+
+    bool getUpdateCheck();
 };
 
 /* Global */

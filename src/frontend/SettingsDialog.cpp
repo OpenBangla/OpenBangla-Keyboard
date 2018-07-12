@@ -21,9 +21,8 @@
 #include "Settings.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SettingsDialog)
-{
+        QDialog(parent),
+        ui(new Ui::SettingsDialog) {
     ui->setupUi(this);
 
     this->setFixedSize(QSize(this->width(), this->height()));
@@ -31,8 +30,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     updateSettings();
 }
 
-SettingsDialog::~SettingsDialog()
-{
+SettingsDialog::~SettingsDialog() {
     delete ui;
 }
 
@@ -43,30 +41,25 @@ void SettingsDialog::updateSettings() {
     ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
 }
 
-void SettingsDialog::on_buttonBox_accepted()
-{
+void SettingsDialog::on_buttonBox_accepted() {
     gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
     gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
     gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
     gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
 }
 
-void SettingsDialog::on_buttonBox_rejected()
-{
+void SettingsDialog::on_buttonBox_rejected() {
     SettingsDialog::close();
 }
 
-void SettingsDialog::on_btnClosePrevWin_toggled(bool checked)
-{
+void SettingsDialog::on_btnClosePrevWin_toggled(bool checked) {
     ui->btnClosePrevWin->setText(checked ? "On" : "Off");
 }
 
-void SettingsDialog::on_btnShowPrevWin_toggled(bool checked)
-{
+void SettingsDialog::on_btnShowPrevWin_toggled(bool checked) {
     ui->btnShowPrevWin->setText(checked ? "On" : "Off");
 }
 
-void SettingsDialog::on_btnCheckUpdate_toggled(bool checked)
-{
+void SettingsDialog::on_btnCheckUpdate_toggled(bool checked) {
     ui->btnCheckUpdate->setText(checked ? "On" : "Off");
 }

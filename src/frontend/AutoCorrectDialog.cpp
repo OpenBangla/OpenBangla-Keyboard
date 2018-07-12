@@ -17,14 +17,12 @@
  */
 
 #include <QTreeWidget>
-#include <QSignalBlocker>
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
 
 AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AutoCorrectDialog)
-{
+        QDialog(parent),
+        ui(new Ui::AutoCorrectDialog) {
     ui->setupUi(this);
 
     this->setFixedSize(QSize(this->width(), this->height()));
@@ -40,8 +38,7 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     loadEntries();
 }
 
-AutoCorrectDialog::~AutoCorrectDialog()
-{
+AutoCorrectDialog::~AutoCorrectDialog() {
     delete ui;
 }
 
@@ -57,7 +54,7 @@ void AutoCorrectDialog::loadEntries() {
 
     QVariantMap acList = dict.getEntries();
     QVariantMap::const_iterator iter = acList.constBegin();
-    while(iter != acList.constEnd()) {
+    while (iter != acList.constEnd()) {
         addEntries(iter.key(), iter.value().toString());
         ++iter;
         ++items;
@@ -75,34 +72,29 @@ void AutoCorrectDialog::addEntries(QString replace, QString with) {
     item->setText(1, with);
 }
 
-void AutoCorrectDialog::on_buttonBox_accepted()
-{
-   dict.saveUserAutoCorrectFile();
+void AutoCorrectDialog::on_buttonBox_accepted() {
+    dict.saveUserAutoCorrectFile();
 }
 
-void AutoCorrectDialog::on_buttonBox_rejected()
-{
+void AutoCorrectDialog::on_buttonBox_rejected() {
     AutoCorrectDialog::close();
 }
 
-void AutoCorrectDialog::on_btnUpdate_clicked()
-{
+void AutoCorrectDialog::on_btnUpdate_clicked() {
     dict.setEntry(ui->txtReplace->text().trimmed(), ui->txtWith->text().trimmed());
     loadEntries();
 }
 
-void AutoCorrectDialog::on_btnClear_clicked()
-{
+void AutoCorrectDialog::on_btnClear_clicked() {
     ui->txtReplace->setText("");
     ui->txtWith->setText("");
 }
 
-void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1)
-{
-    if(arg1 != "") {
+void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1) {
+    if (arg1 != "") {
         ui->lblPreviewR->setText(dict.convertBanglish(arg1));
-        if(!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
-        if(ui->txtWith->text() != "") {
+        if (!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
+        if (ui->txtWith->text() != "") {
             ui->btnUpdate->setEnabled(true);
         } else {
             ui->btnUpdate->setEnabled(false);
@@ -114,18 +106,17 @@ void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1)
     }
 }
 
-void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1)
-{
-    if(arg1 != "") {
+void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1) {
+    if (arg1 != "") {
         // smiley rule
-        if(ui->txtReplace->text() == arg1) {
+        if (ui->txtReplace->text() == arg1) {
             ui->lblPreviewW->setText(arg1);
         } else {
             ui->lblPreviewW->setText(dict.convertBanglish(arg1));
         }
 
-        if(!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
-        if(ui->txtReplace->text() != "") {
+        if (!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
+        if (ui->txtReplace->text() != "") {
             ui->btnUpdate->setEnabled(true);
         } else {
             ui->btnUpdate->setEnabled(false);
@@ -137,8 +128,7 @@ void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1)
     }
 }
 
-void AutoCorrectDialog::on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
-{
+void AutoCorrectDialog::on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) {
     ui->txtReplace->setText(current->text(0));
     ui->txtWith->setText(current->text(1));
 }

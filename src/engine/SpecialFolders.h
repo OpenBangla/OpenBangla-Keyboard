@@ -23,28 +23,28 @@
 #include "log.h"
 
 class SpecialFolders {
-  QString path;
-  QDir dir;
+    QString path;
+    QDir dir;
 public:
-  SpecialFolders() {
-    path = dir.homePath() + "/.OpenBangla-Keyboard";
-    // Create our folder in the user home folder
-    dir.mkpath(path);
-    // Create user specific layouts folder
-    dir.mkpath(path + "/Layouts/");
-  }
+    SpecialFolders() {
+        path = dir.homePath() + "/.OpenBangla-Keyboard";
+        // Create our folder in the user home folder
+        dir.mkpath(path);
+        // Create user specific layouts folder
+        dir.mkpath(path + "/Layouts/");
+    }
 
-  QString getCandidateSaveFile() {
-    return path + "/phonetic-candidate-selection.json";
-  }
+    QString getCandidateSaveFile() {
+        return path + "/phonetic-candidate-selection.json";
+    }
 
-  QString getUserLayoutPath() {
-    return path + "/Layouts/";
-  }
+    QString getUserLayoutPath() {
+        return path + "/Layouts/";
+    }
 
-  QString getUserAutoCorrectFile() {
-    return path + "/autocorrect.json";
-  }
+    QString getUserAutoCorrectFile() {
+        return path + "/autocorrect.json";
+    }
 };
 
 #endif /* end of include guard: SPECIAL_FOLDER_H */

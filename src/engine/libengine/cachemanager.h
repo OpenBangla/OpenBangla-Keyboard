@@ -25,21 +25,25 @@
 #include "SpecialFolders.h"
 
 class CacheManager {
-  QMap<QString, QVector<QString>> tempCache;
-  QJsonObject candidateSel;
-  QMap<QString, QVector<QString>> base;
+    QMap<QString, QVector<QString>> tempCache;
+    QJsonObject candidateSel;
+    QMap<QString, QVector<QString>> base;
 
-  SpecialFolders folders;
+    SpecialFolders folders;
 public:
-  CacheManager();
+    CacheManager();
 
-  void setTempCache(QString key, QVector<QString> suggestions);
-  QVector<QString> getTempCache(QString key);
+    void setTempCache(QString key, QVector<QString> suggestions);
 
-  void loadCandidateSelection();
-  QString getCandidateSelection(QString word);
-  void writeCandidateSelection(QString word, QString sel);
-  void saveCandidateSelection();
+    QVector<QString> getTempCache(QString key);
+
+    void loadCandidateSelection();
+
+    QString getCandidateSelection(QString word);
+
+    void writeCandidateSelection(QString word, QString sel);
+
+    void saveCandidateSelection();
 };
 
 #endif /* end of include guard: CACHE_MANAGER_H */

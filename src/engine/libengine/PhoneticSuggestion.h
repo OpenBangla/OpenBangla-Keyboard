@@ -19,45 +19,56 @@
 #include "cachemanager.h"
 
 struct Cache {
-  QString base;
-  QString eng;
+    QString base;
+    QString eng;
 };
 
 class PhoneticSuggestion {
 private:
-  PhoneticParser parser;
-  AutoCorrect autodict;
-  Database db;
-  CacheManager cacheMan;
+    PhoneticParser parser;
+    AutoCorrect autodict;
+    Database db;
+    CacheManager cacheMan;
 
-  QRegularExpression rgxPadding;
-  QRegularExpression rgxKar;
-  QRegularExpression rgxVowel;
+    QRegularExpression rgxPadding;
+    QRegularExpression rgxKar;
+    QRegularExpression rgxVowel;
 
-  QString padBegin, padMiddle, padEnd;
-  QMap<QString, QStringList> phoneticCache;
-  QMap<QString, Cache> tempCache;
-  QStringList prevSuggestion;
+    QString padBegin, padMiddle, padEnd;
+    QMap<QString, QStringList> phoneticCache;
+    QMap<QString, Cache> tempCache;
+    QStringList prevSuggestion;
 
-  void separatePadding(QString word);
-  bool isKar(QString word);
-  bool isVowel(QString word);
-  QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic);
-  void appendIfNotContains(QStringList &array, QString item);
-  QStringList getDictionarySuggestion();
-  QString getAutocorrect(QString word);
-  QStringList addSuffix();
-  void addToTempCache(QString full, QString base, QString eng);
+    void separatePadding(QString word);
+
+    bool isKar(QString word);
+
+    bool isVowel(QString word);
+
+    QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic);
+
+    void appendIfNotContains(QStringList &array, QString item);
+
+    QStringList getDictionarySuggestion();
+
+    QString getAutocorrect(QString word);
+
+    QStringList addSuffix();
+
+    void addToTempCache(QString full, QString base, QString eng);
 
 public:
-  PhoneticSuggestion();
-  void setLayout(QJsonObject lay);
+    PhoneticSuggestion();
 
-  QString getPrevSelected();
-  void saveSelection(int index);
+    void setLayout(QJsonObject lay);
 
-  QStringList Suggest(QString word);
-  void updateEngine();
+    QString getPrevSelected();
+
+    void saveSelection(int index);
+
+    QStringList Suggest(QString word);
+
+    void updateEngine();
 };
 
 #endif /* end of include guard: PHONETIC_SUGGESTION_H */
