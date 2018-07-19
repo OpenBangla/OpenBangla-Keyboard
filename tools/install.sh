@@ -83,27 +83,8 @@ case $DISTRO_NAME in
       echo "Please visit https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard for Distrowise/Distro-specific Install Instructions."
       echo
       
-#       echo "Do you want to see the instructions for installing OpenBangla Keyboard in your system?"
-#       select yn in "Yes" "No"; do
-      
-#       case $yn in
-            
-#         (Yes)
-#           URL="https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard"
-#           [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
-#           path=$(command -v xdg-open || command -v gnome-open) && exec "$path" "$URL"
-#           echo "Can't find browser"
-#           break
-#           ;; 
-#         (No)
-#           exit
-#           ;; 
-#         esac
-      
-#       done
-#     ;; 
 echo -n "Do you want to see the instructions? (Yes/No) "
-read -r $answer
+read -r answer
 case $answer in
   [yY]*)
     URL="https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard"
