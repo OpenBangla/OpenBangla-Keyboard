@@ -115,4 +115,6 @@ case $answer in
   [nN]*)
     exit
     ;;
-esac
+  esac
+done
+;;
