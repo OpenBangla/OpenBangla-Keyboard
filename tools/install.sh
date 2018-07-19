@@ -110,11 +110,9 @@ case $answer in
     [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
     path=$(command -v xdg-open || command -v gnome-open) && exec "$path" "$URL"
     echo "Can't find browser"
-    break
     ;;
   [nN]*)
     exit
     ;;
   esac
-done
-;;
+esac
