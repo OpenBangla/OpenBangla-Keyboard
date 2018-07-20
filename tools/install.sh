@@ -27,7 +27,7 @@ function get_distro {
   while read -r line; do
       if [[ $line =~ ^(NAME|DISTRIB_ID)=(.+)$ ]]; then
       distro_str=${BASH_REMATCH[2]}
-      if echo "$distro_str" | grep -qP '(?i).*ubuntu.*'; then
+      if echo "$distro_str" | grep -qP '(?i).*(ubuntu|mint).*'; then
         distro_name='ubuntu'
       elif echo "$distro_str" | grep -qP '(?i).*fedora.*'; then
         distro_name='fedora'
@@ -53,16 +53,15 @@ echo "Downloading installation package for $DISTRO_NAME ..."
 # start downloading and install
 case $DISTRO_NAME in
 ("ubuntu")
-  # VERSION_ID=$(lsb_release -r | cut -f 2)  #  lsb_release may be replaced as well with shell script
-  # ubuntu is supposed to ensure a /etc/os-release file by default
   # VERSION_ID (and some more vars) are sourced
   # shellcheck disable=SC1091
   source /etc/os-release
-  if [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
+  if [ $ID = "linuxmint" ]; then
+    VERSION_ID=16.04
+  elif [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
     sudo apt install "$HOME/OpenBangla.deb"
     mv -f "$HOME/OpenBangla.deb" /tmp/
-  else
     echo "Ubuntu version not supported ($VERSION_ID)."
   fi
   ;;
