@@ -58,7 +58,8 @@ case $DISTRO_NAME in
   source /etc/os-release
   if [ $ID = "linuxmint" ]; then
     VERSION_ID=16.04
-  elif [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
+  fi
+  if [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
     sudo apt install "$HOME/OpenBangla.deb"
     mv -f "$HOME/OpenBangla.deb" /tmp/
