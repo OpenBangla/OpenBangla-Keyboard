@@ -78,9 +78,23 @@ case $DISTRO_NAME in
 (*)
   echo
   echo "Sorry, this script was not able to identify your OS distribution."
+  echo "Please report a bug at https://github.com/OpenBangla/OpenBangla-Keyboard/issues"
   echo
-  echo "Please consult https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/"
-  echo "for distrowise install or build instructions."
+  echo "Please visit https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard for distrowise/distro-specific install instructions."
   echo
+      
+  echo -n "Do you want to see the instructions? (Yes/No) "
+  read -r answer
+  case $answer in
+  [yY]*)
+    URL="https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard"
+    [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
+    path=$(command -v xdg-open || command -v gnome-open) && exec "$path" "$URL"
+    echo "Can't find browser"
+    ;;
+  [nN]*)
+    exit
+    ;;
+  esac
   ;;
 esac
