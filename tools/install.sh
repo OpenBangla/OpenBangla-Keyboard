@@ -62,6 +62,7 @@ case $DISTRO_NAME in
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
     sudo apt install "$HOME/OpenBangla.deb"
     mv -f "$HOME/OpenBangla.deb" /tmp/
+  else
     echo "Ubuntu version not supported ($VERSION_ID)."
   fi
   ;;
