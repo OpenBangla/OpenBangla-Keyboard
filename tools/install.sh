@@ -1,5 +1,5 @@
 #!/bin/bash
-## MUST: Always update this whenever a new version is released. Also remember to update download URLs if needed
+##  Note for Maintainter: Always update this whenever a new version is released. Also remember to update download URLs if needed
 APP_VERSION=1.4.0
 URL_STUB="https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/${APP_VERSION}"
 
@@ -77,11 +77,23 @@ case $DISTRO_NAME in
   sudo dnf install /tmp/OpenBangla.rpm
   ;;
 (*)
-  echo
-  echo "Sorry, this script was not able to identify your OS distribution."
-  echo
-  echo "Please consult https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/"
-  echo "for distrowise install or build instructions."
-  echo
-  ;;
+      echo
+      echo "This script was not able to identify your OS distribution! Please report a bug at https://github.com/OpenBangla/OpenBangla-Keyboard/issues"
+      echo
+      echo "Please visit https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard for Distrowise/Distro-specific Install Instructions."
+      echo
+      
+echo -n "Do you want to see the instructions? (Yes/No) "
+read -r answer
+case $answer in
+  [yY]*)
+    URL="https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard"
+    [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
+    path=$(command -v xdg-open || command -v gnome-open) && exec "$path" "$URL"
+    echo "Can't find browser"
+    ;;
+  [nN]*)
+    exit
+    ;;
+  esac
 esac
