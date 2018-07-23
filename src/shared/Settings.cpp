@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QSettings>
-#include <QString>
 #include <QPoint>
 #include "Settings.h"
 
@@ -61,10 +60,12 @@ QString Settings::getLayoutName() {
   setting->sync();
   return setting->value("layout/name", "Avro Phonetic").toString();
 }
+
 void Settings::setLayoutPath(QString path) {
   setting->setValue("layout/path", path);
   setting->sync();
 }
+
 QString Settings::getLayoutPath() {
   setting->sync();
   return setting->value("layout/path", PKGDATADIR "/layouts/avrophonetic.json").toString();

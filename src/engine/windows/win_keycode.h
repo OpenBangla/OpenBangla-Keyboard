@@ -27,7 +27,7 @@
  * https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731%28v=vs.85%29.aspx
  */
 
-std::map<int,int> key;
+std::map<int, int> key;
 
 void intKeycode() {
   // Begin Alphanumeric Zone
@@ -127,12 +127,10 @@ void intKeycode() {
 
 int win_keycode(guint k) {
   intKeycode();
-  try
-  {
+  try {
     return key.at(k);
   }
-  catch(std::out_of_range)
-  {
+  catch (std::out_of_range) {
     // The key is not mapped - means that we don't needed the UNKNOWN key!
     LOG_DEBUG("[IM:Windows]: Got unknown keycode. Mapping to VC_UNKNOWN");
     return VC_UNKNOWN;

@@ -20,31 +20,24 @@
 #include "MethodPhonetic.h"
 #include "Settings.h"
 
-void MethodPhonetic::setLayout(QJsonObject lay)
-{
+void MethodPhonetic::setLayout(QJsonObject lay) {
   suggest.setLayout(lay);
 }
 
-std::vector<std::string> MethodPhonetic::toStdVector(QStringList vec)
-{
+std::vector<std::string> MethodPhonetic::toStdVector(QStringList vec) {
   std::vector<std::string> v;
-  for (auto &str : vec)
-  {
+  for (auto &str : vec) {
     v.push_back(str.toStdString());
   }
   return v;
 }
 
-Suggestion MethodPhonetic::createSuggestion()
-{
+Suggestion MethodPhonetic::createSuggestion() {
   // Our Suggestion builder
-  if (EnglishT == "")
-  {
+  if (EnglishT == "") {
     // If there is no text available, don't do anything
     return {};
-  }
-  else
-  {
+  } else {
     // Reset
     changedCandidateSelection = false;
 
@@ -54,24 +47,19 @@ Suggestion MethodPhonetic::createSuggestion()
     prevSelected = 0;
 
     // Check if user wants the candidate window, otherwise don't show it.
-    if (gSettings->getShowCWPhonetic())
-    {
+    if (gSettings->getShowCWPhonetic()) {
       // Is user selected any candidate before?
       QString selected = suggest.getPrevSelected();
-      if (selected != "")
-      {
+      if (selected != "") {
         // User has selected a candidate before
         int index = list.indexOf(selected);
-        if (index != -1)
-        {
+        if (index != -1) {
           prevSelected = index;
         }
       }
 
       suggested = {toStdVector(list), EnglishT.toStdString(), true, prevSelected};
-    }
-    else
-    {
+    } else {
       // The first candidate will be shown.
       suggested = {toStdVector(list), EnglishT.toStdString(), false, prevSelected};
     }
@@ -80,725 +68,555 @@ Suggestion MethodPhonetic::createSuggestion()
   }
 }
 
-Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool alt)
-{
+Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool alt) {
   // Don't catch Ctrl or Alt
-  if (ctrl || alt)
-  {
+  if (ctrl || alt) {
     handledKey = false;
     return {};
   }
 
-  switch (key)
-  {
-  // Begin Alphanumeric Zone
-  case VC_TILDE:
-    EnglishT += "~";
+  switch (key) {
+    // Begin Alphanumeric Zone
+  case VC_TILDE:EnglishT += "~";
     handledKey = true;
     return createSuggestion();
-  case VC_GRAVE:
-    EnglishT += "`";
+  case VC_GRAVE:EnglishT += "`";
     handledKey = true;
     return createSuggestion();
 
-  case VC_EXCLAIM:
-    EnglishT += "!";
+  case VC_EXCLAIM:EnglishT += "!";
     handledKey = true;
     return createSuggestion();
-  case VC_1:
-    EnglishT += "1";
+  case VC_1:EnglishT += "1";
     handledKey = true;
     return createSuggestion();
-  case VC_AT:
-    EnglishT += "@";
+  case VC_AT:EnglishT += "@";
     handledKey = true;
     return createSuggestion();
-  case VC_2:
-    EnglishT += "2";
+  case VC_2:EnglishT += "2";
     handledKey = true;
     return createSuggestion();
-  case VC_HASH:
-    EnglishT += "#";
+  case VC_HASH:EnglishT += "#";
     handledKey = true;
     return createSuggestion();
-  case VC_3:
-    EnglishT += "3";
+  case VC_3:EnglishT += "3";
     handledKey = true;
     return createSuggestion();
-  case VC_DOLLAR:
-    EnglishT += "$";
+  case VC_DOLLAR:EnglishT += "$";
     handledKey = true;
     return createSuggestion();
-  case VC_4:
-    EnglishT += "4";
+  case VC_4:EnglishT += "4";
     handledKey = true;
     return createSuggestion();
-  case VC_PERCENT:
-    EnglishT += "%";
+  case VC_PERCENT:EnglishT += "%";
     handledKey = true;
     return createSuggestion();
-  case VC_5:
-    EnglishT += "5";
+  case VC_5:EnglishT += "5";
     handledKey = true;
     return createSuggestion();
-  case VC_CIRCUM:
-    EnglishT += "^";
+  case VC_CIRCUM:EnglishT += "^";
     handledKey = true;
     return createSuggestion();
-  case VC_6:
-    EnglishT += "6";
+  case VC_6:EnglishT += "6";
     handledKey = true;
     return createSuggestion();
-  case VC_AMPERSAND:
-    EnglishT += "&";
+  case VC_AMPERSAND:EnglishT += "&";
     handledKey = true;
     return createSuggestion();
-  case VC_7:
-    EnglishT += "7";
+  case VC_7:EnglishT += "7";
     handledKey = true;
     return createSuggestion();
-  case VC_ASTERISK:
-    EnglishT += "*";
+  case VC_ASTERISK:EnglishT += "*";
     handledKey = true;
     return createSuggestion();
-  case VC_8:
-    EnglishT += "8";
+  case VC_8:EnglishT += "8";
     handledKey = true;
     return createSuggestion();
-  case VC_PAREN_LEFT:
-    EnglishT += "(";
+  case VC_PAREN_LEFT:EnglishT += "(";
     handledKey = true;
     return createSuggestion();
-  case VC_9:
-    EnglishT += "9";
+  case VC_9:EnglishT += "9";
     handledKey = true;
     return createSuggestion();
-  case VC_PAREN_RIGHT:
-    EnglishT += ")";
+  case VC_PAREN_RIGHT:EnglishT += ")";
     handledKey = true;
     return createSuggestion();
-  case VC_0:
-    EnglishT += "0";
+  case VC_0:EnglishT += "0";
     handledKey = true;
     return createSuggestion();
 
-  case VC_UNDERSCORE:
-    EnglishT += "_";
+  case VC_UNDERSCORE:EnglishT += "_";
     handledKey = true;
     return createSuggestion();
-  case VC_MINUS:
-    EnglishT += "-";
+  case VC_MINUS:EnglishT += "-";
     handledKey = true;
     return createSuggestion();
-  case VC_PLUS:
-    EnglishT += "+";
+  case VC_PLUS:EnglishT += "+";
     handledKey = true;
     return createSuggestion();
-  case VC_EQUALS:
-    EnglishT += "=";
+  case VC_EQUALS:EnglishT += "=";
     handledKey = true;
     return createSuggestion();
 
   case VC_A:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "A";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "a";
       handledKey = true;
       return createSuggestion();
     }
   case VC_B:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "B";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "b";
       handledKey = true;
       return createSuggestion();
     }
   case VC_C:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "C";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "c";
       handledKey = true;
       return createSuggestion();
     }
   case VC_D:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "D";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "d";
       handledKey = true;
       return createSuggestion();
     }
   case VC_E:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "E";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "e";
       handledKey = true;
       return createSuggestion();
     }
   case VC_F:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "F";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "f";
       handledKey = true;
       return createSuggestion();
     }
   case VC_G:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "G";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "g";
       handledKey = true;
       return createSuggestion();
     }
   case VC_H:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "H";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "h";
       handledKey = true;
       return createSuggestion();
     }
   case VC_I:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "I";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "i";
       handledKey = true;
       return createSuggestion();
     }
   case VC_J:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "J";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "j";
       handledKey = true;
       return createSuggestion();
     }
   case VC_K:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "K";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "k";
       handledKey = true;
       return createSuggestion();
     }
   case VC_L:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "L";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "l";
       handledKey = true;
       return createSuggestion();
     }
   case VC_M:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "M";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "m";
       handledKey = true;
       return createSuggestion();
     }
   case VC_N:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "N";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "n";
       handledKey = true;
       return createSuggestion();
     }
   case VC_O:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "O";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "o";
       handledKey = true;
       return createSuggestion();
     }
   case VC_P:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "P";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "p";
       handledKey = true;
       return createSuggestion();
     }
   case VC_Q:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "Q";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "q";
       handledKey = true;
       return createSuggestion();
     }
   case VC_R:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "R";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "r";
       handledKey = true;
       return createSuggestion();
     }
   case VC_S:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "S";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "s";
       handledKey = true;
       return createSuggestion();
     }
   case VC_T:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "T";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "t";
       handledKey = true;
       return createSuggestion();
     }
   case VC_U:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "U";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "u";
       handledKey = true;
       return createSuggestion();
     }
   case VC_V:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "V";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "v";
       handledKey = true;
       return createSuggestion();
     }
   case VC_W:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "W";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "w";
       handledKey = true;
       return createSuggestion();
     }
   case VC_X:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "X";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "x";
       handledKey = true;
       return createSuggestion();
     }
   case VC_Y:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "Y";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "y";
       handledKey = true;
       return createSuggestion();
     }
   case VC_Z:
-    if (shift)
-    {
+    if (shift) {
       EnglishT += "Z";
       handledKey = true;
       return createSuggestion();
-    }
-    else if (!shift)
-    {
+    } else if (!shift) {
       EnglishT += "z";
       handledKey = true;
       return createSuggestion();
     }
 
-  case VC_BRACE_LEFT:
-    EnglishT += "{";
+  case VC_BRACE_LEFT:EnglishT += "{";
     handledKey = true;
     return createSuggestion();
-  case VC_BRACKET_LEFT:
-    EnglishT += "[";
+  case VC_BRACKET_LEFT:EnglishT += "[";
     handledKey = true;
     return createSuggestion();
-  case VC_BRACE_RIGHT:
-    EnglishT += "}";
+  case VC_BRACE_RIGHT:EnglishT += "}";
     handledKey = true;
     return createSuggestion();
-  case VC_BRACKET_RIGHT:
-    EnglishT += "]";
+  case VC_BRACKET_RIGHT:EnglishT += "]";
     handledKey = true;
     return createSuggestion();
-  case VC_BAR:
-    EnglishT += "|";
+  case VC_BAR:EnglishT += "|";
     handledKey = true;
     return createSuggestion();
-  case VC_BACK_SLASH:
-    EnglishT += "\\";
+  case VC_BACK_SLASH:EnglishT += "\\";
     handledKey = true;
     return createSuggestion();
 
-  case VC_COLON:
-    EnglishT += ":";
+  case VC_COLON:EnglishT += ":";
     handledKey = true;
     return createSuggestion();
-  case VC_SEMICOLON:
-    EnglishT += ";";
+  case VC_SEMICOLON:EnglishT += ";";
     handledKey = true;
     return createSuggestion();
-  case VC_QUOTE:
-    EnglishT += "\"";
+  case VC_QUOTE:EnglishT += "\"";
     handledKey = true;
     return createSuggestion();
-  case VC_APOSTROPHE:
-    EnglishT += "\'";
+  case VC_APOSTROPHE:EnglishT += "\'";
     handledKey = true;
     return createSuggestion();
-  case VC_LESS:
-    EnglishT += "<";
+  case VC_LESS:EnglishT += "<";
     handledKey = true;
     return createSuggestion();
-  case VC_COMMA:
-    EnglishT += ",";
+  case VC_COMMA:EnglishT += ",";
     handledKey = true;
     return createSuggestion();
-  case VC_GREATER:
-    EnglishT += ">";
+  case VC_GREATER:EnglishT += ">";
     handledKey = true;
     return createSuggestion();
-  case VC_PERIOD:
-    EnglishT += ".";
+  case VC_PERIOD:EnglishT += ".";
     handledKey = true;
     return createSuggestion();
-  case VC_QUESTION:
-    EnglishT += "?";
+  case VC_QUESTION:EnglishT += "?";
     handledKey = true;
     return createSuggestion();
-  case VC_SLASH:
-    EnglishT += "/";
+  case VC_SLASH:EnglishT += "/";
     handledKey = true;
     return createSuggestion();
-  // End Alphanumeric Zone
+    // End Alphanumeric Zone
 
-  // Begin Numeric Zone
+    // Begin Numeric Zone
   case VC_KP_DIVIDE:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "/";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_MULTIPLY:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "*";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_SUBTRACT:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "-";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_ADD:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "+";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
 
   case VC_KP_DECIMAL:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += ".";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
 
   case VC_KP_1:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "1";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_2:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "2";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_3:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "3";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_4:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "4";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_5:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "5";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
 
   case VC_KP_6:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "6";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_7:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "7";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_8:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "8";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_9:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "9";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
   case VC_KP_0:
-    if (!shift)
-    {
+    if (!shift) {
       EnglishT += "0";
       handledKey = true;
       return createSuggestion();
-    }
-    else
-    {
+    } else {
       handledKey = false;
       return {};
     }
-  // End Numeric Zone
+    // End Numeric Zone
   case VC_SHIFT:
-    if (EnglishT != "")
-    {
+    if (EnglishT != "") {
       handledKey = true;
       return suggested;
     }
     break; // Have a break
-  default:
-    handledKey = false;
+  default:handledKey = false;
     return {};
   }
   // If we have got an break
@@ -806,20 +624,16 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
   return {};
 }
 
-Suggestion MethodPhonetic::getCandidates()
-{
+Suggestion MethodPhonetic::getCandidates() {
   return suggested;
 }
 
-bool MethodPhonetic::handledKeyPress()
-{
+bool MethodPhonetic::handledKeyPress() {
   return handledKey;
 }
 
-void MethodPhonetic::candidateCommited(int index)
-{
-  if (changedCandidateSelection)
-  {
+void MethodPhonetic::candidateCommited(int index) {
+  if (changedCandidateSelection) {
     // User selected other candidates
     suggest.saveSelection(index);
     changedCandidateSelection = false;
@@ -829,109 +643,75 @@ void MethodPhonetic::candidateCommited(int index)
   suggested = {};
 }
 
-IMCommand MethodPhonetic::handleSpecialKey(int key)
-{
+IMCommand MethodPhonetic::handleSpecialKey(int key) {
   IMCommand ret;
-  if ((key == VC_ENTER) || (key == VC_KP_ENTER))
-  {
-    if (EnglishT.length() > 0)
-    {
+  if ((key == VC_ENTER) || (key == VC_KP_ENTER)) {
+    if (EnglishT.length() > 0) {
       EnglishT = "";
       ret.commit = true;
-      if (gSettings->getEnterKeyClosesPrevWin())
-      {
+      if (gSettings->getEnterKeyClosesPrevWin()) {
         ret.accepted = true;
-      }
-      else
-      {
+      } else {
         ret.accepted = false;
       }
       return ret;
-    }
-    else
-    {
+    } else {
       ret.accepted = false;
       return ret;
     }
-  }
-  else if (key == VC_SPACE)
-  {
-    if (EnglishT.length() > 0)
-    {
+  } else if (key == VC_SPACE) {
+    if (EnglishT.length() > 0) {
       ret.commit = true;
       ret.accepted = false;
       EnglishT = "";
       return ret;
-    }
-    else
-    {
+    } else {
       ret.accepted = false;
       return ret;
     }
-  }
-  else if (key == VC_BACKSPACE)
-  {
-    if (EnglishT.length() > 0)
-    {
+  } else if (key == VC_BACKSPACE) {
+    if (EnglishT.length() > 0) {
       QString ET = EnglishT.mid(0, EnglishT.length() - 1);
       EnglishT = ET;
       suggested = createSuggestion();
       ret.needUpdate = true;
       ret.accepted = true;
-      if (EnglishT.length() <= 0)
-      {
+      if (EnglishT.length() <= 0) {
         ret.needReset = true;
       }
       return ret;
-    }
-    else
-    {
+    } else {
       ret.accepted = false;
       return ret;
     }
-  }
-  else if ((key == VC_UP) || (key == VC_DOWN))
-  {
-    if ((EnglishT.length() > 0) && !gSettings->getCandidateWinHorizontal())
-    {
+  } else if ((key == VC_UP) || (key == VC_DOWN)) {
+    if ((EnglishT.length() > 0) && !gSettings->getCandidateWinHorizontal()) {
       ret.accepted = true;
       changedCandidateSelection = true;
       return ret;
-    }
-    else
-    {
+    } else {
       if (EnglishT.length() > 0)
         EnglishT = "";
       ret.accepted = false;
       return ret;
     }
-  }
-  else if ((key == VC_RIGHT) || (key == VC_LEFT))
-  {
-    if ((EnglishT.length() > 0) && gSettings->getCandidateWinHorizontal())
-    {
+  } else if ((key == VC_RIGHT) || (key == VC_LEFT)) {
+    if ((EnglishT.length() > 0) && gSettings->getCandidateWinHorizontal()) {
       ret.accepted = true;
       changedCandidateSelection = true;
       return ret;
-    }
-    else
-    {
+    } else {
       if (EnglishT.length() > 0)
         EnglishT = "";
       ret.accepted = false;
       return ret;
     }
-  }
-  else if (key == VC_TAB)
-  {
-    if (EnglishT.length() > 0)
-    {
+  } else if (key == VC_TAB) {
+    if (EnglishT.length() > 0) {
       ret.accepted = true;
       changedCandidateSelection = true;
       return ret;
-    }
-    else
-    {
+    } else {
       ret.accepted = false;
       return ret;
     }
@@ -941,7 +721,6 @@ IMCommand MethodPhonetic::handleSpecialKey(int key)
   return ret;
 }
 
-void MethodPhonetic::updateEngine()
-{
+void MethodPhonetic::updateEngine() {
   suggest.updateEngine();
 }

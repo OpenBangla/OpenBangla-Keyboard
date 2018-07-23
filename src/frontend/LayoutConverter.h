@@ -31,10 +31,11 @@ class LayoutConverter {
   SpecialFolders folders;
 
   ConversionResult convertAvroLayout(QString path);
-  
+
   ConversionResult saveLayout(QJsonObject obj, QString path);
 
   QString unescapeXML(QString escaped);
+
 public:
   ConversionResult convertLayout(QString path);
 };

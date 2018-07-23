@@ -33,15 +33,23 @@ class MethodPhonetic : public LayoutMth {
   Suggestion suggested;
 
   Suggestion createSuggestion();
+
   std::vector<std::string> toStdVector(QStringList vec);
+
 public:
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
+
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+
   IMCommand handleSpecialKey(int key);
+
   Suggestion getCandidates();
+
   bool handledKeyPress();
+
   void candidateCommited(int index);
+
   void updateEngine();
 };
 

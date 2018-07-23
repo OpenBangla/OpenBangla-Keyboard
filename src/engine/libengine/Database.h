@@ -22,12 +22,15 @@ class Database {
   RegexParser rgx;
 public:
   Database();
+
   ~Database();
 
   void loadTable(QStringList table, QSqlDatabase dbase);
+
   void loadSuffixTableFromDatabase(QSqlDatabase dbase);
 
   QStringList find(QString word);
+
   QString banglaForSuffix(QString word);
 };
 

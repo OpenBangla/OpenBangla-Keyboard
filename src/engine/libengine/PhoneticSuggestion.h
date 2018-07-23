@@ -40,23 +40,34 @@ private:
   QStringList prevSuggestion;
 
   void separatePadding(QString word);
+
   bool isKar(QString word);
+
   bool isVowel(QString word);
+
   QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic);
+
   void appendIfNotContains(QStringList &array, QString item);
+
   QStringList getDictionarySuggestion();
+
   QString getAutocorrect(QString word);
+
   QStringList addSuffix();
+
   void addToTempCache(QString full, QString base, QString eng);
 
 public:
   PhoneticSuggestion();
+
   void setLayout(QJsonObject lay);
 
   QString getPrevSelected();
+
   void saveSelection(int index);
 
   QStringList Suggest(QString word);
+
   void updateEngine();
 };
 

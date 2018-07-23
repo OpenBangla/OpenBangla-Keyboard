@@ -23,77 +23,73 @@
 
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AboutDialog)
-{
-    ui->setupUi(this);
+    ui(new Ui::AboutDialog) {
+  ui->setupUi(this);
 
-    this->setFixedSize(this->width(),this->height());
+  this->setFixedSize(this->width(), this->height());
 
-    // Set version
-    ui->labelVer->setText(PROJECT_VERSION);
+  // Set version
+  ui->labelVer->setText(PROJECT_VERSION);
 
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(scroll()));
-    timer->setInterval(30);
-    timer->start();
+  timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()), this, SLOT(scroll()));
+  timer->setInterval(30);
+  timer->start();
 
-    ui->txtLicense->setVisible(false);
-    ui->labelDesc->installEventFilter(this);
+  ui->txtLicense->setVisible(false);
+  ui->labelDesc->installEventFilter(this);
 }
 
-AboutDialog::~AboutDialog()
-{
-    delete ui;
-    delete timer;
+AboutDialog::~AboutDialog() {
+  delete ui;
+  delete timer;
 }
 
 void AboutDialog::scroll() {
-    QPoint point;
-    point.setX(ui->labelDesc->x());
-    if(ui->labelDesc->y() != -780) {
-        point.setY(ui->labelDesc->y() - 1);
-        ui->labelDesc->move(point);
-    } else {
-        point.setY(300);
-        ui->labelDesc->move(point);
-    }
+  QPoint point;
+  point.setX(ui->labelDesc->x());
+  if (ui->labelDesc->y() != -780) {
+    point.setY(ui->labelDesc->y() - 1);
+    ui->labelDesc->move(point);
+  } else {
+    point.setY(300);
+    ui->labelDesc->move(point);
+  }
 }
 
 void AboutDialog::showEvent(QShowEvent *event) {
-    QDialog::showEvent(event);
-    ui->labelDesc->move(ui->labelDesc->x(), 300);
-    return;
+  QDialog::showEvent(event);
+  ui->labelDesc->move(ui->labelDesc->x(), 300);
+  return;
 }
 
-void AboutDialog::on_btnClose_clicked()
-{
-    this->close();
+void AboutDialog::on_btnClose_clicked() {
+  this->close();
 }
 
-void AboutDialog::on_btnLicense_toggled(bool checked)
-{
-    ui->txtLicense->setVisible(checked);
-    ui->labelDesc->setVisible(!checked);
-    if(checked) { timer->stop(); } else { timer->start(); }
+void AboutDialog::on_btnLicense_toggled(bool checked) {
+  ui->txtLicense->setVisible(checked);
+  ui->labelDesc->setVisible(!checked);
+  if (checked) {
+    timer->stop();
+  } else {
+    timer->start();
+  }
 }
 
 bool AboutDialog::eventFilter(QObject *object, QEvent *event) {
-    if (object == ui->labelDesc) {
-        switch (event->type()) {
-            case QEvent::Enter:
-                timer->stop();
-                break;
-            case QEvent::Leave:
-                timer->start();
-                break;
-            default:
-                break;
-        }
+  if (object == ui->labelDesc) {
+    switch (event->type()) {
+    case QEvent::Enter:timer->stop();
+      break;
+    case QEvent::Leave:timer->start();
+      break;
+    default:break;
     }
-    return QObject::eventFilter(object, event);
+  }
+  return QObject::eventFilter(object, event);
 }
 
-void AboutDialog::on_labelDesc_linkActivated(const QString &link)
-{
-    QDesktopServices::openUrl(QUrl(link));
+void AboutDialog::on_labelDesc_linkActivated(const QString &link) {
+  QDesktopServices::openUrl(QUrl(link));
 }

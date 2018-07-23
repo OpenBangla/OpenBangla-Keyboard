@@ -26,6 +26,7 @@ class FixedLayoutParser {
   QJsonObject layout;
 public:
   void setLayout(QJsonObject l);
+
   QString getCharForKey(int keyNum, bool shift, bool altgr, bool shiftaltgr);
 };
 

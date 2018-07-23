@@ -23,13 +23,11 @@
 #include <QJsonObject>
 #include "LayoutConverter.h"
 
-ConversionResult LayoutConverter::convertLayout(QString path)
-{
+ConversionResult LayoutConverter::convertLayout(QString path) {
   return convertAvroLayout(path);
 }
 
-QString LayoutConverter::unescapeXML(QString escaped)
-{
+QString LayoutConverter::unescapeXML(QString escaped) {
   escaped.replace("&amp;", "&");
   escaped.replace("&lt;", "<");
   escaped.replace("&gt;", ">");
@@ -38,40 +36,32 @@ QString LayoutConverter::unescapeXML(QString escaped)
   return escaped;
 }
 
-ConversionResult LayoutConverter::convertAvroLayout(QString path)
-{
+ConversionResult LayoutConverter::convertAvroLayout(QString path) {
   QFile xmlFile(path);
-  if(!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text))
-  {
+  if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
     return OpenError;
   }
   QByteArray xmlData = xmlFile.readAll();
   QXmlStreamReader *xmlReader = new QXmlStreamReader(xmlData);
   QJsonObject layoutDev, infoLayout, info, keys;
 
-  while (!xmlReader->atEnd() && !xmlReader->hasError())
-  {
+  while (!xmlReader->atEnd() && !xmlReader->hasError()) {
     xmlReader->readNext();
-    if (xmlReader->isStartDocument())
-    {
+    if (xmlReader->isStartDocument()) {
       continue;
     }
 
-    if (xmlReader->isStartElement())
-    {
+    if (xmlReader->isStartElement()) {
       QStringRef name = xmlReader->name();
-      if (name == "Layout" || name == "KeyData")
-      {
+      if (name == "Layout" || name == "KeyData") {
         continue;
       }
 
       QString data = xmlReader->readElementText().trimmed();
 
       // Check layout version, we only support Avro Keyboard 5 layout.
-      if(name == "AvroKeyboardVersion")
-      {
-        if(data != "5")
-        {
+      if (name == "AvroKeyboardVersion") {
+        if (data != "5") {
           xmlReader->clear();
           xmlFile.close();
           delete xmlReader;
@@ -79,36 +69,22 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path)
         }
       }
 
-      if (!name.contains("Key") && !name.contains("Num"))
-      {
+      if (!name.contains("Key") && !name.contains("Num")) {
         // Meta data conversion
-        if (name == "LayoutName")
-        {
+        if (name == "LayoutName") {
           infoLayout["name"] = data;
-        }
-        else if (name == "LayoutVersion")
-        {
+        } else if (name == "LayoutVersion") {
           infoLayout["version"] = data;
-        }
-        else if (name == "DeveloperName")
-        {
+        } else if (name == "DeveloperName") {
           layoutDev["name"] = data;
-        }
-        else if (name == "DeveloperComment")
-        {
+        } else if (name == "DeveloperComment") {
           layoutDev["comment"] = unescapeXML(data);
-        }
-        else if (name == "ImageNormalShift")
-        {
+        } else if (name == "ImageNormalShift") {
           infoLayout["image0"] = data.simplified().replace(" ", "");
-        }
-        else if (name == "ImageAltGrShift")
-        {
+        } else if (name == "ImageAltGrShift") {
           infoLayout["image1"] = data.simplified().replace(" ", "");
         }
-      }
-      else
-      {
+      } else {
         // Key conversion
         QString key = name.toString();
         if (key.contains("OEM1"))
@@ -157,10 +133,9 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path)
   return saveLayout(layout, savePath);
 }
 
-ConversionResult LayoutConverter::saveLayout(QJsonObject obj, QString path) 
-{
+ConversionResult LayoutConverter::saveLayout(QJsonObject obj, QString path) {
   QFile saveFile(path);
-  if(!saveFile.open(QIODevice::WriteOnly)) {
+  if (!saveFile.open(QIODevice::WriteOnly)) {
     return SaveError;
   }
 

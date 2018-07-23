@@ -17,128 +17,120 @@
  */
 
 #include <QTreeWidget>
-#include <QSignalBlocker>
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
 
 AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AutoCorrectDialog)
-{
-    ui->setupUi(this);
+    ui(new Ui::AutoCorrectDialog) {
+  ui->setupUi(this);
 
-    this->setFixedSize(QSize(this->width(), this->height()));
+  this->setFixedSize(QSize(this->width(), this->height()));
 
-    ui->autoCorrect->setColumnCount(2);
-    ui->autoCorrect->setHeaderLabels({"Replace", "With"});
+  ui->autoCorrect->setColumnCount(2);
+  ui->autoCorrect->setHeaderLabels({"Replace", "With"});
 
-    ui->btnClear->setEnabled(false);
-    ui->btnUpdate->setEnabled(false);
+  ui->btnClear->setEnabled(false);
+  ui->btnUpdate->setEnabled(false);
 
-    dict.loadAvroPhonetic();
+  dict.loadAvroPhonetic();
 
-    loadEntries();
+  loadEntries();
 }
 
-AutoCorrectDialog::~AutoCorrectDialog()
-{
-    delete ui;
+AutoCorrectDialog::~AutoCorrectDialog() {
+  delete ui;
 }
 
 void AutoCorrectDialog::loadEntries() {
-    int items = 0;
-    /* Block any signals for the treelist.
-     * Otherwise it causes a Segmentation fault.
-     */
-    const QSignalBlocker blocker(ui->autoCorrect);
-    // Clear the treelist
-    ui->autoCorrect->clearSelection();
-    ui->autoCorrect->clear();
+  int items = 0;
+  /* Block any signals for the treelist.
+   * Otherwise it causes a Segmentation fault.
+   */
+  const QSignalBlocker blocker(ui->autoCorrect);
+  // Clear the treelist
+  ui->autoCorrect->clearSelection();
+  ui->autoCorrect->clear();
 
-    QVariantMap acList = dict.getEntries();
-    QVariantMap::const_iterator iter = acList.constBegin();
-    while(iter != acList.constEnd()) {
-        addEntries(iter.key(), iter.value().toString());
-        ++iter;
-        ++items;
-    }
+  QVariantMap acList = dict.getEntries();
+  QVariantMap::const_iterator iter = acList.constBegin();
+  while (iter != acList.constEnd()) {
+    addEntries(iter.key(), iter.value().toString());
+    ++iter;
+    ++items;
+  }
 
-    // Sort list
-    ui->autoCorrect->sortItems(0, Qt::SortOrder::AscendingOrder);
-    // Update
-    ui->lblEntries->setText("Total entries: " + QString::number(items));
+  // Sort list
+  ui->autoCorrect->sortItems(0, Qt::SortOrder::AscendingOrder);
+  // Update
+  ui->lblEntries->setText("Total entries: " + QString::number(items));
 }
 
 void AutoCorrectDialog::addEntries(QString replace, QString with) {
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui->autoCorrect);
-    item->setText(0, replace);
-    item->setText(1, with);
+  QTreeWidgetItem *item = new QTreeWidgetItem(ui->autoCorrect);
+  item->setText(0, replace);
+  item->setText(1, with);
 }
 
-void AutoCorrectDialog::on_buttonBox_accepted()
-{
-   dict.saveUserAutoCorrectFile();
+void AutoCorrectDialog::on_buttonBox_accepted() {
+  dict.saveUserAutoCorrectFile();
 }
 
-void AutoCorrectDialog::on_buttonBox_rejected()
-{
-    AutoCorrectDialog::close();
+void AutoCorrectDialog::on_buttonBox_rejected() {
+  AutoCorrectDialog::close();
 }
 
-void AutoCorrectDialog::on_btnUpdate_clicked()
-{
-    dict.setEntry(ui->txtReplace->text().trimmed(), ui->txtWith->text().trimmed());
-    loadEntries();
+void AutoCorrectDialog::on_btnUpdate_clicked() {
+  dict.setEntry(ui->txtReplace->text().trimmed(), ui->txtWith->text().trimmed());
+  loadEntries();
 }
 
-void AutoCorrectDialog::on_btnClear_clicked()
-{
-    ui->txtReplace->setText("");
-    ui->txtWith->setText("");
+void AutoCorrectDialog::on_btnClear_clicked() {
+  ui->txtReplace->setText("");
+  ui->txtWith->setText("");
 }
 
-void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1)
-{
-    if(arg1 != "") {
-        ui->lblPreviewR->setText(dict.convertBanglish(arg1));
-        if(!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
-        if(ui->txtWith->text() != "") {
-            ui->btnUpdate->setEnabled(true);
-        } else {
-            ui->btnUpdate->setEnabled(false);
-        }
+void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1) {
+  if (arg1 != "") {
+    ui->lblPreviewR->setText(dict.convertBanglish(arg1));
+    if (!ui->btnClear->isEnabled())
+      ui->btnClear->setEnabled(true);
+    if (ui->txtWith->text() != "") {
+      ui->btnUpdate->setEnabled(true);
     } else {
-        ui->lblPreviewR->setText("");
-        ui->btnClear->setEnabled(false);
-        ui->btnUpdate->setEnabled(false);
+      ui->btnUpdate->setEnabled(false);
     }
+  } else {
+    ui->lblPreviewR->setText("");
+    ui->btnClear->setEnabled(false);
+    ui->btnUpdate->setEnabled(false);
+  }
 }
 
-void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1)
-{
-    if(arg1 != "") {
-        // smiley rule
-        if(ui->txtReplace->text() == arg1) {
-            ui->lblPreviewW->setText(arg1);
-        } else {
-            ui->lblPreviewW->setText(dict.convertBanglish(arg1));
-        }
-
-        if(!ui->btnClear->isEnabled()) ui->btnClear->setEnabled(true);
-        if(ui->txtReplace->text() != "") {
-            ui->btnUpdate->setEnabled(true);
-        } else {
-            ui->btnUpdate->setEnabled(false);
-        }
+void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1) {
+  if (arg1 != "") {
+    // smiley rule
+    if (ui->txtReplace->text() == arg1) {
+      ui->lblPreviewW->setText(arg1);
     } else {
-        ui->lblPreviewW->setText("");
-        ui->btnClear->setEnabled(false);
-        ui->btnUpdate->setEnabled(false);
+      ui->lblPreviewW->setText(dict.convertBanglish(arg1));
     }
+
+    if (!ui->btnClear->isEnabled())
+      ui->btnClear->setEnabled(true);
+    if (ui->txtReplace->text() != "") {
+      ui->btnUpdate->setEnabled(true);
+    } else {
+      ui->btnUpdate->setEnabled(false);
+    }
+  } else {
+    ui->lblPreviewW->setText("");
+    ui->btnClear->setEnabled(false);
+    ui->btnUpdate->setEnabled(false);
+  }
 }
 
-void AutoCorrectDialog::on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
-{
-    ui->txtReplace->setText(current->text(0));
-    ui->txtWith->setText(current->text(1));
+void AutoCorrectDialog::on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) {
+  ui->txtReplace->setText(current->text(0));
+  ui->txtWith->setText(current->text(1));
 }
