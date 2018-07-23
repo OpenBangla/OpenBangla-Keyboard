@@ -1,16 +1,16 @@
 {
-    "C_Cpp.errorSquiggles": "Disabled",
-    "files.associations": {
-        "*.tcc": "cpp",
-        "string_view": "cpp",
-        "array": "cpp",
-        "initializer_list": "cpp",
-        "chrono": "cpp",
-        "qmessagebox": "cpp",
-        "qtreewidget": "cpp",
-        "atomic": "cpp",
-        "qvariant": "cpp",
-        "qmap": "cpp",
-        "system_error": "cpp"
-    }
+  "C_Cpp.errorSquiggles": "Disabled",
+  "files.associations": {
+    "*.tcc": "cpp",
+    "string_view": "cpp",
+    "array": "cpp",
+    "initializer_list": "cpp",
+    "chrono": "cpp",
+    "qmessagebox": "cpp",
+    "qtreewidget": "cpp",
+    "atomic": "cpp",
+    "qvariant": "cpp",
+    "qmap": "cpp",
+    "system_error": "cpp"
+  }
 }

@@ -8,7 +8,6 @@
  */
 
 #include <QRegularExpression>
-#include <QStringList>
 #include "Database.h"
 
 Database::Database() {
@@ -20,7 +19,7 @@ Database::Database() {
                        "E", "G", "Gh", "H", "I", "II",
                        "J", "JH", "K", "KH", "Khandatta",
                        "L", "M", "N", "NGA", "NN", "NYA",
-                       "O","OI", "OU", "P", "PH",
+                       "O", "OI", "OU", "P", "PH",
                        "R", "RR", "RRH", "RRI",
                        "S", "SH", "SS",
                        "T", "TH", "TT", "TTH",
@@ -52,9 +51,9 @@ Database::Database() {
                     {'x', {"e", "k"}},
                     {'y', {"i", "y"}},
                     {'z', {"h", "j", "jh", "z"}}
-                  };
+  };
 
-  if(db.open()) {
+  if (db.open()) {
     loadTable(table, db);
 
     loadSuffixTableFromDatabase(db);
@@ -68,11 +67,11 @@ Database::~Database() {}
 void Database::loadTable(QStringList table, QSqlDatabase dbase) {
   QVector<QString> list;
 
-  for (auto& name : table) {
+  for (auto &name : table) {
     // Make a SQL statement
     QSqlQuery query = dbase.exec("SELECT * FROM " + name);
 
-    while(query.next()) {
+    while (query.next()) {
       list.push_back(query.value("Words").toString());
     }
 
@@ -87,7 +86,7 @@ void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
   // Make a SQL statement
   QSqlQuery query = dbase.exec("SELECT * FROM Suffix");
 
-  while(query.next()) {
+  while (query.next()) {
     suffix_table[query.value("English").toString()] = query.value("Bangla").toString();
   }
   // Finish the SQLite statement
@@ -95,16 +94,16 @@ void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
 }
 
 QStringList Database::find(QString word) {
-  if(word != "") {
+  if (word != "") {
     QStringList suggestions;
     QChar lmc = word.at(0); // Left Most Character
 
     QRegularExpression regex(rgx.parse(word));
 
-    for(auto& table : prefixTableMap[lmc]) {
+    for (auto &table : prefixTableMap[lmc]) {
       QVector<QString> tableData = word_table[table];
-      for(auto& tmpString : tableData) {
-        if(tmpString.contains(regex)) {
+      for (auto &tmpString : tableData) {
+        if (tmpString.contains(regex)) {
           suggestions.push_back(tmpString);
         }
       }
@@ -117,7 +116,9 @@ QStringList Database::find(QString word) {
 }
 
 QString Database::banglaForSuffix(QString word) {
-  if(suffix_table.contains(word)) {
+  if (suffix_table.contains(word)) {
     return suffix_table[word];
-  } else { return QString(""); }
+  } else {
+    return QString("");
+  }
 }

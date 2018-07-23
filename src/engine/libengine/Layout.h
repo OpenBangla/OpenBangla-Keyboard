@@ -73,17 +73,23 @@ struct LayoutDesc {
 class LayoutMth {
 public:
   virtual void setLayout(QJsonObject lay) = 0;
+
   /* Generates suggestions on the fly */
   virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt)  = 0;
+
   /* Handle special keys such as Enter, Backspace, Space etc keys */
   virtual IMCommand handleSpecialKey(int key) = 0;
+
   /* Get the candidates for commit */
   virtual Suggestion getCandidates() = 0;
+
   /* Is the last key was processed? */
   virtual bool handledKeyPress() = 0;
+
   /* Confirms that one of the send candidates has been commited
    * @index index of the candidate string that was commited */
   virtual void candidateCommited(int index) = 0;
+
   /* Update internal suggestion making mechanism */
   virtual void updateEngine() = 0;
 };
@@ -101,6 +107,7 @@ class Layout {
 
   /* Load Layout Description. Used internally */
   void loadDesc();
+
   /* Set typing method. Used internally */
   void setMethod();
 
@@ -111,23 +118,31 @@ class Layout {
 
   /* Load a layout from given @path */
   void loadLayout(QString path);
+
 public:
   Layout();
+
   ~Layout();
-  
+
   /* Generates suggestions on the fly */
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+
   /* Get the candidates for commit */
   Suggestion getCandidates();
+
   /* Handle special keys such as Enter, Backspace, Space etc keys */
   IMCommand handleSpecialKey(int key);
+
   /* Is the last key was processed? */
   bool handledKeyPress();
+
   /* Confirms that one of the send candidates has been commited
    * @index index of the candidate string that was commited */
   void candidateCommited(int index);
+
   /* Checks is the candidate window horizontal */
   bool isCandidateWinHorizontal();
+
   /* Update internal suggestion making mechanism */
   void updateEngine();
 };

@@ -28,35 +28,37 @@ namespace Ui {
 class AutoCorrectDialog;
 }
 
-class AutoCorrectDialog : public QDialog
-{
-    Q_OBJECT
+class AutoCorrectDialog : public QDialog {
+Q_OBJECT
 
 public:
-    explicit AutoCorrectDialog(QWidget *parent = 0);
-    ~AutoCorrectDialog();
+  explicit AutoCorrectDialog(QWidget *parent = 0);
+
+  ~AutoCorrectDialog();
 
 private slots:
-    void on_buttonBox_accepted();
 
-    void on_buttonBox_rejected();
+  void on_buttonBox_accepted();
 
-    void on_btnUpdate_clicked();
+  void on_buttonBox_rejected();
 
-    void on_btnClear_clicked();
+  void on_btnUpdate_clicked();
 
-    void on_txtReplace_textChanged(const QString &arg1);
+  void on_btnClear_clicked();
 
-    void on_txtWith_textChanged(const QString &arg1);
+  void on_txtReplace_textChanged(const QString &arg1);
 
-    void on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+  void on_txtWith_textChanged(const QString &arg1);
+
+  void on_autoCorrect_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 private:
-    Ui::AutoCorrectDialog *ui;
-    AutoCorrect dict;
-    
-    void loadEntries();
-    void addEntries(QString replace, QString with);
+  Ui::AutoCorrectDialog *ui;
+  AutoCorrect dict;
+
+  void loadEntries();
+
+  void addEntries(QString replace, QString with);
 };
 
 #endif // AUTOCORRECTDIALOG_H

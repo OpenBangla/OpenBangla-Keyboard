@@ -64,9 +64,11 @@ class Layout {
 
   /* Load Layout Description. Used internaly */
   void loadDesc();
+
   /* Search for layouts in @dir and return the list of them
    * This also resets internal map and lists */
   LayoutList searchLayoutsEx(QDir dir);
+
   /* Load the layout from given @path */
   void loadLayout(QString path);
 

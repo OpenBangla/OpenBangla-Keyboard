@@ -22,51 +22,44 @@
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SettingsDialog)
-{
-    ui->setupUi(this);
+    ui(new Ui::SettingsDialog) {
+  ui->setupUi(this);
 
-    this->setFixedSize(QSize(this->width(), this->height()));
-    ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
-    updateSettings();
+  this->setFixedSize(QSize(this->width(), this->height()));
+  ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
+  updateSettings();
 }
 
-SettingsDialog::~SettingsDialog()
-{
-    delete ui;
+SettingsDialog::~SettingsDialog() {
+  delete ui;
 }
 
 void SettingsDialog::updateSettings() {
-    ui->btnClosePrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
-    ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
-    ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
-    ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
+  ui->btnClosePrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
+  ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
+  ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
+  ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
 }
 
-void SettingsDialog::on_buttonBox_accepted()
-{
-    gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
-    gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
-    gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
-    gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
+void SettingsDialog::on_buttonBox_accepted() {
+  gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
+  gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
+  gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
+  gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
 }
 
-void SettingsDialog::on_buttonBox_rejected()
-{
-    SettingsDialog::close();
+void SettingsDialog::on_buttonBox_rejected() {
+  SettingsDialog::close();
 }
 
-void SettingsDialog::on_btnClosePrevWin_toggled(bool checked)
-{
-    ui->btnClosePrevWin->setText(checked ? "On" : "Off");
+void SettingsDialog::on_btnClosePrevWin_toggled(bool checked) {
+  ui->btnClosePrevWin->setText(checked ? "On" : "Off");
 }
 
-void SettingsDialog::on_btnShowPrevWin_toggled(bool checked)
-{
-    ui->btnShowPrevWin->setText(checked ? "On" : "Off");
+void SettingsDialog::on_btnShowPrevWin_toggled(bool checked) {
+  ui->btnShowPrevWin->setText(checked ? "On" : "Off");
 }
 
-void SettingsDialog::on_btnCheckUpdate_toggled(bool checked)
-{
-    ui->btnCheckUpdate->setText(checked ? "On" : "Off");
+void SettingsDialog::on_btnCheckUpdate_toggled(bool checked) {
+  ui->btnCheckUpdate->setText(checked ? "On" : "Off");
 }
