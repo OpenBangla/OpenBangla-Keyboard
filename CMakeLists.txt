@@ -92,7 +92,6 @@ if(APPLE)
 
   set(FRAMEWORKS_PATH ${PLATFORM_PATH}/Developer/Library/Frameworks)
 
-  include(cmake/CMakeMacOS.txt)
   add_definitions(-DPROJECT_DATADIR="/usr/local/openbangla-keyboard/")
   add_definitions(-DPKGDATADIR="/usr/local/openbangla-keyboard/")
 endif()
