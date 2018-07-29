@@ -16,10 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QFile>
-#include <QByteArray>
 #include <QJsonDocument>
 #include "AutoCorrect.h"
-#include "log.h"
 
 AutoCorrect::AutoCorrect() {
   QFile dictFile(PKGDATADIR "/data/autocorrect.json");
@@ -52,13 +50,13 @@ QString AutoCorrect::getCorrected(QString word) {
   // Always prefer user edited Autocorrect file
   QJsonValue corrected = usrDict.value(word);
 
-  if(corrected.type() != QJsonValue::Undefined) {
+  if (corrected.type() != QJsonValue::Undefined) {
     return corrected.toString();
   } else {
     // Not found in user's AutoCorrect file. So use the
     // default AutoCorrect file.
     corrected = dict.value(word);
-    if(corrected.type() != QJsonValue::Undefined) {
+    if (corrected.type() != QJsonValue::Undefined) {
       return corrected.toString();
     } else {
       return QString("");
@@ -73,7 +71,7 @@ QVariantMap AutoCorrect::getEntries() {
    * If a conflict is found, we prefer user's entry.
    */
   QJsonObject::const_iterator iter = usrDict.constBegin();
-  while(iter != usrDict.constEnd()) {
+  while (iter != usrDict.constEnd()) {
     dct.insert(iter.key(), iter.value());
 
     ++iter;
@@ -105,7 +103,7 @@ void AutoCorrect::setEntry(QString replace, QString with) {
 
 void AutoCorrect::saveUserAutoCorrectFile() {
   QFile saveFile(folders.getUserAutoCorrectFile());
-  if(!saveFile.open(QIODevice::WriteOnly)) {
+  if (!saveFile.open(QIODevice::WriteOnly)) {
     LOG_ERROR("[AutoCorrect:Save]: Error couldn't open save file.\n");
     return;
   }

@@ -20,50 +20,68 @@
 #define SETTINGS_H
 
 class QSettings;
+
 class QPoint;
+
 class QString;
 
 class Settings {
   QSettings *setting;
 public:
   Settings();
+
   ~Settings();
 
   void setTopBarWindowPosition(QPoint pos);
+
   QPoint getTopBarWindowPosition();
+
   void setLayoutViewerWindowPosition(QPoint pos);
+
   QPoint getLayoutViewerWindowPosition();
 
   void setLayoutName(QString name);
+
   QString getLayoutName();
+
   void setLayoutPath(QString path);
+
   QString getLayoutPath();
 
   void setEnterKeyClosesPrevWin(bool b);
+
   bool getEnterKeyClosesPrevWin();
 
   void setAutoVowelFormFixed(bool b);
+
   bool getAutoVowelFormFixed();
 
   void setAutoChandraPosFixed(bool b);
+
   bool getAutoChandraPosFixed();
 
   void setTraditionalKarFixed(bool b);
+
   bool getTraditionalKarFixed();
 
   void setNumberPadFixed(bool b);
+
   bool getNumberPadFixed();
 
   void setOldReph(bool b);
+
   bool getOldReph();
 
   void setCandidateWinHorizontal(bool c);
+
   bool getCandidateWinHorizontal();
 
   void setShowCWPhonetic(bool b);
+
   bool getShowCWPhonetic();
 
   void setUpdateCheck(bool b);
+
   bool getUpdateCheck();
 };
 

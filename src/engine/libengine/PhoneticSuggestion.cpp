@@ -21,9 +21,11 @@
 
 PhoneticSuggestion::PhoneticSuggestion() {
   // Set patterns and optimize them
-  rgxPadding.setPattern("(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
+  rgxPadding.setPattern(
+      "(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
   rgxKar.setPattern("^[\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc\u09c4]$");
-  rgxVowel.setPattern("^[\u0985\u0986\u0987\u0988\u0989\u098a\u098b\u098f\u0990\u0993\u0994\u098c\u09e1\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc]$");
+  rgxVowel.setPattern(
+      "^[\u0985\u0986\u0987\u0988\u0989\u098a\u098b\u098f\u0990\u0993\u0994\u098c\u09e1\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc]$");
   rgxPadding.optimize();
   rgxKar.optimize();
   rgxVowel.optimize();
@@ -70,7 +72,7 @@ QString PhoneticSuggestion::getAutocorrect(QString word) {
 
 void PhoneticSuggestion::separatePadding(QString word) {
   QRegularExpressionMatch match = rgxPadding.match(word);
-  if(match.hasMatch()) {
+  if (match.hasMatch()) {
     padBegin = match.captured(1);
     padMiddle = match.captured(2);
     padEnd = match.captured(3);
@@ -121,10 +123,10 @@ QStringList PhoneticSuggestion::addSuffix() {
       QString testSuffix = dictKey.mid(i, len);
 
       QString suffix = db.banglaForSuffix(testSuffix);
-      if(suffix != "") {
+      if (suffix != "") {
         QString key = dictKey.mid(0, dictKey.length() - testSuffix.length());
         if (!phoneticCache[key].isEmpty()) {
-          for (auto& cacheItem : phoneticCache[key]) {
+          for (auto &cacheItem : phoneticCache[key]) {
             QString cacheRightChar = cacheItem.right(1);
             QString suffixLeftChar = suffix.left(1);
             if (isVowel(cacheRightChar) && isKar(suffixLeftChar)) {
@@ -147,7 +149,7 @@ QStringList PhoneticSuggestion::addSuffix() {
             }
           }
 
-          for (auto& item : tempList) {
+          for (auto &item : tempList) {
             rList.append(item);
           }
         }
@@ -184,9 +186,9 @@ QString PhoneticSuggestion::getPrevSelected() {
               selected = keyWord + "\u09df" + suffix;
             } else {
               if (kwRightChar == "\u09ce") {
-                selected = keyWord.mid(0, keyWord.length() -1) + "\u09a4" + suffix;
+                selected = keyWord.mid(0, keyWord.length() - 1) + "\u09a4" + suffix;
               } else if (kwRightChar == "\u0982") {
-                selected = keyWord.mid(0, keyWord.length() -1) + "\u0999" + suffix;
+                selected = keyWord.mid(0, keyWord.length() - 1) + "\u0999" + suffix;
               } else {
                 selected = keyWord + suffix;
               }
@@ -202,16 +204,17 @@ QString PhoneticSuggestion::getPrevSelected() {
   return padBegin + selected + padEnd;
 }
 
-QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic) {
+QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion,
+                                               QString phonetic) {
   QStringList words;
 
   // Sort dictionary suggestion
-  std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&] (QString i, QString j) {
+  std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&](QString i, QString j) {
     int dist1 = levenshtein_distance(phonetic, i);
     int dist2 = levenshtein_distance(phonetic, j);
-    if(dist1 < dist2) {
+    if (dist1 < dist2) {
       return true;
-    } else if(dist1 > dist2) {
+    } else if (dist1 > dist2) {
       return false;
     } else {
       return true;
@@ -233,7 +236,7 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
 
   QStringList dictSuggestionWithSuffix = addSuffix();
 
-  for (auto& word : dictSuggestionWithSuffix) {
+  for (auto &word : dictSuggestionWithSuffix) {
     appendIfNotContains(words, word);
   }
 
@@ -241,7 +244,7 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
 
   prevSuggestion << words;
 
-  for (auto& word : words) {
+  for (auto &word : words) {
     // smiley rule
     if (autoCorrect == writtenWord) {
       if (autoCorrect != word) {
@@ -269,7 +272,7 @@ QStringList PhoneticSuggestion::Suggest(QString word) {
 
   QString phonetic = parser.parse(padMiddle);
 
-  if(!gSettings->getShowCWPhonetic()) {
+  if (!gSettings->getShowCWPhonetic()) {
     // Return only phonetic suggestion
     suggestion.append(padBegin + phonetic + padEnd);
   } else {

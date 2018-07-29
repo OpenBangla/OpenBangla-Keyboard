@@ -31,20 +31,32 @@ class MethodFixedLayoutModern : public LayoutMth {
   Suggestion suggest;
 public:
   MethodFixedLayoutModern();
+
   void updateCache();
+
   void processKeyPress(QString word);
+
   void insertKar(QString kar);
+
   void insertReph();
+
   void internalBackspace();
+
   void backspace(QString &string, int step);
+
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
+
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+
   IMCommand handleSpecialKey(int key);
+
   Suggestion getCandidates();
+
   bool handledKeyPress();
+
   void candidateCommited(int index);
-  
+
   void updateEngine() {
     // Nothing to do :)
   }

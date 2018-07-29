@@ -28,7 +28,7 @@
  * We use iBus's US layout(https://github.com/ibus/ibus/blob/master/data/keymaps/us)
  */
 
-std::map<guint,int> key;
+std::map<guint, int> key;
 
 void initKeycode() {
   // Begin Alphanumeric Zone
@@ -187,12 +187,10 @@ void initKeycode() {
 }
 
 int ibus_keycode(guint k) {
-  try
-  {
+  try {
     return key.at(k);
   }
-  catch(std::out_of_range)
-  {
+  catch (std::out_of_range) {
     // The key is not mapped - means that we don't needed the UNKNOWN key!
     LOG_DEBUG("[IM:iBus]: Got unknown keycode. Mapping to VC_UNKNOWN\n");
     return VC_UNKNOWN;

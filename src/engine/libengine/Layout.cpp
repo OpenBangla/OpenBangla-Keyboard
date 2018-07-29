@@ -20,7 +20,6 @@
 
 #include <QJsonDocument>
 #include <QFile>
-#include <QByteArray>
 #include "Layout.h"
 #include "Settings.h"
 #include "MethodPhonetic.h"
@@ -45,7 +44,8 @@ Layout::~Layout() {
 
 void Layout::loadLayout(QString path) {
   // Check if we have already a opened file
-  if(fin.isOpen()) fin.close();
+  if (fin.isOpen())
+    fin.close();
 
   // Open the given layout file
   fin.setFileName(path);
@@ -67,7 +67,7 @@ void Layout::loadDesc() {
   // Load Layout Description
   // Layout File Type
   QString type = lf.value("info").toObject().value("type").toString();
-  if(type == "phonetic") {
+  if (type == "phonetic") {
     lD.type = Layout_Phonetic;
   } else {
     lD.type = Layout_Fixed;
@@ -80,7 +80,7 @@ QJsonObject Layout::sendLayout() {
 
 void Layout::setMethod() {
   // Check layout type and set methods
-  if(lD.type == Layout_Phonetic) {
+  if (lD.type == Layout_Phonetic) {
     // Selected method is phonetic
     mth = &mPh; // Phonetic Method
   } else {
@@ -91,7 +91,7 @@ void Layout::setMethod() {
 
 void Layout::updateWithSettings() {
   // Check if user has changed layout
-  if(fin.fileName() != gSettings->getLayoutPath()) {
+  if (fin.fileName() != gSettings->getLayoutPath()) {
     loadLayout(gSettings->getLayoutPath());
   }
 }
