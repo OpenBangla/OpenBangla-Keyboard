@@ -49,7 +49,7 @@ typedef struct {
 void engine_init();
 CSuggestion engine_get_suggestion(int key, bool shift, bool ctrl, bool alt);
 CSuggestion engine_get_candidates();
-void engine_candidate_commited(char *candidate);
+void engine_candidate_commited(int index);
 bool engine_key_handled();
 CIMCommand engine_handle_special_key(int key);
 

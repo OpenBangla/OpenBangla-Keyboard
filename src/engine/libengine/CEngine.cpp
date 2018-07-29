@@ -48,9 +48,8 @@ CSuggestion engine_get_candidates() {
   return suggestion_to_c(suggest);
 }
 
-void engine_candidate_commited(char *candidate) {
-  std::string str(candidate);
-  gLayout->candidateCommited(str);
+void engine_candidate_commited(int index) {
+  gLayout->candidateCommited(index);
 }
 
 bool engine_key_handled() {
