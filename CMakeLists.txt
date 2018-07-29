@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-project(OpenBangla-Keyboard VERSION 1.1.0)
+project(OpenBangla-Keyboard VERSION 1.5.0)
 set(APP_NAME "OpenBangla-Keyboard")
 
 ## Set versions
@@ -12,34 +13,61 @@ set(CMAKE_CXX_STANDARD 11)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
-find_package(Qt5Xml REQUIRED)
 find_package(Qt5Network REQUIRED)
 
 # Get system information. WIN32 and APPLE are defined by CMake
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  set(OS_LINUX 1)
-endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(OS_LINUX 1)
+endif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
 # Set build type to "Release" if user did not specify any build type yet
 # Other possible values: Debug, Release, RelWithDebInfo and MinSizeRel
-if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Release)
-endif(NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif (NOT CMAKE_BUILD_TYPE)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	add_definitions(-DDEBUG)
-endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG)
+endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+# Sanity check our source directory to make sure that we are not trying to
+# generate an in-tree build (it pollutes the source tree with a lot of CMake
+# related files).
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+    message(FATAL_ERROR "In-source builds are not allowed.\nPlease create a build directory and initiate cmake from there.")
+endif ()
 
 # For Linux.
-if(OS_LINUX)
-  # Include our Linux specific additions
-  include(cmake/CMakeLinux.txt)
+if (OS_LINUX)
+    ## Additions for Linux ##
 
-  include(FindPkgConfig)
-  ## Find iBus ##
-  find_package(PkgConfig)
-  pkg_check_modules(IBUS REQUIRED ibus-1.0)
-endif(OS_LINUX)
+    #Generate compile_commands.json to satisfy vscode linux configuration
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+    ## Set Directories for installing and storing files
+    set(CMAKE_INSTALL_PREFIX "/usr")
+
+    if (NOT DEFINED datadir)
+        set(datadir "${CMAKE_INSTALL_PREFIX}/share")
+    endif ()
+    add_definitions(-DDATADIR="${datadir}")
+
+    if (NOT DEFINED LIBEXEC_DIR)
+        set(LIBEXEC_DIR "${CMAKE_INSTALL_PREFIX}/libexec")
+    endif ()
+    add_definitions(-DLIBEXEC_DIR="${LIBEXEC_DIR}")
+
+    if (NOT DEFINED PROJECT_DATADIR)
+        set(PROJECT_DATADIR "${datadir}/openbangla-keyboard")
+    endif (NOT DEFINED PROJECT_DATADIR)
+    add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
+    add_definitions(-DPKGDATADIR="${PROJECT_DATADIR}")
+
+    include(FindPkgConfig)
+    ## Find iBus ##
+    find_package(PkgConfig)
+    pkg_check_modules(IBUS REQUIRED ibus-1.0)
+endif (OS_LINUX)
 
 if(APPLE)
   ## Find Swift compiler
@@ -65,36 +93,61 @@ if(APPLE)
   set(FRAMEWORKS_PATH ${PLATFORM_PATH}/Developer/Library/Frameworks)
 
   include(cmake/CMakeMacOS.txt)
+  add_definitions(-DPROJECT_DATADIR="/usr/local/openbangla-keyboard/")
+  add_definitions(-DPKGDATADIR="/usr/local/openbangla-keyboard/")
 endif()
 
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
 
+# uninstall target
+if (NOT TARGET uninstall)
+    configure_file(
+            "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+            IMMEDIATE @ONLY)
+
+    add_custom_target(uninstall
+            COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif ()
+
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")
 set(CPACK_PACKAGE_VENDOR "Muhammad Mominul Huque")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Muhammad Mominul Huque")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Muhammad Mominul Huque <mominul2082@gmail.com>")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/data/Readme.txt")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus,libibus-1.0-dev,libqt5core5a,libqt5widgets5,libqt5sql5,libqt5sql5-sqlite,libqt5xml5,libqt5network5")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenBanglaKeyboard${CMake_VERSION_MAJOR}")
-#if(WIN32 AND NOT UNIX)
-  # There is a bug in NSI that does not handle full unix paths properly. Make
-  # sure there is at least one set of four (4) backlasshes.
-#  set(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
-#  set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\MyExecutable.exe")
-#  set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} My Famous Project")
-#  set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.my-project-home-page.org")
-#  set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.my-personal-home-page.com")
-#  set(CPACK_NSIS_CONTACT "me@my-personal-home-page.com")
-#  set(CPACK_NSIS_MODIFY_PATH ON)
-#else(WIN32 AND NOT UNIX)
-#  set(CPACK_STRIP_FILES "bin/OpenBanglaKeyboard")
-#  set(CPACK_SOURCE_STRIP_FILES "")
-#endif(WIN32 AND NOT UNIX)
-#set(CPACK_PACKAGE_EXECUTABLES "OpenBanglaKeyboard" "OpenBangla Keyboard")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
+set(CPACK_STRIP_FILES TRUE)
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://openbangla.github.io/")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
+set(CPACK_RPM_PACKAGE_URL "http://openbangla.github.io/")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1")
+set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
+# Prevents CPack from generating file conflicts
+set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus/component")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/metainfo")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/pixmaps")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/1024x1024")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/1024x1024/apps")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/128x128")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/128x128/apps")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/16x16")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/16x16/apps")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/32x32")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/32x32/apps")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/48x48")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/48x48/apps")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/512x512")
+list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/512x512/apps")
 include(CPack)

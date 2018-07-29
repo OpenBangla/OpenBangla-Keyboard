@@ -34,24 +34,15 @@ public:
   CacheManager();
 
   void setTempCache(QString key, QVector<QString> suggestions);
+
   QVector<QString> getTempCache(QString key);
 
-/* TODO: Add Suffix implementation
-  void removeAllBase() {
-    base.clear();
-  }
-
-  QVector<QString> baseForKey(QString key) {
-    return base[key];
-  }
-
-  void setBase(QVector<QString> aBase, QString aKey) {
-    base[aKey] = aBase;
-  }*/
-
   void loadCandidateSelection();
+
   QString getCandidateSelection(QString word);
+
   void writeCandidateSelection(QString word, QString sel);
+
   void saveCandidateSelection();
 };
 

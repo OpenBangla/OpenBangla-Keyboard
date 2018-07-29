@@ -21,10 +21,9 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QDir>
-#include <QByteArray>
 #include "Layout.h"
 #include "Settings.h"
-#include <QDebug>
+
 Layout *gLayout;
 
 Layout::~Layout() {
@@ -51,7 +50,7 @@ void Layout::loadDesc() {
   // Load Layout Description
   // Layout File Type
   QString type = lf.value("info").toObject().value("type").toString();
-  if(type == "phonetic") {
+  if (type == "phonetic") {
     lD.type = Layout_Phonetic;
   } else {
     lD.type = Layout_Fixed;
@@ -71,9 +70,11 @@ void Layout::loadDesc() {
   lD.image1.clear();
   lD.image1.append(lf.value("info").toObject().value("layout").toObject().value("image1").toString());
   // Layout Develper Name
-  lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("name").toString();
+  lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value(
+      "name").toString();
   // Layout Developer Comment
-  lD.devComment = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value("comment").toString();
+  lD.devComment = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value(
+      "comment").toString();
 }
 
 LayoutDesc Layout::getDesc() {
@@ -84,7 +85,7 @@ LayoutDesc Layout::getDesc() {
 LayoutList Layout::searchLayoutsEx(QDir dir) {
   LayoutList layoutList;
   QStringList flist = dir.entryList(QStringList("*.json"), QDir::Files);
-  for(auto& file : flist) {
+  for (auto &file : flist) {
     // Actual file path
     QString path = dir.path() + "/" + file;
     // Load the file temporary
@@ -107,9 +108,11 @@ LayoutList Layout::searchLayouts() {
   lst << searchLayoutsEx(dir);
 
   dir.setPath(folders.getUserLayoutPath());
-  if(dir.exists()) {
+  if (dir.exists()) {
     lst << searchLayoutsEx(dir);
-  } else { return lst; }
+  } else {
+    return lst;
+  }
 
   return lst;
 }

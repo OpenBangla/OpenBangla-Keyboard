@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2015-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,14 +20,38 @@
 
 #include <QString>
 #include <QJsonObject>
+#include <QMap>
+#include <QVariant>
 #include "phoneticparser.h"
+#include "SpecialFolders.h"
 
 class AutoCorrect {
   QJsonObject dict;
+  QJsonObject usrDict;
   PhoneticParser parser;
+  SpecialFolders folders;
 public:
   AutoCorrect();
+
   QString getCorrected(QString word);
+
+  /* Get AutoCorrect entries */
+  QVariantMap getEntries();
+
+  /* Load user AutoCorrect file */
+  void loadUserAutoCorrectFile();
+
+  /* Load Avro Phonetic to convert Banglish to Bangla */
+  void loadAvroPhonetic();
+
+  /* Convert Banglish to Avro Phonetic */
+  QString convertBanglish(QString text);
+
+  /* Add an entry into users's AutoCorrect dictionary */
+  void setEntry(QString replace, QString with);
+
+  /* Save user specific AutoCorrect file */
+  void saveUserAutoCorrectFile();
 };
 
 #endif /* end of include guard: AUTO_CORRECT_H */

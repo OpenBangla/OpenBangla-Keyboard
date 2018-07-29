@@ -26,9 +26,9 @@
 #define LOG_INFO(a...) std::fprintf(stdout, "[OpenBangla-Info]: " a)
 
 #if DEBUG
-  #define LOG_DEBUG(a...) std::fprintf(stdout, "[OpenBangla-Debug]: " a)
+#define LOG_DEBUG(a...) std::fprintf(stdout, "[OpenBangla-Debug]: " a)
 #else
-  #define LOG_DEBUG(a...)
+#define LOG_DEBUG(a...)
 #endif
 
 #define LOG_ERROR(a...) std::fprintf(stderr, "[OpenBangla-Error]: " a)

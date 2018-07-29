@@ -21,21 +21,19 @@
 
 AboutFile::AboutFile(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AboutFile)
-{
-    ui->setupUi(this);
+    ui(new Ui::AboutFile) {
+  ui->setupUi(this);
 
-    this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
-    this->setFixedSize(QSize(this->width(), this->height()));
+  this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
+  this->setFixedSize(QSize(this->width(), this->height()));
 }
 
-AboutFile::~AboutFile()
-{
-    delete ui;
+AboutFile::~AboutFile() {
+  delete ui;
 }
 
 void AboutFile::setDialogType(DialogType type) {
-  if(type == AboutLayout) {
+  if (type == AboutLayout) {
     this->setWindowTitle("About This Layout...");
     loadLayoutInfo();
   }
@@ -49,7 +47,6 @@ void AboutFile::loadLayoutInfo() {
   ui->txtDevComment->setPlainText(desc.devComment);
 }
 
-void AboutFile::on_buttonOK_clicked()
-{
-    AboutFile::close();
+void AboutFile::on_buttonOK_clicked() {
+  AboutFile::close();
 }

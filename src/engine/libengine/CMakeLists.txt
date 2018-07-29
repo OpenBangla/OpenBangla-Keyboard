@@ -10,10 +10,10 @@ set(Sources Layout.cpp
             FixedLayoutParser.cpp
             regexparser.cpp
             regexparser.h
-            autocorrect.cpp
-            autocorrect.h
-            database.cpp
-            database.h
+            AutoCorrect.cpp
+            AutoCorrect.h
+            Database.cpp
+            Database.h
             cachemanager.cpp
             cachemanager.h
             PhoneticSuggestion.cpp

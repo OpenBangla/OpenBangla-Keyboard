@@ -23,6 +23,6 @@ matrix:
 before_script:
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_INSTALL_PREFIX='/usr'
+  - cmake ..
 script:
   - make

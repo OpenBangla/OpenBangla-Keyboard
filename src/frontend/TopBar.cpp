@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,12 +17,11 @@
  */
 
 #include <QSystemTrayIcon>
+#include <QDesktopWidget>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
 #include <QMenu>
-#include <QAction>
-#include <QDebug>
 #include "TopBar.h"
 #include "Layout.h"
 #include "Settings.h"
@@ -31,47 +30,80 @@
 #include "AboutFile.h"
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
+#include "AutoCorrectDialog.h"
+#include "QSimpleUpdater.h"
 #include "ui_TopBar.h"
+
+static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
 TopBar::TopBar(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::TopBar)
-{
-    ui->setupUi(this);
+    ui(new Ui::TopBar) {
+  ui->setupUi(this);
 
-    gLayout = new Layout();
-    gSettings = new Settings();
+  gLayout = new Layout();
+  gSettings = new Settings();
+  updater = QSimpleUpdater::getInstance();
 
-    /* Dialogs */
-    aboutDialog = new AboutDialog(this);
-    layoutViewer = new LayoutViewer(this);
-    settingsDialog = new SettingsDialog(this);
+  /* Dialogs */
+  aboutDialog = new AboutDialog(Q_NULLPTR);
+  layoutViewer = new LayoutViewer(Q_NULLPTR);
+  settingsDialog = new SettingsDialog(Q_NULLPTR);
+  autoCorrectDialog = new AutoCorrectDialog(Q_NULLPTR);
 
-    ui->buttonIcon->installEventFilter(this);
+  ui->buttonIcon->installEventFilter(this);
 
-    SetupTopBar();
-    SetupPopupMenus();
-    SetupTrayIcon();
+  SetupTopBar();
+  SetupPopupMenus();
+  SetupTrayIcon();
+
+  if (gSettings->getUpdateCheck()) {
+    checkForUpdate();
+  }
 }
 
-TopBar::~TopBar()
-{
-    /* Dialogs */
-    delete layoutViewer;
-    delete settingsDialog;
-    delete aboutDialog;
+TopBar::~TopBar() {
+  /* Dialogs */
+  delete layoutViewer;
+  delete settingsDialog;
+  delete aboutDialog;
+  delete autoCorrectDialog;
 
-    delete gLayout;
-    delete gSettings;
+  delete gLayout;
+  delete gSettings;
 
-    delete ui;
+  delete ui;
 }
 
 void TopBar::SetupTopBar() {
+#if defined(linux) || defined(__linux__) || defined(__linux)
+  this->setWindowFlags(
+      Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint |
+          Qt::WindowDoesNotAcceptFocus | Qt::NoDropShadowWindowHint);
+#else
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+#endif
   this->setFixedSize(QSize(this->width(), this->height()));
 
-  move(gSettings->getTopBarWindowPosition());
+  if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
+    int width = this->frameGeometry().width();
+    int height = this->frameGeometry().height();
+    QDesktopWidget wid;
+
+    int screenWidth = wid.screen()->width();
+    int screenHeight = wid.screen()->height();
+
+    this->setGeometry((screenWidth / 2) - (width / 2), (screenHeight / 2) - (height / 2), width, height);
+  } else {
+    move(gSettings->getTopBarWindowPosition());
+  }
+}
+
+void TopBar::checkForUpdate() {
+  updater->setModuleVersion(DEFS_URL, PROJECT_VERSION);
+  updater->setNotifyOnUpdate(DEFS_URL, true);
+  updater->setDownloaderEnabled(DEFS_URL, false);
+  updater->checkForUpdates(DEFS_URL);
 }
 
 void TopBar::SetupPopupMenus() {
@@ -94,12 +126,14 @@ void TopBar::SetupPopupMenus() {
   settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Automatic Vowel Forming\"", this);
   settingsMenuFixedLayoutAutoVForm->setCheckable(true);
   settingsMenuFixedLayoutAutoVForm->setChecked(gSettings->getAutoVowelFormFixed());
-  connect(settingsMenuFixedLayoutAutoVForm, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoVForm_clicked()));
+  connect(settingsMenuFixedLayoutAutoVForm, SIGNAL(triggered()), this,
+          SLOT(settingsMenuFixedLayoutAutoVForm_clicked()));
 
   settingsMenuFixedLayoutAutoChandra = new QAction("Automatically fix \"Chandrabindu\" position", this);
   settingsMenuFixedLayoutAutoChandra->setCheckable(true);
   settingsMenuFixedLayoutAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
-  connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
+  connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this,
+          SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
 
   settingsMenuFixedLayoutOldReph = new QAction("Old Style Reph", this);
   settingsMenuFixedLayoutOldReph->setCheckable(true);
@@ -109,12 +143,14 @@ void TopBar::SetupPopupMenus() {
   settingsMenuFixedLayoutTraditionalKar = new QAction("Enable \"Traditional Kar Joining\"", this);
   settingsMenuFixedLayoutTraditionalKar->setCheckable(true);
   settingsMenuFixedLayoutTraditionalKar->setChecked(gSettings->getTraditionalKarFixed());
-  connect(settingsMenuFixedLayoutTraditionalKar, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutTraditionalKar_clicked()));
+  connect(settingsMenuFixedLayoutTraditionalKar, SIGNAL(triggered()), this,
+          SLOT(settingsMenuFixedLayoutTraditionalKar_clicked()));
 
   settingsMenuFixedLayoutNumberPad = new QAction("Enable Bengali in NumberPad", this);
   settingsMenuFixedLayoutNumberPad->setCheckable(true);
   settingsMenuFixedLayoutNumberPad->setChecked(gSettings->getNumberPadFixed());
-  connect(settingsMenuFixedLayoutNumberPad, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutNumberPad_clicked()));
+  connect(settingsMenuFixedLayoutNumberPad, SIGNAL(triggered()), this,
+          SLOT(settingsMenuFixedLayoutNumberPad_clicked()));
 
   settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
   settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
@@ -126,21 +162,31 @@ void TopBar::SetupPopupMenus() {
   settingsMenuShowDialog = new QAction("Settings", this);
   connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
 
+  settingsMenuAutoCorrect = new QAction("Edit Phonetic AutoCorrect entries", this);
+  connect(settingsMenuAutoCorrect, SIGNAL(triggered()), this, SLOT(settingsMenuAutoCorrect_clicked()));
+
   settingsMenu = new QMenu(this);
   settingsMenu->addMenu(settingsMenuFixedLayout);
+  settingsMenu->addAction(settingsMenuAutoCorrect);
   settingsMenu->addSeparator();
   settingsMenu->addAction(settingsMenuShowDialog);
 
   // About Popup Menu
-  aboutMenuLayout = new QAction("About current keyboard layout...", this);
+  aboutMenuLayout = new QAction("About current keyboard layout", this);
   connect(aboutMenuLayout, SIGNAL(triggered()), this, SLOT(aboutMenuLayout_clicked()));
 
-  aboutMenuAbout = new QAction("About OpenBangla Keyboard...", this);
+  aboutMenuAbout = new QAction("About OpenBangla Keyboard", this);
   connect(aboutMenuAbout, SIGNAL(triggered()), this, SLOT(aboutMenuAbout_clicked()));
+
+  aboutMenuUpdate = new QAction("Check for Updates", this);
+  connect(aboutMenuUpdate, &QAction::triggered, [=]() {
+    checkForUpdate();
+  });
 
   aboutMenu = new QMenu(this);
   aboutMenu->addAction(aboutMenuLayout);
   aboutMenu->addAction(aboutMenuAbout);
+  aboutMenu->addAction(aboutMenuUpdate);
 
   // Quit Popup Menu
   quitMenuQuit = new QAction("Quit", this);
@@ -183,43 +229,81 @@ void TopBar::RefreshLayouts() {
   LayoutList list;
   list = gLayout->searchLayouts();
 
-  for(int k = 0; k < MaxLayoutFiles; ++k) {
-    if(k < list.count()) {
-      layoutMenuLayouts[k]->setText(list[k]);
+  QString selectedLayout = gSettings->getLayoutName();
+
+  for (int k = 0; k < MaxLayoutFiles; ++k) {
+    if (k < list.count()) {
+      QString name = list[k];
+      layoutMenuLayouts[k]->setText(name);
       layoutMenuLayouts[k]->setVisible(true);
+      // Select previously selected layout
+      if (name == selectedLayout) {
+        layoutMenuLayouts[k]->setChecked(true);
+        gLayout->setLayout(name);
+      }
     } else {
       layoutMenuLayouts[k]->setVisible(false);
     }
     layoutMenu->addAction(layoutMenuLayouts[k]);
-    // Select previous selected layout
-    if(layoutMenuLayouts[k]->text() == gSettings->getLayoutName()) {
-      layoutMenuLayouts[k]->setChecked(true);
-      gLayout->setLayout(layoutMenuLayouts[k]->text());
-    }
   }
   layoutMenu->addSeparator();
   layoutMenu->addAction(layoutMenuInstall);
 }
 
 void TopBar::layoutMenuLayouts_clicked() {
+  /**
+   * From Qt version 5.10, Qt automatically adds shortcuts to
+   * menu items. For that Qt includes a `&` character. So when
+   * we use QAction::text() function, we get a string including
+   * a `&` character and we mess all things up.
+   *
+   * See issue #17
+   */
+
   QAction *action = qobject_cast<QAction *>(sender());
-  gLayout->setLayout(action->text());
+
+  QString layoutName = action->text();
+  if (layoutName.contains("&")) {
+    layoutName.replace("&", "");
+  }
+
+  gLayout->setLayout(layoutName);
   action->setChecked(true);
   layoutViewer->refreshLayoutViewer();
 }
 
 void TopBar::layoutMenuInstall_clicked() {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Select Keyboard Layout"), QDir::homePath(), tr("Avro Keyboard 5 Keyboard Layout (*.avrolayout)"));
+  QString fileName = QFileDialog::getOpenFileName(Q_NULLPTR, "Select Keyboard Layout", QDir::homePath(),
+                                                  "Avro Keyboard 5 Keyboard Layout (*.avrolayout)");
   LayoutConverter conv;
-  if(fileName.contains(".avrolayout") && fileName != "") {
-    conv.convertLayout(fileName);
-    QMessageBox::information(this, tr("OpenBangla Keyboard"), tr("Layout Installed Successfully"), QMessageBox::Ok);
+  if (fileName.contains(".avrolayout") && fileName != "") {
+    ConversionResult res = conv.convertLayout(fileName);
+    switch (res) {
+    case Ok:
+      QMessageBox::information(Q_NULLPTR, "OpenBangla Keyboard", "Layout Installed Successfully",
+                               QMessageBox::Ok);
+      break;
+    case UnsupportedLayout:
+      QMessageBox::critical(Q_NULLPTR,
+                            "OpenBangla Keyboard",
+                            "Unsupported Layout file!\nOpenBangla Keyboard only supports Avro Keyboard 5 layouts.",
+                            QMessageBox::Ok);
+      break;
+    case OpenError:
+      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard",
+                            "An error occured when opening the layout file!", QMessageBox::Ok);
+      break;
+    case SaveError:
+      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occured when saving the file!",
+                            QMessageBox::Ok);
+      break;
+    }
   }
   RefreshLayouts();
 }
 
 void TopBar::settingsMenuFixedLayoutAutoVForm_clicked() {
-    gSettings->setAutoVowelFormFixed(settingsMenuFixedLayoutAutoVForm->isChecked());
+  gSettings->setAutoVowelFormFixed(settingsMenuFixedLayoutAutoVForm->isChecked());
 }
 
 void TopBar::settingsMenuFixedLayoutAutoChandra_clicked() {
@@ -238,9 +322,13 @@ void TopBar::settingsMenuFixedLayoutNumberPad_clicked() {
   gSettings->setNumberPadFixed(settingsMenuFixedLayoutNumberPad->isChecked());
 }
 
+void TopBar::settingsMenuAutoCorrect_clicked() {
+  autoCorrectDialog->show();
+}
+
 void TopBar::settingsMenuShowDialog_clicked() {
-    settingsDialog->updateSettings();
-    settingsDialog->show();
+  settingsDialog->updateSettings();
+  settingsDialog->show();
 }
 
 void TopBar::aboutMenuLayout_clicked() {
@@ -266,8 +354,7 @@ void TopBar::trayMenuRestore_clicked() {
   this->setVisible(true);
 }
 
-void TopBar::on_buttonAbout_clicked()
-{
+void TopBar::on_buttonAbout_clicked() {
   QPoint point;
   point = this->pos();
   point.setX(point.x() + ui->buttonAbout->geometry().x());
@@ -280,35 +367,33 @@ void TopBar::closeEvent(QCloseEvent *event) {
   event->accept();
 }
 
-
 bool TopBar::eventFilter(QObject *object, QEvent *event) {
-    if(object == ui->buttonIcon) {
-        if(event->type() == QEvent::MouseButtonPress) {
-            canMoveTopbar = true;
-            QMouseEvent *e = (QMouseEvent *)event;
-            pressedMouseX = e->x();
-            pressedMouseY = e->y();
-            event->accept();
-        } else if (event->type() == QEvent::MouseMove) {
-            if(canMoveTopbar) {
-                QMouseEvent *e = (QMouseEvent *)event;
-                ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
-                move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
-            }
-        } else if(event->type() == QEvent::MouseButtonRelease) {
-            canMoveTopbar = false;
-            ui->buttonIcon->setCursor(Qt::OpenHandCursor);
-            event->accept();
-        } else if(event->type() == QEvent::Enter) {
-            ui->buttonIcon->setCursor(Qt::OpenHandCursor);
-        }
+  if (object == ui->buttonIcon) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      canMoveTopbar = true;
+      QMouseEvent *e = (QMouseEvent *) event;
+      pressedMouseX = e->x();
+      pressedMouseY = e->y();
+      event->accept();
+    } else if (event->type() == QEvent::MouseMove) {
+      if (canMoveTopbar) {
+        QMouseEvent *e = (QMouseEvent *) event;
+        ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
+        move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+      }
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+      canMoveTopbar = false;
+      ui->buttonIcon->setCursor(Qt::OpenHandCursor);
+      event->accept();
+    } else if (event->type() == QEvent::Enter) {
+      ui->buttonIcon->setCursor(Qt::OpenHandCursor);
     }
+  }
 
-    return QObject::eventFilter(object, event);
+  return QObject::eventFilter(object, event);
 }
 
-void TopBar::on_buttonSetLayout_clicked()
-{
+void TopBar::on_buttonSetLayout_clicked() {
   QPoint point;
   point = this->pos();
   point.setX(point.x() + ui->buttonSetLayout->geometry().x());
@@ -316,26 +401,23 @@ void TopBar::on_buttonSetLayout_clicked()
   layoutMenu->exec(point);
 }
 
-void TopBar::on_buttonShutdown_clicked()
-{
-    QPoint point;
-    point = this->pos();
-    point.setX(point.x() + ui->buttonShutdown->geometry().x());
-    point.setY(point.y() + this->height());
-    quitMenu->exec(point);
+void TopBar::on_buttonShutdown_clicked() {
+  QPoint point;
+  point = this->pos();
+  point.setX(point.x() + ui->buttonShutdown->geometry().x());
+  point.setY(point.y() + this->height());
+  quitMenu->exec(point);
 }
 
-void TopBar::on_buttonViewLayout_clicked()
-{
+void TopBar::on_buttonViewLayout_clicked() {
   layoutViewer->refreshLayoutViewer();
   layoutViewer->show();
 }
 
-void TopBar::on_buttonSettings_clicked()
-{
-    QPoint point;
-    point = this->pos();
-    point.setX(point.x() + ui->buttonSettings->geometry().x());
-    point.setY(point.y() + this->height());
-    settingsMenu->exec(point);
+void TopBar::on_buttonSettings_clicked() {
+  QPoint point;
+  point = this->pos();
+  point.setX(point.x() + ui->buttonSettings->geometry().x());
+  point.setY(point.y() + this->height());
+  settingsMenu->exec(point);
 }

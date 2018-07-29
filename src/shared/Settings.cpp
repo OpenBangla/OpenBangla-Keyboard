@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2015-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QSettings>
-#include <QString>
 #include <QPoint>
 #include "Settings.h"
 
@@ -39,7 +38,7 @@ void Settings::setTopBarWindowPosition(QPoint pos) {
 
 QPoint Settings::getTopBarWindowPosition() {
   setting->sync();
-  return setting->value("window/positions/TopBar").toPoint();
+  return setting->value("window/positions/TopBar", QPoint(0, 0)).toPoint();
 }
 
 void Settings::setLayoutViewerWindowPosition(QPoint pos) {
@@ -56,14 +55,17 @@ void Settings::setLayoutName(QString name) {
   setting->setValue("layout/name", name);
   setting->sync();
 }
+
 QString Settings::getLayoutName() {
   setting->sync();
   return setting->value("layout/name", "Avro Phonetic").toString();
 }
+
 void Settings::setLayoutPath(QString path) {
   setting->setValue("layout/path", path);
   setting->sync();
 }
+
 QString Settings::getLayoutPath() {
   setting->sync();
   return setting->value("layout/path", PKGDATADIR "/layouts/avrophonetic.json").toString();
@@ -137,4 +139,24 @@ void Settings::setCandidateWinHorizontal(bool b) {
 bool Settings::getCandidateWinHorizontal() {
   setting->sync();
   return setting->value("settings/CandidateWin/Horizontal", true).toBool();
+}
+
+void Settings::setShowCWPhonetic(bool b) {
+  setting->setValue("settings/CandidateWin/Phonetic", b);
+  setting->sync();
+}
+
+bool Settings::getShowCWPhonetic() {
+  setting->sync();
+  return setting->value("settings/CandidateWin/Phonetic", true).toBool();
+}
+
+void Settings::setUpdateCheck(bool b) {
+  setting->setValue("settings/UpdateCheck", b);
+  setting->sync();
+}
+
+bool Settings::getUpdateCheck() {
+  setting->sync();
+  return setting->value("settings/UpdateCheck", true).toBool();
 }

@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2017 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This Source Code Form is subject to the terms of the Mozilla Public
  *  License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,9 +14,14 @@
 #include <QString>
 #include <QJsonObject>
 #include "phoneticparser.h"
-#include "database.h"
-#include "autocorrect.h"
+#include "Database.h"
+#include "AutoCorrect.h"
 #include "cachemanager.h"
+
+struct Cache {
+  QString base;
+  QString eng;
+};
 
 class PhoneticSuggestion {
 private:
@@ -25,22 +30,45 @@ private:
   Database db;
   CacheManager cacheMan;
 
-  QMap<QString, QString> PadMap;
-  QMap<QString, QVector<QString>> phoneticCache;
+  QRegularExpression rgxPadding;
+  QRegularExpression rgxKar;
+  QRegularExpression rgxVowel;
 
-  QMap<QString, QString> separatePadding(QString word);
+  QString padBegin, padMiddle, padEnd;
+  QMap<QString, QStringList> phoneticCache;
+  QMap<QString, Cache> tempCache;
+  QStringList prevSuggestion;
+
+  void separatePadding(QString word);
+
   bool isKar(QString word);
+
   bool isVowel(QString word);
-  QVector<QString> getSuggestion(QString word);
-  void appendIfNotContains(QVector<QString> &array, QString item);
+
+  QStringList joinSuggestion(QString writtenWord, QString autoCorrect, QStringList dictSuggestion, QString phonetic);
+
+  void appendIfNotContains(QStringList &array, QString item);
+
+  QStringList getDictionarySuggestion();
+
+  QString getAutocorrect(QString word);
+
+  QStringList addSuffix();
+
+  void addToTempCache(QString full, QString base, QString eng);
+
 public:
   PhoneticSuggestion();
+
   void setLayout(QJsonObject lay);
 
   QString getPrevSelected();
-  void saveSelection(QString selected);
 
-  QVector<QString> Suggest(QString cache);
+  void saveSelection(int index);
+
+  QStringList Suggest(QString word);
+
+  void updateEngine();
 };
 
 #endif /* end of include guard: PHONETIC_SUGGESTION_H */

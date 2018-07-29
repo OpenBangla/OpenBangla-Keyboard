@@ -13,21 +13,24 @@ SOURCES += \
     AboutFile.cpp \
     LayoutViewer.cpp \
     SettingsDialog.cpp \
-    AboutDialog.cpp
+    AboutDialog.cpp \
+    AutoCorrectDialog.cpp
 
 HEADERS  += \
     TopBar.h \
     AboutFile.h \
     LayoutViewer.h \
     SettingsDialog.h \
-    AboutDialog.h
+    AboutDialog.h \
+    AutoCorrectDialog.h
 
 FORMS    += \
     TopBar.ui \
     AboutFile.ui \
     LayoutViewer.ui \
     SettingsDialog.ui \
-    AboutDialog.ui
+    AboutDialog.ui \
+    AutoCorrectDialog.ui
 
 RESOURCES += \
     images.qrc

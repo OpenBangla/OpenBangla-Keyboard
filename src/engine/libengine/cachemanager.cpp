@@ -17,10 +17,8 @@
  */
 
 #include <QDir>
-#include <QFile>
 #include <QJsonDocument>
 #include "cachemanager.h"
-#include "log.h"
 
 CacheManager::CacheManager() {
   loadCandidateSelection();
@@ -36,7 +34,7 @@ QVector<QString> CacheManager::getTempCache(QString key) {
 
 void CacheManager::loadCandidateSelection() {
   QFile loadFile(folders.getCandidateSaveFile());
-  if(!loadFile.open(QIODevice::ReadOnly)) {
+  if (!loadFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[CacheManager:Load]: Error couldn't open save file.\n");
     return;
   }
@@ -49,7 +47,7 @@ void CacheManager::loadCandidateSelection() {
 }
 
 QString CacheManager::getCandidateSelection(QString word) {
-  if(candidateSel.contains(word)) {
+  if (candidateSel.contains(word)) {
     return candidateSel[word].toString();
   } else {
     return QString("");
@@ -57,13 +55,13 @@ QString CacheManager::getCandidateSelection(QString word) {
 }
 
 void CacheManager::writeCandidateSelection(QString word, QString sel) {
-  candidateSel[word] = sel;
+  candidateSel.insert(word, sel);
   saveCandidateSelection();
 }
 
 void CacheManager::saveCandidateSelection() {
   QFile saveFile(folders.getCandidateSaveFile());
-  if(!saveFile.open(QIODevice::WriteOnly)) {
+  if (!saveFile.open(QIODevice::WriteOnly)) {
     LOG_ERROR("[CacheManager:Save]: Error couldn't open save file.\n");
     return;
   }

@@ -13,18 +13,24 @@
 #include <QString>
 #include <QMap>
 #include <QVector>
+#include "regexparser.h"
 
 class Database {
   QMap<QString, QVector<QString>> word_table;
   QMap<QString, QString> suffix_table;
+  QMap<QChar, QStringList> prefixTableMap;
+  RegexParser rgx;
 public:
   Database();
+
   ~Database();
 
-  void loadTableWithName(QString name, QSqlDatabase dbase);
+  void loadTable(QStringList table, QSqlDatabase dbase);
+
   void loadSuffixTableFromDatabase(QSqlDatabase dbase);
 
-  QVector<QString> find(QString word);
+  QStringList find(QString word);
+
   QString banglaForSuffix(QString word);
 };
 
