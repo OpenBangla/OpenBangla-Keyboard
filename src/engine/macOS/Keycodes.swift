@@ -48,10 +48,10 @@ let KeyMap = [
   0x1B: VC_MINUS,
   0x1C: VC_8,
   0x1D: VC_0,
-  0x1E: VC_OPEN_BRACKET,
+  0x1E: VC_BRACKET_LEFT,
   0x1F: VC_O,
   0x20: VC_U,
-  0x21: VC_CLOSE_BRACKET,
+  0x21: VC_BRACKET_RIGHT,
   0x22: VC_I,
   0x23: VC_P,
   0x25: VC_L,
@@ -65,7 +65,7 @@ let KeyMap = [
   0x2D: VC_N,
   0x2E: VC_M,
   0x2F: VC_PERIOD,
-  0x32: VC_BACKQUOTE, // Confusion
+  0x32: VC_GRAVE, // Confusion
   0x41: VC_KP_DECIMAL,
   0x43: VC_KP_MULTIPLY,
   0x45: VC_KP_ADD,
