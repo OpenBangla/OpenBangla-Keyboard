@@ -33,7 +33,7 @@
 #include <QNetworkReply>
 #include <QDesktopServices>
 
-#include <math.h>
+#include <cmath>
 
 #include "Downloader.h"
 

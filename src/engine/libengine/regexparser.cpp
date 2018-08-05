@@ -44,7 +44,7 @@ RegexParser::RegexParser() {
   grammarFile.close();
 }
 
-RegexParser::~RegexParser() {}
+RegexParser::~RegexParser() = default;
 
 QString RegexParser::parse(QString input) {
   // Check
@@ -74,14 +74,14 @@ QString RegexParser::parse(QString input) {
           if (find == chunk) {
             QJsonArray rules = pattern.value("rules").toArray();
             if (!(rules.isEmpty())) {
-              for (QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
-                QJsonValue rul = *r;
+              for (auto &&r : rules) {
+                QJsonValue rul = r;
                 QJsonObject rule = rul.toObject();
                 bool replace = true;
                 int chk = 0;
                 QJsonArray matches = rule.value("matches").toArray();
-                for (QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
-                  QJsonValue mch = *m;
+                for (auto &&matche : matches) {
+                  QJsonValue mch = matche;
                   QJsonObject match = mch.toObject();
                   QString value = match.value("value").toString();
                   QString type = match.value("type").toString();

@@ -17,10 +17,10 @@
  */
 
 #include <QRegularExpression>
-#include "keycode.h"
 #include "Settings.h"
 #include "BengaliChars.h"
 #include "MethodFixedLayoutModern.h"
+#include "keycode.h"
 
 MethodFixedLayoutModern::MethodFixedLayoutModern() {
   marks = "`~!@#$%^+*-_=+\\|\"/;:,./?><()[]{}";
@@ -396,5 +396,5 @@ IMCommand MethodFixedLayoutModern::handleSpecialKey(int key) {
   }
 
   // Control flow should not reach here.
-  return ret;
+  //return ret;
 }
