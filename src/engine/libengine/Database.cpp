@@ -62,7 +62,7 @@ Database::Database() {
   }
 }
 
-Database::~Database() {}
+Database::~Database() = default;
 
 void Database::loadTable(QStringList table, QSqlDatabase dbase) {
   QVector<QString> list;

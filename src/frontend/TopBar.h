@@ -49,7 +49,7 @@ class TopBar : public QMainWindow {
 Q_OBJECT
 
 public:
-  explicit TopBar(QWidget *parent = 0);
+  explicit TopBar(QWidget *parent = nullptr);
 
   ~TopBar();
 

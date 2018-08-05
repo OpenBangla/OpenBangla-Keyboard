@@ -44,7 +44,7 @@ QString PhoneticParser::parse(QString input) {
     int start = cur, end;
     bool matched = false;
 
-    int chunkLen;
+
     for (int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
       end = start + chunkLen;
       if (end <= len) {
@@ -59,8 +59,8 @@ QString PhoneticParser::parse(QString input) {
           if (find == chunk) {
             QJsonArray rules = pattern.value("rules").toArray();
             if (!(rules.isEmpty())) {
-              for (QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
-                QJsonValue rul = *r;
+              for (auto &&r : rules) {
+                QJsonValue rul = r;
                 QJsonObject rule = rul.toObject();
                 bool replace = true;
                 int chk = 0;
@@ -180,7 +180,7 @@ QString PhoneticParser::parse(QString input) {
               }
             }
 
-            if (matched == true)
+            if (matched)
               break;
 
             // Default

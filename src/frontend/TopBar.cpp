@@ -112,12 +112,12 @@ void TopBar::SetupPopupMenus() {
   layoutMenu->setIcon(QIcon(":/images/keyboard_layout.png"));
   layoutMenuInstall = new QAction("Install a layout", this);
   layoutMenuLayoutsGroup = new QActionGroup(this);
-  for (int i = 0; i < MaxLayoutFiles; ++i) {
-    layoutMenuLayouts[i] = new QAction(this);
-    layoutMenuLayouts[i]->setVisible(false);
-    layoutMenuLayouts[i]->setCheckable(true);
-    layoutMenuLayoutsGroup->addAction(layoutMenuLayouts[i]);
-    connect(layoutMenuLayouts[i], SIGNAL(triggered()), this, SLOT(layoutMenuLayouts_clicked()));
+  for (auto &layoutMenuLayout : layoutMenuLayouts) {
+    layoutMenuLayout = new QAction(this);
+    layoutMenuLayout->setVisible(false);
+    layoutMenuLayout->setCheckable(true);
+    layoutMenuLayoutsGroup->addAction(layoutMenuLayout);
+    connect(layoutMenuLayout, SIGNAL(triggered()), this, SLOT(layoutMenuLayouts_clicked()));
   }
   RefreshLayouts();
   connect(layoutMenuInstall, SIGNAL(triggered()), this, SLOT(layoutMenuInstall_clicked()));

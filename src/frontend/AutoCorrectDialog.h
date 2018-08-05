@@ -32,7 +32,7 @@ class AutoCorrectDialog : public QDialog {
 Q_OBJECT
 
 public:
-  explicit AutoCorrectDialog(QWidget *parent = 0);
+  explicit AutoCorrectDialog(QWidget *parent = nullptr);
 
   ~AutoCorrectDialog();
 

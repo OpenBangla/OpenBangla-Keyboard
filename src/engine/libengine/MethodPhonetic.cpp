@@ -649,11 +649,7 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
     if (EnglishT.length() > 0) {
       EnglishT = "";
       ret.commit = true;
-      if (gSettings->getEnterKeyClosesPrevWin()) {
-        ret.accepted = true;
-      } else {
-        ret.accepted = false;
-      }
+      ret.accepted = gSettings->getEnterKeyClosesPrevWin();
       return ret;
     } else {
       ret.accepted = false;

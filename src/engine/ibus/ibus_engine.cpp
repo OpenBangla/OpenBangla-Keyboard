@@ -22,10 +22,10 @@
 #include "ibus_keycode.h"
 #include "Layout.h"
 
-static IBusBus *bus = NULL;
-static IBusFactory *factory = NULL;
-static IBusEngine *engine = NULL;
-static IBusLookupTable *table = NULL;
+static IBusBus *bus = nullptr;
+static IBusFactory *factory = nullptr;
+static IBusEngine *engine = nullptr;
+static IBusLookupTable *table = nullptr;
 static gint id = 0;
 static guint candidateSel = 0;
 
@@ -234,7 +234,7 @@ IBusEngine *ibus_create_engine_cb(IBusFactory *factory,
   g_object_ref_sink(table);
 
   LOG_INFO("[IM:iBus]: Creating IM Engine\n");
-  LOG_DEBUG("[IM:iBus]: Creating IM Engine with name:%s and id:%d\n", (char *) engine_name, id);
+  LOG_DEBUG("[IM:iBus]: Creating IM Engine with name:%s and id:%d\n", engine_name, id);
 
   g_signal_connect(engine, "process-key-event", G_CALLBACK(ibus_process_key_event_cb), NULL);
   g_signal_connect(engine, "enable", G_CALLBACK(ibus_enable_cb), NULL);
@@ -285,7 +285,7 @@ void ibus_start_setup(bool ibus) {
                               ));
     ibus_bus_register_component(bus, component);
 
-    ibus_bus_set_global_engine_async(bus, "OpenBangla", -1, NULL, NULL, NULL);
+    ibus_bus_set_global_engine_async(bus, "OpenBangla", -1, nullptr, nullptr, nullptr);
   }
   ibus_main();
 }
@@ -294,11 +294,7 @@ int main(int argc, char *argv[]) {
   gLayout = new Layout();
   initKeycode();
 
-  if (argc > 1 && strcmp(argv[1], "--ibus") == 0) {
-    ibus_start_setup(true);
-  } else {
-    ibus_start_setup(false);
-  }
+  ibus_start_setup( argc > 1 && strcmp(argv[1], "--ibus") == 0 );
 
   delete gLayout;
 

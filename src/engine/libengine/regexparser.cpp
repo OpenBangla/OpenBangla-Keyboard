@@ -59,7 +59,7 @@ QString RegexParser::parse(QString input) {
     int start = cur, end;
     bool matched = false;
 
-    int chunkLen;
+
     for (int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
       end = start + chunkLen;
       if (end <= len) {
@@ -169,7 +169,7 @@ QString RegexParser::parse(QString input) {
               }
             }
 
-            if (matched == true)
+            if (matched)
               break;
 
             // Default
@@ -186,7 +186,7 @@ QString RegexParser::parse(QString input) {
             right = mid - 1;
           }
         }
-        if (matched == true)
+        if (matched)
           break;
       }
     }

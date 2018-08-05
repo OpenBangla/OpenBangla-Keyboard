@@ -54,7 +54,7 @@ signals:
   void downloadFinished(const QString &url, const QString &filepath);
 
 public:
-  explicit Downloader(QWidget *parent = 0);
+  explicit Downloader(QWidget *parent = nullptr);
 
   ~Downloader();
 
