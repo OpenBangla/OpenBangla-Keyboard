@@ -142,6 +142,7 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
     break;
   case VC_UNDERSCORE:key = "Minus";
     emulateShift = true;
+    break;
   case VC_EQUALS:key = "Equals";
     break;
   case VC_PLUS:key = "Equals";

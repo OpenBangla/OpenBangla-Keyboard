@@ -65,8 +65,8 @@ QString PhoneticParser::parse(QString input) {
                 bool replace = true;
                 int chk = 0;
                 QJsonArray matches = rule.value("matches").toArray();
-                for (QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
-                  QJsonValue mch = *m;
+                for (auto &&matche : matches) {
+                  QJsonValue mch = matche;
                   QJsonObject match = mch.toObject();
 
                   QJsonValue jvalue = match.value("value");

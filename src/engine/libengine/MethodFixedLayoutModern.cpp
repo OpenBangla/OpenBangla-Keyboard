@@ -298,11 +298,7 @@ Suggestion MethodFixedLayoutModern::getSuggestion(int key, bool shift, bool ctrl
   }
 
   altgr = ctrl && alt;
-  if (shift && altgr) {
-    shiftaltgr = true;
-  } else {
-    shiftaltgr = false;
-  }
+  shiftaltgr = shift && altgr;
 
   if ((key == VC_SHIFT || key == VC_CONTROL || key == VC_ALT)) {
     if (BengaliT != "") {
