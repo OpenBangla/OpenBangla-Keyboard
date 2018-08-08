@@ -33,7 +33,7 @@ void PhoneticParser::setLayout(QJsonObject l) {
   csen = layout.value("casesensitive").toString();
 }
 
-PhoneticParser::~PhoneticParser() {}
+PhoneticParser::~PhoneticParser() = default;
 
 QString PhoneticParser::parse(QString input) {
   QString fixed = fixString(input);
@@ -196,7 +196,7 @@ QString PhoneticParser::parse(QString input) {
             right = mid - 1;
           }
         }
-        if (matched == true)
+        if (matched)
           break;
       }
     }

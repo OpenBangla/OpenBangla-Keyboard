@@ -212,13 +212,8 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
   std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&](QString i, QString j) {
     int dist1 = levenshtein_distance(phonetic, i);
     int dist2 = levenshtein_distance(phonetic, j);
-    if (dist1 < dist2) {
-      return true;
-    } else if (dist1 > dist2) {
-      return false;
-    } else {
-      return true;
-    }
+
+    return dist1 <= dist2;
   });
 
   if (autoCorrect != "") {
