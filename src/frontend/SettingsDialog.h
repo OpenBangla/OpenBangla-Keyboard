@@ -31,7 +31,7 @@ Q_OBJECT
 public:
   explicit SettingsDialog(QWidget *parent = nullptr);
 
-  ~SettingsDialog();
+  ~SettingsDialog() override;
 
   void updateSettings();
 

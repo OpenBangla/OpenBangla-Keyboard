@@ -51,7 +51,7 @@ Q_OBJECT
 public:
   explicit TopBar(QWidget *parent = nullptr);
 
-  ~TopBar();
+  ~TopBar() override;
 
 protected:
   void closeEvent(QCloseEvent *event) override;

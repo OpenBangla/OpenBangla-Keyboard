@@ -36,7 +36,7 @@ Q_OBJECT
 public:
   explicit AboutFile(QWidget *parent = nullptr);
 
-  ~AboutFile();
+  ~AboutFile() override;
 
   void setDialogType(DialogType type);
 

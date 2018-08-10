@@ -56,7 +56,7 @@ signals:
 public:
   explicit Downloader(QWidget *parent = nullptr);
 
-  ~Downloader();
+  ~Downloader() override;
 
   bool useCustomInstallProcedures() const;
 

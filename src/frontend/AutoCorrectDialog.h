@@ -34,7 +34,7 @@ Q_OBJECT
 public:
   explicit AutoCorrectDialog(QWidget *parent = nullptr);
 
-  ~AutoCorrectDialog();
+  ~AutoCorrectDialog() override;
 
 private slots:
 

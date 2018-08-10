@@ -34,7 +34,7 @@ Q_OBJECT
 public:
   explicit AboutDialog(QWidget *parent = nullptr);
 
-  ~AboutDialog();
+  ~AboutDialog() override;
 
 protected:
   bool eventFilter(QObject *object, QEvent *event) override;

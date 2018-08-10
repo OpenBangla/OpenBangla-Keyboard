@@ -47,17 +47,17 @@ public:
   // Functions inherited from class LayoutMth
   void setLayout(QJsonObject lay);
 
-  Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt);
+  Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt) override;
 
-  IMCommand handleSpecialKey(int key);
+  IMCommand handleSpecialKey(int key) override;
 
-  Suggestion getCandidates();
+  Suggestion getCandidates() override;
 
-  bool handledKeyPress();
+  bool handledKeyPress() override;
 
-  void candidateCommited(int index);
+  void candidateCommited(int index) override;
 
-  void updateEngine() {
+  void updateEngine() override {
     // Nothing to do :)
   }
 };

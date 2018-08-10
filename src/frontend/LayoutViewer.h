@@ -36,7 +36,7 @@ Q_OBJECT
 public:
   explicit LayoutViewer(QWidget *parent = nullptr);
 
-  ~LayoutViewer();
+  ~LayoutViewer() override;
 
   void refreshLayoutViewer();
 
