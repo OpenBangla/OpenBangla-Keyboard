@@ -27,7 +27,6 @@
 #include "Settings.h"
 #include "LayoutViewer.h"
 #include "AboutDialog.h"
-#include "AboutFile.h"
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
 #include "AutoCorrectDialog.h"

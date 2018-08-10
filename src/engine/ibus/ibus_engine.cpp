@@ -294,7 +294,7 @@ int main(int argc, char *argv[]) {
   gLayout = new Layout();
   initKeycode();
 
-  ibus_start_setup( argc > 1 && strcmp(argv[1], "--ibus") == 0 );
+  ibus_start_setup(argc > 1 && strcmp(argv[1], "--ibus") == 0);
 
   delete gLayout;
 

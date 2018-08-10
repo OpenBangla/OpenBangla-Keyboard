@@ -75,7 +75,7 @@ public:
   virtual void setLayout(QJsonObject lay) = 0;
 
   /* Generates suggestions on the fly */
-  virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt)  = 0;
+  virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt) = 0;
 
   /* Handle special keys such as Enter, Backspace, Space etc keys */
   virtual IMCommand handleSpecialKey(int key) = 0;

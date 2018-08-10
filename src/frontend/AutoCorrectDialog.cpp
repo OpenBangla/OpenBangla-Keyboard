@@ -98,7 +98,7 @@ void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1) {
     }
 
     ui->btnUpdate->setEnabled(ui->txtWith->text() != "");
-    
+
   } else {
     ui->lblPreviewR->setText("");
     ui->btnClear->setEnabled(false);
