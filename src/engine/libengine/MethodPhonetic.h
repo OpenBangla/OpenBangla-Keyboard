@@ -38,7 +38,7 @@ class MethodPhonetic : public LayoutMth {
 
 public:
   // Functions inherited from class LayoutMth
-  void setLayout(QJsonObject lay);
+  void setLayout(QJsonObject lay) override;
 
   Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt) override;
 
