@@ -231,6 +231,9 @@ void TopBar::RefreshLayouts() {
 
   QString selectedLayout = gSettings->getLayoutName();
 
+  // This loop need to be rewritten to use `for each` loop, which is unnecessary. Skipping.
+
+
   for (int k = 0; k < MaxLayoutFiles; ++k) {
     if (k < list.count()) {
       QString name = list[k];
