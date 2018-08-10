@@ -67,10 +67,13 @@ void MethodFixedLayoutModern::insertReph() {
     } else if (isVowel(BengaliT.right(1))) {
       rephMoveable = isPureConsonent(BengaliT.right(2).left(1));
     } else if (BengaliT.right(1) == b_Chandra) {
+
       if (isPureConsonent(BengaliT.right(2).left(1))) {
         rephMoveable = true;
-      } else
+      } else {
         rephMoveable = isVowel(BengaliT.right(2).left(1)) && isPureConsonent(BengaliT.right(3).left(1));
+      }
+
     }
   } else {
     rephMoveable = false;
