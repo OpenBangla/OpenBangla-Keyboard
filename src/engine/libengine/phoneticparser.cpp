@@ -58,15 +58,14 @@ QString PhoneticParser::parse(QString input) {
           if (find == chunk) {
             QJsonArray rules = pattern.value("rules").toArray();
             if (!(rules.isEmpty())) {
-              for (auto &&r : rules) {
-                QJsonValue rul = r;
+              for (auto &&rul : rules) {
+                
                 QJsonObject rule = rul.toObject();
                 bool replace = true;
                 int chk = 0;
                 QJsonArray matches = rule.value("matches").toArray();
                 for (auto &&matche : matches) {
-                  QJsonValue mch = matche;
-                  QJsonObject match = mch.toObject();
+                  QJsonObject match = matche.toObject();
 
                   QJsonValue jvalue = match.value("value");
                   QString value;
