@@ -67,9 +67,9 @@ void ibus_table_sel_dec() {
   }
 }
 
-void ibus_update_suggest(Suggestion suggestions) {
+void ibus_update_suggest(Suggestion suggest) {
   // Assign suggestions // WHY?
-  // suggestions = suggest;
+  suggestions = suggest;
   if (suggestions.showCandidateWin) {
     // Update auxiliary text
     IBusText *caux = ibus_text_new_from_string((gchar *) suggestions.auxiliaryText.c_str());
