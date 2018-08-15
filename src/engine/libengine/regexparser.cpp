@@ -44,7 +44,7 @@ RegexParser::RegexParser() {
   grammarFile.close();
 }
 
-RegexParser::~RegexParser() {}
+RegexParser::~RegexParser() = default;
 
 QString RegexParser::parse(QString input) {
   // Check
@@ -59,7 +59,6 @@ QString RegexParser::parse(QString input) {
     int start = cur, end;
     bool matched = false;
 
-    int chunkLen;
     for (int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
       end = start + chunkLen;
       if (end <= len) {
@@ -74,15 +73,15 @@ QString RegexParser::parse(QString input) {
           if (find == chunk) {
             QJsonArray rules = pattern.value("rules").toArray();
             if (!(rules.isEmpty())) {
-              for (QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
-                QJsonValue rul = *r;
+              for (auto &&rul : rules) {
+
                 QJsonObject rule = rul.toObject();
                 bool replace = true;
                 int chk = 0;
                 QJsonArray matches = rule.value("matches").toArray();
-                for (QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
-                  QJsonValue mch = *m;
-                  QJsonObject match = mch.toObject();
+                for (auto &&matche : matches) {
+
+                  QJsonObject match = matche.toObject();
                   QString value = match.value("value").toString();
                   QString type = match.value("type").toString();
                   QString scope = match.value("scope").toString();
@@ -169,7 +168,7 @@ QString RegexParser::parse(QString input) {
               }
             }
 
-            if (matched == true)
+            if (matched)
               break;
 
             // Default
@@ -186,7 +185,7 @@ QString RegexParser::parse(QString input) {
             right = mid - 1;
           }
         }
-        if (matched == true)
+        if (matched)
           break;
       }
     }

@@ -13,7 +13,7 @@
 class SingleInstance : public QObject {
 Q_OBJECT
 public:
-  explicit SingleInstance(QObject *parent = 0);
+  explicit SingleInstance(QObject *parent = nullptr);
 
   void listen(QString name);
 
