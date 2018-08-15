@@ -69,6 +69,11 @@ if (OS_LINUX)
     pkg_check_modules(IBUS REQUIRED ibus-1.0)
 endif (OS_LINUX)
 
+if(WIN32)
+    add_definitions(-DPROJECT_DATADIR="/usr/local/openbangla-keyboard/")
+    add_definitions(-DPKGDATADIR="/usr/local/openbangla-keyboard/")
+endif(WIN32)
+
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
