@@ -36,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 }
 
-NSApplication.shared()
+NSApplication.shared
 let controler = AppDelegate()
 NSApp.delegate = controler
 NSApp.run()
