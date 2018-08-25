@@ -23,22 +23,24 @@
   <key>IFMinorVersion</key>
   <integer>1</integer>
   <key>InputMethodConnectionName</key>
-	<string>OpenBangla_Keyboard_Connection</string>
-	<key>InputMethodServerControllerClass</key>
-	<string>OpenBanglaKeyboardController</string>
-	<key>LSBackgroundOnly</key>
-	<string>1</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-	<key>NSSupportsSuddenTermination</key>
-	<true/>
-	<key>TISIntendedLanguage</key>
-	<string>bn</string>
-	<key>tsInputMethodCharacterRepertoireKey</key>
-	<array>
-		<string>Beng</string>
-	</array>
-	<key>tsInputMethodIconFileKey</key>
-	<string>openbangla</string>
+  <string>OpenBangla_Keyboard_Connection</string>
+  <key>InputMethodServerControllerClass</key>
+  <string>OpenBangla_Engine.OpenBanglaKeyboardController</string>
+  <key>InputMethodServerDelegateClass</key>
+  <string>OpenBangla_Engine.OpenBanglaKeyboardController</string>
+  <key>LSBackgroundOnly</key>
+  <string>1</string>
+  <key>NSPrincipalClass</key>
+  <string>NSApplication</string>
+  <key>NSSupportsSuddenTermination</key>
+  <true/>
+  <key>TISIntendedLanguage</key>
+  <string>bn</string>
+  <key>tsInputMethodCharacterRepertoireKey</key>
+  <array>
+    <string>Beng</string>
+  </array>
+  <key>tsInputMethodIconFileKey</key>
+  <string>openbangla</string>
 </dict>
 </plist>
