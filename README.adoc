@@ -31,6 +31,8 @@ Probhat, Munir Optima, National (Jatiya) etc.
 Most of the features of https://www.omicronlab.com/avro-keyboard.html[Avro Keyboard] are present in OpenBangla Keyboard. 
 So Avro Keyboard users will feel at home with OpenBangla Keyboard in Linux.
 
+OpenBangla Keyboard is the default Bangla writing software for http://www.magpieos.net[MagpieOS], a Bangladeshi Linux distribution.
+
 image:https://travis-ci.org/OpenBangla/OpenBangla-Keyboard.svg?branch=master[Build status, link=https://travis-ci.org/OpenBangla/OpenBangla-Keyboard.svg?branch=master] {nbsp} 
 image:https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg[Downloads, link=https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg] {nbsp}
 image:https://img.shields.io/discord/436879388362014740.svg[Discord, link=https://discord.gg/HXK7QnJ]
