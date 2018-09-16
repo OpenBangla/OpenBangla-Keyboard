@@ -68,7 +68,7 @@ void ibus_table_sel_dec() {
 }
 
 void ibus_update_suggest(Suggestion suggest) {
-  // Assign suggestions // WHY?
+  // Assign suggestions
   suggestions = suggest;
   if (suggestions.showCandidateWin) {
     // Update auxiliary text
@@ -230,8 +230,8 @@ IBusEngine *ibus_create_engine_cb(IBusFactory *factory,
 
   // Setup Lookup table
   table = ibus_lookup_table_new(9, 0, TRUE, TRUE);
-  ibus_update_with_settings();
   g_object_ref_sink(table);
+  ibus_update_with_settings();
 
   LOG_INFO("[IM:iBus]: Creating IM Engine\n");
   LOG_DEBUG("[IM:iBus]: Creating IM Engine with name:%s and id:%d\n", engine_name, id);
@@ -253,11 +253,9 @@ void ibus_start_setup(bool ibus) {
   ibus_init();
 
   bus = ibus_bus_new();
-  g_object_ref_sink(bus);
   g_signal_connect(bus, "disconnected", G_CALLBACK(ibus_disconnected_cb), NULL);
 
   factory = ibus_factory_new(ibus_bus_get_connection(bus));
-  g_object_ref_sink(factory);
   g_signal_connect(factory, "create-engine", G_CALLBACK(ibus_create_engine_cb), NULL);
 
   if (ibus) {
