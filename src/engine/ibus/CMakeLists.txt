@@ -65,7 +65,10 @@ install(FILES ${CMAKE_SOURCE_DIR}/data/Probhat.json
 install(FILES ${CMAKE_SOURCE_DIR}/data/autocorrect.json
         DESTINATION ${PROJECT_DATADIR}/data)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/database.db3
+install(FILES ${CMAKE_SOURCE_DIR}/data/dictionary.json
+        DESTINATION ${PROJECT_DATADIR}/data)
+
+install(FILES ${CMAKE_SOURCE_DIR}/data/suffix.json
         DESTINATION ${PROJECT_DATADIR}/data)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/regex.json

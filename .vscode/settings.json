@@ -11,6 +11,9 @@
     "atomic": "cpp",
     "qvariant": "cpp",
     "qmap": "cpp",
-    "system_error": "cpp"
+    "system_error": "cpp",
+    "qjsonobject": "cpp",
+    "qtsql": "cpp",
+    "qstring": "cpp"
   }
 }

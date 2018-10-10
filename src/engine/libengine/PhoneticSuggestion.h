@@ -13,6 +13,7 @@
 #include <QMap>
 #include <QString>
 #include <QJsonObject>
+#include <QRegularExpression>
 #include "phoneticparser.h"
 #include "Database.h"
 #include "AutoCorrect.h"

@@ -1,29 +1,32 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2015-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This Source Code Form is subject to the terms of the Mozilla Public
  *  License, v. 2.0. If a copy of the MPL was not distributed with this
  *  file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <QFile>
+#include <QJsonDocument>
 #include <QRegularExpression>
 #include "Database.h"
+#include "log.h"
 
 Database::Database() {
-  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  db.setDatabaseName(PKGDATADIR "/data/database.db3");
+  QFile dictFile(PKGDATADIR "/data/dictionary.json");
+  if (!dictFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[Database]: Error: Couldn't open dictionary file!\n");
+  }
 
-  QStringList table = {"A", "AA", "B", "BH",
-                       "C", "CH", "D", "Dd", "Ddh", "Dh",
-                       "E", "G", "Gh", "H", "I", "II",
-                       "J", "JH", "K", "KH", "Khandatta",
-                       "L", "M", "N", "NGA", "NN", "NYA",
-                       "O", "OI", "OU", "P", "PH",
-                       "R", "RR", "RRH", "RRI",
-                       "S", "SH", "SS",
-                       "T", "TH", "TT", "TTH",
-                       "U", "UU", "Y", "Z"};
+  word_table = QJsonDocument::fromJson(dictFile.readAll()).object();
+
+  dictFile.close();
+  dictFile.setFileName(PKGDATADIR "/data/suffix.json");
+  dictFile.open(QIODevice::ReadOnly);
+
+  suffix_table = QJsonDocument::fromJson(dictFile.readAll()).object();
+  dictFile.close();
 
   prefixTableMap = {{'a', {"a", "aa", "e", "oi", "o", "nya", "y"}},
                     {'b', {"b", "bh"}},
@@ -52,46 +55,9 @@ Database::Database() {
                     {'y', {"i", "y"}},
                     {'z', {"h", "j", "jh", "z"}}
   };
-
-  if (db.open()) {
-    loadTable(table, db);
-
-    loadSuffixTableFromDatabase(db);
-
-    db.close();
-  }
 }
 
 Database::~Database() = default;
-
-void Database::loadTable(QStringList table, QSqlDatabase dbase) {
-  QVector<QString> list;
-
-  for (auto &name : table) {
-    // Make a SQL statement
-    QSqlQuery query = dbase.exec("SELECT * FROM " + name);
-
-    while (query.next()) {
-      list.push_back(query.value("Words").toString());
-    }
-
-    word_table[name.toLower()] = list;
-
-    // Finish the SQL statement
-    query.finish();
-  }
-}
-
-void Database::loadSuffixTableFromDatabase(QSqlDatabase dbase) {
-  // Make a SQL statement
-  QSqlQuery query = dbase.exec("SELECT * FROM Suffix");
-
-  while (query.next()) {
-    suffix_table[query.value("English").toString()] = query.value("Bangla").toString();
-  }
-  // Finish the SQLite statement
-  query.finish();
-}
 
 QStringList Database::find(QString word) {
   if (word != "") {
@@ -101,8 +67,9 @@ QStringList Database::find(QString word) {
     QRegularExpression regex(rgx.parse(word));
 
     for (auto &table : prefixTableMap[lmc]) {
-      QVector<QString> tableData = word_table[table];
-      for (auto &tmpString : tableData) {
+      QJsonArray tableData = word_table[table].toArray();
+      for (auto tmpValue : tableData) {
+        QString tmpString = tmpValue.toString();
         if (tmpString.contains(regex)) {
           suggestions.push_back(tmpString);
         }
@@ -117,7 +84,7 @@ QStringList Database::find(QString word) {
 
 QString Database::banglaForSuffix(QString word) {
   if (suffix_table.contains(word)) {
-    return suffix_table[word];
+    return suffix_table[word].toString();
   } else {
     return QString("");
   }
