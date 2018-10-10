@@ -12,7 +12,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Sql REQUIRED)
 find_package(Qt5Network REQUIRED)
 
 # Get system information. WIN32 and APPLE are defined by CMake

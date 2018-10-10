@@ -9,25 +9,20 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <QtSql>
+#include <QJsonObject>
 #include <QString>
 #include <QMap>
-#include <QVector>
 #include "regexparser.h"
 
 class Database {
-  QMap<QString, QVector<QString>> word_table;
-  QMap<QString, QString> suffix_table;
+  QJsonObject word_table;
+  QJsonObject suffix_table;
   QMap<QChar, QStringList> prefixTableMap;
   RegexParser rgx;
 public:
   Database();
 
   ~Database();
-
-  void loadTable(QStringList table, QSqlDatabase dbase);
-
-  void loadSuffixTableFromDatabase(QSqlDatabase dbase);
 
   QStringList find(QString word);
 

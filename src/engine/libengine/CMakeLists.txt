@@ -20,4 +20,4 @@ add_library(libEngine
         PhoneticSuggestion.h
         keycode.h)
 
-target_link_libraries(libEngine libShared Qt5::Core Qt5::Sql)
+target_link_libraries(libEngine libShared Qt5::Core)
