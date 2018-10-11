@@ -1,166 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>TopBar</class>
-    <widget class="QMainWindow" name="TopBar">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>156</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>999</width>
-                <height>999</height>
-            </size>
-        </property>
-        <property name="cursor">
-            <cursorShape>ArrowCursor</cursorShape>
-        </property>
-        <property name="windowTitle">
-            <string>OpenBangla Keyboard</string>
-        </property>
-        <property name="windowIcon">
-            <iconset resource="images.qrc">
-                <normaloff>:/images/OpenBangla-Keyboard.png</normaloff>:/images/OpenBangla-Keyboard.png
-            </iconset>
-        </property>
-        <property name="documentMode">
-            <bool>false</bool>
-        </property>
-        <widget class="QWidget" name="centralwidget">
-            <property name="maximumSize">
-                <size>
-                    <width>16777187</width>
-                    <height>16777215</height>
-                </size>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-                <property name="spacing">
-                    <number>0</number>
-                </property>
-                <property name="leftMargin">
-                    <number>0</number>
-                </property>
-                <property name="topMargin">
-                    <number>0</number>
-                </property>
-                <property name="rightMargin">
-                    <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                    <number>0</number>
-                </property>
-                <item>
-                    <widget class="QPushButton" name="buttonIcon">
-                        <property name="toolTip">
-                            <string>Move</string>
-                        </property>
-                        <property name="text">
-                            <string/>
-                        </property>
-                        <property name="icon">
-                            <iconset resource="images.qrc">
-                                <normaloff>:/images/icon.png</normaloff>:/images/icon.png
-                            </iconset>
-                        </property>
-                        <property name="iconSize">
-                            <size>
-                                <width>16</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QPushButton" name="buttonSetLayout">
-                        <property name="toolTip">
-                            <string>Change Layout</string>
-                        </property>
-                        <property name="icon">
-                            <iconset resource="images.qrc">
-                                <normaloff>:/images/keyboard_layout_viewer.png</normaloff>
-                                :/images/keyboard_layout_viewer.png
-                            </iconset>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QPushButton" name="buttonViewLayout">
-                        <property name="toolTip">
-                            <string>View information about current layout</string>
-                        </property>
-                        <property name="icon">
-                            <iconset resource="images.qrc">
-                                <normaloff>:/images/keyboard_layout.png</normaloff>:/images/keyboard_layout.png
-                            </iconset>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QPushButton" name="buttonSettings">
-                        <property name="toolTip">
-                            <string>Settings</string>
-                        </property>
-                        <property name="icon">
-                            <iconset resource="images.qrc">
-                                <normaloff>:/images/settings.png</normaloff>:/images/settings.png
-                            </iconset>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QPushButton" name="buttonAbout">
-                        <property name="minimumSize">
-                            <size>
-                                <width>0</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="toolTip">
-                            <string>Help</string>
-                        </property>
-                        <property name="icon">
-                            <iconset resource="images.qrc">
-                                <normaloff>:/images/about.png</normaloff>:/images/about.png
-                            </iconset>
-                        </property>
-                        <property name="iconSize">
-                            <size>
-                                <width>16</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>false</bool>
-                        </property>
-                        <property name="default">
-                            <bool>false</bool>
-                        </property>
-                        <property name="flat">
-                            <bool>false</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QPushButton" name="buttonShutdown">
-                        <property name="text">
-                            <string/>
-                        </property>
-                        <property name="icon">
-                            <iconset resource="images.qrc">
-                                <normaloff>:/images/shutdown.png</normaloff>:/images/shutdown.png
-                            </iconset>
-                        </property>
-                    </widget>
-                </item>
-            </layout>
-        </widget>
-    </widget>
-    <resources>
-        <include location="images.qrc"/>
-    </resources>
-    <connections/>
+ <class>TopBar</class>
+ <widget class="QMainWindow" name="TopBar">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>156</width>
+    <height>26</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>999</width>
+    <height>999</height>
+   </size>
+  </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
+  <property name="windowTitle">
+   <string>OpenBangla Keyboard</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="images.qrc">
+    <normaloff>:/images/OpenBangla-Keyboard.png</normaloff>:/images/OpenBangla-Keyboard.png</iconset>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="maximumSize">
+    <size>
+     <width>16777187</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <widget class="QPushButton" name="buttonAbout">
+    <property name="geometry">
+     <rect>
+      <x>104</x>
+      <y>0</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Help</string>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>12</width>
+      <height>12</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonSetLayout">
+    <property name="geometry">
+     <rect>
+      <x>26</x>
+      <y>0</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Change Layout</string>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/keyboard_layout_viewer.png</normaloff>:/images/keyboard_layout_viewer.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonViewLayout">
+    <property name="geometry">
+     <rect>
+      <x>52</x>
+      <y>0</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>View information about current layout</string>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/keyboard_layout.png</normaloff>:/images/keyboard_layout.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonSettings">
+    <property name="geometry">
+     <rect>
+      <x>78</x>
+      <y>0</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Settings</string>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonShutdown">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>0</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/shutdown.png</normaloff>:/images/shutdown.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonIcon">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Move</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>16</width>
+      <height>16</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections/>
 </ui>
