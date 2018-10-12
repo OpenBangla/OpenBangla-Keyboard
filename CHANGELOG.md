@@ -1,4 +1,7 @@
 # Change Log
+## 1.5.1
+* Fixes a dictionary loading issue which was affecting in some scenarios. ([#73](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/73))
+* Polished some UI dialogs. ([#66][https://github.com/OpenBangla/OpenBangla-Keyboard/pull/66])
 ## 1.5.0
 * AutoCorrect item is shown as the first suggestion item if available when writing using Avro Phonetic method. ([#42](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/42))
 * Performance update for Avro Phonetic suggestion making code. ([#42](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/42))
