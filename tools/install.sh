@@ -1,6 +1,6 @@
 #!/bin/bash
 ## MUST: Always update this whenever a new version is released. Also remember to update download URLs if needed
-APP_VERSION=1.5.0
+APP_VERSION=1.5.1
 URL_STUB="https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/${APP_VERSION}"
 
 cat <<"EOF"
