@@ -63,8 +63,7 @@ void LayoutViewer::on_viewNormal_clicked() {
   image.loadFromData(QByteArray::fromBase64(desc.image0));
   ui->labelImage->setPixmap(QPixmap::fromImage(image));
   ui->labelImage->adjustSize();
-  this->setFixedHeight(ui->labelImage->height() + ui->labelImage->y());
-  this->setFixedWidth(ui->labelImage->width());
+
   ui->viewNormal->setChecked(true);
 }
 
@@ -73,8 +72,7 @@ void LayoutViewer::on_viewAltGr_clicked() {
     image.loadFromData(QByteArray::fromBase64(desc.image1));
     ui->labelImage->setPixmap(QPixmap::fromImage(image));
     ui->labelImage->adjustSize();
-    this->setFixedHeight(ui->labelImage->height() + ui->labelImage->y());
-    this->setFixedWidth(ui->labelImage->width());
+
     ui->viewAltGr->setChecked(true);
   } else {
     ui->labelImage->setText("No image to display!");
