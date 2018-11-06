@@ -57,7 +57,7 @@ case $DISTRO_NAME in
   # shellcheck disable=SC1091
   source /etc/os-release
   if [ $ID = "linuxmint" ]; then
-    VERSION_ID=16.04
+    (( ${VERSION_ID%%.*} == 19 ))&& VERSION_ID=18.04||VERSION_ID=16.04
   fi
   if [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
@@ -83,7 +83,7 @@ case $DISTRO_NAME in
   echo
   echo "Please visit https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard for distrowise/distro-specific install instructions."
   echo
-      
+
   echo -n "Do you want to see the instructions? (Yes/No) "
   read -r answer
   case $answer in
