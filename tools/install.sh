@@ -57,11 +57,7 @@ case $DISTRO_NAME in
   # shellcheck disable=SC1091
   source /etc/os-release
   if [ $ID = "linuxmint" ]; then
-    if (( ${VERSION_ID%%.*} == 19));then
-    	VERSION_ID=18.04
-    elif (( ${VERSION_ID%%.*} == 18));then
-    	VERSION_ID=16.04
-    fi
+   	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
   if [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
