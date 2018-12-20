@@ -1,4 +1,4 @@
-include_directories(. ../ ../libengine ${IBUS_INCLUDE_DIRS})
+include_directories(. ../../shared ../libengine ${IBUS_INCLUDE_DIRS})
 link_directories(${CMAKE_CURRENT_BINARY_DIR}/libengine)
 
 set(iBus ibus_engine.cpp

@@ -68,7 +68,7 @@ void Settings::setLayoutPath(QString path) {
 
 QString Settings::getLayoutPath() {
   setting->sync();
-  return setting->value("layout/path", PKGDATADIR "/layouts/avrophonetic.json").toString();
+  return setting->value("layout/path", "/usr/share/openbangla-keyboard/layouts/avrophonetic.json").toString();
 }
 
 void Settings::setEnterKeyClosesPrevWin(bool b) {

@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Layout handiling code for the frontend. */
+/* Layout handling code for the frontend. */
 
 #include <QJsonDocument>
 #include <QFile>
@@ -104,7 +104,7 @@ LayoutList Layout::searchLayouts() {
   layoutMap.clear();
 
   QDir dir;
-  dir.setPath(PKGDATADIR "/layouts");
+  dir.setPath("/usr/share/openbangla-keyboard/layouts");
   lst << searchLayoutsEx(dir);
 
   dir.setPath(folders.getUserLayoutPath());

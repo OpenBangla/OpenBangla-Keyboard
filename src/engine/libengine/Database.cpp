@@ -14,7 +14,7 @@
 #include "log.h"
 
 Database::Database() {
-  QFile dictFile(PKGDATADIR "/data/dictionary.json");
+  QFile dictFile("/usr/share/openbangla-keyboard/data/dictionary.json");
   if (!dictFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[Database]: Error: Couldn't open dictionary file!\n");
   }
@@ -22,7 +22,7 @@ Database::Database() {
   word_table = QJsonDocument::fromJson(dictFile.readAll()).object();
 
   dictFile.close();
-  dictFile.setFileName(PKGDATADIR "/data/suffix.json");
+  dictFile.setFileName("/usr/share/openbangla-keyboard/data/suffix.json");
   dictFile.open(QIODevice::ReadOnly);
 
   suffix_table = QJsonDocument::fromJson(dictFile.readAll()).object();

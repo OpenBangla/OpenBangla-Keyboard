@@ -25,7 +25,7 @@
 #include "log.h"
 
 RegexParser::RegexParser() {
-  QFile grammarFile(PKGDATADIR "/data/regex.json");
+  QFile grammarFile("/usr/share/openbangla-keyboard/data/regex.json");
   if (!grammarFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[RegexParser]: Error: Couldn't open grammar file\n");
   }
