@@ -26,6 +26,7 @@ void MethodPhonetic::setLayout(QJsonObject lay) {
 
 std::vector<std::string> MethodPhonetic::toStdVector(QStringList vec) {
   std::vector<std::string> v;
+  v.reserve(vec.size());
   for (auto &str : vec) {
     v.push_back(str.toStdString());
   }
