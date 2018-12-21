@@ -17,31 +17,31 @@ install(FILES ${CMAKE_SOURCE_DIR}/data/32.png
         RENAME OpenBangla-Keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/1024.png
-        DESTINATION ${datadir}/pixmaps/
+        DESTINATION ${DATADIR}/pixmaps/
         RENAME openbangla-keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/16.png
-        DESTINATION ${datadir}/icons/hicolor/16x16/apps/
+        DESTINATION ${DATADIR}/icons/hicolor/16x16/apps/
         RENAME openbangla-keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/32.png
-        DESTINATION ${datadir}/icons/hicolor/32x32/apps/
+        DESTINATION ${DATADIR}/icons/hicolor/32x32/apps/
         RENAME openbangla-keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/48.png
-        DESTINATION ${datadir}/icons/hicolor/48x48/apps/
+        DESTINATION ${DATADIR}/icons/hicolor/48x48/apps/
         RENAME openbangla-keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/128.png
-        DESTINATION ${datadir}/icons/hicolor/128x128/apps/
+        DESTINATION ${DATADIR}/icons/hicolor/128x128/apps/
         RENAME openbangla-keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/512.png
-        DESTINATION ${datadir}/icons/hicolor/512x512/apps/
+        DESTINATION ${DATADIR}/icons/hicolor/512x512/apps/
         RENAME openbangla-keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/1024.png
-        DESTINATION ${datadir}/icons/hicolor/1024x1024/apps/
+        DESTINATION ${DATADIR}/icons/hicolor/1024x1024/apps/
         RENAME openbangla-keyboard.png)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
@@ -75,13 +75,13 @@ install(FILES ${CMAKE_SOURCE_DIR}/data/regex.json
         DESTINATION ${PROJECT_DATADIR}/data)
 
 install(FILES ${CMAKE_BINARY_DIR}/data/openbangla.xml
-        DESTINATION "${datadir}/ibus/component")
+        DESTINATION "${DATADIR}/ibus/component")
 
 install(FILES ${CMAKE_BINARY_DIR}/data/openbangla-keyboard.desktop
-        DESTINATION "${datadir}/applications")
+        DESTINATION "${DATADIR}/applications")
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/io.github.openbangla.keyboard.metainfo.xml
-        DESTINATION ${datadir}/metainfo)
+        DESTINATION ${DATADIR}/metainfo)
 
 install(TARGETS OpenBangla-Engine
         RUNTIME DESTINATION ${PROJECT_DATADIR})
