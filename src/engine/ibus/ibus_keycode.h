@@ -22,7 +22,7 @@
 #include <map>
 #include <ibus.h>
 #include "keycode.h"
-#include "log.h"
+#include "Log.h"
 
 /* Here we map iBus keycodes with ours.
  * We use iBus's US layout(https://github.com/ibus/ibus/blob/master/data/keymaps/us)

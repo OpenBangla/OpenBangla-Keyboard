@@ -23,13 +23,13 @@
 #include <QMap>
 #include <QVariant>
 #include "phoneticparser.h"
-#include "SpecialFolders.h"
+#include "FileSystem.h"
 
 class AutoCorrect {
   QJsonObject dict;
   QJsonObject usrDict;
   PhoneticParser parser;
-  SpecialFolders folders;
+  UserFolders folders;
 public:
   AutoCorrect();
 

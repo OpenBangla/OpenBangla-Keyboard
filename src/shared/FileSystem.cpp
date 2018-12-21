@@ -16,35 +16,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SPECIAL_FOLDER_H
-#define SPECIAL_FOLDER_H
+#include "FileSystem.h"
 
-#include <QDir>
-#include "log.h"
+QString LayoutsFilePath() {
+    return "/usr/share/openbangla-keyboard/layouts";
+}
 
-class SpecialFolders {
-  QString path;
-  QDir dir;
-public:
-  SpecialFolders() {
-    path = dir.homePath() + "/.OpenBangla-Keyboard";
-    // Create our folder in the user home folder
-    dir.mkpath(path);
-    // Create user specific layouts folder
-    dir.mkpath(path + "/Layouts/");
-  }
+QString AvroPhoneticLayoutPath() {
+    return "/usr/share/openbangla-keyboard/layouts/avrophonetic.json";
+}
 
-  QString getCandidateSaveFile() {
-    return path + "/phonetic-candidate-selection.json";
-  }
+QString DictionaryPath() {
+    return "/usr/share/openbangla-keyboard/data/dictionary.json";
+}
 
-  QString getUserLayoutPath() {
-    return path + "/Layouts/";
-  }
+QString SuffixDictPath() {
+    return "/usr/share/openbangla-keyboard/data/suffix.json";
+}
 
-  QString getUserAutoCorrectFile() {
-    return path + "/autocorrect.json";
-  }
-};
+QString RegexDictPath() {
+    return "/usr/share/openbangla-keyboard/data/regex.json";
+}
 
-#endif /* end of include guard: SPECIAL_FOLDER_H */
+QString AutoCorrectFilePath() {
+    return "/usr/share/openbangla-keyboard/data/autocorrect.json";
+}

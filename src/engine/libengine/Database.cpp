@@ -11,10 +11,11 @@
 #include <QJsonDocument>
 #include <QRegularExpression>
 #include "Database.h"
-#include "log.h"
+#include "FileSystem.h"
+#include "Log.h"
 
 Database::Database() {
-  QFile dictFile("/usr/share/openbangla-keyboard/data/dictionary.json");
+  QFile dictFile(DictionaryPath());
   if (!dictFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[Database]: Error: Couldn't open dictionary file!\n");
   }
@@ -22,7 +23,7 @@ Database::Database() {
   word_table = QJsonDocument::fromJson(dictFile.readAll()).object();
 
   dictFile.close();
-  dictFile.setFileName("/usr/share/openbangla-keyboard/data/suffix.json");
+  dictFile.setFileName(SuffixDictPath());
   dictFile.open(QIODevice::ReadOnly);
 
   suffix_table = QJsonDocument::fromJson(dictFile.readAll()).object();

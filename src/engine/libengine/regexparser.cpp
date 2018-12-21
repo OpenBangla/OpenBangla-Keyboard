@@ -22,10 +22,11 @@
 
 #include <QFile>
 #include "regexparser.h"
-#include "log.h"
+#include "FileSystem.h"
+#include "Log.h"
 
 RegexParser::RegexParser() {
-  QFile grammarFile("/usr/share/openbangla-keyboard/data/regex.json");
+  QFile grammarFile(RegexDictPath());
   if (!grammarFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[RegexParser]: Error: Couldn't open grammar file\n");
   }

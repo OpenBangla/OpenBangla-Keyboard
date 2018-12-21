@@ -23,6 +23,7 @@
 #include <QDir>
 #include "Layout.h"
 #include "Settings.h"
+#include "FileSystem.h"
 
 Layout *gLayout;
 
@@ -104,7 +105,7 @@ LayoutList Layout::searchLayouts() {
   layoutMap.clear();
 
   QDir dir;
-  dir.setPath("/usr/share/openbangla-keyboard/layouts");
+  dir.setPath(LayoutsFilePath());
   lst << searchLayoutsEx(dir);
 
   dir.setPath(folders.getUserLayoutPath());

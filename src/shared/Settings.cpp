@@ -18,6 +18,7 @@
 #include <QSettings>
 #include <QPoint>
 #include "Settings.h"
+#include "FileSystem.h"
 
 Settings *gSettings;
 
@@ -68,7 +69,7 @@ void Settings::setLayoutPath(QString path) {
 
 QString Settings::getLayoutPath() {
   setting->sync();
-  return setting->value("layout/path", "/usr/share/openbangla-keyboard/layouts/avrophonetic.json").toString();
+  return setting->value("layout/path", AvroPhoneticLayoutPath()).toString();
 }
 
 void Settings::setEnterKeyClosesPrevWin(bool b) {
