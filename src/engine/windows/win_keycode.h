@@ -21,7 +21,7 @@
 
 #include <map>
 #include <windows.h>
-#include "log.h"
+#include "Log.h"
 
 /* Windows Virtual Keycode Mapping
  * https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731%28v=vs.85%29.aspx

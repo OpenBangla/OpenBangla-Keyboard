@@ -1,4 +1,4 @@
-include_directories(. ../ ../../shared)
+include_directories(. ../../shared)
 add_library(libEngine
         Layout.cpp
         Layout.h

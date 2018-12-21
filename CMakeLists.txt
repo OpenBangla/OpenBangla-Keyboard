@@ -40,27 +40,14 @@ endif ()
 if (OS_LINUX)
     ## Additions for Linux ##
 
-    #Generate compile_commands.json to satisfy vscode linux configuration
+    # Generate compile_commands.json to satisfy vscode linux configuration
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
     ## Set Directories for installing and storing files
     set(CMAKE_INSTALL_PREFIX "/usr")
-
-    if (NOT DEFINED datadir)
-        set(datadir "${CMAKE_INSTALL_PREFIX}/share")
-    endif ()
-    add_definitions(-DDATADIR="${datadir}")
-
-    if (NOT DEFINED LIBEXEC_DIR)
-        set(LIBEXEC_DIR "${CMAKE_INSTALL_PREFIX}/libexec")
-    endif ()
-    add_definitions(-DLIBEXEC_DIR="${LIBEXEC_DIR}")
-
-    if (NOT DEFINED PROJECT_DATADIR)
-        set(PROJECT_DATADIR "${datadir}/openbangla-keyboard")
-    endif (NOT DEFINED PROJECT_DATADIR)
+    set(DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+    set(PROJECT_DATADIR "${DATADIR}/openbangla-keyboard")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
-    add_definitions(-DPKGDATADIR="${PROJECT_DATADIR}")
 
     include(FindPkgConfig)
     ## Find iBus ##
