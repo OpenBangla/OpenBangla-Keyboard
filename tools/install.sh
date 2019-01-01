@@ -23,7 +23,7 @@ EOF
 function get_distro {
   local distro_name distro_data distro_str
   # try to get distro data from *-release files
-  distro_data=$(for n in /etc/*-release; do [ ! -d $n ]&&cat $n; done)
+  distro_data=$(for n in /etc/*-release; do [ ! -d "$n" ]&&cat "$n"; done)
   while read -r line; do
       if [[ $line =~ ^(NAME|DISTRIB_ID)=(.+)$ ]]; then
       distro_str=${BASH_REMATCH[2]}
@@ -59,6 +59,13 @@ case $DISTRO_NAME in
   if [ $ID = "linuxmint" ]; then
    	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
+	  case $VERSION_ID in
+	  	18.*) VERSION_ID=18.04;;
+	  	16.*) VERSION_ID=16.04;;
+	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle"
+	  		exit 1
+	  		;;
+	  esac
   if [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
     sudo apt install "$HOME/OpenBangla.deb"
