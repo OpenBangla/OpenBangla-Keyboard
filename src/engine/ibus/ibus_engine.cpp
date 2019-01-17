@@ -184,6 +184,12 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
     }
   }
 
+  // Commit the preedit buffer when the `Ctrl + B` key is pressed.
+  if(kctrl && key == VC_B) {
+    ibus_commit();
+    return TRUE;
+  }
+
   // Send key events to the Layout
   Suggestion sgg = gLayout->getSuggestion(key, kshift, kctrl, kalt);
   // If we have processed the key, update suggestions

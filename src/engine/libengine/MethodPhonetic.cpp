@@ -617,6 +617,13 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
       return suggested;
     }
     break; // Have a break
+  // Eat up Ctrl key
+  case VC_CONTROL:
+    if (EnglishT != "") {
+      handledKey = true;
+      return suggested;
+    }
+    break; // Have a break
   default:handledKey = false;
     return {};
   }
