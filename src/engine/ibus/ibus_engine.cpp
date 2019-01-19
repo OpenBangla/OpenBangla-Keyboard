@@ -78,9 +78,6 @@ void ibus_update_suggest(Suggestion suggest) {
     for (auto &str : suggestions.candidates) {
       IBusText *ctext = ibus_text_new_from_string((gchar *) str.c_str());
       ibus_lookup_table_append_candidate(table, ctext);
-      // Hide candidate labels // Hack learned from ibus-avro
-      IBusText *clabel = ibus_text_new_from_string("");
-      ibus_lookup_table_append_label(table, clabel);
     }
     // Previous selection
     candidateSel = (guint) suggestions.prevSelection;
