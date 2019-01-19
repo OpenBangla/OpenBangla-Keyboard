@@ -78,9 +78,6 @@ void ibus_update_suggest(Suggestion suggest) {
     for (auto &str : suggestions.candidates) {
       IBusText *ctext = ibus_text_new_from_string((gchar *) str.c_str());
       ibus_lookup_table_append_candidate(table, ctext);
-      // Hide candidate labels // Hack learned from ibus-avro
-      IBusText *clabel = ibus_text_new_from_string("");
-      ibus_lookup_table_append_label(table, clabel);
     }
     // Previous selection
     candidateSel = (guint) suggestions.prevSelection;
@@ -101,15 +98,19 @@ void ibus_reset() {
   ibus_engine_hide_lookup_table(engine);
 }
 
+void commit_text(std::string text) {
+  IBusText *txt = ibus_text_new_from_string((gchar *) text.c_str());
+  ibus_engine_commit_text(engine, txt);
+  gLayout->candidateCommited(candidateSel);
+  ibus_reset();
+}
+
 void ibus_commit() {
   if (!suggestions.isEmpty()) {
-    std::string candidate = suggestions.candidates[candidateSel];
-    IBusText *txt = ibus_text_new_from_string((gchar *) candidate.c_str());
-    ibus_engine_commit_text(engine, txt);
-    gLayout->candidateCommited(candidateSel);
+    commit_text(suggestions.candidates[candidateSel]);
+  } else {
+    ibus_reset();
   }
-  ibus_reset();
-  candidateSel = 0;
 }
 
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
@@ -182,6 +183,12 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
       ibus_commit();
       return FALSE;
     }
+  }
+
+  // Commit the preedit buffer when the `Ctrl + B` key is pressed.
+  if(kctrl && key == VC_B && !suggestions.isEmpty()) {
+    commit_text(suggestions.auxiliaryText);
+    return TRUE;
   }
 
   // Send key events to the Layout

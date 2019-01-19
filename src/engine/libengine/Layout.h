@@ -34,7 +34,7 @@
  *
  * @func isEmpty()
  * @return bool
- * @description Checks is there is any candidate in @candidates
+ * @description Checks is there any candidate available in @candidates
  */
 struct Suggestion {
   std::vector<std::string> candidates;
