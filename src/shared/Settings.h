@@ -83,6 +83,10 @@ public:
   void setUpdateCheck(bool b);
 
   bool getUpdateCheck();
+
+  void setCommitRaw(int key);
+
+  int getCommitRaw();
 };
 
 /* Global */

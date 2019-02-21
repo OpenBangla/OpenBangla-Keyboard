@@ -161,3 +161,13 @@ bool Settings::getUpdateCheck() {
   setting->sync();
   return setting->value("settings/UpdateCheck", true).toBool();
 }
+
+void Settings::setCommitRaw(int key) {
+  setting->setValue("settings/CommitRaw", key);
+  setting->sync();
+}
+
+int Settings::getCommitRaw() {
+  setting->sync();
+  return setting->value("settings/CommitRaw", 0xA0C7).toInt(); // Default: Ctrl + T
+}

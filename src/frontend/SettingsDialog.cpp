@@ -19,6 +19,7 @@
 #include "SettingsDialog.h"
 #include "ui_SettingsDialog.h"
 #include "Settings.h"
+#include "keycode.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
@@ -27,6 +28,36 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
   this->setFixedSize(QSize(this->width(), this->height()));
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
+  rawTextKeys = {
+    {"Ctrl + Q", VC_Q},
+    {"Ctrl + W", VC_W},
+    {"Ctrl + E", VC_E},
+    {"Ctrl + R", VC_R},
+    {"Ctrl + T", VC_T},
+    {"Ctrl + Y", VC_Y},
+    {"Ctrl + U", VC_U},
+    {"Ctrl + I", VC_I},
+    {"Ctrl + O", VC_O},
+    {"Ctrl + P", VC_P},
+    {"Ctrl + A", VC_A},
+    {"Ctrl + S", VC_S},
+    {"Ctrl + D", VC_D},
+    {"Ctrl + F", VC_F},
+    {"Ctrl + G", VC_G},
+    {"Ctrl + H", VC_H},
+    {"Ctrl + J", VC_J},
+    {"Ctrl + K", VC_K},
+    {"Ctrl + L", VC_L},
+    {"Ctrl + Z", VC_Z},
+    {"Ctrl + X", VC_X},
+    {"Ctrl + C", VC_C},
+    {"Ctrl + V", VC_V},
+    {"Ctrl + B", VC_B},
+    {"Ctrl + V", VC_V},
+    {"Ctrl + N", VC_N},
+    {"Ctrl + M", VC_M},
+  };
+  ui->cmbRawTxt->addItems(rawTextKeys.keys());
   updateSettings();
 }
 
@@ -39,6 +70,7 @@ void SettingsDialog::updateSettings() {
   ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
   ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
+  ui->cmbRawTxt->setCurrentText(rawTextKeys.keys(gSettings->getCommitRaw()).first());
 }
 
 void SettingsDialog::on_buttonBox_accepted() {
@@ -46,6 +78,7 @@ void SettingsDialog::on_buttonBox_accepted() {
   gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
   gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
+  gSettings->setCommitRaw(rawTextKeys.value(ui->cmbRawTxt->currentText()));
 }
 
 void SettingsDialog::on_buttonBox_rejected() {

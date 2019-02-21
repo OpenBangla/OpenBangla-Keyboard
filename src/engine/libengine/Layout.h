@@ -140,11 +140,14 @@ public:
    * @index index of the candidate string that was commited */
   void candidateCommited(int index);
 
-  /* Checks is the candidate window horizontal */
+  /* Checks if the candidate window is horizontal */
   bool isCandidateWinHorizontal();
 
   /* Update internal suggestion making mechanism */
   void updateEngine();
+
+  /* Returns the user configured key for commiting raw text. */
+  int commitRawTextKey();
 };
 
 /* Global */
