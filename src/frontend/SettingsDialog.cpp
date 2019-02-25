@@ -28,6 +28,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
   this->setFixedSize(QSize(this->width(), this->height()));
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
+  ui->cmbRawTxt->addItem("None");
   rawTextKeys = {
     {"Ctrl + Q", VC_Q},
     {"Ctrl + W", VC_W},
@@ -70,7 +71,12 @@ void SettingsDialog::updateSettings() {
   ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
   ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
-  ui->cmbRawTxt->setCurrentText(rawTextKeys.keys(gSettings->getCommitRaw()).first());
+  int rawTextKey = gSettings->getCommitRaw();
+  if(rawTextKey == 0) {
+    ui->cmbRawTxt->setCurrentText("None");
+  } else {
+    ui->cmbRawTxt->setCurrentText(rawTextKeys.keys(rawTextKey).first());
+  }
 }
 
 void SettingsDialog::on_buttonBox_accepted() {
@@ -78,7 +84,12 @@ void SettingsDialog::on_buttonBox_accepted() {
   gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
   gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
-  gSettings->setCommitRaw(rawTextKeys.value(ui->cmbRawTxt->currentText()));
+  QString rawTextKey = ui->cmbRawTxt->currentText();
+  if(rawTextKey == "None") {
+    gSettings->setCommitRaw(0);
+  } else {
+    gSettings->setCommitRaw(rawTextKeys.value(rawTextKey));
+  }
 }
 
 void SettingsDialog::on_buttonBox_rejected() {
