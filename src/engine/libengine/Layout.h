@@ -34,7 +34,7 @@
  *
  * @func isEmpty()
  * @return bool
- * @description Checks is there is any candidate in @candidates
+ * @description Checks is there any candidate available in @candidates
  */
 struct Suggestion {
   std::vector<std::string> candidates;
@@ -75,7 +75,7 @@ public:
   virtual void setLayout(QJsonObject lay) = 0;
 
   /* Generates suggestions on the fly */
-  virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt)  = 0;
+  virtual Suggestion getSuggestion(int key, bool shift, bool ctrl, bool alt) = 0;
 
   /* Handle special keys such as Enter, Backspace, Space etc keys */
   virtual IMCommand handleSpecialKey(int key) = 0;

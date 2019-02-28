@@ -34,9 +34,9 @@ class LayoutViewer : public QDialog {
 Q_OBJECT
 
 public:
-  explicit LayoutViewer(QWidget *parent = 0);
+  explicit LayoutViewer(QWidget *parent = nullptr);
 
-  ~LayoutViewer();
+  ~LayoutViewer() override;
 
   void refreshLayoutViewer();
 

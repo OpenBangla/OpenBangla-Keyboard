@@ -93,13 +93,12 @@ void AutoCorrectDialog::on_btnClear_clicked() {
 void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1) {
   if (arg1 != "") {
     ui->lblPreviewR->setText(dict.convertBanglish(arg1));
-    if (!ui->btnClear->isEnabled())
+    if (!ui->btnClear->isEnabled()) {
       ui->btnClear->setEnabled(true);
-    if (ui->txtWith->text() != "") {
-      ui->btnUpdate->setEnabled(true);
-    } else {
-      ui->btnUpdate->setEnabled(false);
     }
+
+    ui->btnUpdate->setEnabled(ui->txtWith->text() != "");
+
   } else {
     ui->lblPreviewR->setText("");
     ui->btnClear->setEnabled(false);
@@ -118,11 +117,7 @@ void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1) {
 
     if (!ui->btnClear->isEnabled())
       ui->btnClear->setEnabled(true);
-    if (ui->txtReplace->text() != "") {
-      ui->btnUpdate->setEnabled(true);
-    } else {
-      ui->btnUpdate->setEnabled(false);
-    }
+    ui->btnUpdate->setEnabled(ui->txtReplace->text() != "");
   } else {
     ui->lblPreviewW->setText("");
     ui->btnClear->setEnabled(false);

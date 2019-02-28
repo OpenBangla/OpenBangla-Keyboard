@@ -16,6 +16,18 @@
         </p>
     </description>
     <releases>
+        <release version="1.5.1" date="2018-10-13" urgency="medium">
+            <description>
+                <ul>
+                    <li>
+                        Fixes a dictionary loading issue which was affecting in some scenarios.
+                    </li>
+                    <li>
+                        Polished some UI dialogs.
+                    </li>
+                </ul>
+            </description>
+        </release>
         <release version="1.5.0" date="2018-06-30" urgency="medium">
             <description>
                 <ul>

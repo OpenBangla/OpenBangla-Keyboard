@@ -1,6 +1,6 @@
 #!/bin/bash
 ## MUST: Always update this whenever a new version is released. Also remember to update download URLs if needed
-APP_VERSION=1.5.0
+APP_VERSION=1.5.1
 URL_STUB="https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/${APP_VERSION}"
 
 cat <<"EOF"
@@ -23,7 +23,7 @@ EOF
 function get_distro {
   local distro_name distro_data distro_str
   # try to get distro data from *-release files
-  distro_data=$(cat /etc/*-release)
+  distro_data=$(for n in /etc/*-release; do [ ! -d "$n" ]&&cat "$n"; done)
   while read -r line; do
       if [[ $line =~ ^(NAME|DISTRIB_ID)=(.+)$ ]]; then
       distro_str=${BASH_REMATCH[2]}
@@ -57,8 +57,15 @@ case $DISTRO_NAME in
   # shellcheck disable=SC1091
   source /etc/os-release
   if [ $ID = "linuxmint" ]; then
-    VERSION_ID=16.04
+   	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
+	  case $VERSION_ID in
+	  	18.*) VERSION_ID=18.04;;
+	  	16.*) VERSION_ID=16.04;;
+	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle"
+	  		exit 1
+	  		;;
+	  esac
   if [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
     sudo apt install "$HOME/OpenBangla.deb"
@@ -83,7 +90,7 @@ case $DISTRO_NAME in
   echo
   echo "Please visit https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard for distrowise/distro-specific install instructions."
   echo
-      
+
   echo -n "Do you want to see the instructions? (Yes/No) "
   read -r answer
   case $answer in

@@ -16,13 +16,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Layout handiling code for the frontend. */
+/* Layout handling code for the frontend. */
 
 #include <QJsonDocument>
 #include <QFile>
 #include <QDir>
 #include "Layout.h"
 #include "Settings.h"
+#include "FileSystem.h"
 
 Layout *gLayout;
 
@@ -104,7 +105,7 @@ LayoutList Layout::searchLayouts() {
   layoutMap.clear();
 
   QDir dir;
-  dir.setPath(PKGDATADIR "/layouts");
+  dir.setPath(LayoutsFilePath());
   lst << searchLayoutsEx(dir);
 
   dir.setPath(folders.getUserLayoutPath());

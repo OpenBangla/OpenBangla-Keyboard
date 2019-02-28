@@ -20,7 +20,7 @@
 #include "AutoCorrect.h"
 
 AutoCorrect::AutoCorrect() {
-  QFile dictFile(PKGDATADIR "/data/autocorrect.json");
+  QFile dictFile(AutoCorrectFilePath());
   if (!dictFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[AutoCorrect]: Error: Couldn't open autocorrect dictionary file!\n");
   }
@@ -82,7 +82,7 @@ QVariantMap AutoCorrect::getEntries() {
 
 void AutoCorrect::loadAvroPhonetic() {
   // Now load Avro Phonetic
-  QFile layoutFile(PKGDATADIR "/layouts/avrophonetic.json");
+  QFile layoutFile(AvroPhoneticLayoutPath());
   if (!layoutFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[AutoCorrect]: Error: Couldn't open Avro Phonetic layout file!\n");
   }

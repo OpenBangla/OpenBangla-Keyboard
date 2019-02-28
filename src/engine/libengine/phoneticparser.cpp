@@ -33,7 +33,7 @@ void PhoneticParser::setLayout(QJsonObject l) {
   csen = layout.value("casesensitive").toString();
 }
 
-PhoneticParser::~PhoneticParser() {}
+PhoneticParser::~PhoneticParser() = default;
 
 QString PhoneticParser::parse(QString input) {
   QString fixed = fixString(input);
@@ -44,7 +44,6 @@ QString PhoneticParser::parse(QString input) {
     int start = cur, end;
     bool matched = false;
 
-    int chunkLen;
     for (int chunkLen = maxPatternLength; chunkLen > 0; --chunkLen) {
       end = start + chunkLen;
       if (end <= len) {
@@ -59,15 +58,14 @@ QString PhoneticParser::parse(QString input) {
           if (find == chunk) {
             QJsonArray rules = pattern.value("rules").toArray();
             if (!(rules.isEmpty())) {
-              for (QJsonArray::iterator r = rules.begin(); r != rules.end(); ++r) {
-                QJsonValue rul = *r;
+              for (auto &&rul : rules) {
+                
                 QJsonObject rule = rul.toObject();
                 bool replace = true;
                 int chk = 0;
                 QJsonArray matches = rule.value("matches").toArray();
-                for (QJsonArray::iterator m = matches.begin(); m != matches.end(); ++m) {
-                  QJsonValue mch = *m;
-                  QJsonObject match = mch.toObject();
+                for (auto &&matche : matches) {
+                  QJsonObject match = matche.toObject();
 
                   QJsonValue jvalue = match.value("value");
                   QString value;
@@ -180,7 +178,7 @@ QString PhoneticParser::parse(QString input) {
               }
             }
 
-            if (matched == true)
+            if (matched)
               break;
 
             // Default
@@ -196,7 +194,7 @@ QString PhoneticParser::parse(QString input) {
             right = mid - 1;
           }
         }
-        if (matched == true)
+        if (matched)
           break;
       }
     }

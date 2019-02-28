@@ -22,10 +22,10 @@
 #include "ibus_keycode.h"
 #include "Layout.h"
 
-static IBusBus *bus = NULL;
-static IBusFactory *factory = NULL;
-static IBusEngine *engine = NULL;
-static IBusLookupTable *table = NULL;
+static IBusBus *bus = nullptr;
+static IBusFactory *factory = nullptr;
+static IBusEngine *engine = nullptr;
+static IBusLookupTable *table = nullptr;
 static gint id = 0;
 static guint candidateSel = 0;
 
@@ -78,9 +78,6 @@ void ibus_update_suggest(Suggestion suggest) {
     for (auto &str : suggestions.candidates) {
       IBusText *ctext = ibus_text_new_from_string((gchar *) str.c_str());
       ibus_lookup_table_append_candidate(table, ctext);
-      // Hide candidate labels // Hack learned from ibus-avro
-      IBusText *clabel = ibus_text_new_from_string("");
-      ibus_lookup_table_append_label(table, clabel);
     }
     // Previous selection
     candidateSel = (guint) suggestions.prevSelection;
@@ -101,15 +98,19 @@ void ibus_reset() {
   ibus_engine_hide_lookup_table(engine);
 }
 
+void commit_text(std::string text) {
+  IBusText *txt = ibus_text_new_from_string((gchar *) text.c_str());
+  ibus_engine_commit_text(engine, txt);
+  gLayout->candidateCommited(candidateSel);
+  ibus_reset();
+}
+
 void ibus_commit() {
   if (!suggestions.isEmpty()) {
-    std::string candidate = suggestions.candidates[candidateSel];
-    IBusText *txt = ibus_text_new_from_string((gchar *) candidate.c_str());
-    ibus_engine_commit_text(engine, txt);
-    gLayout->candidateCommited(candidateSel);
+    commit_text(suggestions.candidates[candidateSel]);
+  } else {
+    ibus_reset();
   }
-  ibus_reset();
-  candidateSel = 0;
 }
 
 void ibus_disconnected_cb(IBusBus *bus, gpointer user_data) {
@@ -184,6 +185,12 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
     }
   }
 
+  // Commit the preedit buffer when the `Ctrl + B` key is pressed.
+  if(kctrl && key == VC_B && !suggestions.isEmpty()) {
+    commit_text(suggestions.auxiliaryText);
+    return TRUE;
+  }
+
   // Send key events to the Layout
   Suggestion sgg = gLayout->getSuggestion(key, kshift, kctrl, kalt);
   // If we have processed the key, update suggestions
@@ -230,11 +237,11 @@ IBusEngine *ibus_create_engine_cb(IBusFactory *factory,
 
   // Setup Lookup table
   table = ibus_lookup_table_new(9, 0, TRUE, TRUE);
-  ibus_update_with_settings();
   g_object_ref_sink(table);
+  ibus_update_with_settings();
 
   LOG_INFO("[IM:iBus]: Creating IM Engine\n");
-  LOG_DEBUG("[IM:iBus]: Creating IM Engine with name:%s and id:%d\n", (char *) engine_name, id);
+  LOG_DEBUG("[IM:iBus]: Creating IM Engine with name:%s and id:%d\n", engine_name, id);
 
   g_signal_connect(engine, "process-key-event", G_CALLBACK(ibus_process_key_event_cb), NULL);
   g_signal_connect(engine, "enable", G_CALLBACK(ibus_enable_cb), NULL);
@@ -253,11 +260,9 @@ void ibus_start_setup(bool ibus) {
   ibus_init();
 
   bus = ibus_bus_new();
-  g_object_ref_sink(bus);
   g_signal_connect(bus, "disconnected", G_CALLBACK(ibus_disconnected_cb), NULL);
 
   factory = ibus_factory_new(ibus_bus_get_connection(bus));
-  g_object_ref_sink(factory);
   g_signal_connect(factory, "create-engine", G_CALLBACK(ibus_create_engine_cb), NULL);
 
   if (ibus) {
@@ -280,12 +285,12 @@ void ibus_start_setup(bool ibus) {
                                                    "bn",
                                                    "GPL 3",
                                                    "See About Dialog",
-                                                   PKGDATADIR "/icons/OpenBangla-Keyboard.png",
+                                                   PROJECT_DATADIR "/icons/OpenBangla-Keyboard.png",
                                                    "default"
                               ));
     ibus_bus_register_component(bus, component);
 
-    ibus_bus_set_global_engine_async(bus, "OpenBangla", -1, NULL, NULL, NULL);
+    ibus_bus_set_global_engine_async(bus, "OpenBangla", -1, nullptr, nullptr, nullptr);
   }
   ibus_main();
 }
@@ -294,11 +299,7 @@ int main(int argc, char *argv[]) {
   gLayout = new Layout();
   initKeycode();
 
-  if (argc > 1 && strcmp(argv[1], "--ibus") == 0) {
-    ibus_start_setup(true);
-  } else {
-    ibus_start_setup(false);
-  }
+  ibus_start_setup(argc > 1 && strcmp(argv[1], "--ibus") == 0);
 
   delete gLayout;
 

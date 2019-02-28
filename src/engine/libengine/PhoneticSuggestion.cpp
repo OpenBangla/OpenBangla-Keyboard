@@ -21,8 +21,10 @@
 
 PhoneticSuggestion::PhoneticSuggestion() {
   // Set patterns and optimize them
+
+  // Using RAW String literal (C++11)
   rgxPadding.setPattern(
-      "(^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*)(.*?(?:,,)*)((?::`|\\.`|[-\\]\\\\~!@#&*()_=+\\[{}'\";<>/?|.,])*$)");
+      R"((^(?::`|\.`|[-\]\\~!@#&*()_=+\[{}'";<>/?|.,])*?(?=(?:,{2,}))|^(?::`|\.`|[-\]\\~!@#&*()_=+\[{}'";<>/?|.,])*)(.*?(?:,,)*)((?::`|\.`|[-\]\\~!@#&*()_=+\[{}'";<>/?|.,])*$))");
   rgxKar.setPattern("^[\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc\u09c4]$");
   rgxVowel.setPattern(
       "^[\u0985\u0986\u0987\u0988\u0989\u098a\u098b\u098f\u0990\u0993\u0994\u098c\u09e1\u09be\u09bf\u09c0\u09c1\u09c2\u09c3\u09c7\u09c8\u09cb\u09cc]$");
@@ -212,13 +214,8 @@ QStringList PhoneticSuggestion::joinSuggestion(QString writtenWord, QString auto
   std::sort(dictSuggestion.begin(), dictSuggestion.end(), [&](QString i, QString j) {
     int dist1 = levenshtein_distance(phonetic, i);
     int dist2 = levenshtein_distance(phonetic, j);
-    if (dist1 < dist2) {
-      return true;
-    } else if (dist1 > dist2) {
-      return false;
-    } else {
-      return true;
-    }
+
+    return dist1 <= dist2;
   });
 
   if (autoCorrect != "") {

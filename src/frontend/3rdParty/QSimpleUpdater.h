@@ -128,7 +128,7 @@ public slots:
   void setUseCustomInstallProcedures(const QString &url, const bool custom);
 
 protected:
-  ~QSimpleUpdater();
+  ~QSimpleUpdater() override;
 
 private:
   Updater *getUpdater(const QString &url) const;

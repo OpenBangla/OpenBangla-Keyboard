@@ -17,10 +17,10 @@
  */
 
 #include <QRegularExpression>
-#include "keycode.h"
 #include "Settings.h"
 #include "BengaliChars.h"
 #include "MethodFixedLayoutModern.h"
+#include "keycode.h"
 
 MethodFixedLayoutModern::MethodFixedLayoutModern() {
   marks = "`~!@#$%^+*-_=+\\|\"/;:,./?><()[]{}";
@@ -65,19 +65,15 @@ void MethodFixedLayoutModern::insertReph() {
     if (isPureConsonent(BengaliT.right(1))) {
       rephMoveable = true;
     } else if (isVowel(BengaliT.right(1))) {
-      if (isPureConsonent(BengaliT.right(2).left(1))) {
-        rephMoveable = true;
-      } else {
-        rephMoveable = false;
-      }
+      rephMoveable = isPureConsonent(BengaliT.right(2).left(1));
     } else if (BengaliT.right(1) == b_Chandra) {
+
       if (isPureConsonent(BengaliT.right(2).left(1))) {
         rephMoveable = true;
-      } else if (isVowel(BengaliT.right(2).left(1)) && isPureConsonent(BengaliT.right(3).left(1))) {
-        rephMoveable = true;
       } else {
-        rephMoveable = false;
+        rephMoveable = isVowel(BengaliT.right(2).left(1)) && isPureConsonent(BengaliT.right(3).left(1));
       }
+
     }
   } else {
     rephMoveable = false;
@@ -304,16 +300,8 @@ Suggestion MethodFixedLayoutModern::getSuggestion(int key, bool shift, bool ctrl
     }
   }
 
-  if (ctrl && alt) {
-    altgr = true;
-  } else {
-    altgr = false;
-  }
-  if (shift && altgr) {
-    shiftaltgr = true;
-  } else {
-    shiftaltgr = false;
-  }
+  altgr = ctrl && alt;
+  shiftaltgr = shift && altgr;
 
   if ((key == VC_SHIFT || key == VC_CONTROL || key == VC_ALT)) {
     if (BengaliT != "") {

@@ -1,4 +1,4 @@
-include_directories(. ../ ../../shared c-api/)
+include_directories(. ../../shared c-api/)
 
 set(Sources Layout.cpp
             Layout.h
@@ -30,4 +30,4 @@ if(APPLE)
   target_compile_options(libEngine PUBLIC -fmodules -fmodule-map-file=${CMAKE_SOURCE_DIR}/src/engine/libengine/c-api/module.modulemap -fmodules-cache-path=${CMAKE_BINARY_DIR}/cache )
 endif()
 
-target_link_libraries(libEngine libShared Qt5::Core Qt5::Sql)
+target_link_libraries(libEngine libShared Qt5::Core)

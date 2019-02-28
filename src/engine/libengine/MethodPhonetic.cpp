@@ -26,6 +26,7 @@ void MethodPhonetic::setLayout(QJsonObject lay) {
 
 std::vector<std::string> MethodPhonetic::toStdVector(QStringList vec) {
   std::vector<std::string> v;
+  v.reserve(vec.size());
   for (auto &str : vec) {
     v.push_back(str.toStdString());
   }
@@ -616,6 +617,13 @@ Suggestion MethodPhonetic::getSuggestion(int key, bool shift, bool ctrl, bool al
       return suggested;
     }
     break; // Have a break
+  // Eat up Ctrl key
+  case VC_CONTROL:
+    if (EnglishT != "") {
+      handledKey = true;
+      return suggested;
+    }
+    break; // Have a break
   default:handledKey = false;
     return {};
   }
@@ -649,11 +657,7 @@ IMCommand MethodPhonetic::handleSpecialKey(int key) {
     if (EnglishT.length() > 0) {
       EnglishT = "";
       ret.commit = true;
-      if (gSettings->getEnterKeyClosesPrevWin()) {
-        ret.accepted = true;
-      } else {
-        ret.accepted = false;
-      }
+      ret.accepted = gSettings->getEnterKeyClosesPrevWin();
       return ret;
     } else {
       ret.accepted = false;

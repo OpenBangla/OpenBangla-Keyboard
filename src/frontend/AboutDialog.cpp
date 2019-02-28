@@ -60,7 +60,6 @@ void AboutDialog::scroll() {
 void AboutDialog::showEvent(QShowEvent *event) {
   QDialog::showEvent(event);
   ui->labelDesc->move(ui->labelDesc->x(), 300);
-  return;
 }
 
 void AboutDialog::on_btnClose_clicked() {

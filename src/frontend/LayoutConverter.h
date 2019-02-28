@@ -18,7 +18,7 @@
 
 #include <QFile>
 #include <QJsonObject>
-#include "SpecialFolders.h"
+#include "FileSystem.h"
 
 enum ConversionResult {
   Ok,
@@ -28,7 +28,7 @@ enum ConversionResult {
 };
 
 class LayoutConverter {
-  SpecialFolders folders;
+  UserFolders folders;
 
   ConversionResult convertAvroLayout(QString path);
 

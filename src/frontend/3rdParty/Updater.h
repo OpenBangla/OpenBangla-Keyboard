@@ -56,7 +56,7 @@ signals:
 public:
   Updater();
 
-  ~Updater();
+  ~Updater() override;
 
   QString url() const;
 
