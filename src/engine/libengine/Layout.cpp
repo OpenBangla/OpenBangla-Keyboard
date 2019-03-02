@@ -124,3 +124,7 @@ bool Layout::isCandidateWinHorizontal() {
 void Layout::updateEngine() {
   mth->updateEngine();
 }
+
+int Layout::commitRawTextKey() {
+  return gSettings->getCommitRaw();
+}

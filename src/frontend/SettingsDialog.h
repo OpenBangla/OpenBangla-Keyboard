@@ -20,6 +20,7 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QMap>
 
 namespace Ui {
 class SettingsDialog;
@@ -49,6 +50,7 @@ private slots:
 
 private:
   Ui::SettingsDialog *ui;
+  QMap<QString, int> rawTextKeys;
 };
 
 #endif // SETTINGSDIALOG_H

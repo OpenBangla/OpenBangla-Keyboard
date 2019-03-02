@@ -185,8 +185,9 @@ gboolean ibus_process_key_event_cb(IBusEngine *engine,
     }
   }
 
-  // Commit the preedit buffer when the `Ctrl + B` key is pressed.
-  if(kctrl && key == VC_B && !suggestions.isEmpty()) {
+  // Commit the preedit buffer(raw text) when the user configured key is pressed.
+  int rawTextKey = gLayout->commitRawTextKey();
+  if(kctrl && rawTextKey != 0 && key == rawTextKey && !suggestions.isEmpty()) {
     commit_text(suggestions.auxiliaryText);
     return TRUE;
   }
