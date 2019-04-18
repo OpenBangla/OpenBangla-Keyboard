@@ -60,6 +60,7 @@ case $DISTRO_NAME in
    	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
 	  case $VERSION_ID in
+      19.*) VERSION_ID=18.04;;
 	  	18.*) VERSION_ID=18.04;;
 	  	16.*) VERSION_ID=16.04;;
 	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle"
