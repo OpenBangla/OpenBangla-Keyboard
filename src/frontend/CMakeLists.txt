@@ -20,8 +20,8 @@ set(SRC_MAIN main.cpp
         LayoutConverter.h
         SingleInstance.cpp)
 
-add_executable(OpenBangla-Keyboard ${SRC_MAIN} ${SRC_GUI})
-target_link_libraries(OpenBangla-Keyboard libEngine libShared 3rdParty Qt5::Widgets Qt5::Network)
+add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
+target_link_libraries(openbangla-gui libEngine libShared 3rdParty Qt5::Widgets Qt5::Network)
 
-install(TARGETS OpenBangla-Keyboard
+install(TARGETS openbangla-gui
         RUNTIME DESTINATION ${PROJECT_DATADIR})
