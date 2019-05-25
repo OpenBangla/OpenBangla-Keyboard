@@ -41,3 +41,11 @@ QString RegexDictPath() {
 QString AutoCorrectFilePath() {
     return "/usr/share/openbangla-keyboard/data/autocorrect.json";
 }
+
+QString environmentVariable(const char *varName, const QString &defaultValue)
+{
+    QByteArray value = qgetenv(varName);
+    if (value.isNull())
+        return defaultValue;
+    return QString::fromLocal8Bit(value);
+}

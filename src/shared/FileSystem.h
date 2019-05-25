@@ -22,6 +22,9 @@
 #include <QDir>
 #include "Log.h"
 
+// TODO: Use qEnvironmentVariable function when we are able to use Qt 5.10 version.
+QString environmentVariable(const char *varName, const QString &defaultValue);
+
 /* We follow XDG Directory Specification for storing user specific data.
    https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
  */
@@ -30,7 +33,7 @@ class UserFolders {
   QDir dir;
 public:
   UserFolders() {
-    path = qEnvironmentVariable("XDG_DATA_HOME", dir.homePath() + "/.local/share") + "/openbangla-keyboard";
+    path = environmentVariable("XDG_DATA_HOME", dir.homePath() + "/.local/share") + "/openbangla-keyboard";
     // Create our folder in the user specific data folder
     dir.mkpath(path);
     // Create user specific layouts folder
