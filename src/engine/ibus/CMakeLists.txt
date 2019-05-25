@@ -4,8 +4,8 @@ link_directories(${CMAKE_CURRENT_BINARY_DIR}/libengine)
 set(iBus ibus_engine.cpp
         ibus_keycode.h)
 
-add_executable(OpenBangla-Engine ${iBus})
-target_link_libraries(OpenBangla-Engine libEngine Qt5::Core ${IBUS_LIBRARIES})
+add_executable(ibus-openbangla ${iBus})
+target_link_libraries(ibus-openbangla libEngine Qt5::Core ${IBUS_LIBRARIES})
 
 ## Configure the files
 configure_file(${CMAKE_SOURCE_DIR}/data/openbangla.xml.in ${CMAKE_BINARY_DIR}/data/openbangla.xml)
@@ -83,5 +83,5 @@ install(FILES ${CMAKE_BINARY_DIR}/data/openbangla-keyboard.desktop
 install(FILES ${CMAKE_SOURCE_DIR}/data/io.github.openbangla.keyboard.metainfo.xml
         DESTINATION ${DATADIR}/metainfo)
 
-install(TARGETS OpenBangla-Engine
+install(TARGETS ibus-openbangla
         RUNTIME DESTINATION ${PROJECT_DATADIR})
