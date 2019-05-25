@@ -22,16 +22,19 @@
 #include <QDir>
 #include "Log.h"
 
+/* We follow XDG Directory Specification for storing user specific data.
+   https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+ */
 class UserFolders {
   QString path;
   QDir dir;
 public:
   UserFolders() {
-    path = dir.homePath() + "/.OpenBangla-Keyboard";
-    // Create our folder in the user home folder
+    path = qEnvironmentVariable("XDG_DATA_HOME", dir.homePath() + "/.local/share") + "/openbangla-keyboard";
+    // Create our folder in the user specific data folder
     dir.mkpath(path);
     // Create user specific layouts folder
-    dir.mkpath(path + "/Layouts/");
+    dir.mkpath(path + "/layouts/");
   }
 
   QString getCandidateSaveFile() {
@@ -39,7 +42,7 @@ public:
   }
 
   QString getUserLayoutPath() {
-    return path + "/Layouts/";
+    return path + "/layouts/";
   }
 
   QString getUserAutoCorrectFile() {
