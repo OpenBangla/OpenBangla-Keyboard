@@ -19,7 +19,6 @@
 #include "SettingsDialog.h"
 #include "ui_SettingsDialog.h"
 #include "Settings.h"
-#include "keycode.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),

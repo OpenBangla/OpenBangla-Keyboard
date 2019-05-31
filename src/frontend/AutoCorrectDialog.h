@@ -20,7 +20,8 @@
 #define AUTOCORRECTDIALOG_H
 
 #include <QDialog>
-#include "AutoCorrect.h"
+#include "AvroPhonetic.h"
+#include "FileSystem.h"
 
 class QTreeWidgetItem;
 
@@ -54,11 +55,18 @@ private slots:
 
 private:
   Ui::AutoCorrectDialog *ui;
-  AutoCorrect dict;
+  AvroPhonetic phonetic;
+  UserFolders folders;
 
+  QJsonObject dict;
+  QJsonObject usrDict;
+
+  void loadData();
+  /* Get AutoCorrect entries */
+  QVariantMap getEntries();
   void loadEntries();
 
-  void addEntries(QString replace, QString with);
+  void addEntryInViewer(QString replace, QString with);
 };
 
 #endif // AUTOCORRECTDIALOG_H

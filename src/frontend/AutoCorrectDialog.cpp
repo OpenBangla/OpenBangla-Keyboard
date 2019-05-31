@@ -17,6 +17,7 @@
  */
 
 #include <QTreeWidget>
+#include <QJsonDocument>
 #include "AutoCorrectDialog.h"
 #include "ui_AutoCorrectDialog.h"
 
@@ -33,13 +34,50 @@ AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
   ui->btnClear->setEnabled(false);
   ui->btnUpdate->setEnabled(false);
 
-  dict.loadAvroPhonetic();
-
+  loadData();
   loadEntries();
 }
 
 AutoCorrectDialog::~AutoCorrectDialog() {
   delete ui;
+}
+
+void AutoCorrectDialog::loadData() {
+  QFile dictFile(AutoCorrectFilePath());
+  if (!dictFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[AutoCorrect]: Error: Couldn't open autocorrect dictionary file!\n");
+  }
+  QByteArray data = dictFile.readAll();
+  dictFile.close();
+
+  QJsonDocument json(QJsonDocument::fromJson(data));
+  dict = json.object().value("autocorrect").toObject();
+  
+  dictFile.setFileName(folders.getUserAutoCorrectFile());
+  if (!dictFile.open(QIODevice::ReadOnly)) {
+    LOG_ERROR("[AutoCorrect]: Error: Couldn't open user specific AutoCorrect file!\n");
+  }
+  data = dictFile.readAll();
+  dictFile.close();
+
+  QJsonDocument usrJson(QJsonDocument::fromJson(data));
+  usrDict = usrJson.object();
+}
+
+QVariantMap AutoCorrectDialog::getEntries() {
+  QVariantMap dct = dict.toVariantMap();
+
+  /* Insert user's AutoCorrect entries.
+   * If a conflict is found, we prefer user's entry.
+   */
+  QJsonObject::const_iterator iter = usrDict.constBegin();
+  while (iter != usrDict.constEnd()) {
+    dct.insert(iter.key(), iter.value());
+
+    ++iter;
+  }
+
+  return dct;
 }
 
 void AutoCorrectDialog::loadEntries() {
@@ -52,10 +90,10 @@ void AutoCorrectDialog::loadEntries() {
   ui->autoCorrect->clearSelection();
   ui->autoCorrect->clear();
 
-  QVariantMap acList = dict.getEntries();
+  QVariantMap acList = getEntries();
   QVariantMap::const_iterator iter = acList.constBegin();
   while (iter != acList.constEnd()) {
-    addEntries(iter.key(), iter.value().toString());
+    addEntryInViewer(iter.key(), iter.value().toString());
     ++iter;
     ++items;
   }
@@ -66,14 +104,24 @@ void AutoCorrectDialog::loadEntries() {
   ui->lblEntries->setText("Total entries: " + QString::number(items));
 }
 
-void AutoCorrectDialog::addEntries(QString replace, QString with) {
+void AutoCorrectDialog::addEntryInViewer(QString replace, QString with) {
   QTreeWidgetItem *item = new QTreeWidgetItem(ui->autoCorrect);
   item->setText(0, replace);
   item->setText(1, with);
 }
 
 void AutoCorrectDialog::on_buttonBox_accepted() {
-  dict.saveUserAutoCorrectFile();
+  // Save changes in user specific auto correct file.
+  QFile saveFile(folders.getUserAutoCorrectFile());
+  if (!saveFile.open(QIODevice::WriteOnly)) {
+    LOG_ERROR("[AutoCorrect:Save]: Error couldn't open save file.\n");
+    return;
+  }
+
+  QJsonDocument json(usrDict);
+  saveFile.write(json.toJson());
+
+  saveFile.close();
 }
 
 void AutoCorrectDialog::on_buttonBox_rejected() {
@@ -81,7 +129,7 @@ void AutoCorrectDialog::on_buttonBox_rejected() {
 }
 
 void AutoCorrectDialog::on_btnUpdate_clicked() {
-  dict.setEntry(ui->txtReplace->text().trimmed(), ui->txtWith->text().trimmed());
+  usrDict.insert(ui->txtReplace->text().trimmed(), ui->txtWith->text().trimmed());
   loadEntries();
 }
 
@@ -92,7 +140,7 @@ void AutoCorrectDialog::on_btnClear_clicked() {
 
 void AutoCorrectDialog::on_txtReplace_textChanged(const QString &arg1) {
   if (arg1 != "") {
-    ui->lblPreviewR->setText(dict.convertBanglish(arg1));
+    ui->lblPreviewR->setText(phonetic.convert(arg1));
     if (!ui->btnClear->isEnabled()) {
       ui->btnClear->setEnabled(true);
     }
@@ -112,7 +160,7 @@ void AutoCorrectDialog::on_txtWith_textChanged(const QString &arg1) {
     if (ui->txtReplace->text() == arg1) {
       ui->lblPreviewW->setText(arg1);
     } else {
-      ui->lblPreviewW->setText(dict.convertBanglish(arg1));
+      ui->lblPreviewW->setText(phonetic.convert(arg1));
     }
 
     if (!ui->btnClear->isEnabled())
