@@ -159,9 +159,9 @@ QString FixedLayoutParser::getCharForKey(int keyNum, bool shift, bool altgr, boo
   case VC_BRACE_RIGHT:key = "CloseBracket";
     emulateShift = true;
     break;
-  case VC_BACK_SLASH:key = "BlackSlash";
+  case VC_BACK_SLASH:key = "BackSlash";
     break;
-  case VC_BAR:key = "BlackSlash";
+  case VC_BAR:key = "BackSlash";
     emulateShift = true;
     break;
   case VC_SEMICOLON:key = "Semicolon";

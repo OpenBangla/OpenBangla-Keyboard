@@ -96,7 +96,7 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path) {
         if (key.contains("OEM4"))
           key.replace("OEM4", "OpenBracket");
         if (key.contains("OEM5"))
-          key.replace("OEM5", "BackBracket");
+          key.replace("OEM5", "BackSlash");
         if (key.contains("OEM6"))
           key.replace("OEM6", "CloseBracket");
         if (key.contains("OEM7"))
