@@ -14,6 +14,7 @@
     "system_error": "cpp",
     "qjsonobject": "cpp",
     "qtsql": "cpp",
-    "qstring": "cpp"
+    "qstring": "cpp",
+    "libriti.h": "c"
   }
 }

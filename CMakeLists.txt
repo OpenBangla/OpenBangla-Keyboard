@@ -10,6 +10,9 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MI
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 11)
 
+enable_language(Rust)
+include(CMakeCargo)
+
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
