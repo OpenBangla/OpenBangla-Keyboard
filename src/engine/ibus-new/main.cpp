@@ -12,5 +12,5 @@ int main(int argc, char* argv[]) {
     RitiContext *ctx = riti_context_new();
     qDebug() << riti_context_key_handled(ctx);
     riti_context_free(ctx);
-	return 0;
+    return 0;
 }
