@@ -13,6 +13,46 @@ static IBusLookupTable *table = nullptr;
 static gint id = 0;
 static guint candidateSel = 0;
 
+void engine_update_preedit() {
+  ibus_engine_update_lookup_table_fast(engine, table, TRUE);
+  guint pos = ibus_lookup_table_get_cursor_pos(table);
+  IBusText *txt = ibus_lookup_table_get_candidate(table, pos);
+  ibus_engine_update_preedit_text(engine, txt, ibus_text_get_length(txt), TRUE);
+}
+
+void engine_update_lookup_table(Suggestion *suggestion) {
+  char *aux = riti_suggestion_get_auxiliary_text(suggestion);
+  IBusText *auxiliary = ibus_text_new_from_string(aux);
+
+  ibus_lookup_table_clear(table);
+  ibus_engine_update_auxiliary_text(engine, auxiliary, TRUE);
+
+  char *const *suggestions = riti_suggestion_get_suggestions(suggestion);
+  uintptr_t len = riti_suggestion_get_length(suggestion);
+
+  for(uintptr_t i = 0; i < len; i++) {
+    IBusText *text = ibus_text_new_from_string(suggestions[i]);
+    ibus_lookup_table_append_candidate(table, text);
+  }
+  ibus_lookup_table_set_cursor_pos(table, 0);
+  engine_update_preedit();
+}
+
+void engine_reset() {
+  ibus_lookup_table_clear(table);
+  ibus_engine_hide_preedit_text(engine);
+  ibus_engine_hide_auxiliary_text(engine);
+  ibus_engine_hide_lookup_table(engine);
+}
+
+void engine_commit() {
+  IBusText *txt = ibus_lookup_table_get_candidate(table, ibus_lookup_table_get_cursor_pos(table));
+  ibus_engine_commit_text(engine, txt);
+  engine_reset();
+}
+
+/************************************* Callbacks *************************************/
+
 gboolean engine_process_key_event_cb(IBusEngine *engine,
                                    guint keyval,
                                    guint keycode,
@@ -36,19 +76,41 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   Suggestion *suggestion = riti_get_suggestion_for_key(ctx, key, modifier);
 
   bool ret = riti_context_key_handled(ctx);
+  LOG_DEBUG("[IM:iBus]: Layout Management %s the event\n", ret ? "accepted" : "rejected");
 
   if(ret) {
-      char *const *vec = riti_suggestion_get_suggestions(suggestion);
-      uintptr_t len = riti_suggestion_get_length(suggestion);
-
-      for(uintptr_t i = 0; i < len; i++) {
-          qDebug() << "Returned >> " << vec[i];
+    if(key == VC_BACKSPACE || key == VC_RIGHT || key == VC_LEFT) {
+      switch (key) {
+        // We have to care specially when the key is Backspace! :)
+        case VC_BACKSPACE:
+          if(!riti_suggestion_is_empty(suggestion)) {
+            engine_update_lookup_table(suggestion);
+          } else {
+            engine_reset();
+          } 
+          break;
+        case VC_RIGHT:
+          ibus_lookup_table_cursor_down(table);
+          engine_update_preedit();
+          break;
+        case VC_LEFT:
+          ibus_lookup_table_cursor_up(table);
+          engine_update_preedit();
+          break;
       }
-      riti_suggestion_free(suggestion);
+    } else {
+      engine_update_lookup_table(suggestion);
+    }
+  } else {
+    if(!riti_suggestion_is_empty(suggestion)) {
+      engine_commit();
+    } else {
+      engine_reset();
+    }
   }
 
-  LOG_DEBUG("[IM:iBus]: Layout Management %s the event\n", ret ? "accepted" : "rejected");
-  return (gboolean) 0;
+  riti_suggestion_free(suggestion);
+  return (gboolean) ret;
 }
 
 void engine_enable_cb(IBusEngine *engine) {
@@ -62,7 +124,7 @@ void engine_disable_cb(IBusEngine *engine) {
 }
 
 void engine_focus_out_cb(IBusEngine *engine) {
-    //
+  LOG_INFO("[IM:iBus]: IM Focus out\n");
 }
 
 IBusEngine *create_engine_cb(IBusFactory *factory,
@@ -76,6 +138,7 @@ IBusEngine *create_engine_cb(IBusFactory *factory,
 
   // Setup Lookup table
   table = ibus_lookup_table_new(9, 0, TRUE, TRUE);
+  ibus_lookup_table_set_orientation(table, IBUS_ORIENTATION_HORIZONTAL);
   g_object_ref_sink(table);
 
   LOG_INFO("[IM:iBus]: Creating IM Engine\n");
