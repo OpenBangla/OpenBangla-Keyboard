@@ -13,6 +13,14 @@ static IBusLookupTable *table = nullptr;
 static gint id = 0;
 static guint candidateSel = 0;
 
+void update_with_settings() {
+    qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
+
+    if(table != nullptr) {
+      ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
+    }
+}
+
 void engine_update_preedit() {
   ibus_engine_update_lookup_table_fast(engine, table, TRUE);
   guint pos = ibus_lookup_table_get_cursor_pos(table);
@@ -115,6 +123,7 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
 
 void engine_enable_cb(IBusEngine *engine) {
   LOG_INFO("[IM:iBus]: IM enabled\n");
+  update_with_settings();
   // Update Engine
   //gLayout->updateEngine();
 }
@@ -125,6 +134,7 @@ void engine_disable_cb(IBusEngine *engine) {
 
 void engine_focus_out_cb(IBusEngine *engine) {
   LOG_INFO("[IM:iBus]: IM Focus out\n");
+  update_with_settings();
 }
 
 IBusEngine *create_engine_cb(IBusFactory *factory,
@@ -138,7 +148,6 @@ IBusEngine *create_engine_cb(IBusFactory *factory,
 
   // Setup Lookup table
   table = ibus_lookup_table_new(9, 0, TRUE, TRUE);
-  ibus_lookup_table_set_orientation(table, IBUS_ORIENTATION_HORIZONTAL);
   g_object_ref_sink(table);
 
   LOG_INFO("[IM:iBus]: Creating IM Engine\n");
@@ -199,10 +208,6 @@ void start_setup(bool ibus) {
     ibus_bus_set_global_engine_async(bus, "OpenBangla", -1, nullptr, nullptr, nullptr);
   }
   ibus_main();
-}
-
-void update_with_settings() {
-    qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
 }
 
 int main(int argc, char* argv[]) {
