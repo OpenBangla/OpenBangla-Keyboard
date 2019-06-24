@@ -7,7 +7,6 @@
 
 static RitiContext *ctx = nullptr;
 static IBusBus *bus = nullptr;
-static IBusFactory *factory = nullptr;
 static IBusEngine *engine = nullptr;
 static IBusLookupTable *table = nullptr;
 static gint id = 0;
@@ -177,7 +176,7 @@ void start_setup(bool ibus) {
   bus = ibus_bus_new();
   g_signal_connect(bus, "disconnected", G_CALLBACK(engine_disconnected_cb), NULL);
 
-  factory = ibus_factory_new(ibus_bus_get_connection(bus));
+  IBusFactory *factory = ibus_factory_new(ibus_bus_get_connection(bus));
   g_signal_connect(factory, "create-engine", G_CALLBACK(create_engine_cb), NULL);
 
   if (ibus) {
@@ -215,8 +214,9 @@ int main(int argc, char* argv[]) {
     update_with_settings();
     initKeycode();
     ctx = riti_context_new();
+
     start_setup(argc > 1 && strcmp(argv[1], "--ibus") == 0);
-    qDebug() << riti_context_key_handled(ctx);
+
     riti_context_free(ctx);
     return 0;
 }
