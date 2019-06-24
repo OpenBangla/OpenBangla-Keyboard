@@ -10,7 +10,7 @@ static IBusBus *bus = nullptr;
 static IBusEngine *engine = nullptr;
 static IBusLookupTable *table = nullptr;
 static gint id = 0;
-static guint candidateSel = 0;
+static bool input_session_ongoing = false;
 
 void update_with_settings() {
     qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
@@ -41,11 +41,14 @@ void engine_update_lookup_table(Suggestion *suggestion) {
     IBusText *text = ibus_text_new_from_string(suggestions[i]);
     ibus_lookup_table_append_candidate(table, text);
   }
+
+  input_session_ongoing = true;
   ibus_lookup_table_set_cursor_pos(table, 0);
   engine_update_preedit();
 }
 
 void engine_reset() {
+  input_session_ongoing = false;
   ibus_lookup_table_clear(table);
   ibus_engine_hide_preedit_text(engine);
   ibus_engine_hide_auxiliary_text(engine);
@@ -53,8 +56,10 @@ void engine_reset() {
 }
 
 void engine_commit() {
-  IBusText *txt = ibus_lookup_table_get_candidate(table, ibus_lookup_table_get_cursor_pos(table));
+  uintptr_t index = ibus_lookup_table_get_cursor_pos(table);
+  IBusText *txt = ibus_lookup_table_get_candidate(table, index);
   ibus_engine_commit_text(engine, txt);
+  riti_context_candidate_committed(ctx, index);
   engine_reset();
 }
 
@@ -109,7 +114,7 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
       engine_update_lookup_table(suggestion);
     }
   } else {
-    if(!riti_suggestion_is_empty(suggestion)) {
+    if(input_session_ongoing) {
       engine_commit();
     } else {
       engine_reset();
@@ -133,6 +138,11 @@ void engine_disable_cb(IBusEngine *engine) {
 
 void engine_focus_out_cb(IBusEngine *engine) {
   LOG_INFO("[IM:iBus]: IM Focus out\n");
+
+  if(input_session_ongoing) {
+    engine_commit();
+  }
+
   update_with_settings();
 }
 
