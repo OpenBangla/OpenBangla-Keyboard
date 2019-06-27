@@ -128,8 +128,6 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
 void engine_enable_cb(IBusEngine *engine) {
   LOG_INFO("[IM:iBus]: IM enabled\n");
   update_with_settings();
-  // Update Engine
-  //gLayout->updateEngine();
 }
 
 void engine_disable_cb(IBusEngine *engine) {
@@ -144,6 +142,7 @@ void engine_focus_out_cb(IBusEngine *engine) {
   }
 
   update_with_settings();
+  riti_context_update_engine(ctx);
 }
 
 IBusEngine *create_engine_cb(IBusFactory *factory,
