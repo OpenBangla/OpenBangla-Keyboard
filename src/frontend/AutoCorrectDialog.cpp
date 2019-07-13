@@ -51,7 +51,7 @@ void AutoCorrectDialog::loadData() {
   dictFile.close();
 
   QJsonDocument json(QJsonDocument::fromJson(data));
-  dict = json.object().value("autocorrect").toObject();
+  dict = json.object();
   
   dictFile.setFileName(folders.getUserAutoCorrectFile());
   if (!dictFile.open(QIODevice::ReadOnly)) {

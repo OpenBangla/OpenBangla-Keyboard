@@ -2,6 +2,7 @@
 #include <QDebug>
 #include "riti.h"
 #include "keycode.h"
+#include "FileSystem.h"
 #include "Settings.h"
 #include "Log.h"
 
@@ -11,40 +12,57 @@ static IBusEngine *engine = nullptr;
 static IBusLookupTable *table = nullptr;
 static gint id = 0;
 static bool input_session_ongoing = false;
+static IBusText *preeditText = nullptr;
+static uintptr_t table_pos = 0; 
 
 void update_with_settings() {
     qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
+    qputenv("RITI_PHONETIC_DATABASE_DIR", DatabasePath().toLatin1());
+    qputenv("RITI_LAYOUT_FIXED_VOWEL", gSettings->getAutoVowelFormFixed() ? "true" : "false");
+    qputenv("RITI_LAYOUT_FIXED_CHANDRA", gSettings->getAutoChandraPosFixed() ? "true" : "false");
+    qputenv("RITI_LAYOUT_FIXED_KAR", gSettings->getTraditionalKarFixed() ? "true" : "false");
 
     if(table != nullptr) {
       ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
     }
 }
 
-void engine_update_preedit() {
-  ibus_engine_update_lookup_table_fast(engine, table, TRUE);
-  guint pos = ibus_lookup_table_get_cursor_pos(table);
-  IBusText *txt = ibus_lookup_table_get_candidate(table, pos);
-  ibus_engine_update_preedit_text(engine, txt, ibus_text_get_length(txt), TRUE);
+void engine_update_preedit(Suggestion *suggestion) {
+  if (!riti_suggestion_is_lonely(suggestion)) {
+    ibus_engine_update_lookup_table_fast(engine, table, TRUE);
+    table_pos = ibus_lookup_table_get_cursor_pos(table);
+    preeditText = ibus_lookup_table_get_candidate(table, table_pos);
+  } else {
+    preeditText = ibus_text_new_from_string(riti_suggestion_get_lonely_suggestion(suggestion));
+    table_pos = 0;
+  }
+
+  g_object_ref_sink(preeditText);
+
+  ibus_engine_update_preedit_text(engine, preeditText, ibus_text_get_length(preeditText), TRUE);
 }
 
 void engine_update_lookup_table(Suggestion *suggestion) {
-  char *aux = riti_suggestion_get_auxiliary_text(suggestion);
-  IBusText *auxiliary = ibus_text_new_from_string(aux);
+  if (!riti_suggestion_is_lonely(suggestion)) {
+    char *aux = riti_suggestion_get_auxiliary_text(suggestion);
+    IBusText *auxiliary = ibus_text_new_from_string(aux);
 
-  ibus_lookup_table_clear(table);
-  ibus_engine_update_auxiliary_text(engine, auxiliary, TRUE);
+    ibus_lookup_table_clear(table);
+    ibus_engine_update_auxiliary_text(engine, auxiliary, TRUE);
 
-  char *const *suggestions = riti_suggestion_get_suggestions(suggestion);
-  uintptr_t len = riti_suggestion_get_length(suggestion);
+    char *const *suggestions = riti_suggestion_get_suggestions(suggestion);
+    uintptr_t len = riti_suggestion_get_length(suggestion);
 
-  for(uintptr_t i = 0; i < len; i++) {
-    IBusText *text = ibus_text_new_from_string(suggestions[i]);
-    ibus_lookup_table_append_candidate(table, text);
+    for(uintptr_t i = 0; i < len; i++) {
+      IBusText *text = ibus_text_new_from_string(suggestions[i]);
+      ibus_lookup_table_append_candidate(table, text);
+    }
+
+    ibus_lookup_table_set_cursor_pos(table, 0);
   }
 
   input_session_ongoing = true;
-  ibus_lookup_table_set_cursor_pos(table, 0);
-  engine_update_preedit();
+  engine_update_preedit(suggestion);
 }
 
 void engine_reset() {
@@ -56,10 +74,9 @@ void engine_reset() {
 }
 
 void engine_commit() {
-  uintptr_t index = ibus_lookup_table_get_cursor_pos(table);
-  IBusText *txt = ibus_lookup_table_get_candidate(table, index);
-  ibus_engine_commit_text(engine, txt);
-  riti_context_candidate_committed(ctx, index);
+  ibus_engine_commit_text(engine, preeditText);
+  riti_context_candidate_committed(ctx, table_pos);
+  g_object_unref(preeditText);
   engine_reset();
 }
 
@@ -103,11 +120,11 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
           break;
         case VC_RIGHT:
           ibus_lookup_table_cursor_down(table);
-          engine_update_preedit();
+          engine_update_preedit(suggestion);
           break;
         case VC_LEFT:
           ibus_lookup_table_cursor_up(table);
-          engine_update_preedit();
+          engine_update_preedit(suggestion);
           break;
       }
     } else {
