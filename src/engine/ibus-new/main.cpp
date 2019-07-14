@@ -102,6 +102,11 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
 
   int key = ibus_keycode(keyval);
 
+  if(!input_session_ongoing) {
+    update_with_settings();
+    riti_context_update_engine(ctx);
+  }
+
   Suggestion *suggestion = riti_get_suggestion_for_key(ctx, key, modifier);
 
   bool ret = riti_context_key_handled(ctx);
