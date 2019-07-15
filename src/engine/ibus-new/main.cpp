@@ -162,9 +162,6 @@ void engine_focus_out_cb(IBusEngine *engine) {
   if(input_session_ongoing) {
     engine_commit();
   }
-
-  update_with_settings();
-  riti_context_update_engine(ctx);
 }
 
 IBusEngine *create_engine_cb(IBusFactory *factory,
