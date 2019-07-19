@@ -58,7 +58,9 @@ void engine_update_lookup_table(Suggestion *suggestion) {
       ibus_lookup_table_append_candidate(table, text);
     }
 
-    ibus_lookup_table_set_cursor_pos(table, 0);
+    uintptr_t prev_selection = riti_suggestion_previously_selected_index(suggestion);
+
+    ibus_lookup_table_set_cursor_pos(table, prev_selection);
   }
 
   input_session_ongoing = true;
