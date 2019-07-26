@@ -98,6 +98,7 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
                                    guint keycode,
                                    guint state) {
   u_int8_t modifier = 0;
+  bool ctrl_key = false;
 
   // Don't accept Key Release event
   if (state & IBUS_RELEASE_MASK)
@@ -106,8 +107,10 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   // Set modifiers
   if (state & IBUS_SHIFT_MASK)
     modifier |= MODIFIER_SHIFT;
-  if (state & IBUS_CONTROL_MASK)
+  if (state & IBUS_CONTROL_MASK) {
     modifier |= MODIFIER_CTRL;
+    ctrl_key = true;
+  }
   if (state & IBUS_MOD1_MASK)
     modifier |= MODIFIER_ALT;
 
@@ -116,6 +119,17 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   if(!input_session_ongoing) {
     update_with_settings();
     riti_context_update_engine(ctx);
+  }
+
+  // Commit the preedit buffer(raw text) when the user configured key is pressed.
+  int rawTextKey = gSettings->getCommitRaw();
+  if(ctrl_key && rawTextKey != 0 && key == rawTextKey && input_session_ongoing && !riti_suggestion_is_lonely(suggestion)) {
+    IBusText *text = ibus_text_new_from_string(riti_suggestion_get_auxiliary_text(suggestion));
+    ibus_engine_commit_text(engine, text);
+    // For notifing that we have committed something.
+    riti_context_candidate_committed(ctx, 0);
+    engine_reset();
+    return TRUE;
   }
 
   suggestion = riti_get_suggestion_for_key(ctx, key, modifier);
