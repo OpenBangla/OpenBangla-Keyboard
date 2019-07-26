@@ -16,10 +16,14 @@ static Suggestion *suggestion = nullptr;
 
 void update_with_settings() {
     qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
+    qputenv("RITI_ENTER_CLOSES_PREVIEW_WIN", gSettings->getEnterKeyClosesPrevWin() ? "true" : "false");
+    qputenv("RITI_PREVIEW_WIN_HORIZONTAL", gSettings->getCandidateWinHorizontal() ? "true" : "false");
     qputenv("RITI_PHONETIC_DATABASE_DIR", DatabasePath().toLatin1());
     qputenv("RITI_LAYOUT_FIXED_VOWEL", gSettings->getAutoVowelFormFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_CHANDRA", gSettings->getAutoChandraPosFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_KAR", gSettings->getTraditionalKarFixed() ? "true" : "false");
+    qputenv("RITI_LAYOUT_FIXED_OLD_REPH", gSettings->getOldReph() ? "true" : "false");
+    qputenv("RITI_LAYOUT_FIXED_NUMBERPAD", gSettings->getNumberPadFixed() ? "true" : "false");
 
     if(table != nullptr) {
       ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
@@ -138,7 +142,6 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   LOG_DEBUG("[IM:iBus]: Layout Management %s the event\n", ret ? "accepted" : "rejected");
 
   if(ret) {
-    if(key == VC_BACKSPACE || key == VC_RIGHT || key == VC_LEFT || key == VC_TAB) {
       switch (key) {
         // We have to care specially when the key is Backspace! :)
         case VC_BACKSPACE:
@@ -148,7 +151,15 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
             engine_reset();
           } 
           break;
+        // When 'Enter key closes preview window' is true.
+        case VC_ENTER:
+          engine_commit();
+          break;
         case VC_RIGHT:
+          ibus_lookup_table_cursor_down(table);
+          engine_update_preedit();
+          break;
+        case VC_DOWN:
           ibus_lookup_table_cursor_down(table);
           engine_update_preedit();
           break;
@@ -156,14 +167,17 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
           ibus_lookup_table_cursor_up(table);
           engine_update_preedit();
           break;
+        case VC_UP:
+          ibus_lookup_table_cursor_up(table);
+          engine_update_preedit();
+          break;
         case VC_TAB:
           ibus_lookup_table_cursor_down(table);
           engine_update_preedit();
           break;
+        default:
+          engine_update_lookup_table();
       }
-    } else {
-      engine_update_lookup_table();
-    }
   } else {
     if(input_session_ongoing) {
       engine_commit();
