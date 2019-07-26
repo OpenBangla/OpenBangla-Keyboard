@@ -12,8 +12,7 @@ static IBusEngine *engine = nullptr;
 static IBusLookupTable *table = nullptr;
 static gint id = 0;
 static bool input_session_ongoing = false;
-static IBusText *preeditText = nullptr;
-static uintptr_t table_pos = 0; 
+static Suggestion *suggestion = nullptr;
 
 void update_with_settings() {
     qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
@@ -27,22 +26,21 @@ void update_with_settings() {
     }
 }
 
-void engine_update_preedit(Suggestion *suggestion) {
+void engine_update_preedit() {
+  IBusText *text = nullptr;
+
   if (!riti_suggestion_is_lonely(suggestion)) {
     ibus_engine_update_lookup_table_fast(engine, table, TRUE);
-    table_pos = ibus_lookup_table_get_cursor_pos(table);
-    preeditText = ibus_lookup_table_get_candidate(table, table_pos);
+    guint index = ibus_lookup_table_get_cursor_pos(table);
+    text = ibus_lookup_table_get_candidate(table, index);
   } else {
-    preeditText = ibus_text_new_from_string(riti_suggestion_get_lonely_suggestion(suggestion));
-    table_pos = 0;
+    text = ibus_text_new_from_string(riti_suggestion_get_lonely_suggestion(suggestion));
   }
 
-  g_object_ref_sink(preeditText);
-
-  ibus_engine_update_preedit_text(engine, preeditText, ibus_text_get_length(preeditText), TRUE);
+  ibus_engine_update_preedit_text(engine, text, ibus_text_get_length(text), TRUE);
 }
 
-void engine_update_lookup_table(Suggestion *suggestion) {
+void engine_update_lookup_table() {
   if (!riti_suggestion_is_lonely(suggestion)) {
     char *aux = riti_suggestion_get_auxiliary_text(suggestion);
     IBusText *auxiliary = ibus_text_new_from_string(aux);
@@ -64,7 +62,7 @@ void engine_update_lookup_table(Suggestion *suggestion) {
   }
 
   input_session_ongoing = true;
-  engine_update_preedit(suggestion);
+  engine_update_preedit();
 }
 
 void engine_reset() {
@@ -76,9 +74,20 @@ void engine_reset() {
 }
 
 void engine_commit() {
-  ibus_engine_commit_text(engine, preeditText);
-  riti_context_candidate_committed(ctx, table_pos);
-  g_object_unref(preeditText);
+  uintptr_t index = 0;
+  IBusText *text = nullptr;
+
+  if (!riti_suggestion_is_lonely(suggestion)) {
+    index = ibus_lookup_table_get_cursor_pos(table);
+    text = ibus_lookup_table_get_candidate(table, index);
+  } else {
+    index = 0;
+    char *txt = riti_suggestion_get_lonely_suggestion(suggestion);
+    text = ibus_text_new_from_string(txt);
+  }
+
+  ibus_engine_commit_text(engine, text);
+  riti_context_candidate_committed(ctx, index);
   engine_reset();
 }
 
@@ -109,33 +118,37 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
     riti_context_update_engine(ctx);
   }
 
-  Suggestion *suggestion = riti_get_suggestion_for_key(ctx, key, modifier);
+  suggestion = riti_get_suggestion_for_key(ctx, key, modifier);
 
   bool ret = riti_context_key_handled(ctx);
   LOG_DEBUG("[IM:iBus]: Layout Management %s the event\n", ret ? "accepted" : "rejected");
 
   if(ret) {
-    if(key == VC_BACKSPACE || key == VC_RIGHT || key == VC_LEFT) {
+    if(key == VC_BACKSPACE || key == VC_RIGHT || key == VC_LEFT || key == VC_TAB) {
       switch (key) {
         // We have to care specially when the key is Backspace! :)
         case VC_BACKSPACE:
           if(!riti_suggestion_is_empty(suggestion)) {
-            engine_update_lookup_table(suggestion);
+            engine_update_lookup_table();
           } else {
             engine_reset();
           } 
           break;
         case VC_RIGHT:
           ibus_lookup_table_cursor_down(table);
-          engine_update_preedit(suggestion);
+          engine_update_preedit();
           break;
         case VC_LEFT:
           ibus_lookup_table_cursor_up(table);
-          engine_update_preedit(suggestion);
+          engine_update_preedit();
+          break;
+        case VC_TAB:
+          ibus_lookup_table_cursor_down(table);
+          engine_update_preedit();
           break;
       }
     } else {
-      engine_update_lookup_table(suggestion);
+      engine_update_lookup_table();
     }
   } else {
     if(input_session_ongoing) {
@@ -145,7 +158,6 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
     }
   }
 
-  riti_suggestion_free(suggestion);
   return (gboolean) ret;
 }
 
