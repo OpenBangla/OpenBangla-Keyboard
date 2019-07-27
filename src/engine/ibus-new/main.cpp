@@ -18,6 +18,7 @@ void update_with_settings() {
     qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
     qputenv("RITI_ENTER_CLOSES_PREVIEW_WIN", gSettings->getEnterKeyClosesPrevWin() ? "true" : "false");
     qputenv("RITI_PREVIEW_WIN_HORIZONTAL", gSettings->getCandidateWinHorizontal() ? "true" : "false");
+    qputenv("RITI_PHONETIC_DATABASE_ON", gSettings->getShowCWPhonetic() ? "true" : "false");
     qputenv("RITI_PHONETIC_DATABASE_DIR", DatabasePath().toLatin1());
     qputenv("RITI_LAYOUT_FIXED_VOWEL", gSettings->getAutoVowelFormFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_CHANDRA", gSettings->getAutoChandraPosFixed() ? "true" : "false");
