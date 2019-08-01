@@ -78,6 +78,11 @@ void engine_reset() {
   ibus_engine_hide_lookup_table(engine);
 }
 
+void engine_commit_text(IBusText * text) {
+  ibus_engine_commit_text(engine, text);
+  engine_reset();
+}
+
 void engine_commit() {
   uintptr_t index = 0;
   IBusText *text = nullptr;
@@ -91,9 +96,8 @@ void engine_commit() {
     text = ibus_text_new_from_string(txt);
   }
 
-  ibus_engine_commit_text(engine, text);
+  engine_commit_text(text);
   riti_context_candidate_committed(ctx, index);
-  engine_reset();
 }
 
 /************************************* Callbacks *************************************/
@@ -130,10 +134,9 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   int rawTextKey = gSettings->getCommitRaw();
   if(ctrl_key && rawTextKey != 0 && key == rawTextKey && input_session_ongoing && !riti_suggestion_is_lonely(suggestion)) {
     IBusText *text = ibus_text_new_from_string(riti_suggestion_get_auxiliary_text(suggestion));
-    ibus_engine_commit_text(engine, text);
+    engine_commit_text(text);
     // For notifing that we have committed something.
     riti_context_candidate_committed(ctx, 0);
-    engine_reset();
     return TRUE;
   }
 
@@ -207,6 +210,15 @@ void engine_focus_out_cb(IBusEngine *engine) {
   }
 }
 
+void engine_candidate_clicked_cb(IBusEngine *engine, guint index, guint button, guint state) {
+  IBusText *text = ibus_lookup_table_get_candidate(table, index);
+  engine_commit_text(text);
+  /// Hack: We do this for notifing that user has choosen a different suggestion to be committed.
+  /// We also free it immediately :)
+  riti_suggestion_free(riti_get_suggestion_for_key(ctx, VC_TAB, 0));
+  riti_context_candidate_committed(ctx, index);
+}
+
 IBusEngine *create_engine_cb(IBusFactory *factory,
                                   gchar *engine_name,
                                   gpointer user_data) {
@@ -227,7 +239,7 @@ IBusEngine *create_engine_cb(IBusFactory *factory,
   g_signal_connect(engine, "enable", G_CALLBACK(engine_enable_cb), NULL);
   g_signal_connect(engine, "disable", G_CALLBACK(engine_disable_cb), NULL);
   g_signal_connect(engine, "focus-out", G_CALLBACK(engine_focus_out_cb), NULL);
-  //g_signal_connect(engine, "candidate-clicked", G_CALLBACK(ibus_candidate_clicked_cb), NULL);
+  g_signal_connect(engine, "candidate-clicked", G_CALLBACK(engine_candidate_clicked_cb), NULL);
 
   return engine;
 }
