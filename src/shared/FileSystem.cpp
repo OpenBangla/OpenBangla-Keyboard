@@ -26,6 +26,10 @@ QString AvroPhoneticLayoutPath() {
     return "/usr/share/openbangla-keyboard/layouts/avrophonetic.json";
 }
 
+QString DatabasePath() {
+    return "/usr/share/openbangla-keyboard/data";
+}
+
 QString DictionaryPath() {
     return "/usr/share/openbangla-keyboard/data/dictionary.json";
 }

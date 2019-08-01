@@ -1,0 +1,4 @@
+[submodule "src/engine/riti"]
+	path = src/engine/riti
+	url = https://github.com/OpenBangla/riti.git
+	branch = master

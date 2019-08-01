@@ -57,6 +57,8 @@ QString LayoutsFilePath();
 
 QString AvroPhoneticLayoutPath();
 
+QString DatabasePath();
+
 QString DictionaryPath();
 
 QString SuffixDictPath();

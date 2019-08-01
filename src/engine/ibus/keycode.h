@@ -16,12 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IBUS_KEYCODE_H
-#define IBUS_KEYCODE_H
+#ifndef KEYCODE_H
+#define KEYCODE_H
 
 #include <map>
 #include <ibus.h>
-#include "keycode.h"
+#include "riti.h"
 #include "Log.h"
 
 /* Here we map iBus keycodes with ours.
@@ -197,4 +197,4 @@ int ibus_keycode(guint k) {
   }
 }
 
-#endif /* end of include guard: IBUS_KEYCODE_H */
+#endif /* end of include guard: KEYCODE_H */
