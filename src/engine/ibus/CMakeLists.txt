@@ -1,11 +1,6 @@
-include_directories(. ../../shared ../libengine ${IBUS_INCLUDE_DIRS})
-link_directories(${CMAKE_CURRENT_BINARY_DIR}/libengine)
-
-set(iBus ibus_engine.cpp
-        ibus_keycode.h)
-
-add_executable(ibus-openbangla ${iBus})
-target_link_libraries(ibus-openbangla libEngine Qt5::Core ${IBUS_LIBRARIES})
+include_directories(../riti/include ../../shared ${IBUS_INCLUDE_DIRS})
+add_executable(ibus-openbangla main.cpp)
+target_link_libraries(ibus-openbangla riti libShared Qt5::Core ${IBUS_LIBRARIES} dl pthread)
 
 ## Configure the files
 configure_file(${CMAKE_SOURCE_DIR}/data/openbangla.xml.in ${CMAKE_BINARY_DIR}/data/openbangla.xml)
