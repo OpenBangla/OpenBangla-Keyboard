@@ -43,6 +43,7 @@ target_wrapper.*
 
 # QtCreator
 *.autosave
+*.stash
 
 # QtCreator Qml
 *.qmlproject.user

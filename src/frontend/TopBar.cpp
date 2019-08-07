@@ -48,7 +48,6 @@ TopBar::TopBar(QWidget *parent) :
   aboutDialog = new AboutDialog(Q_NULLPTR);
   layoutViewer = new LayoutViewer(Q_NULLPTR);
   settingsDialog = new SettingsDialog(Q_NULLPTR);
-  autoCorrectDialog = new AutoCorrectDialog(Q_NULLPTR);
 
   ui->buttonIcon->installEventFilter(this);
 
@@ -66,7 +65,6 @@ TopBar::~TopBar() {
   delete layoutViewer;
   delete settingsDialog;
   delete aboutDialog;
-  delete autoCorrectDialog;
 
   delete gLayout;
   delete gSettings;
@@ -121,54 +119,14 @@ void TopBar::SetupPopupMenus() {
   RefreshLayouts();
   connect(layoutMenuInstall, SIGNAL(triggered()), this, SLOT(layoutMenuInstall_clicked()));
 
-  // Settings Popup Menu
-  settingsMenuFixedLayoutAutoVForm = new QAction("Enable \"Automatic Vowel Forming\"", this);
-  settingsMenuFixedLayoutAutoVForm->setCheckable(true);
-  settingsMenuFixedLayoutAutoVForm->setChecked(gSettings->getAutoVowelFormFixed());
-  connect(settingsMenuFixedLayoutAutoVForm, SIGNAL(triggered()), this,
-          SLOT(settingsMenuFixedLayoutAutoVForm_clicked()));
-
-  settingsMenuFixedLayoutAutoChandra = new QAction("Automatically fix \"Chandrabindu\" position", this);
-  settingsMenuFixedLayoutAutoChandra->setCheckable(true);
-  settingsMenuFixedLayoutAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
-  connect(settingsMenuFixedLayoutAutoChandra, SIGNAL(triggered()), this,
-          SLOT(settingsMenuFixedLayoutAutoChandra_clicked()));
-
-  settingsMenuFixedLayoutOldReph = new QAction("Old Style Reph", this);
-  settingsMenuFixedLayoutOldReph->setCheckable(true);
-  settingsMenuFixedLayoutOldReph->setChecked(gSettings->getOldReph());
-  connect(settingsMenuFixedLayoutOldReph, SIGNAL(triggered()), this, SLOT(settingsMenuFixedLayoutOldReph_clicked()));
-
-  settingsMenuFixedLayoutTraditionalKar = new QAction("Enable \"Traditional Kar Joining\"", this);
-  settingsMenuFixedLayoutTraditionalKar->setCheckable(true);
-  settingsMenuFixedLayoutTraditionalKar->setChecked(gSettings->getTraditionalKarFixed());
-  connect(settingsMenuFixedLayoutTraditionalKar, SIGNAL(triggered()), this,
-          SLOT(settingsMenuFixedLayoutTraditionalKar_clicked()));
-
-  settingsMenuFixedLayoutNumberPad = new QAction("Enable Bengali in NumberPad", this);
-  settingsMenuFixedLayoutNumberPad->setCheckable(true);
-  settingsMenuFixedLayoutNumberPad->setChecked(gSettings->getNumberPadFixed());
-  connect(settingsMenuFixedLayoutNumberPad, SIGNAL(triggered()), this,
-          SLOT(settingsMenuFixedLayoutNumberPad_clicked()));
-
-  settingsMenuFixedLayout = new QMenu("Fixed Keyboard Layout Options", this);
-  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoVForm);
-  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutAutoChandra);
-  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutOldReph);
-  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutTraditionalKar);
-  settingsMenuFixedLayout->addAction(settingsMenuFixedLayoutNumberPad);
+  /* Settings Popup Menu
 
   settingsMenuShowDialog = new QAction("Settings", this);
   connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
 
-  settingsMenuAutoCorrect = new QAction("Edit Phonetic AutoCorrect entries", this);
-  connect(settingsMenuAutoCorrect, SIGNAL(triggered()), this, SLOT(settingsMenuAutoCorrect_clicked()));
-
   settingsMenu = new QMenu(this);
-  settingsMenu->addMenu(settingsMenuFixedLayout);
-  settingsMenu->addAction(settingsMenuAutoCorrect);
-  settingsMenu->addSeparator();
   settingsMenu->addAction(settingsMenuShowDialog);
+  */
 
   // About Popup Menu
   aboutMenuLayout = new QAction("About current keyboard layout", this);
@@ -304,34 +262,11 @@ void TopBar::layoutMenuInstall_clicked() {
   RefreshLayouts();
 }
 
-void TopBar::settingsMenuFixedLayoutAutoVForm_clicked() {
-  gSettings->setAutoVowelFormFixed(settingsMenuFixedLayoutAutoVForm->isChecked());
-}
-
-void TopBar::settingsMenuFixedLayoutAutoChandra_clicked() {
-  gSettings->setAutoChandraPosFixed(settingsMenuFixedLayoutAutoChandra->isChecked());
-}
-
-void TopBar::settingsMenuFixedLayoutOldReph_clicked() {
-  gSettings->setOldReph(settingsMenuFixedLayoutOldReph->isChecked());
-}
-
-void TopBar::settingsMenuFixedLayoutTraditionalKar_clicked() {
-  gSettings->setTraditionalKarFixed(settingsMenuFixedLayoutTraditionalKar->isChecked());
-}
-
-void TopBar::settingsMenuFixedLayoutNumberPad_clicked() {
-  gSettings->setNumberPadFixed(settingsMenuFixedLayoutNumberPad->isChecked());
-}
-
-void TopBar::settingsMenuAutoCorrect_clicked() {
-  autoCorrectDialog->show();
-}
-
+/*
 void TopBar::settingsMenuShowDialog_clicked() {
   settingsDialog->updateSettings();
   settingsDialog->show();
-}
+}*/
 
 void TopBar::aboutMenuLayout_clicked() {
   layoutViewer->showLayoutInfoDialog();
@@ -417,9 +352,6 @@ void TopBar::on_buttonViewLayout_clicked() {
 }
 
 void TopBar::on_buttonSettings_clicked() {
-  QPoint point;
-  point = this->pos();
-  point.setX(point.x() + ui->buttonSettings->geometry().x());
-  point.setY(point.y() + this->height());
-  settingsMenu->exec(point);
+  settingsDialog->updateSettings();
+  settingsDialog->show();
 }

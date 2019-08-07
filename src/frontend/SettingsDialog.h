@@ -55,6 +55,8 @@ namespace Ui {
 class SettingsDialog;
 }
 
+class AutoCorrectDialog;
+
 class SettingsDialog : public QDialog {
 Q_OBJECT
 
@@ -77,9 +79,22 @@ private slots:
 
   void on_btnCheckUpdate_toggled(bool checked);
 
+  void on_btnAutoVowel_toggled(bool checked);
+
+  void on_btnKarJoining_toggled(bool checked);
+
+  void on_btnAutoChandra_toggled(bool checked);
+
+  void on_btnOldReph_toggled(bool checked);
+
+  void on_btnNumberpad_toggled(bool checked);
+
+  void on_btnACUpdate_clicked();
+
 private:
   Ui::SettingsDialog *ui;
   QMap<QString, int> rawTextKeys;
+  AutoCorrectDialog *autoCorrectDialog;
 };
 
 #endif // SETTINGSDIALOG_H
