@@ -218,8 +218,8 @@
    <widget class="QPushButton" name="btnClosePrevWin">
     <property name="geometry">
      <rect>
-      <x>301</x>
-      <y>36</y>
+      <x>300</x>
+      <y>80</y>
       <width>101</width>
       <height>25</height>
      </rect>
@@ -235,7 +235,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>80</y>
+      <y>40</y>
       <width>280</width>
       <height>17</height>
      </rect>
@@ -296,7 +296,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>40</y>
+      <y>80</y>
       <width>271</width>
       <height>17</height>
      </rect>
@@ -315,7 +315,7 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>80</y>
+      <y>40</y>
       <width>101</width>
       <height>25</height>
      </rect>

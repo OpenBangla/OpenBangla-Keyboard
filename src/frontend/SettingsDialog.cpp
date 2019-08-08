@@ -60,6 +60,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     {"Ctrl + M", VC_M},
   };
   ui->cmbRawTxt->addItems(rawTextKeys.keys());
+  implementSignals();
   updateSettings();
 }
 
@@ -68,8 +69,48 @@ SettingsDialog::~SettingsDialog() {
   delete ui;
 }
 
+void SettingsDialog::implementSignals() {
+  // Phonetic Keyboard Layout Group.
+  connect(ui->btnShowPrevWin, &QPushButton::toggled, [=](bool checked) {
+    ui->btnShowPrevWin->setText(checked ? "On" : "Off");
+    // Control other Preview window related settings.
+    ui->btnClosePrevWin->setEnabled(checked);
+    ui->cmbOrientation->setEnabled(checked);
+    ui->cmbRawTxt->setEnabled(checked);
+    ui->btnACUpdate->setEnabled(checked);
+  });
+  connect(ui->btnClosePrevWin, &QPushButton::toggled, [=](bool checked) {
+    ui->btnClosePrevWin->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnACUpdate, &QPushButton::clicked, [=]() {
+    autoCorrectDialog->open();
+  });
+
+  // Fixed Keyboard Layout Group.
+  connect(ui->btnAutoVowel, &QPushButton::toggled, [=](bool checked) {
+    ui->btnAutoVowel->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnKarJoining, &QPushButton::toggled, [=](bool checked) {
+    ui->btnKarJoining->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnAutoChandra, &QPushButton::toggled, [=](bool checked) {
+    ui->btnAutoChandra->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnOldReph, &QPushButton::toggled, [=](bool checked) {
+    ui->btnOldReph->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnNumberpad, &QPushButton::toggled, [=](bool checked) {
+    ui->btnNumberpad->setText(checked ? "On" : "Off");
+  });
+
+  // General 
+  connect(ui->btnCheckUpdate, &QPushButton::toggled, [=](bool checked) {
+    ui->btnCheckUpdate->setText(checked ? "On" : "Off");
+  });
+}
+
 void SettingsDialog::updateSettings() {
-  // Phonetic Keyboard Layout
+  // Phonetic Keyboard Layout Group.
   ui->btnClosePrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
   ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
@@ -80,7 +121,7 @@ void SettingsDialog::updateSettings() {
     ui->cmbRawTxt->setCurrentText(rawTextKeys.keys(rawTextKey).first());
   }
 
-  // Fixed Keyboard Layout
+  // Fixed Keyboard Layout Group.
   ui->btnAutoVowel->setChecked(gSettings->getAutoVowelFormFixed());
   ui->btnAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   ui->btnOldReph->setChecked(gSettings->getOldReph());
@@ -91,7 +132,7 @@ void SettingsDialog::updateSettings() {
 }
 
 void SettingsDialog::on_buttonBox_accepted() {
-  // Phonetic Keyboard Layout
+  // Phonetic Keyboard Layout Group.
   gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
   gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
@@ -102,7 +143,7 @@ void SettingsDialog::on_buttonBox_accepted() {
     gSettings->setCommitRaw(rawTextKeys.value(rawTextKey));
   }
 
-  // Fixed Keyboard Layout
+  // Fixed Keyboard Layout Group.
   gSettings->setAutoVowelFormFixed(ui->btnAutoVowel->isChecked());
   gSettings->setAutoChandraPosFixed(ui->btnAutoChandra->isChecked());
   gSettings->setOldReph(ui->btnOldReph->isChecked());
@@ -114,46 +155,4 @@ void SettingsDialog::on_buttonBox_accepted() {
 
 void SettingsDialog::on_buttonBox_rejected() {
   SettingsDialog::close();
-}
-
-void SettingsDialog::on_btnClosePrevWin_toggled(bool checked) {
-  ui->btnClosePrevWin->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnShowPrevWin_toggled(bool checked) {
-  ui->btnShowPrevWin->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnCheckUpdate_toggled(bool checked) {
-  ui->btnCheckUpdate->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnAutoVowel_toggled(bool checked)
-{
-  ui->btnAutoVowel->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnKarJoining_toggled(bool checked)
-{
-  ui->btnKarJoining->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnAutoChandra_toggled(bool checked)
-{
-  ui->btnAutoChandra->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnOldReph_toggled(bool checked)
-{
-  ui->btnOldReph->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnNumberpad_toggled(bool checked)
-{
-  ui->btnNumberpad->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnACUpdate_clicked()
-{
-  autoCorrectDialog->show();
 }
