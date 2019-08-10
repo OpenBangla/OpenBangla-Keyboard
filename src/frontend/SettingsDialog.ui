@@ -414,7 +414,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Automacitc Check for Update</string>
+          <string>Automatically Check for Updates:</string>
          </property>
         </widget>
        </item>
@@ -427,7 +427,13 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>On</string>
+          <string>Off</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
