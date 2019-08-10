@@ -55,6 +55,8 @@ namespace Ui {
 class SettingsDialog;
 }
 
+class AutoCorrectDialog;
+
 class SettingsDialog : public QDialog {
 Q_OBJECT
 
@@ -71,15 +73,12 @@ private slots:
 
   void on_buttonBox_rejected();
 
-  void on_btnClosePrevWin_toggled(bool checked);
-
-  void on_btnShowPrevWin_toggled(bool checked);
-
-  void on_btnCheckUpdate_toggled(bool checked);
-
 private:
   Ui::SettingsDialog *ui;
   QMap<QString, int> rawTextKeys;
+  AutoCorrectDialog *autoCorrectDialog;
+
+  void implementSignals();
 };
 
 #endif // SETTINGSDIALOG_H

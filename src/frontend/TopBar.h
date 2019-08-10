@@ -64,19 +64,7 @@ private slots:
 
   void layoutMenuInstall_clicked();
 
-  void settingsMenuAutoCorrect_clicked();
-
-  void settingsMenuFixedLayoutAutoVForm_clicked();
-
-  void settingsMenuFixedLayoutAutoChandra_clicked();
-
-  void settingsMenuFixedLayoutOldReph_clicked();
-
-  void settingsMenuFixedLayoutTraditionalKar_clicked();
-
-  void settingsMenuFixedLayoutNumberPad_clicked();
-
-  void settingsMenuShowDialog_clicked();
+  //void settingsMenuShowDialog_clicked();
 
   void aboutMenuLayout_clicked();
 
@@ -109,7 +97,6 @@ private:
   AboutDialog *aboutDialog;
   LayoutViewer *layoutViewer;
   SettingsDialog *settingsDialog;
-  AutoCorrectDialog *autoCorrectDialog;
 
   /* Layout Popup Menu */
   QMenu *layoutMenu;
@@ -119,16 +106,9 @@ private:
   QAction *layoutMenuLayouts[MaxLayoutFiles];
   QActionGroup *layoutMenuLayoutsGroup;
   QAction *layoutMenuInstall;
-  /* Settings Popup Menu */
+  /* Settings Popup Menu 
   QMenu *settingsMenu;
-  QAction *settingsMenuAutoCorrect;
-  QAction *settingsMenuShowDialog;
-  QMenu *settingsMenuFixedLayout;
-  QAction *settingsMenuFixedLayoutAutoVForm;
-  QAction *settingsMenuFixedLayoutAutoChandra;
-  QAction *settingsMenuFixedLayoutOldReph;
-  QAction *settingsMenuFixedLayoutTraditionalKar;
-  QAction *settingsMenuFixedLayoutNumberPad;
+  QAction *settingsMenuShowDialog;*/
   /* About Popup Menu */
   QMenu *aboutMenu;
   QAction *aboutMenuLayout;

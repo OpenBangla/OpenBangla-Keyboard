@@ -19,11 +19,13 @@
 #include "SettingsDialog.h"
 #include "ui_SettingsDialog.h"
 #include "Settings.h"
+#include "AutoCorrectDialog.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SettingsDialog) {
   ui->setupUi(this);
+  autoCorrectDialog = new AutoCorrectDialog(this);
 
   this->setFixedSize(QSize(this->width(), this->height()));
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
@@ -58,51 +60,99 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     {"Ctrl + M", VC_M},
   };
   ui->cmbRawTxt->addItems(rawTextKeys.keys());
+  implementSignals();
   updateSettings();
 }
 
 SettingsDialog::~SettingsDialog() {
+  delete autoCorrectDialog;
   delete ui;
 }
 
+void SettingsDialog::implementSignals() {
+  // Phonetic Keyboard Layout Group.
+  connect(ui->btnShowPrevWin, &QPushButton::toggled, [=](bool checked) {
+    ui->btnShowPrevWin->setText(checked ? "On" : "Off");
+    // Control other Preview window related settings.
+    ui->btnClosePrevWin->setEnabled(checked);
+    ui->cmbOrientation->setEnabled(checked);
+    ui->cmbRawTxt->setEnabled(checked);
+    ui->btnACUpdate->setEnabled(checked);
+  });
+  connect(ui->btnClosePrevWin, &QPushButton::toggled, [=](bool checked) {
+    ui->btnClosePrevWin->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnACUpdate, &QPushButton::clicked, [=]() {
+    autoCorrectDialog->open();
+  });
+
+  // Fixed Keyboard Layout Group.
+  connect(ui->btnAutoVowel, &QPushButton::toggled, [=](bool checked) {
+    ui->btnAutoVowel->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnKarJoining, &QPushButton::toggled, [=](bool checked) {
+    ui->btnKarJoining->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnAutoChandra, &QPushButton::toggled, [=](bool checked) {
+    ui->btnAutoChandra->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnOldReph, &QPushButton::toggled, [=](bool checked) {
+    ui->btnOldReph->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnNumberpad, &QPushButton::toggled, [=](bool checked) {
+    ui->btnNumberpad->setText(checked ? "On" : "Off");
+  });
+
+  // General 
+  connect(ui->btnCheckUpdate, &QPushButton::toggled, [=](bool checked) {
+    ui->btnCheckUpdate->setText(checked ? "On" : "Off");
+  });
+}
+
 void SettingsDialog::updateSettings() {
+  // Phonetic Keyboard Layout Group.
   ui->btnClosePrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
   ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
-  ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
   int rawTextKey = gSettings->getCommitRaw();
   if(rawTextKey == 0) {
     ui->cmbRawTxt->setCurrentText("None");
   } else {
     ui->cmbRawTxt->setCurrentText(rawTextKeys.keys(rawTextKey).first());
   }
+
+  // Fixed Keyboard Layout Group.
+  ui->btnAutoVowel->setChecked(gSettings->getAutoVowelFormFixed());
+  ui->btnAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
+  ui->btnOldReph->setChecked(gSettings->getOldReph());
+  ui->btnKarJoining->setChecked(gSettings->getTraditionalKarFixed());
+  ui->btnNumberpad->setChecked(gSettings->getNumberPadFixed());
+
+  ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
 }
 
 void SettingsDialog::on_buttonBox_accepted() {
+  // Phonetic Keyboard Layout Group.
   gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
   gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
-  gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
   QString rawTextKey = ui->cmbRawTxt->currentText();
   if(rawTextKey == "None") {
     gSettings->setCommitRaw(0);
   } else {
     gSettings->setCommitRaw(rawTextKeys.value(rawTextKey));
   }
+
+  // Fixed Keyboard Layout Group.
+  gSettings->setAutoVowelFormFixed(ui->btnAutoVowel->isChecked());
+  gSettings->setAutoChandraPosFixed(ui->btnAutoChandra->isChecked());
+  gSettings->setOldReph(ui->btnOldReph->isChecked());
+  gSettings->setTraditionalKarFixed(ui->btnKarJoining->isChecked());
+  gSettings->setNumberPadFixed(ui->btnNumberpad->isChecked());
+
+  gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
 }
 
 void SettingsDialog::on_buttonBox_rejected() {
   SettingsDialog::close();
-}
-
-void SettingsDialog::on_btnClosePrevWin_toggled(bool checked) {
-  ui->btnClosePrevWin->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnShowPrevWin_toggled(bool checked) {
-  ui->btnShowPrevWin->setText(checked ? "On" : "Off");
-}
-
-void SettingsDialog::on_btnCheckUpdate_toggled(bool checked) {
-  ui->btnCheckUpdate->setText(checked ? "On" : "Off");
 }
