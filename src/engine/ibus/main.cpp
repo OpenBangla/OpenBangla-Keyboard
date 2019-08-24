@@ -203,7 +203,7 @@ void engine_disable_cb(IBusEngine *engine) {
 }
 
 void engine_focus_out_cb(IBusEngine *engine) {
-  LOG_INFO("[IM:iBus]: IM Focus out\n");
+  LOG_DEBUG("[IM:iBus]: IM Focus out\n");
 
   if(input_session_ongoing) {
     engine_commit();
