@@ -19,7 +19,8 @@ void update_with_settings() {
     qputenv("RITI_ENTER_CLOSES_PREVIEW_WIN", gSettings->getEnterKeyClosesPrevWin() ? "true" : "false");
     qputenv("RITI_PREVIEW_WIN_HORIZONTAL", gSettings->getCandidateWinHorizontal() ? "true" : "false");
     qputenv("RITI_PHONETIC_DATABASE_ON", gSettings->getShowCWPhonetic() ? "true" : "false");
-    qputenv("RITI_PHONETIC_DATABASE_DIR", DatabasePath().toLatin1());
+    qputenv("RITI_DATABASE_DIR", DatabasePath().toLatin1());
+    qputenv("RITI_LAYOUT_FIXED_DATABASE_ON", "true");
     qputenv("RITI_LAYOUT_FIXED_VOWEL", gSettings->getAutoVowelFormFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_CHANDRA", gSettings->getAutoChandraPosFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_KAR", gSettings->getTraditionalKarFixed() ? "true" : "false");
@@ -229,7 +230,7 @@ IBusEngine *create_engine_cb(IBusFactory *factory,
                            ibus_bus_get_connection(bus));
 
   // Setup Lookup table
-  table = ibus_lookup_table_new(9, 0, TRUE, TRUE);
+  table = ibus_lookup_table_new(10, 0, TRUE, TRUE);
   g_object_ref_sink(table);
 
   LOG_INFO("[IM:iBus]: Creating IM Engine\n");
