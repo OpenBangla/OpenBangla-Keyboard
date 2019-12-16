@@ -84,9 +84,9 @@ public:
 
   bool getUpdateCheck();
 
-  void setCommitRaw(int key);
+  void setIncludeEnglishPrevWin(bool b);
 
-  int getCommitRaw();
+  bool getIncludeEnglishPrevWin();
 };
 
 /* Global */

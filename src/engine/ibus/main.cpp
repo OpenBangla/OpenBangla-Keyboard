@@ -19,6 +19,7 @@ void update_with_settings() {
     qputenv("RITI_ENTER_CLOSES_PREVIEW_WIN", gSettings->getEnterKeyClosesPrevWin() ? "true" : "false");
     qputenv("RITI_PREVIEW_WIN_HORIZONTAL", gSettings->getCandidateWinHorizontal() ? "true" : "false");
     qputenv("RITI_PHONETIC_DATABASE_ON", gSettings->getShowCWPhonetic() ? "true" : "false");
+    qputenv("RITI_PHONETIC_INCLUDE_ENGLISH", gSettings->getIncludeEnglishPrevWin() ? "true" : "false");
     qputenv("RITI_DATABASE_DIR", DatabasePath().toLatin1());
     qputenv("RITI_LAYOUT_FIXED_DATABASE_ON", "true");
     qputenv("RITI_LAYOUT_FIXED_VOWEL", gSettings->getAutoVowelFormFixed() ? "true" : "false");
@@ -129,16 +130,6 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   if(!input_session_ongoing) {
     update_with_settings();
     riti_context_update_engine(ctx);
-  }
-
-  // Commit the preedit buffer(raw text) when the user configured key is pressed.
-  int rawTextKey = gSettings->getCommitRaw();
-  if(ctrl_key && rawTextKey != 0 && key == rawTextKey && input_session_ongoing && !riti_suggestion_is_lonely(suggestion)) {
-    IBusText *text = ibus_text_new_from_string(riti_suggestion_get_auxiliary_text(suggestion));
-    engine_commit_text(text);
-    // For notifing that we have committed something.
-    riti_context_candidate_committed(ctx, 0);
-    return TRUE;
   }
 
   suggestion = riti_get_suggestion_for_key(ctx, key, modifier);

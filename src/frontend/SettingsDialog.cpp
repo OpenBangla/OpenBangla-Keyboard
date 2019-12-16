@@ -29,37 +29,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
   this->setFixedSize(QSize(this->width(), this->height()));
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
-  ui->cmbRawTxt->addItem("None");
-  rawTextKeys = {
-    {"Ctrl + Q", VC_Q},
-    {"Ctrl + W", VC_W},
-    {"Ctrl + E", VC_E},
-    {"Ctrl + R", VC_R},
-    {"Ctrl + T", VC_T},
-    {"Ctrl + Y", VC_Y},
-    {"Ctrl + U", VC_U},
-    {"Ctrl + I", VC_I},
-    {"Ctrl + O", VC_O},
-    {"Ctrl + P", VC_P},
-    {"Ctrl + A", VC_A},
-    {"Ctrl + S", VC_S},
-    {"Ctrl + D", VC_D},
-    {"Ctrl + F", VC_F},
-    {"Ctrl + G", VC_G},
-    {"Ctrl + H", VC_H},
-    {"Ctrl + J", VC_J},
-    {"Ctrl + K", VC_K},
-    {"Ctrl + L", VC_L},
-    {"Ctrl + Z", VC_Z},
-    {"Ctrl + X", VC_X},
-    {"Ctrl + C", VC_C},
-    {"Ctrl + V", VC_V},
-    {"Ctrl + B", VC_B},
-    {"Ctrl + V", VC_V},
-    {"Ctrl + N", VC_N},
-    {"Ctrl + M", VC_M},
-  };
-  ui->cmbRawTxt->addItems(rawTextKeys.keys());
+
   implementSignals();
   updateSettings();
 }
@@ -76,11 +46,14 @@ void SettingsDialog::implementSignals() {
     // Control other Preview window related settings.
     ui->btnClosePrevWin->setEnabled(checked);
     ui->cmbOrientation->setEnabled(checked);
-    ui->cmbRawTxt->setEnabled(checked);
+    ui->btnIncludeEnglishPrevWin->setEnabled(checked);
     ui->btnACUpdate->setEnabled(checked);
   });
   connect(ui->btnClosePrevWin, &QPushButton::toggled, [=](bool checked) {
     ui->btnClosePrevWin->setText(checked ? "On" : "Off");
+  });
+  connect(ui->btnIncludeEnglishPrevWin, &QPushButton::toggled, [=](bool checked) {
+    ui->btnIncludeEnglishPrevWin->setText(checked ? "On" : "Off");
   });
   connect(ui->btnACUpdate, &QPushButton::clicked, [=]() {
     autoCorrectDialog->open();
@@ -114,12 +87,7 @@ void SettingsDialog::updateSettings() {
   ui->btnClosePrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
   ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
-  int rawTextKey = gSettings->getCommitRaw();
-  if(rawTextKey == 0) {
-    ui->cmbRawTxt->setCurrentText("None");
-  } else {
-    ui->cmbRawTxt->setCurrentText(rawTextKeys.keys(rawTextKey).first());
-  }
+  ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getIncludeEnglishPrevWin());
 
   // Fixed Keyboard Layout Group.
   ui->btnAutoVowel->setChecked(gSettings->getAutoVowelFormFixed());
@@ -136,12 +104,7 @@ void SettingsDialog::on_buttonBox_accepted() {
   gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
   gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
-  QString rawTextKey = ui->cmbRawTxt->currentText();
-  if(rawTextKey == "None") {
-    gSettings->setCommitRaw(0);
-  } else {
-    gSettings->setCommitRaw(rawTextKeys.value(rawTextKey));
-  }
+  gSettings->setIncludeEnglishPrevWin(ui->btnIncludeEnglishPrevWin->isChecked());
 
   // Fixed Keyboard Layout Group.
   gSettings->setAutoVowelFormFixed(ui->btnAutoVowel->isChecked());
