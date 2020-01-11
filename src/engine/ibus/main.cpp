@@ -286,6 +286,7 @@ void start_setup(bool ibus) {
 
 int main(int argc, char* argv[]) {
     gSettings = new Settings();
+    UserFolders folders;
     update_with_settings();
     initKeycode();
     ctx = riti_context_new();
