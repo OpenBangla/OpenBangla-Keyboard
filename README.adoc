@@ -75,6 +75,9 @@ wget -nv -O- https://bit.ly/OBK-sh | bash
 
 If this does not workout for you please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue]. While we look into the problem you can check the https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[Wiki] for Distrowise/Distro-specific Install Instructions. After you have installed OpenBangla Keyboard, you will need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
 
+== Community
+We are on https://discord.gg/HXK7QnJ[Discord] and Our https://www.facebook.com/openbanglakeyboard[Facebook page].
+
 == Compiling on GNU/Linux
 
 OpenBangla Keyboard currently needs following libraries and binaries
