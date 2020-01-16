@@ -100,7 +100,7 @@ sudo dnf install @buildsys-build rust cargo cmake qt5-qtdeclarative-devel ibus-d
 ```
 On a Arch Linux / Arch Based system you can easily install them like this
 ```bash
-sudo pacman -Sy base-devel rust cmake qt5-base libibus
+sudo pacman -S base-devel rust cmake qt5-base libibus
 ```
 
 After you have installed required libraries and binaries. Clone this repository `git clone --recursive https://github.com/OpenBangla/OpenBangla-Keyboard.git` and change the directory to the cloned folder and issue the commands:
