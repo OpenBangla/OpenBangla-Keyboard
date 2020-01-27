@@ -1,0 +1,49 @@
+name: CI
+on: [push, pull_request]
+# each job runs in parallel in separate VMs, so pre-build steps have to run for all jobs
+jobs:
+  build-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: checkout-submodules
+        run: git submodule update --init --recursive
+      - name: update-system
+        run: sudo apt-get update -qq
+      - name: install-required
+        run: sudo apt-get install libibus-1.0-dev qt5-default rustc cargo
+      - name: build
+        env:
+          CXX: g++
+          CXX_FOR_BUILD: g++
+          CC: gcc
+          CC_FOR_BUILD: gcc
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+  build-clang:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: checkout-submodules
+        run: git submodule update --init --recursive
+      - name: update-system
+        run: sudo apt-get update -qq
+      - name: install-required
+        run: sudo apt-get install libibus-1.0-dev qt5-default rustc cargo
+      - name: build
+        env:
+          CXX: clang++
+          CXX_FOR_BUILD: clang++
+          CC: clang
+          CC_FOR_BUILD: clang
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
