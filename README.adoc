@@ -33,7 +33,7 @@ So Avro Keyboard users will feel at home with OpenBangla Keyboard in Linux.
 
 OpenBangla Keyboard is the default Bangla writing software for http://www.magpieos.net[MagpieOS], a Bangladeshi Linux distribution.
 
-image:https://img.shields.io/github/workflow/status/OpenBangla/OpenBangla-Keyboard/CI[GitHub Workflow Status (branch)] {nbsp}
+image:https://github.com/OpenBangla/OpenBangla-Keyboard/workflows/CI/badge.svg[CI, link=https://github.com/OpenBangla/OpenBangla-Keyboard/actions?query=workflow%3ACI+branch%3Amaster] {nbsp}
 image:https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg[Downloads, link=https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg] {nbsp}
 image:https://img.shields.io/discord/436879388362014740.svg[Discord, link=https://discord.gg/HXK7QnJ]
 
