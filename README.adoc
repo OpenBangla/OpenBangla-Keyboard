@@ -15,6 +15,10 @@ endif::[]
 :toc:
 :toc-placement!:
 
+++++
+<p align=right>(<a href="README.bn.adoc"><b>বাংলায় পড়ুন</b></a>)</p>
+++++
+
 //HTML for formating the logo
 
 ++++
@@ -78,7 +82,7 @@ wget -nv -O- https://bit.ly/OBK-sh | bash
 
 Then use iBus UI or run `ibus-setup` to add and activate **OpenBangla Keyboard** as input method.
 
- After you have installed OpenBangla Keyboard, you may need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
+After you have installed OpenBangla Keyboard, you may need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
 
 If this does not work out for you, please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue]. While we look into the problem, you can check the https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[Wiki] for distro-specific install instructions.
 
