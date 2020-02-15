@@ -6,9 +6,7 @@ RELEASE_STUB="OpenBangla-Keyboard_${RELEASE_VERSION}-"
 makeDeb () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
     apt-get -y install build-essential cmake libibus-1.0-dev qt5-default rustc cargo ninja-build curl
-    git clone https://github.com/OpenBangla/OpenBangla-Keyboard.git /src
-    git -C /src submodule update --init --recursive
-    cmake -H/src -B/build -GNinja -DCPACK_GENERATOR=DEB
+    cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCPACK_GENERATOR=DEB
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
 }
@@ -16,9 +14,7 @@ makeDeb () {
 makeRpm () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
     dnf install -y --allowerasing @buildsys-build cmake ibus-devel qt5-qtdeclarative-devel rust cargo ninja-build
-    git clone https://github.com/OpenBangla/OpenBangla-Keyboard.git /src
-    git -C /src submodule update --init --recursive
-    cmake -H/src -B/build -GNinja -DCPACK_GENERATOR=RPM
+    cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCPACK_GENERATOR=RPM
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
 }
@@ -30,11 +26,12 @@ makeArch () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}${PKGEXT}"
     pacman -S --noconfirm --needed base-devel cmake libibus qt5-base rust curl
     mkdir /build
-    sed -i "/pkgname=/a pkgver=\"${RELEASE_VERSION}\"" PKGBUILD.stub
-    cp PKGBUILD.stub /build/PKGBUILD
+    cd /build
+    cp -fpr "$GITHUB_WORKSPACE" /build/src
+    cp "${GITHUB_WORKSPACE}/tools/PKGBUILD.stub" /build/PKGBUILD
+    sed -i "/pkgname=/a pkgver=\"${RELEASE_VERSION}\"" /build/PKGBUILD
     useradd -m builder
     chown -R builder:builder /build
-    cd /build
     sudo -u builder makepkg -fd --skipinteg
     mv openbangla-keyboard-*${PKGEXT} ${RELEASE_FILENAME}
     RELEASE_FILE=$(realpath "${RELEASE_FILENAME}")
@@ -65,3 +62,4 @@ if [ $DEPLOY == true ]; then
     mkdir "$DEPLOY_PATH"
     mv "$RELEASE_FILE" "${DEPLOY_PATH}/"
 fi
+
