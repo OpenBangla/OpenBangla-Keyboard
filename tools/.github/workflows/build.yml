@@ -1,0 +1,63 @@
+name: BUILDMAN
+
+on: [push, pull_request]
+
+jobs:
+
+  build:
+    strategy:
+      matrix:
+        container: [ "ubuntu:16.04", "ubuntu:18.04", "ubuntu:19.04", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "archlinux:latest" ]
+    runs-on: [ "ubuntu-latest" ]
+    container:
+      image: ${{ matrix.container }}
+      env:
+        DIST: ${{ matrix.container }}
+    env:
+      DEPLOY: ${{ contains(github.event.head_commit.message, 'deploy+') }}
+    steps:
+      - name: checkout-buildman
+        uses: actions/checkout@v1
+      - name: run-buildman
+        shell: bash
+        run: ./build.sh
+      - name: upload-artifacts
+        if: contains(github.event.head_commit.message, 'deploy+')
+        uses: actions/upload-artifact@v1
+        with:
+          name: package-archives
+          path: artifact
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'deploy+')
+    runs-on: [ "ubuntu-latest" ]
+    container:
+      image: "archlinux:latest"
+    env:
+      BINTRAY_USER: ${{ github.actor }}
+      BINTRAY_APIKEY: ${{ secrets.BINTRAY_APIKEY }}
+      BINTRAY_GPG_DATA: ${{ secrets.GPG_DATA }}
+      BINTRAY_GPG_ID: ${{ secrets.GPG_ID }}
+      JFROG_CLI_OFFER_CONFIG: false
+    steps:
+      - name: checkout-buildman
+        uses: actions/checkout@v1
+      - name: install-jfrog-cli
+        uses: jfrog/setup-jfrog-cli@v1
+      - name: download-artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: package-archives
+          path: artifact
+      - name: bintray-publish
+        shell: bash
+        run: ./publish.sh
+      # - name: github-publish
+      #   uses: actions/github-script@0.4.0
+      #   with:
+      #     github-token: ${{ secrets.BUILDMAN_GITHUB_TOKEN }}
+      #     # script is a nodejs function body :/
+      #     script: |
+      #       return true
+
