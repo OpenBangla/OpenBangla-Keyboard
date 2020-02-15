@@ -2,7 +2,7 @@
 ORG='openbangla'
 PACKAGE='openbangla-keyboard'
 REPOLIST=(ubuntu debian fedora archlinux)
-RELEASE_VERSION=$(cat "`dirname $0`/version.txt")
+RELEASE_VERSION=$(grep "^project(" CMakeLists.txt | cut -d\  -f3 | cut -d\) -f1)
 jfrog bt config --user "$BINTRAY_USER" --key "$BINTRAY_APIKEY" --licenses 'GPL-3.0'
 cd artifact
 

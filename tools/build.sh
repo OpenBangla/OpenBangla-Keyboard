@@ -1,5 +1,5 @@
 #! /bin/bash
-RELEASE_VERSION=$(cat "`dirname $0`/version.txt")
+RELEASE_VERSION=$(grep "^project(" CMakeLists.txt | cut -d\  -f3 | cut -d\) -f1)
 # follow cmake PACKAGE_FILE_NAME directive in main repo
 RELEASE_STUB="OpenBangla-Keyboard_${RELEASE_VERSION}-"
 
