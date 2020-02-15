@@ -1,26 +1,29 @@
-name: BUILDMAN
+name: DEPLOY
 
-on: [push, pull_request]
+on: push
 
 jobs:
 
   build:
+    if: contains(github.event.head_commit.message, 'deploy+')
     strategy:
       matrix:
         container: [ "ubuntu:16.04", "ubuntu:18.04", "ubuntu:19.04", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "archlinux:latest" ]
-    runs-on: [ "ubuntu-latest" ]
+    runs-on: "ubuntu-latest"
     container:
       image: ${{ matrix.container }}
       env:
         DIST: ${{ matrix.container }}
     env:
-      DEPLOY: ${{ contains(github.event.head_commit.message, 'deploy+') }}
+      DEPLOY: ${{ true }}
     steps:
-      - name: checkout-buildman
+      - name: checkout-source
         uses: actions/checkout@v1
-      - name: run-buildman
+        with:
+          submodules: recursive
+      - name: run-builder
         shell: bash
-        run: ./build.sh
+        run: ./tools/build.sh
       - name: upload-artifacts
         if: contains(github.event.head_commit.message, 'deploy+')
         uses: actions/upload-artifact@v1
@@ -30,8 +33,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'deploy+')
-    runs-on: [ "ubuntu-latest" ]
+    runs-on: "ubuntu-latest"
     container:
       image: "archlinux:latest"
     env:
@@ -41,8 +43,10 @@ jobs:
       BINTRAY_GPG_ID: ${{ secrets.GPG_ID }}
       JFROG_CLI_OFFER_CONFIG: false
     steps:
-      - name: checkout-buildman
+      - name: checkout-source
         uses: actions/checkout@v1
+        with:
+          submodules: recursive
       - name: install-jfrog-cli
         uses: jfrog/setup-jfrog-cli@v1
       - name: download-artifacts
@@ -52,7 +56,7 @@ jobs:
           path: artifact
       - name: bintray-publish
         shell: bash
-        run: ./publish.sh
+        run: ./tools/publish.sh
       # - name: github-publish
       #   uses: actions/github-script@0.4.0
       #   with:
