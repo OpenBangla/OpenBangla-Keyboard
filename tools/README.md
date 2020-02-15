@@ -1,6 +1,6 @@
 # buildman
-Build OpenBangla Keyboard packages for various distribution.
+Builds OpenBangla Keyboard packages for various distributions.
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bdeshi/openbangla-keyboard-buildman/buildman/gh-actions)
-
-To deploy the build artifacts, the commit message would need `deploy+` to be present.
+- To build and deploy package installers, commit message must
+include the string `deploy+`.
+- Otherwise, a lightweight C/I workflow runs by default.
