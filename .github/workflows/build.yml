@@ -56,3 +56,48 @@ jobs:
       - name: bintray-publish
         shell: bash
         run: ./tools/publish.sh
+
+  release:
+    needs: deploy
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v1
+      - name: get-version
+        id: get_version
+        shell: bash
+        run: |
+          RELEASE_VERSION=$(cat version.txt | head -n1)
+          echo ::set-output name=RELEASE_VERSION::$RELEASE_VERSION
+      - name: download-artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: package-archives
+          path: artifact
+      - name: create-release-bundle
+        shell: bash
+        run: |
+          zip -j9 installers.zip artifact/*
+      - name: create-release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
+          release_name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
+          body: |
+            [![Github Releases (by Release)](https://img.shields.io/github/downloads/${{ github.repository }}/${{ steps.get_version.outputs.RELEASE_VERSION }}/total.svg)]()
+            ### Changes in this release:
+            - ...
+          draft: false
+      - name: upload-release-asset
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: installers.zip
+          asset_name: installers.zip
+          asset_content_type: application/zip
