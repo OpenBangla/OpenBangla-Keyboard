@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-# ties to RELEASE_VERSION grepper in tools/{build,publish}.sh
-project(OpenBangla-Keyboard VERSION 1.5.1)
+file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
+project("OpenBangla-Keyboard" VERSION ${VERSION_STRING})
 set(APP_NAME "OpenBangla-Keyboard")
 
 ## Set versions
