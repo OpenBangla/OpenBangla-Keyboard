@@ -25,7 +25,6 @@ jobs:
         shell: bash
         run: ./tools/build.sh
       - name: upload-artifacts
-        if: contains(github.event.head_commit.message, 'deploy+')
         uses: actions/upload-artifact@v1
         with:
           name: package-archives
@@ -57,11 +56,3 @@ jobs:
       - name: bintray-publish
         shell: bash
         run: ./tools/publish.sh
-      # - name: github-publish
-      #   uses: actions/github-script@0.4.0
-      #   with:
-      #     github-token: ${{ secrets.BUILDMAN_GITHUB_TOKEN }}
-      #     # script is a nodejs function body :/
-      #     script: |
-      #       return true
-
