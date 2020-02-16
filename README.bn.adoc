@@ -67,18 +67,59 @@ toc::[]
   ** চন্দ্রবিন্দুর অবস্থান সংশোধন।
 
 
-== ইনস্টল
+== ইনস্টল  পদ্ধতি
 
-WARNING: ওপেনবাংলা কিবোর্ড ১.২.০ অথবা পূর্ববর্তী সংস্করণ ইনস্টল করা থাকলে সেটি প্রথমে আনইনস্টল করে নিন।
+IMPORTANT: ওপেনবাংলা কিবোর্ড ১.২.০ অথবা পূর্ববর্তী সংস্করণ ইনস্টল করা থাকলে সেটি প্রথমে আনইনস্টল করে নিন।
 
-ইনস্টলের সময় **কার্যকর ইন্টারনেট সংযোগ** প্রয়োজন।
+প্রথমে আপনার ডিস্ট্রোর জন্য আমাদের রিপজিটরি যোগ করুন, তারপর  আপনার প্যাকেজ ম্যানেজার দিয়ে স্বাভাবিকভাবে ইনস্টল করতে পারবেন।
 
-ওপেনবাংলা কিবোর্ড ইন্সটল করার জন্য টার্মিনাল উইন্ডো খুলে এই কমান্ডটি রান করুন:
-```bash
-wget -nv -O- https://bit.ly/OBK-sh | bash
+=== উবুন্টু এবং উবুন্টু-ভিত্তিক ডিস্ট্রো
+নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
+```
+DIST=YOUR_DISTNAME
+curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
+curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$DIST/" | sudo tee /etc/sources.list.d/openbangla.list
+sudo apt-get update
+```
+WARNING: এখানে `YOUR_DISTNAME` এর জায়গায় আপনার ডিস্ট্রোর _বেজ উবুন্টু কোডনেম_ বসাতে হবে, যেমন: `bionic`, `focal`, ইত্যাদি।
+
+=== ডেবিয়ান
+নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
+```
+DIST=YOUR_DISTNAME
+curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
+curl https://dl.bintray.com/openbangla/i/debian.conf | sed "s/@NAME@/$DIST/" | sudo tee /etc/sources.list.d/openbangla.list
+sudo apt-get update
+```
+WARNING: এখানে `YOUR_DISTNAME` এর জায়গায় আপনার ডিস্ট্রোর _কোডনেম_ বসাতে হবে, যেমন: `stretch`, `buster`, ইত্যাদি।
+
+=== ফেদোরা
+নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
+```
+sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
+curl https://dl.bintray.com/openbangla/i/fedora.conf | sudo tee /etc/yum.repos.d/openbangla.repo
 ```
 
-এরপর আইবাসের উইন্ডো থেকে অথবা `ibus-setup` কমান্ডের মাধ্যমে **OpenBangla Keyboard** ইনপুট পদ্ধতি হিসেবে যোগ করে নিন।
+=== আর্চলিনাক্স
+নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
+```
+sudo pacman-key -r 0x00F3092A45393EC8
+sudo pacman-key -lsign-key 0x00F3092A45393EC8
+curl https://dl.bintray.com/i/archlinux.conf | sudo tee -a /etc/pacman.conf
+sudo pacman -Syy
+```
+
+=== শেষ ধাপ
+ব্যাস! এখন আপনার সিস্টেমের প্যাকেজ ম্যানেজার দিয়ে স্বাভাবিকভাবেই ওপেনবাংলা কিবোর্ড ইনস্টল করতে পারবেন!
+```
+sudo apt-get install openbangla-keyboard
+sudo dnf install openbangla-keyboard
+sudo pacman -S openbangla-keyboard
+```
+
+এছাড়া আমাদের (https://github.com/OpenBangla/OpenBangla-Keyboard/releases)[রিলিজ] পাতা থেকে উপযুক্ত প্যাকেজ ডাউনলোড করেও ইনস্টল করতে পারেন।
+
+ইন্সটলের পরে আইবাসের উইন্ডো থেকে অথবা `ibus-setup` কমান্ডের মাধ্যমে **OpenBangla Keyboard** ইনপুট পদ্ধতি হিসেবে যোগ করে নিন।
 
 ওপেনবাংলা কিবোর্ড ইনস্টলের পর আপনার https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[ডেস্কটপ এনভায়রনমেন্ট কনফিগার] করার প্রয়োজন হতে পারে।
 
