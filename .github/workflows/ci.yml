@@ -1,5 +1,10 @@
 name: CI
-on: [ push, pull_request ]
+on: 
+  push:
+    paths-ignore: [ '**.md', '**.adoc' ]
+  pull_request:
+    paths-ignore: [ '**.md', '**.adoc' ]
+
 jobs:
   build:
     if: contains(github.event.head_commit.message, 'deploy+') == false
