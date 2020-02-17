@@ -39,7 +39,7 @@ jobs:
     container:
       image: "archlinux:latest"
     env:
-      BINTRAY_USER: ${{ github.actor }}
+      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
       BINTRAY_APIKEY: ${{ secrets.BINTRAY_APIKEY }}
       BINTRAY_GPG_DATA: ${{ secrets.GPG_DATA }}
       BINTRAY_GPG_ID: ${{ secrets.GPG_ID }}
