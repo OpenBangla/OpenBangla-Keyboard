@@ -57,9 +57,7 @@ fi
 DIST=${DIST/:/}
 ${BUILDFUNC}
 
-if [ $DEPLOY == true ]; then
-    DEPLOY_PATH="${GITHUB_WORKSPACE}/artifact"
-    mkdir "$DEPLOY_PATH"
-    mv "$RELEASE_FILE" "${DEPLOY_PATH}/"
-fi
+DEPLOY_PATH="${GITHUB_WORKSPACE}/artifact"
+mkdir "$DEPLOY_PATH"
+mv "$RELEASE_FILE" "${DEPLOY_PATH}/"
 

@@ -73,3 +73,4 @@ for REPO in ${REPOLIST[*]}; do
         pubArch
     fi
 done
+
