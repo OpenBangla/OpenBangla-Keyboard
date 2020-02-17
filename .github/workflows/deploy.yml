@@ -11,7 +11,7 @@ jobs:
     if: contains(github.event.head_commit.message, 'deploy+')
     strategy:
       matrix:
-        container: [ "ubuntu:16.04", "ubuntu:17.04", "ubuntu:18.04", "ubuntu:19.04", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "archlinux:latest" ]
+        container: [ "ubuntu:16.04", "ubuntu:18.04", "ubuntu:19.04", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "archlinux:latest" ]
     runs-on: "ubuntu-latest"
     container:
       image: ${{ matrix.container }}
