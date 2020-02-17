@@ -4,6 +4,7 @@ PACKAGE='openbangla-keyboard'
 REPOLIST=(ubuntu debian fedora archlinux)
 RELEASE_VERSION=$(cat version.txt | head -n1)
 jfrog bt config --user "$BINTRAY_USER" --key "$BINTRAY_APIKEY" --licenses 'GPL-3.0'
+pacman -Syyuu --noconfirm --needed jq rpm
 cd artifact
 
 gpgImport () {
@@ -12,17 +13,23 @@ gpgImport () {
 }
 
 pubDeb () {
+    # prepare an ordered list of ubuntu release codenames
+    DISTS=$(curl https://api.launchpad.net/devel/ubuntu/series | jq -cM '.entries|sort_by(.version|tonumber)|map(.name)')
     for PKG in $(ls *${REPO}*); do
         # read distro code from filename
         CODENAME=$(echo $PKG | grep -oP '[^-]+.deb$' | cut -d. -f1)
         jfrog bt upload --publish --override --deb "${CODENAME}/main/amd64" "$PKG" "$VERSION_PATH"
+        # we only build for 1st yearly releases. this section pushes the builds for next release version
+        NEXT_CODENAME=$(echo $DISTS | jq -rcM ".[index(\"${CODENAME}\")+1]")
+        if [ $NEXT_CODENAME != null ]; then
+            jfrog bt upload --publish --override --deb "${NEXT_CODENAME}/main/amd64" "$PKG" "$VERSION_PATH"
+        fi
     done
 }
 
 pubRpm () {
     gpgImport
     ARCH='x86_64'
-    pacman -Syyuu --noconfirm --needed rpm
     gpg --export -a "${BINTRAY_GPG_ID}" > pubkey.asc
     rpm --import pubkey.asc
     rm pubkey.asc
@@ -66,4 +73,3 @@ for REPO in ${REPOLIST[*]}; do
         pubArch
     fi
 done
-
