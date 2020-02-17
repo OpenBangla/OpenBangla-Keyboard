@@ -75,34 +75,31 @@ IMPORTANT: ওপেনবাংলা কিবোর্ড ১.২.০ অথ�
 
 === উবুন্টু এবং উবুন্টু-ভিত্তিক ডিস্ট্রো
 নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
-```
-DIST=YOUR_DISTNAME
+```bash
+source /etc/os-release
 curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$DIST/" | sudo tee /etc/sources.list.d/openbangla.list
-sudo apt-get update
+curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$UBUNTU_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
 ```
-WARNING: এখানে `YOUR_DISTNAME` এর জায়গায় আপনার ডিস্ট্রোর _বেজ উবুন্টু কোডনেম_ বসাতে হবে, যেমন: `bionic`, `focal`, ইত্যাদি।
 
 === ডেবিয়ান
 নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
-```
-DIST=YOUR_DISTNAME
+```bash
+source /etc/os-release
 curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/debian.conf | sed "s/@NAME@/$DIST/" | sudo tee /etc/sources.list.d/openbangla.list
+curl https://dl.bintray.com/openbangla/i/debian.conf | sed "s/@NAME@/$VERSION_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
 sudo apt-get update
 ```
-WARNING: এখানে `YOUR_DISTNAME` এর জায়গায় আপনার ডিস্ট্রোর _কোডনেম_ বসাতে হবে, যেমন: `stretch`, `buster`, ইত্যাদি।
 
 === ফেদোরা
 নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
-```
+```bash
 sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
 curl https://dl.bintray.com/openbangla/i/fedora.conf | sudo tee /etc/yum.repos.d/openbangla.repo
 ```
 
 === আর্চলিনাক্স
 নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
-```
+```bash
 sudo pacman-key -r 0x00F3092A45393EC8
 sudo pacman-key -lsign-key 0x00F3092A45393EC8
 curl https://dl.bintray.com/i/archlinux.conf | sudo tee -a /etc/pacman.conf

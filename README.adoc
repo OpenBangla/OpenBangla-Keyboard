@@ -77,35 +77,31 @@ First set up our repositories for your distro, then you can install normally wit
 
 === Ubuntu & derivatives
 Run these commands to set up our repository:
-```
-DIST=YOUR_DISTNAME
+```bash
+source /etc/os-release
 curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$DIST/" | sudo tee /etc/sources.list.d/openbangla.list
-sudo apt-get update
+curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$UBUNTU_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
 ```
-WARNING: Replace `YOUR_DISTNAME` with your distro's _base ubuntu codename_, eg: `bionic`, `focal`, etc.
 
 === Debian
 Run these commands to set up our repository:
-```
-DIST=YOUR_DISTNAME
+```bash
+source /etc/os-release
 curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/debian.conf | sed "s/@NAME@/$DIST/" | sudo tee /etc/sources.list.d/openbangla.list
+curl https://dl.bintray.com/openbangla/i/debian.conf | sed "s/@NAME@/$VERSION_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
 sudo apt-get update
 ```
-WARNING: Replace `YOUR_DISTNAME` with your distro's _codename_, eg: `stretch`, `buster`, etc.
 
 === Fedora
 Run these commands to set up our repository:
-```
+```bash
 sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
 curl https://dl.bintray.com/openbangla/i/fedora.conf | sudo tee /etc/yum.repos.d/openbangla.repo
 ```
 
 === Archlinux
 Run these commands to set up our repository:
-
-```
+```bash
 sudo pacman-key -r 0x00F3092A45393EC8
 sudo pacman-key -lsign-key 0x00F3092A45393EC8
 curl https://dl.bintray.com/i/archlinux.conf | sudo tee -a /etc/pacman.conf
@@ -114,7 +110,7 @@ sudo pacman -Syy
 
 === Finally
 Done! Now you can use your package manager normally to get OpenBangla-Keyboard!
-```
+```bash
 sudo apt-get install openbangla-keyboard
 sudo dnf install openbangla-keyboard
 sudo pacman -S openbangla-keyboard
