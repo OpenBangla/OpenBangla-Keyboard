@@ -22,7 +22,7 @@ pubDeb () {
         # we only build for 1st yearly releases. this section pushes the builds for next release version
         NEXT_CODENAME=$(echo $DISTS | jq -rcM ".[index(\"${CODENAME}\")+1]")
         if [ $NEXT_CODENAME != null ]; then
-            jfrog bt upload --publish --override --deb "${NEXT_CODENAME}/main/amd64" "$PKG" "$VERSION_PATH"
+            jfrog bt upload --publish --deb "${NEXT_CODENAME}/main/amd64" "$PKG" "$VERSION_PATH"
         fi
     done
 }
