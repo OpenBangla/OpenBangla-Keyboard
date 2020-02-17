@@ -5,6 +5,7 @@ on:
     tags-ignore: [ '**' ]
     paths-ignore: [ '**.md', '**.adoc' ]
   pull_request:
+    branches: [ '**' ]
     paths-ignore: [ '**.md', '**.adoc' ]
 
 jobs:
