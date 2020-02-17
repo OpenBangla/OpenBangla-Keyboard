@@ -81,6 +81,7 @@ Run these commands to set up our repository:
 source /etc/os-release
 curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
 curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$UBUNTU_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
+sudo apt-get update
 ```
 
 === Debian
