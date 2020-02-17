@@ -117,7 +117,7 @@ sudo dnf install openbangla-keyboard
 sudo pacman -S openbangla-keyboard
 ```
 
-You can also install by downloading necessary packages from our (https://github.com/OpenBangla/OpenBangla-Keyboard/releases)[Release] page
+You can also install by downloading necessary packages from our https://github.com/OpenBangla/OpenBangla-Keyboard/releases[Release] page
 
 After installation, use iBus UI or run `ibus-setup` to add and activate **OpenBangla Keyboard** as input method.
 

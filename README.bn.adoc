@@ -115,7 +115,7 @@ sudo dnf install openbangla-keyboard
 sudo pacman -S openbangla-keyboard
 ```
 
-এছাড়া আমাদের (https://github.com/OpenBangla/OpenBangla-Keyboard/releases)[রিলিজ] পাতা থেকে উপযুক্ত প্যাকেজ ডাউনলোড করেও ইনস্টল করতে পারেন।
+এছাড়া আমাদের https://github.com/OpenBangla/OpenBangla-Keyboard/releases[রিলিজ] পাতা থেকে উপযুক্ত প্যাকেজ ডাউনলোড করেও ইনস্টল করতে পারেন।
 
 ইন্সটলের পরে আইবাসের উইন্ডো থেকে অথবা `ibus-setup` কমান্ডের মাধ্যমে **OpenBangla Keyboard** ইনপুট পদ্ধতি হিসেবে যোগ করে নিন।
 
