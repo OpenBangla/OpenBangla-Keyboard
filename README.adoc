@@ -104,7 +104,7 @@ curl https://dl.bintray.com/openbangla/i/fedora.conf | sudo tee /etc/yum.repos.d
 Run these commands to set up our repository:
 ```bash
 sudo pacman-key -r 0x00F3092A45393EC8
-sudo pacman-key -lsign-key 0x00F3092A45393EC8
+sudo pacman-key --lsign-key 0x00F3092A45393EC8
 curl https://dl.bintray.com/i/archlinux.conf | sudo tee -a /etc/pacman.conf
 sudo pacman -Syy
 ```
