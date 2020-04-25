@@ -93,7 +93,7 @@ https://discord.gg/HXK7QnJ[ডিসকর্ড] এবং https://www.facebook
 ওপেনবাংলা কিবোর্ড কম্পাইলের তথা সোর্সকোড থেকে বিল্ড করার জন্য বর্তমানে নিম্নোলিখিত ডিপেন্ডেসিগুলো প্রয়োজন:
 
 * GNU GCC, G++ compiler or Clang
-* Rust 1.32.0 or later
+* Rust 1.34.0 or later
 * GNU Make or Ninja
 * CMake
 * Qt 5.5 or later
