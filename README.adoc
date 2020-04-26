@@ -133,7 +133,7 @@ We are on https://discord.gg/HXK7QnJ[Discord] and https://www.facebook.com/openb
 OpenBangla Keyboard currently has the following build dependencies:
 
 * GNU GCC, G++ compiler or Clang
-* Rust 1.32.0 or later
+* Rust 1.34.0 or later
 * GNU Make or Ninja
 * CMake
 * Qt 5.5 or later
