@@ -132,6 +132,8 @@ private:
   void checkForUpdate();
 
   void RefreshLayouts();
+
+  void DataMigration();
 };
 
 #endif // TOPBAR_H

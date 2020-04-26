@@ -87,6 +87,10 @@ public:
   void setIncludeEnglishPrevWin(bool b);
 
   bool getIncludeEnglishPrevWin();
+
+  void setPreviousUserDataRemains(bool b);
+
+  bool getPreviousUserDataRemains();
 };
 
 /* Global */
