@@ -16,7 +16,7 @@ jobs:
       - name: update-system
         run: sudo apt-get update -qq
       - name: install-deps
-        run: sudo apt-get install libibus-1.0-dev qt5-default rustc cargo
+        run: sudo apt-get install libibus-1.0-dev libzstd-dev qt5-default rustc cargo
       - name: make
         env: ${{ matrix.env }}
         run: |
