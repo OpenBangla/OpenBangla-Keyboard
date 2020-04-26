@@ -11,12 +11,13 @@ jobs:
     if: contains(github.event.head_commit.message, 'deploy+')
     strategy:
       matrix:
-        container: [ "ubuntu:18.04", "ubuntu:19.04", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "archlinux:latest" ]
+        container: [ "ubuntu:18.04", "ubuntu:19.10", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "fedora:32", "archlinux:latest" ]
     runs-on: "ubuntu-latest"
     container:
       image: ${{ matrix.container }}
       env:
         DIST: ${{ matrix.container }}
+        DEBIAN_FRONTEND: noninteractive
     steps:
       - name: checkout-source
         uses: actions/checkout@v1
@@ -75,31 +76,18 @@ jobs:
         with:
           name: package-archives
           path: artifact
-      - name: create-release-bundle
-        shell: bash
-        run: |
-          zip -j9 installers.zip artifact/*
       - name: create-release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
-          release_name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.get_version.outputs.RELEASE_VERSION }}
+          name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
+          artifacts: "artifact/*"
+          allowUpdates: true
+          draft: true
           body: |
             [![Github Releases (by Release)](https://img.shields.io/github/downloads/${{ github.repository }}/${{ steps.get_version.outputs.RELEASE_VERSION }}/total.svg)]()
             ### Changes in this release:
             - ...
-          draft: false
-      - name: upload-release-asset
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: installers.zip
-          asset_name: installers.zip
-          asset_content_type: application/zip
 
