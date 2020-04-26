@@ -25,7 +25,7 @@ pubDeb () {
         jfrog bt upload --publish --override --deb "${CODENAME}/main/amd64" "$PKG" "$VERSION_PATH"
         if [ $REPO == ubuntu ]; then
             # we only build for major/first yearly releases.
-            # this block uploads the pacjage for the other version in the same range
+            # this block uploads the package for the other version in the same range
             VERSION_STR=$(grep "$CODENAME" dists.txt)
             VERSION_MAJOR=$(echo "$VERSION_STR" | cut -d. -f1)
             OTHER_VERSION_STR=$(grep "^${VERSION_MAJOR}\." dists.txt | grep -v "$CODENAME")
@@ -90,4 +90,3 @@ for REPO in ${DISTLIST[*]}; do
         pubArch
     fi
 done
-
