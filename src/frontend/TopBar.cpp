@@ -237,7 +237,7 @@ void TopBar::layoutMenuInstall_clicked() {
                                                   "Avro Keyboard 5 Keyboard Layout (*.avrolayout)");
   LayoutConverter conv;
   if (fileName.contains(".avrolayout") && fileName != "") {
-    ConversionResult res = conv.convertLayout(fileName);
+    ConversionResult res = conv.convertAvroLayout(fileName);
     switch (res) {
     case Ok:
       QMessageBox::information(Q_NULLPTR, "OpenBangla Keyboard", "Layout Installed Successfully",

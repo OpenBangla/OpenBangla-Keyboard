@@ -1,4 +1,4 @@
-include_directories(../shared 3rdParty)
+include_directories(../shared 3rdParty ${ZSTD_INCLUDE_DIRS})
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -22,7 +22,7 @@ set(SRC_MAIN main.cpp
         AvroPhonetic.cpp)
 
 add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
-target_link_libraries(openbangla-gui libShared 3rdParty Qt5::Widgets Qt5::Network)
+target_link_libraries(openbangla-gui libShared 3rdParty Qt5::Widgets Qt5::Network ${ZSTD_LIBRARIES})
 
 install(TARGETS openbangla-gui
         RUNTIME DESTINATION ${PROJECT_DATADIR})

@@ -42,13 +42,13 @@ install(FILES ${CMAKE_SOURCE_DIR}/data/1024.png
 install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
         DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/Bornona.json
+install(FILES ${CMAKE_SOURCE_DIR}/data/Borno.json
         DESTINATION ${PROJECT_DATADIR}/layouts)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/Avro_Easy.json
         DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/Munir_Optima_uni_.json
+install(FILES ${CMAKE_SOURCE_DIR}/data/Munir_Optima.json
         DESTINATION ${PROJECT_DATADIR}/layouts)
 
 install(FILES ${CMAKE_SOURCE_DIR}/data/National_Jatiya.json
