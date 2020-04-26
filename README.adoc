@@ -71,55 +71,16 @@ toc::[]
 
 == Installation
 
-IMPORTANT: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
+WARNING: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
 
-First set up our repositories for your distro, then you can install normally with your package manager.
+Make sure you have a **working internet connection**.
 
-=== Ubuntu & derivatives
-Run these commands to set up our repository:
+Open your terminal and run this command on your shell:
 ```bash
-source /etc/os-release
-curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$UBUNTU_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
-sudo apt-get update
+bash -c "$(wget -nv -O- https://bit.ly/OBK-sh)"
 ```
 
-=== Debian
-Run these commands to set up our repository:
-```bash
-source /etc/os-release
-curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/debian.conf | sed "s/@NAME@/$VERSION_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
-sudo apt-get update
-```
-
-=== Fedora
-Run these commands to set up our repository:
-```bash
-sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
-curl https://dl.bintray.com/openbangla/i/fedora.conf | sudo tee /etc/yum.repos.d/openbangla.repo
-```
-
-=== Archlinux
-Run these commands to set up our repository:
-```bash
-sudo pacman-key -r 0x00F3092A45393EC8
-sudo pacman-key --lsign-key 0x00F3092A45393EC8
-curl https://dl.bintray.com/i/archlinux.conf | sudo tee -a /etc/pacman.conf
-sudo pacman -Syy
-```
-
-=== Finally
-Done! Now you can use your package manager normally to get OpenBangla-Keyboard!
-```bash
-sudo apt-get install openbangla-keyboard
-sudo dnf install openbangla-keyboard
-sudo pacman -S openbangla-keyboard
-```
-
-You can also install by downloading necessary packages from our https://github.com/OpenBangla/OpenBangla-Keyboard/releases[Release] page
-
-After installation, use iBus UI or run `ibus-setup` to add and activate **OpenBangla Keyboard** as input method.
+Then use iBus UI or run `ibus-setup` to add and activate **OpenBangla Keyboard** as input method.
 
 After you have installed OpenBangla Keyboard, you may need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
 
