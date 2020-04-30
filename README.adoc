@@ -79,8 +79,8 @@ First set up our repositories for your distro, then you can install normally wit
 Run these commands to set up our repository:
 ```bash
 source /etc/os-release
-curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed "s/@NAME@/$UBUNTU_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/pub.key | apt-key add -"
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed s/@NAME@/$UBUNTU_CODENAME/ > /etc/apt/sources.list.d/openbangla.list"
 sudo apt-get update
 ```
 
@@ -88,8 +88,8 @@ sudo apt-get update
 Run these commands to set up our repository:
 ```bash
 source /etc/os-release
-curl https://dl.bintray.com/openbangla/i/pub.key | sudo apt-key add -
-curl https://dl.bintray.com/openbangla/i/debian.conf | sed "s/@NAME@/$VERSION_CODENAME/" | sudo tee /etc/apt/sources.list.d/openbangla.list
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/pub.key | apt-key add -"
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/debian.conf | sed s/@NAME@/$VERSION_CODENAME/ > /etc/apt/sources.list.d/openbangla.list"
 sudo apt-get update
 ```
 
@@ -97,15 +97,15 @@ sudo apt-get update
 Run these commands to set up our repository:
 ```bash
 sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
-curl https://dl.bintray.com/openbangla/i/fedora.conf | sudo tee /etc/yum.repos.d/openbangla.repo
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/fedora.conf > /etc/yum.repos.d/openbangla.repo"
 ```
 
 === Archlinux
 Run these commands to set up our repository:
 ```bash
-sudo pacman-key -r 0x00F3092A45393EC8
-sudo pacman-key --lsign-key 0x00F3092A45393EC8
-curl https://dl.bintray.com/openbangla/i/archlinux.conf | sudo tee -a /etc/pacman.conf
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/pub.key | pacman-key -a -"
+sudo pacman-key --lsign-key "openbanglateam@gmail.com"
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/archlinux.conf >> /etc/pacman.conf"
 sudo pacman -Syy
 ```
 
