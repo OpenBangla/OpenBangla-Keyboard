@@ -1,8 +1,17 @@
 name: CI
-on: [push, pull_request]
+on: 
+  push:
+    branches: [ '**' ]
+    tags-ignore: [ '**' ]
+    paths-ignore: [ '**.md', '**.adoc' ]
+  pull_request:
+    branches: [ '**' ]
+    paths-ignore: [ '**.md', '**.adoc' ]
+
 jobs:
   build:
-    runs-on: [ "ubuntu-latest" ]
+    if: contains(github.event.head_commit.message, 'deploy+') == false
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         env:
@@ -10,9 +19,9 @@ jobs:
           - { CXX: clang++, CC: clang, CXX_FOR_BUILD: clang++, CC_FOR_BUILD: clang }
     steps:
       - name: checkout-source
-        uses: actions/checkout@v2
-      - name: checkout-submodules
-        run: git submodule update --init --recursive
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
       - name: update-system
         run: sudo apt-get update -qq
       - name: install-deps
@@ -24,3 +33,4 @@ jobs:
           cd build
           cmake ..
           make
+

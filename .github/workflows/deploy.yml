@@ -1,0 +1,97 @@
+name: DEPLOY
+
+on:
+  push:
+    branches: [ '**' ]
+    tags-ignore: [ '**' ]
+
+jobs:
+
+  build:
+    if: contains(github.event.head_commit.message, 'deploy+')
+    strategy:
+      matrix:
+        container: [ "ubuntu:18.04", "ubuntu:19.10", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "fedora:32", "archlinux:latest" ]
+        # this list should be updated from time to time by consulting these pages:
+        # https://releases.ubuntu.com/
+        # https://wiki.debian.org/DebianReleases#Production_Releases
+        # https://fedoraproject.org/wiki/Releases
+    runs-on: "ubuntu-latest"
+    container:
+      image: ${{ matrix.container }}
+      env:
+        DIST: ${{ matrix.container }}
+        DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+      - name: run-builder
+        shell: bash
+        run: ./tools/build.sh
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: package-archives
+          path: artifact
+
+  deploy:
+    needs: build
+    runs-on: "ubuntu-latest"
+    container:
+      image: "archlinux:latest"
+    env:
+      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+      BINTRAY_APIKEY: ${{ secrets.BINTRAY_APIKEY }}
+      BINTRAY_GPG_DATA: ${{ secrets.GPG_DATA }}
+      BINTRAY_GPG_ID: ${{ secrets.GPG_ID }}
+      JFROG_CLI_OFFER_CONFIG: false
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+      - name: install-jfrog-cli
+        uses: jfrog/setup-jfrog-cli@v1
+      - name: download-artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: package-archives
+          path: artifact
+      - name: bintray-publish
+        shell: bash
+        run: ./tools/publish.sh
+
+  release:
+    needs: deploy
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v1
+      - name: get-version
+        id: get_version
+        shell: bash
+        run: |
+          RELEASE_VERSION=$(cat version.txt | head -n1)
+          echo ::set-output name=RELEASE_VERSION::$RELEASE_VERSION
+      - name: download-artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: package-archives
+          path: artifact
+      - name: create-release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.get_version.outputs.RELEASE_VERSION }}
+          name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
+          artifacts: "artifact/*"
+          allowUpdates: true
+          draft: true
+          body: |
+            [![Github Releases (by Release)](https://img.shields.io/github/downloads/${{ github.repository }}/${{ steps.get_version.outputs.RELEASE_VERSION }}/total.svg)]()
+            ### Changes in this release:
+            - ...
+

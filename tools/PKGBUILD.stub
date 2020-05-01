@@ -1,0 +1,20 @@
+# Maintainer: OpenBangla Team <openbanglateam@gmail.com>
+# THIS IS A *PARTIAL* PKGBUILD TEMPLATE FOR CUSTOM AUTOBUILD PROCESS ONLY
+pkgname="openbangla-keyboard"
+pkgrel=1
+pkgdesc="An OpenSource, Unicode compliant Bengali Input Method"
+arch=('x86_64')
+url="https://openbangla.github.io"
+license=('GPL3')
+depends=('ibus' 'qt5-base')
+build() {
+    cd "$srcdir"
+    mkdir build && cd build
+    cmake ..
+    make
+}
+package() {
+    cd "$srcdir"
+    make -C build DESTDIR="$pkgdir" install
+}
+
