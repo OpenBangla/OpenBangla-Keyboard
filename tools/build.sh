@@ -21,7 +21,7 @@ makeRpm () {
 
 makeArch () {
     DIST=archlinux
-    echo "PACKAGER='OpenBangla <openbanglateam@gmail.com>'" >> /etc/makepkg.conf
+    echo "PACKAGER='OpenBangla Team <openbanglateam@gmail.com>'" >> /etc/makepkg.conf
     PKGEXT=".pkg.tar.zst"
     echo "PKGEXT='$PKGEXT'" >> /etc/makepkg.conf
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}${PKGEXT}"

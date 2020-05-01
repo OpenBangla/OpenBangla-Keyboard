@@ -1,4 +1,4 @@
-# Maintainer: OpenBangla <openbanglateam@gmail.com>
+# Maintainer: OpenBangla Team <openbanglateam@gmail.com>
 # THIS IS A *PARTIAL* PKGBUILD TEMPLATE FOR CUSTOM AUTOBUILD PROCESS ONLY
 pkgname="openbangla-keyboard"
 pkgrel=1
