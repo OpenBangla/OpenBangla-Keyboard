@@ -94,10 +94,10 @@ void LayoutViewer::on_viewAltGr_clicked() {
 
 QByteArray LayoutViewer::decodeAndDecompress(QByteArray &data) {
   std::string decoded = base91::decode(std::string(data.data(), data.size()));
-  size_t compressedSize = ZSTD_findFrameCompressedSize(decoded.data(), decoded.size());
   unsigned long long cap = ZSTD_getFrameContentSize(decoded.data(), decoded.size());
   char *imgData = (char *)malloc(cap);
-  size_t decompressed = ZSTD_decompress(imgData, cap, decoded.data(), compressedSize);
+
+  size_t decompressed = ZSTD_decompress(imgData, cap, decoded.data(), decoded.size());
   QByteArray img = QByteArray(imgData, decompressed);
   free(imgData);
 

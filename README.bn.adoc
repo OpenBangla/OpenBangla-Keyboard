@@ -98,18 +98,19 @@ https://discord.gg/HXK7QnJ[ডিসকর্ড] এবং https://www.facebook
 * CMake
 * Qt 5.5 or later
 * iBus development library
+* Zstandard compression library (zstd)
 
 উবুন্টু/ডেবিয়ান ভিত্তিক সিস্টেমে ডিপেন্ডেসিগুলো ইনস্টলের কমান্ড:
 ```bash
-sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default
+sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default libzstd-dev
 ```
 ফেদোরাতে ডিপেন্ডেসিগুলো ইনস্টলের কমান্ড:
 ```bash
-sudo dnf install @buildsys-build rust cargo cmake qt5-qtdeclarative-devel ibus-devel
+sudo dnf install @buildsys-build rust cargo cmake qt5-qtdeclarative-devel ibus-devel libzstd-devel
 ```
 আর্চলিনাক্স ভিত্তিক সিস্টেমে ডিপেন্ডেসিগুলো ইনস্টলের কমান্ড:
 ```bash
-sudo pacman -S base-devel rust cmake qt5-base libibus
+sudo pacman -S base-devel rust cmake qt5-base libibus zstd
 ```
 
 বিল্ড ডিপেন্ডেন্সিগুলো ইনস্টলের পর ওপেনবাংলা কিবোর্ডের সোর্স কোড রিপজিটরিটি ক্লোন করুন এবং ক্লোন করা ডিরেক্টরিতে প্রবেশ করুন:
