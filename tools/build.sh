@@ -21,8 +21,9 @@ makeRpm () {
 
 makeArch () {
     DIST=archlinux
-    # pin package extension
-    PKGEXT=".pkg.tar.xz"
+    echo "PACKAGER='OpenBangla <openbanglateam@gmail.com>'" >> /etc/makepkg.conf
+    PKGEXT=".pkg.tar.zst"
+    echo "PKGEXT='$PKGEXT'" >> /etc/makepkg.conf
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}${PKGEXT}"
     pacman -S --noconfirm --needed base-devel cmake libibus qt5-base rust curl
     mkdir /build
