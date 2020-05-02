@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QCloseEvent>
 #include <zstd.h>
 #include "LayoutViewer.h"
 #include "Settings.h"
@@ -41,16 +42,26 @@ LayoutViewer::~LayoutViewer() {
 void LayoutViewer::refreshLayoutViewer() {
   image0.clear();
   image1.clear();
+  ui->viewAltGr->setEnabled(false);
+  ui->viewNormal->setEnabled(false);
+  ui->labelImage->setText("");
 
   desc = gLayout->getDesc();
   this->setWindowTitle(desc.name + " :: Layout Viewer");
 
-  image0 = decodeAndDecompress(desc.image0);
-  if(desc.image1.size() != 0) {
-    image1 = decodeAndDecompress(desc.image1);
+  if(desc.image0.size() != 0) {
+    image0 = decodeAndDecompress(desc.image0);
+    if(desc.image1.size() != 0) {
+      image1 = decodeAndDecompress(desc.image1);
+      ui->viewAltGr->setEnabled(true);
+    }
+    ui->viewNormal->setEnabled(true);
+    on_viewNormal_clicked();
+  } else {
+    ui->labelImage->setText("No image to display!");
+    this->resize(537, 152);
   }
 
-  on_viewNormal_clicked();
   // This refreshes Layout Info Dialog
   aboutDialog->setDialogType(AboutLayout);
 }
@@ -60,9 +71,9 @@ void LayoutViewer::showLayoutInfoDialog() {
   aboutDialog->show();
 }
 
-void LayoutViewer::on_buttonClose_clicked() {
+void LayoutViewer::closeEvent(QCloseEvent *event) {
   gSettings->setLayoutViewerWindowPosition(this->pos());
-  LayoutViewer::close();
+  event->accept();
 }
 
 void LayoutViewer::on_buttonAboutLayout_clicked() {
@@ -70,26 +81,25 @@ void LayoutViewer::on_buttonAboutLayout_clicked() {
 }
 
 void LayoutViewer::on_viewNormal_clicked() {
-  ui->labelImage->setText("");
   image.loadFromData(image0);
   ui->labelImage->setPixmap(QPixmap::fromImage(image));
   ui->labelImage->adjustSize();
-  this->setFixedHeight(ui->labelImage->height() + ui->labelImage->y());
-  this->setFixedWidth(ui->labelImage->width());
+  QSize size;
+  size.setHeight(ui->labelImage->height() + ui->labelImage->y());
+  size.setWidth(ui->labelImage->width());
+  this->resize(size);
   ui->viewNormal->setChecked(true);
 }
 
 void LayoutViewer::on_viewAltGr_clicked() {
-  if (image1.size() != 0) {
-    image.loadFromData(image1);
-    ui->labelImage->setPixmap(QPixmap::fromImage(image));
-    ui->labelImage->adjustSize();
-    this->setFixedHeight(ui->labelImage->height() + ui->labelImage->y());
-    this->setFixedWidth(ui->labelImage->width());
-    ui->viewAltGr->setChecked(true);
-  } else {
-    ui->labelImage->setText("No image to display!");
-  }
+  image.loadFromData(image1);
+  ui->labelImage->setPixmap(QPixmap::fromImage(image));
+  ui->labelImage->adjustSize();
+  QSize size;
+  size.setHeight(ui->labelImage->height() + ui->labelImage->y());
+  size.setWidth(ui->labelImage->width());
+  this->resize(size);
+  ui->viewAltGr->setChecked(true);
 }
 
 QByteArray LayoutViewer::decodeAndDecompress(QByteArray &data) {
