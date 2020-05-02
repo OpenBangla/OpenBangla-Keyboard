@@ -16,9 +16,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <zstd.h>
 #include "LayoutViewer.h"
 #include "Settings.h"
 #include "AboutFile.h"
+#include "base.hpp"
 #include "ui_LayoutViewer.h"
 
 LayoutViewer::LayoutViewer(QWidget *parent) :
@@ -37,8 +39,17 @@ LayoutViewer::~LayoutViewer() {
 }
 
 void LayoutViewer::refreshLayoutViewer() {
+  image0.clear();
+  image1.clear();
+
   desc = gLayout->getDesc();
   this->setWindowTitle(desc.name + " :: Layout Viewer");
+
+  image0 = decodeAndDecompress(desc.image0);
+  if(desc.image1.size() != 0) {
+    image1 = decodeAndDecompress(desc.image1);
+  }
+
   on_viewNormal_clicked();
   // This refreshes Layout Info Dialog
   aboutDialog->setDialogType(AboutLayout);
@@ -60,7 +71,7 @@ void LayoutViewer::on_buttonAboutLayout_clicked() {
 
 void LayoutViewer::on_viewNormal_clicked() {
   ui->labelImage->setText("");
-  image.loadFromData(QByteArray::fromBase64(desc.image0));
+  image.loadFromData(image0);
   ui->labelImage->setPixmap(QPixmap::fromImage(image));
   ui->labelImage->adjustSize();
   this->setFixedHeight(ui->labelImage->height() + ui->labelImage->y());
@@ -69,8 +80,8 @@ void LayoutViewer::on_viewNormal_clicked() {
 }
 
 void LayoutViewer::on_viewAltGr_clicked() {
-  if (desc.image1.size() != 0) {
-    image.loadFromData(QByteArray::fromBase64(desc.image1));
+  if (image1.size() != 0) {
+    image.loadFromData(image1);
     ui->labelImage->setPixmap(QPixmap::fromImage(image));
     ui->labelImage->adjustSize();
     this->setFixedHeight(ui->labelImage->height() + ui->labelImage->y());
@@ -79,4 +90,16 @@ void LayoutViewer::on_viewAltGr_clicked() {
   } else {
     ui->labelImage->setText("No image to display!");
   }
+}
+
+QByteArray LayoutViewer::decodeAndDecompress(QByteArray &data) {
+  std::string decoded = base91::decode(std::string(data.data(), data.size()));
+  unsigned long long cap = ZSTD_getFrameContentSize(decoded.data(), decoded.size());
+  char *imgData = (char *)malloc(cap);
+
+  size_t decompressed = ZSTD_decompress(imgData, cap, decoded.data(), decoded.size());
+  QByteArray img = QByteArray(imgData, decompressed);
+  free(imgData);
+
+  return img;
 }

@@ -54,9 +54,11 @@ if (OS_LINUX)
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
 
     include(FindPkgConfig)
-    ## Find iBus ##
     find_package(PkgConfig)
+    ## Find iBus ##
     pkg_check_modules(IBUS REQUIRED ibus-1.0)
+    ## Find zstd ##
+    pkg_check_modules(ZSTD REQUIRED libzstd)
 endif (OS_LINUX)
 
 add_subdirectory(src/engine)

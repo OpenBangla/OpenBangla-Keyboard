@@ -66,10 +66,14 @@ void Layout::loadDesc() {
   lD.ver = lf.value("info").toObject().value("layout").toObject().value("version").toString();
   // Layout Image 0
   lD.image0.clear();
-  lD.image0.append(lf.value("info").toObject().value("layout").toObject().value("image0").toString());
-  // Layout Image 0
+  if(!lf.value("info").toObject().value("layout").toObject().value("image0").isUndefined()) {
+    lD.image0 = lf.value("info").toObject().value("layout").toObject().value("image0").toString().toUtf8();
+  }
+  // Layout Image 1
   lD.image1.clear();
-  lD.image1.append(lf.value("info").toObject().value("layout").toObject().value("image1").toString());
+  if(!lf.value("info").toObject().value("layout").toObject().value("image1").isUndefined()) {
+    lD.image1 = lf.value("info").toObject().value("layout").toObject().value("image1").toString().toUtf8();
+  }
   // Layout Develper Name
   lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value(
       "name").toString();
