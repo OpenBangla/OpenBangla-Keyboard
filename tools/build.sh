@@ -5,7 +5,7 @@ RELEASE_STUB="OpenBangla-Keyboard_${RELEASE_VERSION}-"
 
 makeDeb () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
-    apt-get -y install build-essential cmake libibus-1.0-dev qt5-default rustc cargo ninja-build curl
+    apt-get -y install build-essential cmake libibus-1.0-dev libzstd-dev qt5-default rustc cargo ninja-build curl
     cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCPACK_GENERATOR=DEB
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
@@ -13,7 +13,7 @@ makeDeb () {
 
 makeRpm () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
-    dnf install -y --allowerasing @buildsys-build cmake ibus-devel qt5-qtdeclarative-devel rust cargo ninja-build
+    dnf install -y --allowerasing @buildsys-build cmake ibus-devel libzstd-devel qt5-qtdeclarative-devel rust cargo ninja-build
     cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCPACK_GENERATOR=RPM
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
@@ -25,7 +25,7 @@ makeArch () {
     PKGEXT=".pkg.tar.zst"
     echo "PKGEXT='$PKGEXT'" >> /etc/makepkg.conf
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}${PKGEXT}"
-    pacman -S --noconfirm --needed base-devel cmake libibus qt5-base rust curl
+    pacman -S --noconfirm --needed base-devel cmake libibus zstd qt5-base rust curl
     mkdir /build
     cd /build
     cp -fpr "$GITHUB_WORKSPACE" /build/src
