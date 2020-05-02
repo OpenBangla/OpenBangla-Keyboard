@@ -99,20 +99,21 @@ OpenBangla Keyboard currently has the following build dependencies:
 * CMake
 * Qt 5.5 or later
 * iBus development library
+* Zstandard compression library (zstd)
 
 On a Ubuntu/Debian system you can easily install them like this:
 ```bash
-sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default
+sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default libzstd-dev
 ```
 
 On a Fedora system you can easily install them like this:
 ```bash
-sudo dnf install @buildsys-build rust cargo cmake qt5-qtdeclarative-devel ibus-devel
+sudo dnf install @buildsys-build rust cargo cmake qt5-qtdeclarative-devel ibus-devel libzstd-devel
 ```
 
 On a Arch Linux / Arch Based system you can easily install them like this:
 ```bash
-sudo pacman -S base-devel rust cmake qt5-base libibus
+sudo pacman -S base-devel rust cmake qt5-base libibus zstd
 ```
 
 After you have installed required libraries and binaries, clone this repository and change to the cloned folder:

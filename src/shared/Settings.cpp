@@ -171,3 +171,13 @@ bool Settings::getIncludeEnglishPrevWin() {
   setting->sync();
   return setting->value("settings/PreviewWin/IncludeEnglishPhonetic", true).toBool();
 }
+
+void Settings::setPreviousUserDataRemains(bool b) {
+  setting->setValue("settings/PreviousUserDataRemains", b);
+  setting->sync();
+}
+
+bool Settings::getPreviousUserDataRemains() {
+  setting->sync();
+  return setting->value("settings/PreviousUserDataRemains", true).toBool();
+}

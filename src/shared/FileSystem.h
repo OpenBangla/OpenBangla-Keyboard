@@ -40,6 +40,10 @@ public:
     dir.mkpath(path + "/layouts/");
   }
 
+  QString dataPath() {
+    return path;
+  }
+
   QString getCandidateSaveFile() {
     return path + "/phonetic-candidate-selection.json";
   }

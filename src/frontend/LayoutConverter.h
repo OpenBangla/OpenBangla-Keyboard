@@ -30,12 +30,13 @@ enum ConversionResult {
 class LayoutConverter {
   UserFolders folders;
 
-  ConversionResult convertAvroLayout(QString path);
+  QString decodeCompressAndEncode(QString &data);
 
   ConversionResult saveLayout(QJsonObject obj, QString path);
 
   QString unescapeXML(QString escaped);
 
 public:
-  ConversionResult convertLayout(QString path);
+  ConversionResult convertAvroLayout(QString path);
+  ConversionResult convertLayoutFormat(QString path);
 };

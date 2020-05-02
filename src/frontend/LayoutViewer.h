@@ -58,6 +58,9 @@ private:
   AboutFile *aboutDialog;
   QImage image;
   LayoutDesc desc;
+  QByteArray image0, image1;
+
+  QByteArray decodeAndDecompress(QByteArray &data);
 };
 
 #endif // LAYOUTVIEWER_H

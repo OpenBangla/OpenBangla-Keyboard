@@ -6,7 +6,7 @@ pkgdesc="An OpenSource, Unicode compliant Bengali Input Method"
 arch=('x86_64')
 url="https://openbangla.github.io"
 license=('GPL3')
-depends=('ibus' 'qt5-base')
+depends=('ibus' 'qt5-base' 'zstd')
 build() {
     cd "$srcdir"
     mkdir build && cd build

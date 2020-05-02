@@ -22,9 +22,11 @@
 #include <QMouseEvent>
 #include <QFileDialog>
 #include <QMenu>
+#include <QDir>
 #include "TopBar.h"
 #include "Layout.h"
 #include "Settings.h"
+#include "FileSystem.h"
 #include "LayoutViewer.h"
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
@@ -54,6 +56,7 @@ TopBar::TopBar(QWidget *parent) :
   SetupTopBar();
   SetupPopupMenus();
   SetupTrayIcon();
+  DataMigration();
 
   if (gSettings->getUpdateCheck()) {
     checkForUpdate();
@@ -237,7 +240,7 @@ void TopBar::layoutMenuInstall_clicked() {
                                                   "Avro Keyboard 5 Keyboard Layout (*.avrolayout)");
   LayoutConverter conv;
   if (fileName.contains(".avrolayout") && fileName != "") {
-    ConversionResult res = conv.convertLayout(fileName);
+    ConversionResult res = conv.convertAvroLayout(fileName);
     switch (res) {
     case Ok:
       QMessageBox::information(Q_NULLPTR, "OpenBangla Keyboard", "Layout Installed Successfully",
@@ -251,10 +254,10 @@ void TopBar::layoutMenuInstall_clicked() {
       break;
     case OpenError:
       QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard",
-                            "An error occured when opening the layout file!", QMessageBox::Ok);
+                            "An error occured while opening the layout file!", QMessageBox::Ok);
       break;
     case SaveError:
-      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occured when saving the file!",
+      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occured while saving the file!",
                             QMessageBox::Ok);
       break;
     }
@@ -354,4 +357,44 @@ void TopBar::on_buttonViewLayout_clicked() {
 void TopBar::on_buttonSettings_clicked() {
   settingsDialog->updateSettings();
   settingsDialog->show();
+}
+
+/**
+ * OBK from version 2 onwards reads and stores user data in a different directory
+ * the following XDG specification.
+ * This function checks and migrates data files into the new user data directory.
+ **/
+void TopBar::DataMigration() {
+  UserFolders usr;
+  LayoutConverter converter;
+  if(gSettings->getPreviousUserDataRemains()) {
+    QDir previousUserDataPath = QDir(environmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
+    if(previousUserDataPath.exists()) {
+      // Handle the data files.
+      // FIXME: These functions will not overwrite.
+      QFile::copy(previousUserDataPath.filePath("phonetic-candidate-selection.json"), usr.dataPath());
+      QFile::copy(previousUserDataPath.filePath("autocorrect.json"), usr.dataPath());
+      // Convert old layout files if present.
+      previousUserDataPath.cd("Layouts");
+      QStringList list = previousUserDataPath.entryList(QStringList("*.json"));
+      if(!list.empty()) {
+        for(auto& file : list) {
+          QString path = previousUserDataPath.path() + "/" + file;
+
+          if(converter.convertLayoutFormat(path) != Ok) {
+            QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard",
+                            QString("An error occured while converting %1 layout!").arg(file), QMessageBox::Ok);
+            return;
+          }
+        }
+      }
+      QMessageBox::information(Q_NULLPTR, "OpenBangla Keyboard", "User data files has been migrated successfully.",
+                               QMessageBox::Ok);
+      // Delete the previous user directory.
+      previousUserDataPath.cdUp();
+      previousUserDataPath.removeRecursively();
+      gSettings->setPreviousUserDataRemains(false);
+      RefreshLayouts();
+    }
+  }
 }
