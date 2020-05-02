@@ -93,7 +93,7 @@ set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
 set(CPACK_RPM_PACKAGE_URL "https://openbangla.github.io/")
-set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, zstd >= 1.3.3")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, libzstd >= 1.3.3")
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
 # Prevents CPack from generating file conflicts
 set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications")
