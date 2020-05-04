@@ -64,8 +64,6 @@ private slots:
 
   void layoutMenuInstall_clicked();
 
-  //void settingsMenuShowDialog_clicked();
-
   void aboutMenuLayout_clicked();
 
   void aboutMenuAbout_clicked();
@@ -106,9 +104,6 @@ private:
   QAction *layoutMenuLayouts[MaxLayoutFiles];
   QActionGroup *layoutMenuLayoutsGroup;
   QAction *layoutMenuInstall;
-  /* Settings Popup Menu 
-  QMenu *settingsMenu;
-  QAction *settingsMenuShowDialog;*/
   /* About Popup Menu */
   QMenu *aboutMenu;
   QAction *aboutMenuLayout;

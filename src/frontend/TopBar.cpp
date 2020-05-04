@@ -122,15 +122,6 @@ void TopBar::SetupPopupMenus() {
   RefreshLayouts();
   connect(layoutMenuInstall, SIGNAL(triggered()), this, SLOT(layoutMenuInstall_clicked()));
 
-  /* Settings Popup Menu
-
-  settingsMenuShowDialog = new QAction("Settings", this);
-  connect(settingsMenuShowDialog, SIGNAL(triggered()), this, SLOT(settingsMenuShowDialog_clicked()));
-
-  settingsMenu = new QMenu(this);
-  settingsMenu->addAction(settingsMenuShowDialog);
-  */
-
   // About Popup Menu
   aboutMenuLayout = new QAction("About current keyboard layout", this);
   connect(aboutMenuLayout, SIGNAL(triggered()), this, SLOT(aboutMenuLayout_clicked()));
@@ -264,12 +255,6 @@ void TopBar::layoutMenuInstall_clicked() {
   }
   RefreshLayouts();
 }
-
-/*
-void TopBar::settingsMenuShowDialog_clicked() {
-  settingsDialog->updateSettings();
-  settingsDialog->show();
-}*/
 
 void TopBar::aboutMenuLayout_clicked() {
   layoutViewer->showLayoutInfoDialog();

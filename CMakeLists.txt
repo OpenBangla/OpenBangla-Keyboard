@@ -6,7 +6,7 @@ project("OpenBangla-Keyboard" VERSION ${VERSION_STRING})
 set(APP_NAME "OpenBangla-Keyboard")
 
 ## Set versions
-add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 11)
