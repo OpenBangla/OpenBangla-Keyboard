@@ -60,14 +60,15 @@ case $DISTRO_NAME in
    	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
 	  case $VERSION_ID in
-      19.*) VERSION_ID=18.04;;
-	  	18.*) VERSION_ID=18.04;;
-	  	16.*) VERSION_ID=16.04;;
+	  	20.*) VERSION_ID=20.04;UBUNTU_SUPPORTED=1;;
+	  	19.*) VERSION_ID=18.04;UBUNTU_SUPPORTED=1;;
+	  	18.*) VERSION_ID=18.04;UBUNTU_SUPPORTED=1;;
+	  	16.*) VERSION_ID=16.04;UBUNTU_SUPPORTED=1;;
 	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle"
 	  		exit 1
 	  		;;
 	  esac
-  if [[ $VERSION_ID = "18.04" || $VERSION_ID = "16.04" ]]; then
+  if [[ $UBUNTU_SUPPORTED = 1 ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
     sudo apt install "$HOME/OpenBangla.deb"
     mv -f "$HOME/OpenBangla.deb" /tmp/
