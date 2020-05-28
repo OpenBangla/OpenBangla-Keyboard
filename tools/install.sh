@@ -59,14 +59,9 @@ case $DISTRO_NAME in
   if [ $ID = "linuxmint" ]; then
    	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
-	  case $VERSION_ID in
-	  	20.*) VERSION_ID=20.04;UBUNTU_SUPPORTED=1;;
-	  	19.*) VERSION_ID=18.04;UBUNTU_SUPPORTED=1;;
-	  	18.*) VERSION_ID=18.04;UBUNTU_SUPPORTED=1;;
-	  	16.*) VERSION_ID=16.04;UBUNTU_SUPPORTED=1;;
-	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle"
-	  		exit 1
-	  		;;
+	  case ${VERSION_ID%%.*} in
+	  	20|19|18|16) VERSION_ID=${VERSION_ID%%.*}.04;UBUNTU_SUPPORTED=1;;
+	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle";exit 1;;
 	  esac
   if [[ $UBUNTU_SUPPORTED = 1 ]]; then
     wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-ubuntu${VERSION_ID}.deb" -O "$HOME/OpenBangla.deb"
