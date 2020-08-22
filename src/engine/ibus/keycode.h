@@ -20,6 +20,7 @@
 #define KEYCODE_H
 
 #include <map>
+#include <stdexcept>
 #include <ibus.h>
 #include "riti.h"
 #include "Log.h"

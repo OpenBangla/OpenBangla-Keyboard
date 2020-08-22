@@ -15,6 +15,7 @@
     "qjsonobject": "cpp",
     "qtsql": "cpp",
     "qstring": "cpp",
-    "libriti.h": "c"
+    "libriti.h": "c",
+    "stdexcept": "cpp"
   }
 }
