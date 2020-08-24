@@ -52,6 +52,10 @@ public:
 
   bool getEnterKeyClosesPrevWin();
 
+  void setShowPrevWinFixed(bool b);
+
+  bool getShowPrevWinFixed();
+
   void setAutoVowelFormFixed(bool b);
 
   bool getAutoVowelFormFixed();
