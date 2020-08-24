@@ -21,7 +21,7 @@ void update_with_settings() {
     qputenv("RITI_PHONETIC_DATABASE_ON", gSettings->getShowCWPhonetic() ? "true" : "false");
     qputenv("RITI_PHONETIC_INCLUDE_ENGLISH", gSettings->getIncludeEnglishPrevWin() ? "true" : "false");
     qputenv("RITI_DATABASE_DIR", DatabasePath().toLatin1());
-    qputenv("RITI_LAYOUT_FIXED_DATABASE_ON", "true");
+    qputenv("RITI_LAYOUT_FIXED_DATABASE_ON", gSettings->getShowPrevWinFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_VOWEL", gSettings->getAutoVowelFormFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_CHANDRA", gSettings->getAutoChandraPosFixed() ? "true" : "false");
     qputenv("RITI_LAYOUT_FIXED_KAR", gSettings->getTraditionalKarFixed() ? "true" : "false");

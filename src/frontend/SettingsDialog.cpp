@@ -60,6 +60,9 @@ void SettingsDialog::implementSignals() {
   });
 
   // Fixed Keyboard Layout Group.
+  connect(ui->btnShowPrevWinFixed, &QPushButton::toggled, [=](bool checked) {
+    ui->btnShowPrevWinFixed->setText(checked ? "On" : "Off");
+  });
   connect(ui->btnAutoVowel, &QPushButton::toggled, [=](bool checked) {
     ui->btnAutoVowel->setText(checked ? "On" : "Off");
   });
@@ -90,6 +93,7 @@ void SettingsDialog::updateSettings() {
   ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getIncludeEnglishPrevWin());
 
   // Fixed Keyboard Layout Group.
+  ui->btnShowPrevWinFixed->setChecked(gSettings->getShowPrevWinFixed());
   ui->btnAutoVowel->setChecked(gSettings->getAutoVowelFormFixed());
   ui->btnAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   ui->btnOldReph->setChecked(gSettings->getOldReph());
@@ -107,6 +111,7 @@ void SettingsDialog::on_buttonBox_accepted() {
   gSettings->setIncludeEnglishPrevWin(ui->btnIncludeEnglishPrevWin->isChecked());
 
   // Fixed Keyboard Layout Group.
+  gSettings->setShowPrevWinFixed(ui->btnShowPrevWinFixed->isChecked());
   gSettings->setAutoVowelFormFixed(ui->btnAutoVowel->isChecked());
   gSettings->setAutoChandraPosFixed(ui->btnAutoChandra->isChecked());
   gSettings->setOldReph(ui->btnOldReph->isChecked());
