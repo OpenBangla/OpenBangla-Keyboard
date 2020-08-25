@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2020 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,9 +20,6 @@
 #define ABOUTDIALOG_H
 
 #include <QDialog>
-#include <QEvent>
-
-class QTimer;
 
 namespace Ui {
 class AboutDialog;
@@ -36,25 +33,14 @@ public:
 
   ~AboutDialog() override;
 
-protected:
-  bool eventFilter(QObject *object, QEvent *event) override;
-
-  void showEvent(QShowEvent *event) override;
-
 private slots:
 
-  void scroll();
-
-  void on_btnClose_clicked();
-
-  void on_btnLicense_toggled(bool checked);
-
-  void on_labelDesc_linkActivated(const QString &link);
+  void on_lblWebsite_linkActivated(const QString &link);
+  void on_lblContrib_linkActivated(const QString &link);
+  void on_lblLicense_linkActivated(const QString &link);
 
 private:
   Ui::AboutDialog *ui;
-
-  QTimer *timer;
 };
 
 #endif // ABOUTDIALOG_H

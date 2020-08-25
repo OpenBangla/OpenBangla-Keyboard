@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2020 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QTimer>
 #include <QDesktopServices>
+#include <QUrl>
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
 
@@ -30,65 +30,20 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
   // Set version
   ui->labelVer->setText(PROJECT_VERSION);
-
-  timer = new QTimer(this);
-  connect(timer, SIGNAL(timeout()), this, SLOT(scroll()));
-  timer->setInterval(30);
-  timer->start();
-
-  ui->txtLicense->setVisible(false);
-  ui->labelDesc->installEventFilter(this);
 }
 
 AboutDialog::~AboutDialog() {
   delete ui;
-  delete timer;
 }
 
-void AboutDialog::scroll() {
-  QPoint point;
-  point.setX(ui->labelDesc->x());
-  if (ui->labelDesc->y() != -780) {
-    point.setY(ui->labelDesc->y() - 1);
-    ui->labelDesc->move(point);
-  } else {
-    point.setY(300);
-    ui->labelDesc->move(point);
-  }
+void AboutDialog::on_lblWebsite_linkActivated(const QString &link) {
+  QDesktopServices::openUrl(QUrl(link));
 }
 
-void AboutDialog::showEvent(QShowEvent *event) {
-  QDialog::showEvent(event);
-  ui->labelDesc->move(ui->labelDesc->x(), 300);
+void AboutDialog::on_lblContrib_linkActivated(const QString &link) {
+  QDesktopServices::openUrl(QUrl(link));
 }
 
-void AboutDialog::on_btnClose_clicked() {
-  this->close();
-}
-
-void AboutDialog::on_btnLicense_toggled(bool checked) {
-  ui->txtLicense->setVisible(checked);
-  ui->labelDesc->setVisible(!checked);
-  if (checked) {
-    timer->stop();
-  } else {
-    timer->start();
-  }
-}
-
-bool AboutDialog::eventFilter(QObject *object, QEvent *event) {
-  if (object == ui->labelDesc) {
-    switch (event->type()) {
-    case QEvent::Enter:timer->stop();
-      break;
-    case QEvent::Leave:timer->start();
-      break;
-    default:break;
-    }
-  }
-  return QObject::eventFilter(object, event);
-}
-
-void AboutDialog::on_labelDesc_linkActivated(const QString &link) {
+void AboutDialog::on_lblLicense_linkActivated(const QString &link) {
   QDesktopServices::openUrl(QUrl(link));
 }
