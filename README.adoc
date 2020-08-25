@@ -135,6 +135,7 @@ sudo make install
  * Mehdi Hasan Khan, for originally developing and maintaining Avro Keyboard.
  * Rifat Nabi, for porting Avro Phonetic to Javascript.
  * https://github.com/sarim[Sarim Khan], for writing ibus-avro.
+ * https://github.com/saaiful[Saiful Islam], for the icon.
  * https://github.com/alex-spataru/QSimpleUpdater[QSimpleUpdater], for providing update mechanism.
 
 
