@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2015-2016 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2015-2020 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,9 +25,10 @@
 #include "riti.h"
 #include "Log.h"
 
-/* Here we map iBus keycodes with ours. */
+/* Here we map iBus keycodes with riti's. */
 
-std::map<guint, int> key;
+std::map<guint, uint16_t> key;
+static const uint16_t VC_UNKNOWN = 0x0046;
 
 void initKeycode() {
   // Begin Alphanumeric Zone
@@ -62,10 +63,6 @@ void initKeycode() {
 
   key[IBUS_KEY_equal] = VC_EQUALS;
   key[IBUS_KEY_plus] = VC_PLUS;
-
-  key[IBUS_KEY_BackSpace] = VC_BACKSPACE;
-
-  key[IBUS_KEY_Tab] = VC_TAB;
 
   key[IBUS_KEY_A] = VC_A_SHIFT;
   key[IBUS_KEY_B] = VC_B_SHIFT;
@@ -145,17 +142,6 @@ void initKeycode() {
   key[IBUS_KEY_apostrophe] = VC_APOSTROPHE;
   key[IBUS_KEY_quotedbl] = VC_QUOTE;
 
-  key[IBUS_KEY_Return] = VC_ENTER;
-  key[IBUS_KEY_space] = VC_SPACE;
-  // End Alphanumeric Zone
-
-  // Begin Cursor Key Zone
-  key[IBUS_KEY_Left] = VC_LEFT;
-  key[IBUS_KEY_Up] = VC_UP;
-  key[IBUS_KEY_Right] = VC_RIGHT;
-  key[IBUS_KEY_Down] = VC_DOWN;
-  // End Cursor Key Zone
-
   // Begin Numeric Zone
   key[IBUS_KEY_KP_Divide] = VC_KP_DIVIDE;
   key[IBUS_KEY_KP_Multiply] = VC_KP_MULTIPLY;
@@ -176,22 +162,15 @@ void initKeycode() {
   key[IBUS_KEY_KP_9] = VC_KP_9;
   key[IBUS_KEY_KP_0] = VC_KP_0;
   // End Numeric Zone
-
-  key[IBUS_KEY_Shift_L] = VC_SHIFT;
-  key[IBUS_KEY_Shift_R] = VC_SHIFT;
-  key[IBUS_KEY_Control_L] = VC_CONTROL;
-  key[IBUS_KEY_Control_R] = VC_CONTROL;
-  key[IBUS_KEY_Alt_L] = VC_ALT;
-  key[IBUS_KEY_Alt_R] = VC_ALT;
 }
 
-int ibus_keycode(guint k) {
+uint16_t ibus_keycode(guint k) {
   try {
     return key.at(k);
   }
   catch (std::out_of_range) {
     // The key is not mapped - means that we don't needed the UNKNOWN key!
-    LOG_DEBUG("[IM:iBus]: Got unknown keycode. Mapping to VC_UNKNOWN\n");
+    LOG_DEBUG("[IM:iBus]: Got unknown keycode %d. Mapping to VC_UNKNOWN\n", k);
     return VC_UNKNOWN;
   }
 }
