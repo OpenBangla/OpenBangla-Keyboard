@@ -110,6 +110,10 @@ void TopBar::SetupPopupMenus() {
   // Layout Popup Menu
   layoutMenu = new QMenu("Select keyboard layout", this);
   layoutMenu->setIcon(QIcon(":/images/keyboard_layout.png"));
+  connect(layoutMenu, &QMenu::aboutToHide, [=]() {
+    ui->buttonSetLayout->setChecked(false);
+  });
+
   layoutMenuInstall = new QAction("Install a layout", this);
   layoutMenuLayoutsGroup = new QActionGroup(this);
   for (auto &layoutMenuLayout : layoutMenuLayouts) {
@@ -182,6 +186,8 @@ void TopBar::RefreshLayouts() {
 
   QString selectedLayout = gSettings->getLayoutName();
 
+  ui->buttonSetLayout->setText(selectedLayout);
+
   // This loop need to be rewritten to use `for each` loop, which is unnecessary. Skipping.
 
 
@@ -222,6 +228,7 @@ void TopBar::layoutMenuLayouts_clicked() {
   }
 
   gLayout->setLayout(layoutName);
+  ui->buttonSetLayout->setText(layoutName);
   action->setChecked(true);
   layoutViewer->refreshLayoutViewer();
 }
@@ -248,7 +255,7 @@ void TopBar::layoutMenuInstall_clicked() {
                             "An error occured while opening the layout file!", QMessageBox::Ok);
       break;
     case SaveError:
-      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occured while saving the file!",
+      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occurred while saving the file!",
                             QMessageBox::Ok);
       break;
     }
