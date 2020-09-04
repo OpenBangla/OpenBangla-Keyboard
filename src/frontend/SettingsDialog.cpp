@@ -27,7 +27,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui->setupUi(this);
   autoCorrectDialog = new AutoCorrectDialog(this);
 
-  this->setFixedSize(QSize(this->width(), this->height()));
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
 
   implementSignals();
@@ -41,16 +40,14 @@ SettingsDialog::~SettingsDialog() {
 
 void SettingsDialog::implementSignals() {
   // Phonetic Keyboard Layout Group.
-  connect(ui->btnShowPrevWin, &QPushButton::toggled, [=](bool checked) {
-    ui->btnShowPrevWin->setText(checked ? "On" : "Off");
+  connect(ui->btnSuggestionPhonetic, &QPushButton::toggled, [=](bool checked) {
+    ui->btnSuggestionPhonetic->setText(checked ? "On" : "Off");
     // Control other Preview window related settings.
-    ui->btnClosePrevWin->setEnabled(checked);
-    ui->cmbOrientation->setEnabled(checked);
     ui->btnIncludeEnglishPrevWin->setEnabled(checked);
     ui->btnACUpdate->setEnabled(checked);
   });
-  connect(ui->btnClosePrevWin, &QPushButton::toggled, [=](bool checked) {
-    ui->btnClosePrevWin->setText(checked ? "On" : "Off");
+  connect(ui->btnEnterClosePW, &QPushButton::toggled, [=](bool checked) {
+    ui->btnEnterClosePW->setText(checked ? "On" : "Off");
   });
   connect(ui->btnIncludeEnglishPrevWin, &QPushButton::toggled, [=](bool checked) {
     ui->btnIncludeEnglishPrevWin->setText(checked ? "On" : "Off");
@@ -60,8 +57,8 @@ void SettingsDialog::implementSignals() {
   });
 
   // Fixed Keyboard Layout Group.
-  connect(ui->btnShowPrevWinFixed, &QPushButton::toggled, [=](bool checked) {
-    ui->btnShowPrevWinFixed->setText(checked ? "On" : "Off");
+  connect(ui->btnSuggestionFixed, &QPushButton::toggled, [=](bool checked) {
+    ui->btnSuggestionFixed->setText(checked ? "On" : "Off");
   });
   connect(ui->btnAutoVowel, &QPushButton::toggled, [=](bool checked) {
     ui->btnAutoVowel->setText(checked ? "On" : "Off");
@@ -87,13 +84,13 @@ void SettingsDialog::implementSignals() {
 
 void SettingsDialog::updateSettings() {
   // Phonetic Keyboard Layout Group.
-  ui->btnClosePrevWin->setChecked(gSettings->getEnterKeyClosesPrevWin());
-  ui->btnShowPrevWin->setChecked(gSettings->getShowCWPhonetic());
+  ui->btnEnterClosePW->setChecked(gSettings->getEnterKeyClosesPrevWin());
+  ui->btnSuggestionPhonetic->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
   ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getIncludeEnglishPrevWin());
 
   // Fixed Keyboard Layout Group.
-  ui->btnShowPrevWinFixed->setChecked(gSettings->getShowPrevWinFixed());
+  ui->btnSuggestionFixed->setChecked(gSettings->getShowPrevWinFixed());
   ui->btnAutoVowel->setChecked(gSettings->getAutoVowelFormFixed());
   ui->btnAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   ui->btnOldReph->setChecked(gSettings->getOldReph());
@@ -105,13 +102,13 @@ void SettingsDialog::updateSettings() {
 
 void SettingsDialog::on_buttonBox_accepted() {
   // Phonetic Keyboard Layout Group.
-  gSettings->setEnterKeyClosesPrevWin(ui->btnClosePrevWin->isChecked());
-  gSettings->setShowCWPhonetic(ui->btnShowPrevWin->isChecked());
+  gSettings->setEnterKeyClosesPrevWin(ui->btnEnterClosePW->isChecked());
+  gSettings->setShowCWPhonetic(ui->btnSuggestionPhonetic->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
   gSettings->setIncludeEnglishPrevWin(ui->btnIncludeEnglishPrevWin->isChecked());
 
   // Fixed Keyboard Layout Group.
-  gSettings->setShowPrevWinFixed(ui->btnShowPrevWinFixed->isChecked());
+  gSettings->setShowPrevWinFixed(ui->btnSuggestionFixed->isChecked());
   gSettings->setAutoVowelFormFixed(ui->btnAutoVowel->isChecked());
   gSettings->setAutoChandraPosFixed(ui->btnAutoChandra->isChecked());
   gSettings->setOldReph(ui->btnOldReph->isChecked());
