@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>156</width>
-    <height>26</height>
+    <width>261</width>
+    <height>27</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -39,7 +39,7 @@
    <widget class="QPushButton" name="buttonAbout">
     <property name="geometry">
      <rect>
-      <x>104</x>
+      <x>208</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
@@ -79,22 +79,21 @@
      <rect>
       <x>26</x>
       <y>0</y>
-      <width>27</width>
+      <width>131</width>
       <height>27</height>
      </rect>
     </property>
     <property name="toolTip">
      <string>Change Layout</string>
     </property>
-    <property name="icon">
-     <iconset resource="images.qrc">
-      <normaloff>:/images/keyboard_layout_viewer.png</normaloff>:/images/keyboard_layout_viewer.png</iconset>
+    <property name="checkable">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonViewLayout">
     <property name="geometry">
      <rect>
-      <x>52</x>
+      <x>156</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
@@ -111,7 +110,7 @@
    <widget class="QPushButton" name="buttonSettings">
     <property name="geometry">
      <rect>
-      <x>78</x>
+      <x>182</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
@@ -128,7 +127,7 @@
    <widget class="QPushButton" name="buttonShutdown">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>234</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
