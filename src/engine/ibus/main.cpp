@@ -12,6 +12,8 @@ static IBusEngine *engine = nullptr;
 static IBusLookupTable *table = nullptr;
 static gint id = 0;
 static Suggestion *suggestion = nullptr;
+/* Unfortunately, we have to keep track of the right Alt Key. */
+static bool altGr = false;
 
 void update_with_settings() {
     qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
@@ -109,6 +111,9 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
 
   // Don't accept Key Release event
   if (state & IBUS_RELEASE_MASK) {
+    if(keyval == IBUS_KEY_Alt_R || keyval == IBUS_KEY_ISO_Level3_Shift) {
+      altGr = false;
+    }
     return FALSE;
   }
 
@@ -202,13 +207,14 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
         return FALSE;
       }
     /** Modifier keys **/
+    case IBUS_KEY_Alt_R:
+    case IBUS_KEY_ISO_Level3_Shift:
+    altGr = true; // Keep track of the right Alt key (also known as the AltGr key)
     case IBUS_KEY_Shift_L:
     case IBUS_KEY_Shift_R:
     case IBUS_KEY_Control_L:
     case IBUS_KEY_Control_R:
     case IBUS_KEY_Alt_L:
-    case IBUS_KEY_Alt_R:
-    case IBUS_KEY_ISO_Level3_Shift:
     case IBUS_KEY_Meta_L:
     case IBUS_KEY_Meta_R:
       return (gboolean) riti_context_ongoing_input_session(ctx);
@@ -232,16 +238,16 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   // Convert the key value into riti's key value.
   uint16_t key = ibus_keycode(keyval);
 
-  // Reject the key which has only ctrl or alt combination and riti doesn't handle.
-  if((ctrl_key && !alt_key) || (!ctrl_key && alt_key) || key == VC_UNKNOWN) {
+  // Reject the key which has only Ctrl or Alt (not the right one) combination and riti doesn't handle.
+  if((ctrl_key && !alt_key) || (!ctrl_key && alt_key && !altGr) || key == VC_UNKNOWN) {
     if(riti_context_ongoing_input_session(ctx)) {
       engine_commit();
     }
     return FALSE;
   }
 
-  // If we have ctrl and alt combination, set it as the altgr modifier.
-  if(ctrl_key && alt_key) {
+  // If we have Ctrl and Alt combination or the right Alt, set it as the AltGr modifier.
+  if((ctrl_key && alt_key) || altGr) {
     modifier |= MODIFIER_ALT_GR;
   }
 
