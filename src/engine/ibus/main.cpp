@@ -253,7 +253,11 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
 
   suggestion = riti_get_suggestion_for_key(ctx, key, modifier);
 
-  engine_update_lookup_table();
+  if(!riti_suggestion_is_empty(suggestion)) {
+    engine_update_lookup_table();
+  } else {
+    return FALSE;
+  }
 
   return TRUE;
 }
