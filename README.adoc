@@ -77,7 +77,7 @@ Make sure you have a **working internet connection**.
 
 Open your terminal and run this command on your shell:
 ```bash
-bash -c "$(wget -nv -O- https://bit.ly/OBK-sh)"
+bash -c "$(wget -nv -O- https://git.io/JUGB8)"
 ```
 
 Then use iBus UI or run `ibus-setup` to add and activate **OpenBangla Keyboard** as input method.
