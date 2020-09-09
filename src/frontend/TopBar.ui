@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
+    <width>235</width>
     <height>27</height>
    </rect>
   </property>
@@ -36,44 +36,6 @@
      <height>16777215</height>
     </size>
    </property>
-   <widget class="QPushButton" name="buttonAbout">
-    <property name="geometry">
-     <rect>
-      <x>208</x>
-      <y>0</y>
-      <width>27</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>0</width>
-      <height>0</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>Help</string>
-    </property>
-    <property name="icon">
-     <iconset resource="images.qrc">
-      <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>12</width>
-      <height>12</height>
-     </size>
-    </property>
-    <property name="autoDefault">
-     <bool>false</bool>
-    </property>
-    <property name="default">
-     <bool>false</bool>
-    </property>
-    <property name="flat">
-     <bool>false</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="buttonSetLayout">
     <property name="geometry">
      <rect>
@@ -127,7 +89,7 @@
    <widget class="QPushButton" name="buttonShutdown">
     <property name="geometry">
      <rect>
-      <x>234</x>
+      <x>208</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
