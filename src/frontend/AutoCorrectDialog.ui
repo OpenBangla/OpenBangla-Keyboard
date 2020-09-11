@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>371</width>
-    <height>420</height>
+    <width>390</width>
+    <height>465</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,34 +35,33 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLineEdit" name="txtReplace"/>
+      <widget class="QLineEdit" name="txtReplace">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="txtWith"/>
+      <widget class="QLineEdit" name="txtWith">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="accessibleName">
-      <string/>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Preview</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <property name="topMargin">
-       <number>9</number>
-      </property>
-      <property name="bottomMargin">
-       <number>9</number>
-      </property>
       <item>
        <widget class="QLabel" name="lblPreviewR">
         <property name="sizePolicy">
@@ -72,10 +71,7 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="text">
          <string/>
@@ -91,10 +87,7 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="text">
          <string/>
