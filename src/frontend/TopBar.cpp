@@ -127,7 +127,7 @@ void TopBar::SetupPopupMenus() {
   connect(layoutMenuInstall, SIGNAL(triggered()), this, SLOT(layoutMenuInstall_clicked()));
 
   // Icon Button Popup Menu
-  #if 0
+#if 0
   iconMenuOnTray = new QAction("Jump to system tray", this);
   connect(iconMenuOnTray, SIGNAL(triggered()), this, SLOT(iconMenuOnTray_clicked()));
 #endif
@@ -242,7 +242,7 @@ void TopBar::layoutMenuInstall_clicked() {
       break;
     case OpenError:
       QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard",
-                            "An error occured while opening the layout file!", QMessageBox::Ok);
+                            "An error occurred while opening the layout file!", QMessageBox::Ok);
       break;
     case SaveError:
       QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occurred while saving the file!",
