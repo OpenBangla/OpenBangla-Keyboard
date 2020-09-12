@@ -64,17 +64,15 @@ private slots:
 
   void layoutMenuInstall_clicked();
 
-  void aboutMenuLayout_clicked();
+  void iconMenuLayout_clicked();
 
-  void aboutMenuAbout_clicked();
+  void iconMenuAbout_clicked();
 
-  void quitMenuOnTray_clicked();
-
-  void quitMenuQuit_clicked();
+  void iconMenuOnTray_clicked();
 
   void trayMenuRestore_clicked();
 
-  void on_buttonAbout_clicked();
+  void on_buttonIcon_clicked();
 
   void on_buttonSetLayout_clicked();
 
@@ -86,7 +84,8 @@ private slots:
 
 private:
   Ui::TopBar *ui;
-  bool canMoveTopbar;
+  bool canMoveTopbar = false;
+  bool positionChanged = false;
   int pressedMouseX, pressedMouseY;
   QSystemTrayIcon *tray;
   QSimpleUpdater *updater;
@@ -104,15 +103,12 @@ private:
   QAction *layoutMenuLayouts[MaxLayoutFiles];
   QActionGroup *layoutMenuLayoutsGroup;
   QAction *layoutMenuInstall;
-  /* About Popup Menu */
-  QMenu *aboutMenu;
-  QAction *aboutMenuLayout;
-  QAction *aboutMenuAbout;
-  QAction *aboutMenuUpdate;
-  /* Quit Popup Menu */
-  QMenu *quitMenu;
-  QAction *quitMenuOnTray;
-  QAction *quitMenuQuit;
+  /* Icon Button Popup Menu */
+  QMenu *iconMenu;
+  QAction *iconMenuOnTray;
+  QAction *iconMenuLayout;
+  QAction *iconMenuAbout;
+  QAction *iconMenuUpdate;
 
   /* Tray Popup Menu */
   QMenu *trayMenu;

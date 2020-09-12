@@ -1,14 +1,11 @@
 <RCC>
-  <qresource prefix="/">
-    <file>images/OpenBangla-Keyboard.png</file>
-    <file>images/about.png</file>
-    <file>images/internet.png</file>
-    <file>images/keyboard_layout.png</file>
-    <file>images/keyboard_layout_viewer.png</file>
-    <file>images/settings.png</file>
-    <file>images/shutdown.png</file>
-    <file>images/zoom-in.png</file>
-    <file>images/zoom-out.png</file>
-    <file>images/icon.png</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>images/OpenBangla-Keyboard.png</file>
+        <file>images/icon.png</file>
+        <file>images/outline_keyboard_hide_black_24dp.png</file>
+        <file>images/outline_keyboard_black_24dp.png</file>
+        <file>images/outline_settings_black_24dp.png</file>
+        <file>images/outline_description_black_18dp.png</file>
+        <file>images/outline_close_black_24dp.png</file>
+    </qresource>
 </RCC>
