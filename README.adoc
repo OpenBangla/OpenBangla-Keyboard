@@ -136,6 +136,7 @@ sudo make install
  * Rifat Nabi, for porting Avro Phonetic to Javascript.
  * https://github.com/sarim[Sarim Khan], for writing ibus-avro.
  * https://github.com/saaiful[Saiful Islam], for the icon.
+ * https://material.io/resources/icons[Material Design Icons].
  * https://github.com/alex-spataru/QSimpleUpdater[QSimpleUpdater], for providing update mechanism.
 
 

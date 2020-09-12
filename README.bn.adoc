@@ -131,10 +131,12 @@ sudo make install
  * মেহেদী হাসান খান, অভ্র কিবোর্ডের ডেভলপের জন্য।
  * রীফাত নবী, অভ্র ফোনেটিক জাভাস্ক্রিপ্টে স্থানান্তর করার জন্য।
  * https://github.com/sarim[সারিম খান], আইবাস-অভ্র ডেভলপের জন্য।
+ * https://github.com/saaiful[সাইফুল ইসলাম], আইকনের জন্য। 
+ * https://material.io/resources/icons[Material Design Icons].
  * https://github.com/alex-spataru/QSimpleUpdater[QSimpleUpdater], হালনাগাদকরণ লাইব্রেরির জন্য।
 
 
 == লাইসেন্স
 এই প্রজেক্টটি https://opensource.org/licenses/GPL-3.0[জিপিএল ৩] লাইসেন্সের অধীন।
 
-https://github.com/mominul[মুহম্মদ মমিনুল হক] এবং https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors[✨ অবদানকারীদের ✨] {nbsp} ❤️ {nbsp} দিয়ে তৈরি!
+https://github.com/mominul[মোহাম্মদ মোমিনুল হক] এবং https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors[✨ অবদানকারীদের ✨] {nbsp} ❤️ {nbsp} দিয়ে তৈরি!
