@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
+    <width>130</width>
     <height>27</height>
    </rect>
   </property>
@@ -41,12 +41,22 @@
      <rect>
       <x>26</x>
       <y>0</y>
-      <width>131</width>
+      <width>27</width>
       <height>27</height>
      </rect>
     </property>
     <property name="toolTip">
      <string>Change Layout</string>
+    </property>
+    <property name="icon">
+     <iconset resource="images.qrc">
+      <normaloff>:/images/outline_keyboard_hide_black_24dp.png</normaloff>:/images/outline_keyboard_hide_black_24dp.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -55,7 +65,7 @@
    <widget class="QPushButton" name="buttonViewLayout">
     <property name="geometry">
      <rect>
-      <x>156</x>
+      <x>52</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
@@ -66,13 +76,19 @@
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
-      <normaloff>:/images/keyboard_layout.png</normaloff>:/images/keyboard_layout.png</iconset>
+      <normaloff>:/images/outline_keyboard_black_24dp.png</normaloff>:/images/outline_keyboard_black_24dp.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonSettings">
     <property name="geometry">
      <rect>
-      <x>182</x>
+      <x>78</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
@@ -83,13 +99,19 @@
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
-      <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+      <normaloff>:/images/outline_settings_black_24dp.png</normaloff>:/images/outline_settings_black_24dp.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonShutdown">
     <property name="geometry">
      <rect>
-      <x>208</x>
+      <x>104</x>
       <y>0</y>
       <width>27</width>
       <height>27</height>
@@ -100,7 +122,13 @@
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
-      <normaloff>:/images/shutdown.png</normaloff>:/images/shutdown.png</iconset>
+      <normaloff>:/images/outline_close_black_24dp.png</normaloff>:/images/outline_close_black_24dp.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonIcon">

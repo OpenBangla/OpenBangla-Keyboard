@@ -179,8 +179,6 @@ void TopBar::RefreshLayouts() {
 
   QString selectedLayout = gSettings->getLayoutName();
 
-  ui->buttonSetLayout->setText(selectedLayout);
-
   // This loop need to be rewritten to use `for each` loop, which is unnecessary. Skipping.
 
 
@@ -221,7 +219,6 @@ void TopBar::layoutMenuLayouts_clicked() {
   }
 
   gLayout->setLayout(layoutName);
-  ui->buttonSetLayout->setText(layoutName);
   action->setChecked(true);
   layoutViewer->refreshLayoutViewer();
 }
@@ -363,7 +360,7 @@ void TopBar::DataMigration() {
 
           if(converter.convertLayoutFormat(path) != Ok) {
             QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard",
-                            QString("An error occured while converting %1 layout!").arg(file), QMessageBox::Ok);
+                            QString("An error occurred while converting %1 layout!").arg(file), QMessageBox::Ok);
             return;
           }
         }
