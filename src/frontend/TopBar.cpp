@@ -323,7 +323,7 @@ void TopBar::on_buttonSetLayout_clicked() {
 }
 
 void TopBar::on_buttonShutdown_clicked() {
-  TopBar::close();
+  QApplication::exit();
 }
 
 void TopBar::on_buttonViewLayout_clicked() {
