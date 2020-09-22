@@ -71,4 +71,6 @@ QString RegexDictPath();
 
 QString AutoCorrectFilePath();
 
+bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst);
+
 #endif /* end of include guard: FILE_SYSTEM_H */

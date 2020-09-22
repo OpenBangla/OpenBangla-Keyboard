@@ -348,9 +348,8 @@ void TopBar::DataMigration() {
     QDir previousUserDataPath = QDir(environmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
     if(previousUserDataPath.exists()) {
       // Handle the data files.
-      // FIXME: These functions will not overwrite.
-      QFile::copy(previousUserDataPath.filePath("phonetic-candidate-selection.json"), usr.dataPath());
-      QFile::copy(previousUserDataPath.filePath("autocorrect.json"), usr.dataPath());
+      migrateFile("phonetic-candidate-selection.json", previousUserDataPath, usr.dataPath());
+      migrateFile("autocorrect.json", previousUserDataPath, usr.dataPath());
       // Convert old layout files if present.
       previousUserDataPath.cd("Layouts");
       QStringList list = previousUserDataPath.entryList(QStringList("*.json"));

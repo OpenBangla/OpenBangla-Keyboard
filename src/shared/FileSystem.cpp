@@ -53,3 +53,16 @@ QString environmentVariable(const char *varName, const QString &defaultValue)
         return defaultValue;
     return QString::fromLocal8Bit(value);
 }
+
+/// Copy the `fileName` from `src` to `dst`.
+/// This function overwrites if the file already exists in the destination.
+bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst) {
+    QString srcFile = src.filePath(fileName);
+    QString dstFile = dst.filePath(fileName);
+    
+    if(QFile::exists(srcFile) && QFile::exists(dstFile)) {
+        QFile::remove(dstFile);
+    }
+
+    return QFile::copy(srcFile, dstFile);
+}
