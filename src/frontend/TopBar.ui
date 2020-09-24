@@ -72,7 +72,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>View information about current layout</string>
+     <string>View information about the current layout</string>
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
@@ -116,6 +116,9 @@
       <width>27</width>
       <height>27</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Quit</string>
     </property>
     <property name="text">
      <string/>
