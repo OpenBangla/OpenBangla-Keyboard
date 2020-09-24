@@ -19,8 +19,10 @@
 * **Bug Fix**: Handle the BackSlash key in Fixed Keyboard methods. ([#98][98])
 * **Bug Fix**: Crash when using the Arrow keys in phonetic method. ([#123][123])
 * **Bug Fix**: Fix writing of `Hasant` + `য` and য-ফলা(`্য`) in Fixed Keyboard methods. ([#117][117], [#163][163])
+* **Bug Fix**: Fix Window Manager losing the track of the TopBar issue. ([#153][153], [#171][171])
 * Follows XDG Directory Specification for storing user specific data. ([#16][16]) Automatically [migrates user specific files][143] into the new place.
 * Changes binary names to be more UNIX like. ([#103][103])
+* Huge infrastructural change: We now use Github Actions and Bintray for automating our testing and package deployment. ([#130][130])
 
 [107]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/107
 [3]: https://github.com/OpenBangla/riti/pull/3
@@ -44,6 +46,9 @@
 [117]: https://github.com/OpenBangla/OpenBangla-Keyboard/issues/117
 [163]: https://github.com/OpenBangla/OpenBangla-Keyboard/issues/163#issuecomment-689956532
 [103]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/103
+[153]: https://github.com/OpenBangla/OpenBangla-Keyboard/issues/153
+[171]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/171
+[130]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/130
 ## 1.5.1
 * Fixes a dictionary loading issue which was affecting in some scenarios. ([#73](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/73))
 * Polished some UI dialogs. ([#66](https://github.com/OpenBangla/OpenBangla-Keyboard/pull/66))
