@@ -104,7 +104,8 @@ void LayoutViewer::on_viewAltGr_clicked() {
 
 QByteArray LayoutViewer::decodeAndDecompress(QByteArray &data) {
   std::string decoded = base91::decode(std::string(data.data(), data.size()));
-  unsigned long long cap = ZSTD_getFrameContentSize(decoded.data(), decoded.size());
+  // Use ZSTD_getFrameContentSize() function when we can hard depend on zstd 1.3.0
+  unsigned long long cap = ZSTD_getDecompressedSize(decoded.data(), decoded.size());
   char *imgData = (char *)malloc(cap);
 
   size_t decompressed = ZSTD_decompress(imgData, cap, decoded.data(), decoded.size());
