@@ -29,6 +29,7 @@ makeArch () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}${PKGEXT}"
     pacman -S --noconfirm --needed base-devel cmake libibus zstd qt5-base curl
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
+    source $HOME/.cargo/env
     mkdir /build
     cd /build
     cp -fpr "$GITHUB_WORKSPACE" /build/src
