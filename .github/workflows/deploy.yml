@@ -8,10 +8,10 @@ on:
 jobs:
 
   build:
-    if: contains(github.event.head_commit.message, 'deploy+')
+    if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
     strategy:
       matrix:
-        container: [ "ubuntu:18.04", "ubuntu:19.10", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "fedora:32", "archlinux:latest" ]
+        container: [ "ubuntu:18.04", "ubuntu:19.10", "ubuntu:20.04", "debian:9", "debian:10", "fedora:29", "fedora:30", "fedora:31", "fedora:32", "fedora:33", "archlinux:latest" ]
         # this list should be updated from time to time by consulting these pages:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases
@@ -37,6 +37,7 @@ jobs:
           path: artifact
 
   deploy:
+    if: contains(github.event.head_commit.message, 'deploy+')
     needs: build
     runs-on: "ubuntu-latest"
     container:
