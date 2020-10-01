@@ -35,15 +35,11 @@ Probhat, Munir Optima, National (Jatiya) etc.
 Most features of https://www.omicronlab.com/avro-keyboard.html[Avro Keyboard] are present in OpenBangla Keyboard.
 So Avro Keyboard users will feel right at home in Linux with OpenBangla Keyboard.
 
-OpenBangla Keyboard is the default Bangla writing software for http://www.magpieos.net[MagpieOS], a Bangladeshi Linux distribution.
-
 image:https://github.com/OpenBangla/OpenBangla-Keyboard/workflows/CI/badge.svg[CI, link=https://github.com/OpenBangla/OpenBangla-Keyboard/actions?query=workflow%3ACI+branch%3Amaster] {nbsp}
 image:https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg[Downloads, link=https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg] {nbsp}
 image:https://img.shields.io/discord/436879388362014740.svg[Discord, link=https://discord.gg/HXK7QnJ]
 
-CAUTION: This project is powered by github 🌟s. Go ahead and *star* it please
-
-https://github.com/OpenBangla/OpenBangla-Keyboard/projects/1[**We're working towards version 2.0 of OpenBangla Keyboard!**]
+CAUTION: This project is powered by github 🌟s. Go ahead and *star* it please!
 
 
 toc::[]
@@ -71,20 +67,55 @@ toc::[]
 
 == Installation
 
-WARNING: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, please uninstall it first.
+IMPORTANT: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Uninstalling-OpenBangla-Keyboard[please uninstall it first.]
 
-Make sure you have a **working internet connection**.
+First set up our repositories for your distro, then you can install normally with your package manager.
 
-Open your terminal and run this command on your shell:
+=== Ubuntu & derivatives
+Run these commands to set up our repository:
 ```bash
-bash -c "$(wget -nv -O- https://git.io/JUGB8)"
+source /etc/os-release
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/pub.key | apt-key add -"
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/ubuntu.conf | sed s/@NAME@/$UBUNTU_CODENAME/ > /etc/apt/sources.list.d/openbangla.list"
+sudo apt update
+sudo apt install openbangla-keyboard
 ```
 
-Then use iBus UI or run `ibus-setup` to add and activate **OpenBangla Keyboard** as input method.
+=== Debian & derivatives
+Run these commands to set up our repository:
+```bash
+source /etc/os-release
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/pub.key | apt-key add -"
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/debian.conf | sed s/@NAME@/$VERSION_CODENAME/ > /etc/apt/sources.list.d/openbangla.list"
+sudo apt update
+sudo apt install openbangla-keyboard
+```
 
+=== Fedora
+Run these commands to set up our repository:
+```bash
+sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/fedora.conf > /etc/yum.repos.d/openbangla.repo"
+sudo dnf install openbangla-keyboard
+```
+
+=== Archlinux
+Run these commands to set up our repository:
+```bash
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/pub.key | pacman-key -a -"
+sudo pacman-key --lsign-key "openbanglateam@gmail.com"
+sudo sh -c "curl https://dl.bintray.com/openbangla/i/archlinux.conf >> /etc/pacman.conf"
+sudo pacman -Syy
+sudo pacman -S openbangla-keyboard
+```
+
+=== Others
+You can also install by downloading necessary packages from our https://github.com/OpenBangla/OpenBangla-Keyboard/releases[Releases] page.
+
+=== Finally
 After you have installed OpenBangla Keyboard, you may need to https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Configuring-Environment[configure your desktop environment].
 
-If this does not work out for you, please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue]. While we look into the problem, you can check the https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[Wiki] for distro-specific install instructions.
+If this does not work out for you, please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue.]
 
 == Community
 We are on https://discord.gg/HXK7QnJ[Discord] and https://www.facebook.com/openbanglakeyboard[Facebook].
