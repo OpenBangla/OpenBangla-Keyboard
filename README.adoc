@@ -67,7 +67,7 @@ toc::[]
 
 == Installation
 
-IMPORTANT: If you had installed OpenBangla Keyboard 1.2.0 or earlier version, https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Uninstalling-OpenBangla-Keyboard[please uninstall it first.]
+IMPORTANT: If you had installed OpenBangla Keyboard 1.5.1 or earlier version, https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Uninstalling-OpenBangla-Keyboard[please uninstall it first.]
 
 First set up our repositories for your distro, then you can install normally with your package manager.
 
