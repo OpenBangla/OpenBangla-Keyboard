@@ -140,20 +140,27 @@ https://discord.gg/HXK7QnJ[ডিসকর্ড] এবং https://www.facebook
 ```bash
 sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default libzstd-dev
 ```
+
 ফেদোরাতে ডিপেন্ডেসিগুলো ইনস্টলের কমান্ড:
 ```bash
 sudo dnf install @buildsys-build rust cargo cmake qt5-qtdeclarative-devel ibus-devel libzstd-devel
 ```
+
 আর্চলিনাক্স ভিত্তিক সিস্টেমে ডিপেন্ডেসিগুলো ইনস্টলের কমান্ড:
 ```bash
 sudo pacman -S base-devel rust cmake qt5-base libibus zstd
 ```
 
+ওপেনসুস ভিত্তিক সিস্টেমে ডিপেন্ডেন্সিগুলো ইন্সটলের কমান্ড:
+```bash
+zypper install libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake make ninja rust ibus-devel ibus clang gcc patterns-devel-base-devel_basis
+```
 বিল্ড ডিপেন্ডেন্সিগুলো ইনস্টলের পর ওপেনবাংলা কিবোর্ডের সোর্স কোড রিপজিটরিটি ক্লোন করুন এবং ক্লোন করা ডিরেক্টরিতে প্রবেশ করুন:
 ```bash
 git clone --recursive https://github.com/OpenBangla/OpenBangla-Keyboard.git
 cd OpenBangla-Keyboard
 ```
+
 এরপর বিল্ড কমান্ডগুলো চালান:
 ```bash
 mkdir build && cd build
@@ -167,7 +174,7 @@ sudo make install
  * মেহেদী হাসান খান, অভ্র কিবোর্ডের ডেভলপের জন্য।
  * রীফাত নবী, অভ্র ফোনেটিক জাভাস্ক্রিপ্টে স্থানান্তর করার জন্য।
  * https://github.com/sarim[সারিম খান], আইবাস-অভ্র ডেভলপের জন্য।
- * https://github.com/saaiful[সাইফুল ইসলাম], আইকনের জন্য। 
+ * https://github.com/saaiful[সাইফুল ইসলাম], আইকনের জন্য।
  * https://material.io/resources/icons[Material Design Icons].
  * https://github.com/alex-spataru/QSimpleUpdater[QSimpleUpdater], হালনাগাদকরণ লাইব্রেরির জন্য।
 
