@@ -151,6 +151,11 @@ On a Arch Linux / Arch Based system you can easily install them like this:
 sudo pacman -S base-devel rust cmake qt5-base libibus zstd
 ```
 
+On Opensuse & derivatives you can easily install them like this:
+```bash
+sudo zypper install libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake make ninja rust ibus-devel ibus clang gcc patterns-devel-base-devel_basis
+```
+
 After you have installed required libraries and binaries, clone this repository and change to the cloned folder:
 ```bash
 git clone --recursive https://github.com/OpenBangla/OpenBangla-Keyboard.git
