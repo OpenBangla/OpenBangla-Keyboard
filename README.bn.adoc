@@ -158,7 +158,7 @@ sudo zypper install libQt5Core-devel libQt5Widgets-devel libQt5Network-devel lib
 
 সোলাস ভিত্তিক সিস্টেমে ডিপেন্ডেন্সিগুলো ইন্সটলের কমান্ড:
 ```bash
-sudo eopkg install -c system.devel rust qt5-base-devel ibus-devel zstd-devel git cargo gtk2-engine-murrine
+sudo eopkg install -c system.devel rust qt5-base-devel ibus-devel zstd-devel git cargo
 ```
 
 বিল্ড ডিপেন্ডেন্সিগুলো ইনস্টলের পর ওপেনবাংলা কিবোর্ডের সোর্স কোড রিপজিটরিটি ক্লোন করুন এবং ক্লোন করা ডিরেক্টরিতে প্রবেশ করুন:
