@@ -155,6 +155,12 @@ sudo pacman -S base-devel rust cmake qt5-base libibus zstd
 ```bash
 sudo zypper install libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake make ninja rust ibus-devel ibus clang gcc patterns-devel-base-devel_basis
 ```
+
+সোলাস ভিত্তিক সিস্টেমে ডিপেন্ডেন্সিগুলো ইন্সটলের কমান্ড:
+```bash
+sudo eopkg install -c system.devel rust qt5-base-devel ibus-devel zstd-devel git cargo
+```
+
 বিল্ড ডিপেন্ডেন্সিগুলো ইনস্টলের পর ওপেনবাংলা কিবোর্ডের সোর্স কোড রিপজিটরিটি ক্লোন করুন এবং ক্লোন করা ডিরেক্টরিতে প্রবেশ করুন:
 ```bash
 git clone --recursive https://github.com/OpenBangla/OpenBangla-Keyboard.git
