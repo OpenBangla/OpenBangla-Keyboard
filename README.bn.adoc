@@ -97,7 +97,7 @@ sudo apt install openbangla-keyboard
 === ফেদোরা
 নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
 ```bash
-sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
+sudo rpm --import https://dl.bintray.com/openbangla/i/pub.key
 sudo sh -c "curl https://dl.bintray.com/openbangla/i/fedora.conf > /etc/yum.repos.d/openbangla.repo"
 sudo dnf install openbangla-keyboard
 ```

@@ -98,7 +98,7 @@ sudo apt install openbangla-keyboard
 === Fedora
 Run these commands to set up our repository:
 ```bash
-sudp rpm --import https://dl.bintray.com/openbangla/i/pub.key
+sudo rpm --import https://dl.bintray.com/openbangla/i/pub.key
 sudo sh -c "curl https://dl.bintray.com/openbangla/i/fedora.conf > /etc/yum.repos.d/openbangla.repo"
 sudo dnf install openbangla-keyboard
 ```
