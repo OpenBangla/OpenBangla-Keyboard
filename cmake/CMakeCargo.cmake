@@ -32,6 +32,13 @@ function(cargo_build)
         endif()
     endif()
 
+    if(CMAKE_CROSSCOMPILING)
+        # Get target triple from environment
+        if(DEFINED ENV{RUST_TARGET}) # For Void Linux
+            set(LIB_TARGET $ENV{RUST_TARGET})
+        endif()
+    endif()
+
     if(NOT CMAKE_BUILD_TYPE)
         set(LIB_BUILD_TYPE "debug")
     elseif(${CMAKE_BUILD_TYPE} STREQUAL "Release")
