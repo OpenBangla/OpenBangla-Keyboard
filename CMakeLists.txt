@@ -62,8 +62,18 @@ if(OS_LINUX)
 
     include(FindPkgConfig)
     find_package(PkgConfig)
+
+    option(ENABLE_IBUS "Enable IBus support" On)
+    option(ENABLE_FCITX "Enable Fcitx support" On)
+
     ## Find iBus ##
-    pkg_check_modules(IBUS REQUIRED ibus-1.0)
+    if (ENABLE_IBUS)
+        pkg_check_modules(IBUS REQUIRED ibus-1.0)
+    endif()
+
+    if (ENABLE_FCITX)
+        find_package(Fcitx5Core REQUIRED)
+    endif()
     ## Find zstd ##
     pkg_check_modules(ZSTD REQUIRED libzstd)
 endif()
