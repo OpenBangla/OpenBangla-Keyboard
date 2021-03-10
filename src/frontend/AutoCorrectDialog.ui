@@ -70,6 +70,11 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>Noto Serif Bengali</family>
+         </font>
+        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -85,6 +90,11 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Noto Serif Bengali</family>
+         </font>
         </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
