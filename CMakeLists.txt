@@ -49,6 +49,7 @@ if (OS_LINUX)
 
     ## Set Directories for installing and storing files
     set(CMAKE_INSTALL_PREFIX "/usr")
+    set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
     set(DATADIR "${CMAKE_INSTALL_PREFIX}/share")
     set(PROJECT_DATADIR "${DATADIR}/openbangla-keyboard")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
