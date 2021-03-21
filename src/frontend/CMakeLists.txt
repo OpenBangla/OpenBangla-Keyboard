@@ -25,4 +25,4 @@ add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
 target_link_libraries(openbangla-gui libShared 3rdParty Qt5::Widgets Qt5::Network ${ZSTD_LIBRARIES})
 
 install(TARGETS openbangla-gui
-        RUNTIME DESTINATION ${PROJECT_DATADIR})
+        RUNTIME DESTINATION ${BIN_DIR})
