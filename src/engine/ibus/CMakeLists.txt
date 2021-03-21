@@ -79,4 +79,4 @@ install(FILES ${CMAKE_SOURCE_DIR}/data/io.github.openbangla.keyboard.metainfo.xm
         DESTINATION ${DATADIR}/metainfo)
 
 install(TARGETS ibus-openbangla
-        RUNTIME DESTINATION ${PROJECT_DATADIR})
+        RUNTIME DESTINATION ${BIN_DIR})
