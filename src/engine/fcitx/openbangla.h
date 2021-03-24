@@ -27,62 +27,44 @@
 #include <fcitx/inputcontextproperty.h>
 #include <fcitx/inputmethodengine.h>
 #include <fcitx/instance.h>
+#include <limits>
 
 namespace fcitx {
 
 class OpenBanglaState;
 
-FCITX_CONFIGURATION(
-    OpenBanglaConfig,
-    Option<bool> enterKeyClosesPrevWin{this, "enterKeyClosesPrevWin",
-                                       "enterKeyClosesPrevWin", false};
-    Option<bool> candidateWinHorizontal{this, "CandidateWinHorizontal",
-                                        "CandidateWinHorizontal", true};
-    Option<std::string> layoutPath{
-        this, "LayoutPath", "LayoutPath",
-        "/usr/share/openbangla-keyboard/layouts/avrophonetic.json"};
-    Option<bool> showCWPhonetic{this, "ShowCWPhonetic", "ShowCWPhonetic", true};
-    Option<bool> includeEnglishPrevWin{this, "IncludeEnglishPrevWin",
-                                       "IncludeEnglishPrevWin", true};
-    Option<std::string> databasePath{this, "databasePath", "DatabasePath",
-                                     "/usr/share/openbangla-keyboard/data"};
-    Option<bool> showPrevWinFixed{this, "ShowPrevWinFixed", "ShowPrevWinFixed",
-                                  true};
-    Option<bool> autoVowelFormFixed{this, "AutoVowelFormFixed",
-                                    "AutoVowelFormFixed", true};
-    Option<bool> autoChandraPosFixed{this, "AutoChandraPosFixed",
-                                     "AutoChandraPosFixed", true};
-    Option<bool> traditionalKarFixed{this, "TraditionalKarFixed",
-                                     "TraditionalKarFixed", false};
-    Option<bool> oldReph{this, "OldReph", "OldReph", true};
-    Option<bool> numberPadFixed{this, "NumberPadFixed", "NumberPadFixed",
-                                true};);
+FCITX_CONFIGURATION(OpenBanglaConfig,
+                    ExternalOption config{this, "OpenBanglaKeyboard",
+                                          _("OpenBangla Keyboard"),
+                                          PROJECT_DATADIR "/openbangla-gui"};);
 
 class OpenBanglaEngine final : public InputMethodEngine {
 public:
   OpenBanglaEngine(Instance *instance);
   ~OpenBanglaEngine();
 
+  void activate(const fcitx::InputMethodEntry &,
+                fcitx::InputContextEvent &) override;
   void keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) override;
   void reset(const InputMethodEntry &entry, InputContextEvent &event) override;
 
-  const auto &config() const { return config_; }
   auto *factory() { return &factory_; }
   void reloadConfig() override;
 
   const Configuration *getConfig() const override { return &config_; }
-  void setConfig(const RawConfig &config) override {
-    config_.load(config, true);
-    safeSaveAsIni(config_, "conf/openbangla.conf");
-    populateConfig();
-  }
+
+  auto candidateWinHorizontal() const { return candidateWinHorizontal_; }
+  auto enterKeyClosesPrevWin() const { return enterKeyClosesPrevWin_; }
 
 private:
-  void populateConfig();
+  void populateConfig(const RawConfig &config);
 
   Instance *instance_;
   OpenBanglaConfig config_;
   FactoryFor<OpenBanglaState> factory_;
+  int64_t lastConfigTimestamp_ = std::numeric_limits<int64_t>::min();
+  bool candidateWinHorizontal_ = true;
+  bool enterKeyClosesPrevWin_ = false;
 };
 
 class OpenBanglaFactory : public AddonFactory {
