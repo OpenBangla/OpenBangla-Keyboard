@@ -25,7 +25,11 @@
 #include <fcitx/inputcontext.h>
 #include <fcitx/inputcontextmanager.h>
 #include <fcitx/inputpanel.h>
+#include <fcntl.h>
 #include <memory>
+
+FCITX_DEFINE_LOG_CATEGORY(openbangla, "openbangla");
+#define FCITX_OPENBANGLA_DEBUG() FCITX_LOGC(openbangla, Debug)
 
 namespace fcitx {
 
@@ -77,7 +81,7 @@ public:
     } else {
       auto txt = riti_suggestion_get_lonely_suggestion(suggestion_.get());
       text = txt;
-      // TODO: free txt
+      riti_string_free(txt);
     }
 
     Text preedit(std::move(text));
@@ -106,8 +110,8 @@ public:
     } else {
       char *txt = riti_suggestion_get_lonely_suggestion(suggestion_.get());
       text = txt;
-      // TODO: free txt.
       ic_->commitString(text);
+      riti_string_free(txt);
       riti_context_candidate_committed(ctx_.get(), 0);
       reset();
     }
@@ -123,18 +127,17 @@ public:
         if (aux && aux[0]) {
           ic_->inputPanel().setAuxUp(Text(std::string(aux)));
         }
-        // TODO: free aux
+        riti_string_free(aux);
         auto candidateList = std::make_unique<CommonCandidateList>();
         auto len = riti_suggestion_get_length(suggestion_.get());
-        char *const *suggestions =
-            riti_suggestion_get_suggestions(suggestion_.get());
+        char **suggestions = riti_suggestion_get_suggestions(suggestion_.get());
         for (decltype(len) i = 0; i < len; i++) {
           candidateList->append<OpenBanglaCandidate>(engine_, suggestions[i],
                                                      i);
         }
-        // TODO: free suggestions
+        riti_string_array_free(suggestions, len);
 
-        candidateList->setLayoutHint(*engine_->config().candidateWinHorizontal
+        candidateList->setLayoutHint(engine_->candidateWinHorizontal()
                                          ? CandidateLayoutHint::Horizontal
                                          : CandidateLayoutHint::Vertical);
         auto index =
@@ -195,7 +198,7 @@ public:
     case FcitxKey_Return:
       if (riti_context_ongoing_input_session(ctx)) {
         commit();
-        if (*engine_->config().enterKeyClosesPrevWin) {
+        if (engine_->enterKeyClosesPrevWin()) {
           keyEvent.filterAndAccept();
         }
       }
@@ -215,7 +218,7 @@ public:
     case FcitxKey_Right:
     case FcitxKey_Left:
       if (riti_context_ongoing_input_session(ctx)) {
-        if (*engine_->config().candidateWinHorizontal &&
+        if (engine_->candidateWinHorizontal() &&
             !riti_suggestion_is_lonely(suggestion_.get()) && candidateList &&
             candidateList->toCursorMovable()) {
           if (key.sym() == FcitxKey_Right) {
@@ -235,7 +238,7 @@ public:
     case FcitxKey_Up:
     case FcitxKey_Down:
       if (riti_context_ongoing_input_session(ctx)) {
-        if (!*engine_->config().candidateWinHorizontal &&
+        if (!engine_->candidateWinHorizontal() &&
             !riti_suggestion_is_lonely(suggestion_.get()) && candidateList &&
             candidateList->toCursorMovable()) {
           if (key.sym() == FcitxKey_Up) {
@@ -346,6 +349,10 @@ OpenBanglaEngine::OpenBanglaEngine(Instance *instance)
 
 OpenBanglaEngine::~OpenBanglaEngine() {}
 
+void OpenBanglaEngine::activate(const InputMethodEntry &, InputContextEvent &) {
+  reloadConfig();
+}
+
 void OpenBanglaEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
   auto ic = keyEvent.inputContext();
   auto state = ic->propertyFor(&factory_);
@@ -358,31 +365,74 @@ void OpenBanglaEngine::reset(const InputMethodEntry &,
   state->reset();
 }
 
-void OpenBanglaEngine::populateConfig() {
-  setenv("RITI_LAYOUT_FILE", config_.layoutPath->data(), 1);
-  setenv("RITI_PHONETIC_DATABASE_ON",
-         *config_.showCWPhonetic ? "true" : "false", 1);
+bool booleanValue(const RawConfig &config, const std::string &path,
+                  bool defaultValue) {
+  bool value = defaultValue;
+  if (auto *option = config.valueByPath(path)) {
+    value = *option == "true";
+  }
+  return value;
+}
+
+void OpenBanglaEngine::populateConfig(const RawConfig &config) {
+  // Keep sync with Settings.cpp
+  std::string layoutPath =
+      "/usr/share/openbangla-keyboard/layouts/avrophonetic.json";
+  if (auto *path = config.valueByPath("layout/path")) {
+    layoutPath = *path;
+  }
+  const bool showCWPhonetic =
+      booleanValue(config, "settings/CandidateWin\\Phonetic", true);
+  const bool includeEnglishPrevWin =
+      booleanValue(config, "settings/PreviewWin\\IncludeEnglishPhonetic", true);
+  const bool showPrevWinFixed =
+      booleanValue(config, "settings/FixedLayout\\ShowPrevWin", true);
+  const bool autoVowelFormFixed =
+      booleanValue(config, "settings/ixedLayout\\AutoVowelForm", true);
+  const bool autoChandraPosFixed =
+      booleanValue(config, "settings/FixedLayout\\AutoChandraPos", true);
+  const bool traditionalKarFixed =
+      booleanValue(config, "settings/FixedLayout\\TraditionalKar", false);
+  const bool oldReph =
+      booleanValue(config, "settings/FixedLayout\\OldReph", true);
+  const bool numberPadFixed =
+      booleanValue(config, "settings/FixedLayout\\NumberPad", true);
+  setenv("RITI_LAYOUT_FILE", layoutPath.data(), 1);
+  setenv("RITI_PHONETIC_DATABASE_ON", showCWPhonetic ? "true" : "false", 1);
   setenv("RITI_PHONETIC_INCLUDE_ENGLISH",
-         *config_.includeEnglishPrevWin ? "true" : "false", 1);
-  setenv("RITI_DATABASE_DIR", config_.databasePath->data(), 1);
-  setenv("RITI_LAYOUT_FIXED_DATABASE_ON",
-         *config_.showPrevWinFixed ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_VOWEL",
-         *config_.autoVowelFormFixed ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_CHANDRA",
-         *config_.autoChandraPosFixed ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_KAR",
-         *config_.traditionalKarFixed ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_OLD_REPH", *config_.oldReph ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_NUMBERPAD",
-         *config_.numberPadFixed ? "true" : "false", 1);
+         includeEnglishPrevWin ? "true" : "false", 1);
+  setenv("RITI_DATABASE_DIR", "/usr/share/openbangla-keyboard/data", 1);
+  setenv("RITI_LAYOUT_FIXED_DATABASE_ON", showPrevWinFixed ? "true" : "false",
+         1);
+  setenv("RITI_LAYOUT_FIXED_VOWEL", autoVowelFormFixed ? "true" : "false", 1);
+  setenv("RITI_LAYOUT_FIXED_CHANDRA", autoChandraPosFixed ? "true" : "false",
+         1);
+  setenv("RITI_LAYOUT_FIXED_KAR", traditionalKarFixed ? "true" : "false", 1);
+  setenv("RITI_LAYOUT_FIXED_OLD_REPH", oldReph ? "true" : "false", 1);
+  setenv("RITI_LAYOUT_FIXED_NUMBERPAD", numberPadFixed ? "true" : "false", 1);
+  candidateWinHorizontal_ =
+      booleanValue(config, "settings/CandidateWin\\Horizontal", true);
+  enterKeyClosesPrevWin_ =
+      booleanValue(config, "settings/EnterKeyClosesPrevWin", false);
 }
 
 void OpenBanglaEngine::reloadConfig() {
-  readAsIni(config_, "conf/openbangla.conf");
-  populateConfig();
+  auto time = StandardPath::global().timestamp(StandardPath::Type::Config,
+                                               "OpenBangla/Keyboard.conf");
+  if (time < lastConfigTimestamp_) {
+    return;
+  }
+
+  RawConfig config;
+  auto configFile = StandardPath::global().open(
+      StandardPath::Type::Config, "OpenBangla/Keyboard.conf", O_RDONLY);
+  if (configFile.isValid()) {
+    FCITX_OPENBANGLA_DEBUG() << "Reload openbangla configuration";
+    lastConfigTimestamp_ = time;
+    readFromIni(config, configFile.fd());
+  }
+  populateConfig(config);
 }
 
+FCITX_ADDON_FACTORY(OpenBanglaFactory);
 } // namespace fcitx
-
-FCITX_ADDON_FACTORY(fcitx::OpenBanglaFactory);
