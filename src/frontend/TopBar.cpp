@@ -146,7 +146,7 @@ void TopBar::SetupPopupMenus() {
 }
 
 void TopBar::SetupTrayIcon() {
-  tray = new QSystemTrayIcon(QIcon(":/images/icon.png"), this);
+  tray = new QSystemTrayIcon(QIcon(":/images/tray.png"), this);
   tray->setToolTip("OpenBangla Keyboard");
 
   /* Tray Menu */
