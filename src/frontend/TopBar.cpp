@@ -317,6 +317,7 @@ void TopBar::on_buttonSetLayout_clicked() {
 }
 
 void TopBar::on_buttonShutdown_clicked() {
+  gSettings->setTopBarWindowPosition(this->pos());
   QApplication::exit();
 }
 
