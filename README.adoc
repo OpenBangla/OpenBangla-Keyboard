@@ -45,6 +45,7 @@ image:https://img.shields.io/discord/436879388362014740.svg[Discord, link=https:
 
 CAUTION: This project is powered by github 🌟s. Go ahead and *star* it please!
 
+🚧 🚧 *Ongoing developments happen on the https://github.com/OpenBangla/OpenBangla-Keyboard/tree/develop[`develop`] branch.* 🚧 🚧
 
 toc::[]
 
