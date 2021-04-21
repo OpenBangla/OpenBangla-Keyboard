@@ -108,7 +108,10 @@ private:
 
   /* Tray Popup Menu */
   QMenu *trayMenu;
+  QAction *trayLayoutViewer;
+  QAction *traySettings;
   QAction *trayTopBarVisibility;
+  QAction *trayQuit;
 
   void SetupTopBar();
 
