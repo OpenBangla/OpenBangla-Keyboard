@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QCloseEvent>
 #include "SettingsDialog.h"
 #include "ui_SettingsDialog.h"
 #include "Settings.h"
@@ -80,6 +81,14 @@ void SettingsDialog::implementSignals() {
   connect(ui->btnCheckUpdate, &QPushButton::toggled, [=](bool checked) {
     ui->btnCheckUpdate->setText(checked ? "On" : "Off");
   });
+
+  connect(ui->btnOK, &QPushButton::clicked, [=]() {
+    saveSettings();
+    this->hide();
+  });
+  connect(ui->btnCancel, &QPushButton::clicked, [=]() {
+    this->hide();
+  });
 }
 
 void SettingsDialog::updateSettings() {
@@ -100,7 +109,7 @@ void SettingsDialog::updateSettings() {
   ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
 }
 
-void SettingsDialog::on_buttonBox_accepted() {
+void SettingsDialog::saveSettings() {
   // Phonetic Keyboard Layout Group.
   gSettings->setEnterKeyClosesPrevWin(ui->btnEnterClosePW->isChecked());
   gSettings->setShowCWPhonetic(ui->btnSuggestionPhonetic->isChecked());
@@ -118,6 +127,7 @@ void SettingsDialog::on_buttonBox_accepted() {
   gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
 }
 
-void SettingsDialog::on_buttonBox_rejected() {
-  SettingsDialog::close();
+void SettingsDialog::closeEvent(QCloseEvent *event) {
+  this->hide();
+  event->ignore();
 }

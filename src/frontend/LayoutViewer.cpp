@@ -73,7 +73,8 @@ void LayoutViewer::showLayoutInfoDialog() {
 
 void LayoutViewer::closeEvent(QCloseEvent *event) {
   gSettings->setLayoutViewerWindowPosition(this->pos());
-  event->accept();
+  this->hide();
+  event->ignore();
 }
 
 void LayoutViewer::on_buttonAboutLayout_clicked() {

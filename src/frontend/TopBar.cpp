@@ -102,7 +102,7 @@ void TopBar::checkForUpdate() {
 
 void TopBar::SetupPopupMenus() {
   // Layout Popup Menu
-  layoutMenu = new QMenu("Select keyboard layout", this);
+  layoutMenu = new QMenu("Select a keyboard layout", this);
   layoutMenu->setIcon(QIcon(":/images/keyboard_layout.png"));
   connect(layoutMenu, &QMenu::aboutToHide, [=]() {
     ui->buttonSetLayout->setChecked(false);
@@ -121,10 +121,11 @@ void TopBar::SetupPopupMenus() {
   connect(layoutMenuInstall, SIGNAL(triggered()), this, SLOT(layoutMenuInstall_clicked()));
 
   // Icon Button Popup Menu
-#if 0
-  iconMenuOnTray = new QAction("Jump to system tray", this);
-  connect(iconMenuOnTray, SIGNAL(triggered()), this, SLOT(iconMenuOnTray_clicked()));
-#endif
+  iconMenuHide = new QAction("Hide this TopBar", this);
+  connect(iconMenuHide, &QAction::triggered, [&]() {
+    this->setVisible(false);
+    trayTopBarVisibility->setText("Show the TopBar");
+  });
 
   iconMenuLayout = new QAction("About current keyboard layout", this);
   connect(iconMenuLayout, SIGNAL(triggered()), this, SLOT(iconMenuLayout_clicked()));
@@ -138,33 +139,47 @@ void TopBar::SetupPopupMenus() {
   });
 
   iconMenu = new QMenu(this);
-  //iconMenu->addAction(iconMenuOnTray);
+  iconMenu->addAction(iconMenuHide);
   iconMenu->addAction(iconMenuLayout);
   iconMenu->addAction(iconMenuAbout);
   iconMenu->addAction(iconMenuUpdate);  
 }
 
 void TopBar::SetupTrayIcon() {
-#if 0
-  /* TODO: Fix Crash... */
-  tray = new QSystemTrayIcon(QIcon(":/images/keyboard_layout_viewer.png"), this);
+  tray = new QSystemTrayIcon(QIcon(":/images/tray.png"), this);
   tray->setToolTip("OpenBangla Keyboard");
 
   /* Tray Menu */
-  trayMenuRestore = new QAction("Restore TopBar", this);
-  connect(trayMenuRestore, SIGNAL(triggered()), this, SLOT(trayMenuRestore_clicked()));
+  trayLayoutViewer = new QAction("Layout Viewer", this);
+  connect(trayLayoutViewer, &QAction::triggered, this, &TopBar::on_buttonViewLayout_clicked);
+
+  traySettings = new QAction("Settings", this);
+  connect(traySettings, &QAction::triggered, this, &TopBar::on_buttonSettings_clicked);
+
+  trayTopBarVisibility = new QAction("Hide the TopBar", this);
+  connect(trayTopBarVisibility, &QAction::triggered, [&]() {
+    if(this->isVisible()) {
+      this->setVisible(false);
+      trayTopBarVisibility->setText("Show the TopBar");
+    } else {
+      this->setVisible(true);
+      trayTopBarVisibility->setText("Hide the TopBar");
+    }
+  });
+
+  trayQuit = new QAction("Quit", this);
+  connect(trayQuit, &QAction::triggered, this, &TopBar::on_buttonShutdown_clicked);
 
   trayMenu = new QMenu(this);
-  trayMenu->addAction(trayMenuRestore);
   trayMenu->addMenu(layoutMenu); // Layout Menu
-  /*
+  trayMenu->addAction(trayLayoutViewer);
+  trayMenu->addAction(traySettings);
   trayMenu->addSeparator();
-  trayMenu->addAction(iconMenuAbout);*/
-  trayMenu->addSeparator();
-  trayMenu->addAction(iconMenuQuit);
-
+  trayMenu->addAction(trayTopBarVisibility);
+  trayMenu->addAction(trayQuit);
+  
   tray->setContextMenu(trayMenu);
-#endif
+  tray->setVisible(true);
 }
 
 void TopBar::RefreshLayouts() {
@@ -253,17 +268,6 @@ void TopBar::iconMenuLayout_clicked() {
 
 void TopBar::iconMenuAbout_clicked() {
   aboutDialog->show();
-}
-
-void TopBar::iconMenuOnTray_clicked() {
-  this->setVisible(false);
-  tray->setVisible(true);
-  tray->showMessage("OpenBangla Keyboard", "OpenBangla Keyboard is now running on system tray");
-}
-
-void TopBar::trayMenuRestore_clicked() {
-  tray->setVisible(false);
-  this->setVisible(true);
 }
 
 void TopBar::on_buttonIcon_clicked() {

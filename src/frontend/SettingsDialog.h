@@ -37,17 +37,15 @@ public:
 
   void updateSettings();
 
-private slots:
-
-  void on_buttonBox_accepted();
-
-  void on_buttonBox_rejected();
+protected:
+  void closeEvent(QCloseEvent *event) override;
 
 private:
   Ui::SettingsDialog *ui;
   AutoCorrectDialog *autoCorrectDialog;
 
   void implementSignals();
+  void saveSettings();
 };
 
 #endif // SETTINGSDIALOG_H
