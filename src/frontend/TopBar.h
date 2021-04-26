@@ -68,10 +68,6 @@ private slots:
 
   void iconMenuAbout_clicked();
 
-  void iconMenuOnTray_clicked();
-
-  void trayMenuRestore_clicked();
-
   void on_buttonIcon_clicked();
 
   void on_buttonSetLayout_clicked();
@@ -105,14 +101,17 @@ private:
   QAction *layoutMenuInstall;
   /* Icon Button Popup Menu */
   QMenu *iconMenu;
-  QAction *iconMenuOnTray;
+  QAction *iconMenuHide;
   QAction *iconMenuLayout;
   QAction *iconMenuAbout;
   QAction *iconMenuUpdate;
 
   /* Tray Popup Menu */
   QMenu *trayMenu;
-  QAction *trayMenuRestore;
+  QAction *trayLayoutViewer;
+  QAction *traySettings;
+  QAction *trayTopBarVisibility;
+  QAction *trayQuit;
 
   void SetupTopBar();
 
