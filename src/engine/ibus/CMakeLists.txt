@@ -1,6 +1,6 @@
 include_directories(../riti/include ../../shared ${IBUS_INCLUDE_DIRS})
-add_executable(ibus-openbangla main.cpp)
-target_link_libraries(ibus-openbangla riti libShared Qt5::Core ${IBUS_LIBRARIES} dl pthread)
+add_executable(ibus-engine-openbangla main.cpp)
+target_link_libraries(ibus-engine-openbangla riti libShared Qt5::Core ${IBUS_LIBRARIES} dl pthread)
 
 ## Configure the files
 configure_file(${CMAKE_SOURCE_DIR}/data/openbangla.xml.in ${CMAKE_BINARY_DIR}/data/openbangla.xml)
@@ -78,5 +78,5 @@ install(FILES ${CMAKE_BINARY_DIR}/data/openbangla-keyboard.desktop
 install(FILES ${CMAKE_SOURCE_DIR}/data/io.github.openbangla.keyboard.metainfo.xml
         DESTINATION ${DATADIR}/metainfo)
 
-install(TARGETS ibus-openbangla
-        RUNTIME DESTINATION ${BIN_DIR})
+install(TARGETS ibus-engine-openbangla
+        RUNTIME DESTINATION ${LIBEXECDIR})
