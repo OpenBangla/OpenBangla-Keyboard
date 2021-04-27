@@ -4,7 +4,7 @@
 <component>
     <name>org.freedesktop.IBus.OpenBangla</name>
     <description>OpenBangla Keyboard</description>
-    <exec>@BIN_DIR@/ibus-openbangla --ibus</exec>
+    <exec>@LIBEXECDIR@/ibus-engine-openbangla --ibus</exec>
     <version>@PROJECT_VERSION@</version>
     <author>See About Dialog</author>
     <license>GPL 3</license>
