@@ -54,6 +54,7 @@ public:
   ~TopBar() override;
 
 protected:
+  void showEvent(QShowEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
 
   bool eventFilter(QObject *object, QEvent *event) override;

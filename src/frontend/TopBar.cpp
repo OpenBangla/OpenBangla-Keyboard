@@ -72,6 +72,8 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   SetupTrayIcon();
   DataMigration();
 
+  //this->setVisible(gSettings->getTopBarVisibility());
+  
 #ifndef NO_UPDATE_CHECK
   updater = QSimpleUpdater::getInstance();
 
@@ -92,10 +94,12 @@ TopBar::~TopBar() {
 
   delete ui;
 }
-
+#include <QDebug>
 void TopBar::SetupTopBar() {
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   this->setFixedSize(QSize(this->width(), this->height()));
+  qDebug() << gSettings->getTopBarVisibility();
+  
 
   if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
     int width = this->frameGeometry().width();
@@ -305,8 +309,19 @@ void TopBar::on_buttonIcon_clicked() {
   }
 }
 
+void TopBar::showEvent(QShowEvent *event) {
+  if(gSettings->getTopBarVisibility()) {
+    event->accept();
+    qDebug() << "accepted";
+  } else {
+    event->ignore();
+    qDebug() << "ignored";
+  }
+}
+
 void TopBar::closeEvent(QCloseEvent *event) {
   gSettings->setTopBarWindowPosition(this->pos());
+  gSettings->setTopBarVisibility(this->isVisible());
   event->accept();
 }
 
@@ -346,6 +361,7 @@ void TopBar::on_buttonSetLayout_clicked() {
 
 void TopBar::on_buttonShutdown_clicked() {
   gSettings->setTopBarWindowPosition(this->pos());
+  gSettings->setTopBarVisibility(this->isVisible());
   QApplication::exit();
 }
 

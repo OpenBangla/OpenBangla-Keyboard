@@ -42,6 +42,16 @@ QPoint Settings::getTopBarWindowPosition() {
   return setting->value("window/positions/TopBar", QPoint(0, 0)).toPoint();
 }
 
+void Settings::setTopBarVisibility(bool b) {
+  setting->setValue("window/visibility/TopBar", b);
+  setting->sync();
+}
+
+bool Settings::getTopBarVisibility() {
+  setting->sync();
+  return setting->value("window/visibility/TopBar", true).toBool();
+}
+
 void Settings::setLayoutViewerWindowPosition(QPoint pos) {
   setting->setValue("window/positions/LayoutViewer", pos);
   setting->sync();

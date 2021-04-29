@@ -36,6 +36,10 @@ public:
 
   QPoint getTopBarWindowPosition();
 
+  void setTopBarVisibility(bool b);
+
+  bool getTopBarVisibility();
+
   void setLayoutViewerWindowPosition(QPoint pos);
 
   QPoint getLayoutViewerWindowPosition();
