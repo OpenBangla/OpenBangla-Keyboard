@@ -19,29 +19,33 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 
 # Get system information. WIN32 and APPLE are defined by CMake
-if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(OS_LINUX 1)
-endif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+endif()
 
 # Set build type to "Release" if user did not specify any build type yet
 # Other possible values: Debug, Release, RelWithDebInfo and MinSizeRel
-if (NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-endif (NOT CMAKE_BUILD_TYPE)
+endif()
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG)
-endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+endif()
 
 # Sanity check our source directory to make sure that we are not trying to
 # generate an in-tree build (it pollutes the source tree with a lot of CMake
 # related files).
-if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "In-source builds are not allowed.\nPlease create a build directory and initiate cmake from there.")
-endif ()
+endif()
+
+if(NO_UPDATE_CHECK) 
+    add_definitions(-DNO_UPDATE_CHECK)
+endif()
 
 # For Linux.
-if (OS_LINUX)
+if(OS_LINUX)
     ## Additions for Linux ##
 
     # Generate compile_commands.json to satisfy vscode linux configuration
@@ -62,14 +66,14 @@ if (OS_LINUX)
     pkg_check_modules(IBUS REQUIRED ibus-1.0)
     ## Find zstd ##
     pkg_check_modules(ZSTD REQUIRED libzstd)
-endif (OS_LINUX)
+endif()
 
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
 
 # uninstall target
-if (NOT TARGET uninstall)
+if(NOT TARGET uninstall)
     configure_file(
             "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
             "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
@@ -77,7 +81,7 @@ if (NOT TARGET uninstall)
 
     add_custom_target(uninstall
             COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-endif ()
+endif()
 
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")
