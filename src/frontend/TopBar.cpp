@@ -32,8 +32,10 @@
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
 #include "AutoCorrectDialog.h"
-#include "QSimpleUpdater.h"
 #include "ui_TopBar.h"
+#ifndef NO_UPDATE_CHECK
+# include "QSimpleUpdater.h"
+#endif
 
 static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
