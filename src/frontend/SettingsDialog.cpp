@@ -30,6 +30,11 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
 
+#ifdef NO_UPDATE_CHECK
+  ui->lblUpdateCheck->hide();
+  ui->btnCheckUpdate->hide();
+#endif
+
   implementSignals();
   updateSettings();
 }

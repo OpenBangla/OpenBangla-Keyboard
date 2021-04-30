@@ -4,8 +4,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_subdirectory(3rdParty)
-
 set(SRC_GUI TopBar.cpp
         AboutDialog.cpp
         AboutFile.cpp
@@ -21,8 +19,15 @@ set(SRC_MAIN main.cpp
         SingleInstance.cpp
         AvroPhonetic.cpp)
 
+set(LINK_LIBS libShared Qt5::Widgets Qt5::Network ${ZSTD_LIBRARIES})
+
+if(NOT NO_UPDATE_CHECK)
+    add_subdirectory(3rdParty)
+    list(APPEND LINK_LIBS 3rdParty)
+endif()
+
 add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
-target_link_libraries(openbangla-gui libShared 3rdParty Qt5::Widgets Qt5::Network ${ZSTD_LIBRARIES})
+target_link_libraries(openbangla-gui ${LINK_LIBS})
 
 install(TARGETS openbangla-gui
         RUNTIME DESTINATION ${LIBEXECDIR}/openbangla-keyboard)
