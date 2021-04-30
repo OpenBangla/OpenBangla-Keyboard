@@ -1,6 +1,6 @@
 #!/bin/bash
 ## MUST: Always update this whenever a new version is released. Also remember to update download URLs if needed
-APP_VERSION=1.5.1
+APP_VERSION=2.0.0
 URL_STUB="https://github.com/OpenBangla/OpenBangla-Keyboard/releases/download/${APP_VERSION}"
 
 cat <<"EOF"
@@ -60,7 +60,7 @@ case $DISTRO_NAME in
    	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
 	  case ${VERSION_ID%%.*} in
-	  	20|19|18|16) VERSION_ID=${VERSION_ID%%.*}.04;UBUNTU_SUPPORTED=1;;
+	  	21|20|18) VERSION_ID=${VERSION_ID%%.*}.04;UBUNTU_SUPPORTED=1;;
 	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle";exit 1;;
 	  esac
   if [[ $UBUNTU_SUPPORTED = 1 ]]; then
@@ -72,12 +72,12 @@ case $DISTRO_NAME in
   fi
   ;;
 ("arch")
-  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-archlinux.pkg.tar.xz" -O /tmp/OpenBangla.pkg.tar.xz
+  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-archlinux.pkg.tar.zst" -O /tmp/OpenBangla.pkg.tar.zst
   sudo pacman -U /tmp/OpenBangla.pkg.tar.xz
   ;;
 ("fedora")
   # fedora version check ?
-  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora28.rpm" -O /tmp/OpenBangla.rpm
+  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora33.rpm" -O /tmp/OpenBangla.rpm
   sudo dnf install /tmp/OpenBangla.rpm
   ;;
 (*)
