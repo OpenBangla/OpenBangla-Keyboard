@@ -32,8 +32,10 @@
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
 #include "AutoCorrectDialog.h"
-#include "QSimpleUpdater.h"
 #include "ui_TopBar.h"
+#ifndef NO_UPDATE_CHECK
+# include "QSimpleUpdater.h"
+#endif
 
 static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
@@ -44,7 +46,6 @@ TopBar::TopBar(QWidget *parent) :
 
   gLayout = new Layout();
   gSettings = new Settings();
-  updater = QSimpleUpdater::getInstance();
 
   /* Dialogs */
   aboutDialog = new AboutDialog(Q_NULLPTR);
@@ -58,9 +59,13 @@ TopBar::TopBar(QWidget *parent) :
   SetupTrayIcon();
   DataMigration();
 
+#ifndef NO_UPDATE_CHECK
+  updater = QSimpleUpdater::getInstance();
+
   if (gSettings->getUpdateCheck()) {
     checkForUpdate();
   }
+#endif
 }
 
 TopBar::~TopBar() {
@@ -94,10 +99,12 @@ void TopBar::SetupTopBar() {
 }
 
 void TopBar::checkForUpdate() {
+#ifndef NO_UPDATE_CHECK
   updater->setModuleVersion(DEFS_URL, PROJECT_VERSION);
   updater->setNotifyOnUpdate(DEFS_URL, true);
   updater->setDownloaderEnabled(DEFS_URL, false);
   updater->checkForUpdates(DEFS_URL);
+#endif
 }
 
 void TopBar::SetupPopupMenus() {
@@ -142,7 +149,9 @@ void TopBar::SetupPopupMenus() {
   iconMenu->addAction(iconMenuHide);
   iconMenu->addAction(iconMenuLayout);
   iconMenu->addAction(iconMenuAbout);
-  iconMenu->addAction(iconMenuUpdate);  
+#ifndef NO_UPDATE_CHECK
+  iconMenu->addAction(iconMenuUpdate);
+#endif
 }
 
 void TopBar::SetupTrayIcon() {
