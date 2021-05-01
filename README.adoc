@@ -37,11 +37,6 @@ So Avro Keyboard users will feel right at home in Linux with OpenBangla Keyboard
 
 image:https://github.com/OpenBangla/OpenBangla-Keyboard/workflows/CI/badge.svg[CI, link=https://github.com/OpenBangla/OpenBangla-Keyboard/actions?query=workflow%3ACI+branch%3Amaster] {nbsp}
 image:https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg?label=GitHub%20Downloads[Github Downloads, link=https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg?label=GitHub%20Downloads] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/ubuntu/openbangla-keyboard?label=Bintray%20Ubuntu[Bintray Ubuntu repo downloads, link=https://img.shields.io/bintray/dt/openbangla/ubuntu/openbangla-keyboard?label=Bintray%20Ubuntu] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/debian/openbangla-keyboard?label=Bintray%20Debian[Bintray Debian downloads, link=https://img.shields.io/bintray/dt/openbangla/debian/openbangla-keyboard?label=Bintray%20Debian] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/fedora/openbangla-keyboard?label=Bintray%20Fedora[Bintray Fedora downloads, link=https://img.shields.io/bintray/dt/openbangla/fedora/openbangla-keyboard?label=Bintray%20Fedora] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/archlinux/openbangla-keyboard?label=Bintray%20Arch%20Linux[Bintray Arch Linux downloads, link=https://img.shields.io/bintray/dt/openbangla/archlinux/openbangla-keyboard?label=Bintray%20Arch%20Linux] {nbsp}
-image:https://img.shields.io/discord/436879388362014740.svg[Discord, link=https://discord.gg/HXK7QnJ]
 
 CAUTION: This project is powered by github 🌟s. Go ahead and *star* it please!
 
@@ -101,9 +96,9 @@ git clone https://aur.archlinux.org/openbangla-keyboard.git
 cd openbangla-keyboard
 makepkg -risc
 ```
-We also provide a `.pkg.tar.xz` package for Arch Linux which you can easily install by following any of the above instruction for `openbangla-keyboard-bin`. If you want to install it manually, download the installation package from https://github.com/OpenBangla/OpenBangla-Keyboard/releases[releases page] and install OpenBangla Keyboard on your system by running the following command:
+We also provide a `.pkg.tar.zst` package for Arch Linux which you can download the installation package from https://github.com/OpenBangla/OpenBangla-Keyboard/releases[releases page] and install OpenBangla Keyboard on your system by running the following command:
 ```bash
-$ sudo pacman -U package.pkg.tar.xz
+$ sudo pacman -U package.pkg.tar.zst
 ```
 
 === Others
