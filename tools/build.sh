@@ -44,8 +44,8 @@ if [[ $DIST =~ ^(ubuntu|debian) ]]; then
     apt-get -qq update
     apt-get -y install git
     # this is to read distro codename from filename during deployment
-    CODENAME=$(cat /etc/os-release | grep "VERSION_CODENAME" | cut -d= -f2)
-    DIST="${DIST}-${CODENAME}"
+    #CODENAME=$(cat /etc/os-release | grep "VERSION_CODENAME" | cut -d= -f2)
+    #DIST="${DIST}-${CODENAME}"
     BUILDFUNC=makeDeb
 elif [[ $DIST =~ ^fedora ]]; then
     dnf -y --allowerasing distro-sync

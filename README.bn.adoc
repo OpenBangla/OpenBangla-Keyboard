@@ -36,11 +36,6 @@ https://www.omicronlab.com/avro-keyboard.html[অভ্র কীবোর্ড
 
 image:https://github.com/OpenBangla/OpenBangla-Keyboard/workflows/CI/badge.svg[CI, link=https://github.com/OpenBangla/OpenBangla-Keyboard/actions?query=workflow%3ACI+branch%3Amaster] {nbsp}
 image:https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg?label=GitHub%20Downloads[Github Downloads, link=https://img.shields.io/github/downloads/OpenBangla/OpenBangla-Keyboard/total.svg?label=GitHub%20Downloads] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/ubuntu/openbangla-keyboard?label=Bintray%20Ubuntu[Bintray Ubuntu repo downloads, link=https://img.shields.io/bintray/dt/openbangla/ubuntu/openbangla-keyboard?label=Bintray%20Ubuntu] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/debian/openbangla-keyboard?label=Bintray%20Debian[Bintray Debian downloads, link=https://img.shields.io/bintray/dt/openbangla/debian/openbangla-keyboard?label=Bintray%20Debian] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/fedora/openbangla-keyboard?label=Bintray%20Fedora[Bintray Fedora downloads, link=https://img.shields.io/bintray/dt/openbangla/fedora/openbangla-keyboard?label=Bintray%20Fedora] {nbsp}
-image:https://img.shields.io/bintray/dt/openbangla/archlinux/openbangla-keyboard?label=Bintray%20Arch%20Linux[Bintray Arch Linux downloads, link=https://img.shields.io/bintray/dt/openbangla/archlinux/openbangla-keyboard?label=Bintray%20Arch%20Linux] {nbsp}
-image:https://img.shields.io/discord/436879388362014740.svg[Discord, link=https://discord.gg/HXK7QnJ]
 
 CAUTION: প্রজেক্টটি ভাল লাগলে অনুগ্রহ করে গিটহাব 🌟 দিয়ে উৎসাহিত করুন!
 
@@ -73,44 +68,36 @@ toc::[]
 
 IMPORTANT: ওপেনবাংলা কিবোর্ড ১.৫.১ অথবা পূর্ববর্তী সংস্করণ ইনস্টল করা থাকলে https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Uninstalling-OpenBangla-Keyboard[সেটি প্রথমে আনইনস্টল করে নিন।]
 
-প্রথমে আপনার ডিস্ট্রোর জন্য আমাদের রিপজিটরি যোগ করুন, তারপর  আপনার প্যাকেজ ম্যানেজার দিয়ে স্বাভাবিকভাবে ইনস্টল করতে পারবেন।
-
-=== উবুন্টু এবং উবুন্টু-ভিত্তিক ডিস্ট্রো
-নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
+আপনার টার্মিনাল ওপেন করুন এবং এই কমান্ডটি রান করুন আপনার bash শেলে। বিঃদ্রঃ শেলটি **BASH** হতে হতে হবে, তাছাড়া স্ক্রিপ্টটি কাজ করবে না।
 ```bash
-source /etc/os-release
-sudo sh -c "wget https://dl.bintray.com/openbangla/i/pub.key -q -O - | apt-key add -"
-sudo sh -c "wget https://dl.bintray.com/openbangla/i/ubuntu.conf -q -O - | sed s/@NAME@/$UBUNTU_CODENAME/ > /etc/apt/sources.list.d/openbangla.list"
-sudo apt update
-sudo apt install openbangla-keyboard
+bash -c "$(wget -q https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh -O -)"
 ```
 
-=== ডেবিয়ান এবং উবুন্টু-ভিত্তিক ডিস্ট্রো
-নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
-```bash
-source /etc/os-release
-sudo sh -c "wget https://dl.bintray.com/openbangla/i/pub.key -q -O - | apt-key add -"
-sudo sh -c "wget https://dl.bintray.com/openbangla/i/debian.conf  -q -O - | sed s/@NAME@/$VERSION_CODENAME/ > /etc/apt/sources.list.d/openbangla.list"
-sudo apt update
-sudo apt install openbangla-keyboard
-```
+যদি এতে আপনার কাজ না হয় তাহলে দয়া করে একটি https://github.com/OpenBangla/OpenBangla-Keyboard/issues[ইস্যু] তৈরি করুন। এমতাবস্থায় https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[উইকি] থেকে ডিস্ট্রো-ভেদে ইন্সটল নির্দেশাবলী দেখে নিতে পারেন।
 
-=== ফেদোরা
-নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
-```bash
-sudo rpm --import https://dl.bintray.com/openbangla/i/pub.key
-sudo sh -c "curl https://dl.bintray.com/openbangla/i/fedora.conf > /etc/yum.repos.d/openbangla.repo"
-sudo dnf install openbangla-keyboard
-```
+=== আর্চলিনাক্স ভিত্তিক ডিস্ট্রো
+Arch User Repository(AUR) তে ওপেনবাংলা কিবোর্ডের দুটো প্যাকেজ রয়েছে। `openbangla-keyboard` ব্যবহার করুন যদি আপনি সোর্স থেকে প্যাকেজটি তৈরি এবং ইন্সটল করতে চান। অথবা `openbangla-keyboard-bin` ব্যবহার করুন যদি আপনি বাইনারি প্যাকেজটি ব্যবহার করতে চান যেটি আর্চলিনাক্স ভিত্তিক ডিস্ট্রো গুলোর জন্য প্যাকেজটির মেইন্টেইনার তৈরি করেছেন। আপনি আপনার পছন্দের AUR হেল্পার ব্যবহার করে একটি কম্যান্ডের মাধ্যমেই ইন্সটল করতে পারবেন। কিছু জনপ্রিয় টুলের উদাহরণ:
 
-=== আর্চলিনাক্স
-নিচের কমান্ডগুলো দিয়ে আমাদের রিপজিটরি যোগ করে নিন:
+==== `openbangla-keyboard`
+* `$ pacaur -S openbangla-keyboard`
+* `$ yay -S openbangla-keyboard`
+* `$ yaourt -S openbangla-keyboard`
+
+==== `openbangla-keyboard-bin`
+* `$ pacaur -S openbangla-keyboard-bin`
+* `$ yay -S openbangla-keyboard-bin`
+* `$ yaourt -S openbangla-keyboard-bin`
+
+অথবা ম্যানুয়ালি ইন্সটল করুন:
 ```bash
-sudo sh -c "curl https://dl.bintray.com/openbangla/i/pub.key | pacman-key -a -"
-sudo pacman-key --lsign-key "openbanglateam@gmail.com"
-sudo sh -c "curl https://dl.bintray.com/openbangla/i/archlinux.conf >> /etc/pacman.conf"
-sudo pacman -Syy
-sudo pacman -S openbangla-keyboard
+sudo pacman -S base-devel git
+git clone https://aur.archlinux.org/openbangla-keyboard.git
+cd openbangla-keyboard
+makepkg -risc
+```
+আর্চলিনাক্স এর জন্য আমরা `.pkg.tar.zst` প্যাকেজও বিতরণ করে থাকি, যেটা আপনি https://github.com/OpenBangla/OpenBangla-Keyboard/releases[রিলিজেস] পেইজ থেকে ডাউনলোড করে ইন্সটল করতে পারবেন আপনার সিস্টেমে নিম্নলিখিত কমান্ডটি রান করে:
+```bash
+$ sudo pacman -U package.pkg.tar.zst
 ```
 
 === অন্যান্য
