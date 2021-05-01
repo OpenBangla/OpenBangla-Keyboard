@@ -5,7 +5,7 @@ RELEASE_STUB="OpenBangla-Keyboard_${RELEASE_VERSION}-"
 
 makeDeb () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
-    apt-get -y install build-essential cmake libibus-1.0-dev libzstd-dev qt5-default ninja-build curl
+    apt-get -y install build-essential cmake libibus-1.0-dev libzstd-dev ninja-build curl qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCPACK_GENERATOR=DEB
     ninja package -C /build
