@@ -88,9 +88,13 @@ public:
 
   bool getUpdateCheck();
 
-  void setIncludeEnglishPrevWin(bool b);
+  void setIncludeEnglishPhonetic(bool b);
 
-  bool getIncludeEnglishPrevWin();
+  bool getIncludeEnglishPhonetic();
+
+  void setIncludeEnglishFixed(bool b);
+
+  bool getIncludeEnglishFixed();
 
   void setPreviousUserDataRemains(bool b);
 

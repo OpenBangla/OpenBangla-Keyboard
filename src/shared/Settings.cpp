@@ -172,14 +172,24 @@ bool Settings::getUpdateCheck() {
   return setting->value("settings/UpdateCheck", true).toBool();
 }
 
-void Settings::setIncludeEnglishPrevWin(bool b) {
+void Settings::setIncludeEnglishPhonetic(bool b) {
   setting->setValue("settings/PreviewWin/IncludeEnglishPhonetic", b);
   setting->sync();
 }
 
-bool Settings::getIncludeEnglishPrevWin() {
+bool Settings::getIncludeEnglishPhonetic() {
   setting->sync();
   return setting->value("settings/PreviewWin/IncludeEnglishPhonetic", true).toBool();
+}
+
+void Settings::setIncludeEnglishFixed(bool b) {
+  setting->setValue("settings/PreviewWin/IncludeEnglishFixed", b);
+  setting->sync();
+}
+
+bool Settings::getIncludeEnglishFixed() {
+  setting->sync();
+  return setting->value("settings/PreviewWin/IncludeEnglishFixed", true).toBool();
 }
 
 void Settings::setPreviousUserDataRemains(bool b) {

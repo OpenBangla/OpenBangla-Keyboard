@@ -65,6 +65,10 @@ void SettingsDialog::implementSignals() {
   // Fixed Keyboard Layout Group.
   connect(ui->btnSuggestionFixed, &QPushButton::toggled, [=](bool checked) {
     ui->btnSuggestionFixed->setText(checked ? "On" : "Off");
+    ui->btnIncludeEnglishFixed->setEnabled(checked);
+  });
+  connect(ui->btnIncludeEnglishFixed, &QPushButton::toggled, [=](bool checked) {
+    ui->btnIncludeEnglishFixed->setText(checked ? "On" : "Off");
   });
   connect(ui->btnAutoVowel, &QPushButton::toggled, [=](bool checked) {
     ui->btnAutoVowel->setText(checked ? "On" : "Off");
@@ -101,10 +105,11 @@ void SettingsDialog::updateSettings() {
   ui->btnEnterClosePW->setChecked(gSettings->getEnterKeyClosesPrevWin());
   ui->btnSuggestionPhonetic->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
-  ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getIncludeEnglishPrevWin());
+  ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getIncludeEnglishPhonetic());
 
   // Fixed Keyboard Layout Group.
   ui->btnSuggestionFixed->setChecked(gSettings->getShowPrevWinFixed());
+  ui->btnIncludeEnglishFixed->setChecked(gSettings->getIncludeEnglishFixed());
   ui->btnAutoVowel->setChecked(gSettings->getAutoVowelFormFixed());
   ui->btnAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
   ui->btnOldReph->setChecked(gSettings->getOldReph());
@@ -119,10 +124,11 @@ void SettingsDialog::saveSettings() {
   gSettings->setEnterKeyClosesPrevWin(ui->btnEnterClosePW->isChecked());
   gSettings->setShowCWPhonetic(ui->btnSuggestionPhonetic->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
-  gSettings->setIncludeEnglishPrevWin(ui->btnIncludeEnglishPrevWin->isChecked());
+  gSettings->setIncludeEnglishPhonetic(ui->btnIncludeEnglishPrevWin->isChecked());
 
   // Fixed Keyboard Layout Group.
   gSettings->setShowPrevWinFixed(ui->btnSuggestionFixed->isChecked());
+  gSettings->setIncludeEnglishFixed(ui->btnIncludeEnglishFixed->isChecked());
   gSettings->setAutoVowelFormFixed(ui->btnAutoVowel->isChecked());
   gSettings->setAutoChandraPosFixed(ui->btnAutoChandra->isChecked());
   gSettings->setOldReph(ui->btnOldReph->isChecked());
