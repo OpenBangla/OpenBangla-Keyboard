@@ -7,6 +7,7 @@
 #include "Log.h"
 
 static RitiContext *ctx = nullptr;
+static Config *config = nullptr;
 static IBusBus *bus = nullptr;
 static IBusEngine *engine = nullptr;
 static IBusLookupTable *table = nullptr;
@@ -16,16 +17,17 @@ static Suggestion *suggestion = nullptr;
 static bool altGr = false;
 
 void update_with_settings() {
-    qputenv("RITI_LAYOUT_FILE", gSettings->getLayoutPath().toLatin1());
-    qputenv("RITI_PHONETIC_DATABASE_ON", gSettings->getShowCWPhonetic() ? "true" : "false");
-    qputenv("RITI_PHONETIC_INCLUDE_ENGLISH", gSettings->getIncludeEnglishPrevWin() ? "true" : "false");
-    qputenv("RITI_DATABASE_DIR", DatabasePath().toLatin1());
-    qputenv("RITI_LAYOUT_FIXED_DATABASE_ON", gSettings->getShowPrevWinFixed() ? "true" : "false");
-    qputenv("RITI_LAYOUT_FIXED_VOWEL", gSettings->getAutoVowelFormFixed() ? "true" : "false");
-    qputenv("RITI_LAYOUT_FIXED_CHANDRA", gSettings->getAutoChandraPosFixed() ? "true" : "false");
-    qputenv("RITI_LAYOUT_FIXED_KAR", gSettings->getTraditionalKarFixed() ? "true" : "false");
-    qputenv("RITI_LAYOUT_FIXED_OLD_REPH", gSettings->getOldReph() ? "true" : "false");
-    qputenv("RITI_LAYOUT_FIXED_NUMBERPAD", gSettings->getNumberPadFixed() ? "true" : "false");
+    riti_config_set_layout_file(config, gSettings->getLayoutPath().toStdString().data());
+    riti_config_set_phonetic_suggestion(config, gSettings->getShowCWPhonetic());
+    riti_config_set_phonetic_include_english(config, gSettings->getIncludeEnglishPhonetic());
+    riti_config_set_database_dir(config, DatabasePath().toStdString().data());
+    riti_config_set_fixed_suggestion(config, gSettings->getShowPrevWinFixed());
+    riti_config_set_fixed_include_english(config, gSettings->getIncludeEnglishFixed());
+    riti_config_set_fixed_auto_vowel(config, gSettings->getAutoVowelFormFixed());
+    riti_config_set_fixed_auto_chandra(config, gSettings->getAutoChandraPosFixed());
+    riti_config_set_fixed_traditional_kar(config, gSettings->getTraditionalKarFixed());
+    riti_config_set_fixed_old_reph(config, gSettings->getOldReph());
+    riti_config_set_fixed_numpad(config, gSettings->getNumberPadFixed());
 
     if(table != nullptr) {
       ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
@@ -119,7 +121,7 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
 
   if(!riti_context_ongoing_input_session(ctx)) {
     update_with_settings();
-    riti_context_update_engine(ctx);
+    riti_context_update_engine(ctx, config);
   }
 
   // At first, handle the special keys.
@@ -265,6 +267,7 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
 void engine_enable_cb(IBusEngine *engine) {
   LOG_INFO("[IM:iBus]: IM enabled\n");
   update_with_settings();
+  riti_context_update_engine(ctx, config);
 }
 
 void engine_disable_cb(IBusEngine *engine) {
@@ -362,9 +365,10 @@ void start_setup(bool ibus) {
 int main(int argc, char* argv[]) {
     gSettings = new Settings();
     UserFolders folders;
+    config = riti_config_new();
     update_with_settings();
     initKeycode();
-    ctx = riti_context_new();
+    ctx = riti_context_new_with_config(config);
 
     start_setup(argc > 1 && strcmp(argv[1], "--ibus") == 0);
 
