@@ -1,3 +1,5 @@
+configure_file(${CMAKE_SOURCE_DIR}/data/openbangla-keyboard.desktop.in ${CMAKE_BINARY_DIR}/data/openbangla-keyboard.desktop)
+
 ## Install things
 install(FILES ${CMAKE_SOURCE_DIR}/data/32.png
         DESTINATION ${PROJECT_DATADIR}/icons
