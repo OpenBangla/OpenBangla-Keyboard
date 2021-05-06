@@ -72,7 +72,7 @@ if(OS_LINUX)
     endif()
 
     if (ENABLE_FCITX)
-        find_package(Fcitx5Core 5.0.6 REQUIRED)
+        find_package(Fcitx5Core 5.0.5 REQUIRED)
     endif()
     ## Find zstd ##
     pkg_check_modules(ZSTD REQUIRED libzstd)

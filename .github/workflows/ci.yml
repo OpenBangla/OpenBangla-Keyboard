@@ -12,6 +12,12 @@ jobs:
   build:
     if: contains(github.event.head_commit.message, 'deploy+') == false
     runs-on: "ubuntu-latest"
+    # Ubuntu 20.04 doesn't have fcitx 5.0.5 development library which we require.
+    # So we have to run our CI under Ubuntu 21.04 docker image.
+    container:
+      image: "ubuntu:21.04"
+      env:
+        DEBIAN_FRONTEND: noninteractive
     strategy:
       matrix:
         env:
@@ -23,9 +29,9 @@ jobs:
         with:
           submodules: recursive
       - name: update-system
-        run: sudo apt-get update -qq
+        run: apt-get update -qq
       - name: install-deps
-        run: sudo apt-get install libibus-1.0-dev libzstd-dev qt5-default rustc cargo
+        run: apt-get -y install build-essential clang cmake rustc cargo libibus-1.0-dev libfcitx5core-dev libzstd-dev qtbase5-dev qtbase5-dev-tools
       - name: make
         env: ${{ matrix.env }}
         run: |

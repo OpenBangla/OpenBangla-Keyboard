@@ -18,7 +18,6 @@
  */
 #include "openbangla.h"
 #include "keycode.h"
-#include "riti.h"
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/misc.h>
 #include <fcitx-utils/utf8.h>
@@ -36,7 +35,7 @@ namespace fcitx {
 class OpenBanglaState : public InputContextProperty {
 public:
   OpenBanglaState(OpenBanglaEngine *engine, InputContext &ic)
-      : engine_(engine), ic_(&ic), ctx_(riti_context_new()) {}
+      : engine_(engine), ic_(&ic), ctx_(riti_context_new_with_config(engine->getRitiConfig())) {}
 
   ~OpenBanglaState() {}
 
@@ -176,7 +175,8 @@ public:
 
     auto ctx = ctx_.get();
     if (!riti_context_ongoing_input_session(ctx)) {
-      riti_context_update_engine(ctx);
+      engine_->reloadConfig();
+      riti_context_update_engine(ctx, engine_->getRitiConfig());
     }
     auto candidateList = ic_->inputPanel().candidateList();
     // At first, handle the special keys.
@@ -334,7 +334,7 @@ private:
 };
 
 OpenBanglaEngine::OpenBanglaEngine(Instance *instance)
-    : instance_(instance), factory_([this](InputContext &ic) {
+    : instance_(instance), cfg_(riti_config_new()), factory_([this](InputContext &ic) {
         return new OpenBanglaState(this, ic);
       }) {
   if (!fs::makePath(stringutils::joinPath(
@@ -387,8 +387,10 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
       booleanValue(config, "settings/PreviewWin\\IncludeEnglishPhonetic", true);
   const bool showPrevWinFixed =
       booleanValue(config, "settings/FixedLayout\\ShowPrevWin", true);
+  const bool includeEnglishFixed =
+      booleanValue(config, "settings/PreviewWin\\IncludeEnglishFixed", true);
   const bool autoVowelFormFixed =
-      booleanValue(config, "settings/ixedLayout\\AutoVowelForm", true);
+      booleanValue(config, "settings/FixedLayout\\AutoVowelForm", true);
   const bool autoChandraPosFixed =
       booleanValue(config, "settings/FixedLayout\\AutoChandraPos", true);
   const bool traditionalKarFixed =
@@ -397,19 +399,19 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
       booleanValue(config, "settings/FixedLayout\\OldReph", true);
   const bool numberPadFixed =
       booleanValue(config, "settings/FixedLayout\\NumberPad", true);
-  setenv("RITI_LAYOUT_FILE", layoutPath.data(), 1);
-  setenv("RITI_PHONETIC_DATABASE_ON", showCWPhonetic ? "true" : "false", 1);
-  setenv("RITI_PHONETIC_INCLUDE_ENGLISH",
-         includeEnglishPrevWin ? "true" : "false", 1);
-  setenv("RITI_DATABASE_DIR", "/usr/share/openbangla-keyboard/data", 1);
-  setenv("RITI_LAYOUT_FIXED_DATABASE_ON", showPrevWinFixed ? "true" : "false",
-         1);
-  setenv("RITI_LAYOUT_FIXED_VOWEL", autoVowelFormFixed ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_CHANDRA", autoChandraPosFixed ? "true" : "false",
-         1);
-  setenv("RITI_LAYOUT_FIXED_KAR", traditionalKarFixed ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_OLD_REPH", oldReph ? "true" : "false", 1);
-  setenv("RITI_LAYOUT_FIXED_NUMBERPAD", numberPadFixed ? "true" : "false", 1);
+
+  riti_config_set_layout_file(cfg_.get(), layoutPath.data());
+  riti_config_set_phonetic_suggestion(cfg_.get(), showCWPhonetic);
+  riti_config_set_phonetic_include_english(cfg_.get(), includeEnglishPrevWin);
+  riti_config_set_database_dir(cfg_.get(), "/usr/share/openbangla-keyboard/data");
+  riti_config_set_fixed_suggestion(cfg_.get(), showPrevWinFixed);
+  riti_config_set_fixed_include_english(cfg_.get(), includeEnglishFixed);
+  riti_config_set_fixed_auto_vowel(cfg_.get(), autoVowelFormFixed);
+  riti_config_set_fixed_auto_chandra(cfg_.get(), autoChandraPosFixed);
+  riti_config_set_fixed_traditional_kar(cfg_.get(), traditionalKarFixed);
+  riti_config_set_fixed_old_reph(cfg_.get(), oldReph);
+  riti_config_set_fixed_numpad(cfg_.get(), numberPadFixed);
+
   candidateWinHorizontal_ =
       booleanValue(config, "settings/CandidateWin\\Horizontal", true);
   enterKeyClosesPrevWin_ =
