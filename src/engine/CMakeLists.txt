@@ -1,12 +1,14 @@
 ## Platform depended things
 if (OS_LINUX)
-    add_subdirectory(common)
     ## Platform is Linux
-    if (ENABLE_IBUS)
+    add_subdirectory(common)
+
+    if (IBUS_FOUND)
         add_subdirectory(ibus)
     endif()
 
-    if (ENABLE_FCITX)
+    if (Fcitx5Core_FOUND)
+        add_definitions(-DFCITX_PATCH=${Fcitx5Core_VERSION_PATCH})
         add_subdirectory(fcitx)
     endif()
 endif (OS_LINUX)
