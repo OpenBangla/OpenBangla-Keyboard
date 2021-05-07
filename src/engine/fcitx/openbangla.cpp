@@ -18,7 +18,6 @@
  */
 #include "openbangla.h"
 #include "keycode.h"
-#include "shim.h"
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/misc.h>
 #include <fcitx-utils/utf8.h>
@@ -26,6 +25,7 @@
 #include <fcitx/inputcontextmanager.h>
 #include <fcitx/inputpanel.h>
 #include <fcntl.h>
+#include <filesystem>
 #include <memory>
 
 FCITX_DEFINE_LOG_CATEGORY(openbangla, "openbangla");
@@ -36,7 +36,8 @@ namespace fcitx {
 class OpenBanglaState : public InputContextProperty {
 public:
   OpenBanglaState(OpenBanglaEngine *engine, InputContext &ic)
-      : engine_(engine), ic_(&ic), ctx_(riti_context_new_with_config(engine->getRitiConfig())) {}
+      : engine_(engine), ic_(&ic),
+        ctx_(riti_context_new_with_config(engine->ritiConfig())) {}
 
   ~OpenBanglaState() {}
 
@@ -177,7 +178,7 @@ public:
     auto ctx = ctx_.get();
     if (!riti_context_ongoing_input_session(ctx)) {
       engine_->reloadConfig();
-      riti_context_update_engine(ctx, engine_->getRitiConfig());
+      riti_context_update_engine(ctx, engine_->ritiConfig());
     }
     auto candidateList = ic_->inputPanel().candidateList();
     // At first, handle the special keys.
@@ -335,9 +336,9 @@ private:
 };
 
 OpenBanglaEngine::OpenBanglaEngine(Instance *instance)
-    : instance_(instance), cfg_(riti_config_new()), factory_([this](InputContext &ic) {
-        return new OpenBanglaState(this, ic);
-      }) {
+    : instance_(instance), cfg_(riti_config_new()),
+      factory_(
+          [this](InputContext &ic) { return new OpenBanglaState(this, ic); }) {
   if (!fs::makePath(stringutils::joinPath(
           StandardPath::global().userDirectory(StandardPath::Type::Data),
           "openbangla-keyboard"))) {
@@ -404,7 +405,8 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
   riti_config_set_layout_file(cfg_.get(), layoutPath.data());
   riti_config_set_phonetic_suggestion(cfg_.get(), showCWPhonetic);
   riti_config_set_phonetic_include_english(cfg_.get(), includeEnglishPrevWin);
-  riti_config_set_database_dir(cfg_.get(), "/usr/share/openbangla-keyboard/data");
+  riti_config_set_database_dir(cfg_.get(),
+                               "/usr/share/openbangla-keyboard/data");
   riti_config_set_fixed_suggestion(cfg_.get(), showPrevWinFixed);
   riti_config_set_fixed_include_english(cfg_.get(), includeEnglishFixed);
   riti_config_set_fixed_auto_vowel(cfg_.get(), autoVowelFormFixed);
@@ -420,7 +422,12 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
 }
 
 void OpenBanglaEngine::reloadConfig() {
-  auto time = timestamp(StandardPath::Type::Config, "OpenBangla/Keyboard.conf");
+  auto path = StandardPath::global().locate(StandardPath::Type::Config,
+                                            "OpenBangla/Keyboard.conf");
+  auto time = std::filesystem::file_time_type::min();
+  if (!path.empty()) {
+    time = std::filesystem::last_write_time(path);
+  }
   if (time < lastConfigTimestamp_) {
     return;
   }

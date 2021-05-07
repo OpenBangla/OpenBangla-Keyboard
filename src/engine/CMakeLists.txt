@@ -8,7 +8,6 @@ if (OS_LINUX)
     endif()
 
     if (Fcitx5Core_FOUND)
-        add_definitions(-DFCITX_PATCH=${Fcitx5Core_VERSION_PATCH})
         add_subdirectory(fcitx)
     endif()
 endif (OS_LINUX)
