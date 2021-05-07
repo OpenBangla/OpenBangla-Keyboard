@@ -28,16 +28,16 @@
 #include <fcitx/inputcontextproperty.h>
 #include <fcitx/inputmethodengine.h>
 #include <fcitx/instance.h>
-#include <limits>
+#include <filesystem>
 
 namespace fcitx {
 
 class OpenBanglaState;
 
 FCITX_CONFIGURATION(OpenBanglaConfig,
-                    ExternalOption config{this, "OpenBanglaKeyboard",
-                                          _("OpenBangla Keyboard"),
-                                          LIBEXECDIR "/openbangla-keyboard/openbangla-gui"};);
+                    ExternalOption config{
+                        this, "OpenBanglaKeyboard", _("OpenBangla Keyboard"),
+                        LIBEXECDIR "/openbangla-keyboard/openbangla-gui"};);
 
 class OpenBanglaEngine final : public InputMethodEngine {
 public:
@@ -54,7 +54,7 @@ public:
 
   const Configuration *getConfig() const override { return &config_; }
 
-  auto getRitiConfig() const { return cfg_.get(); }
+  auto ritiConfig() const { return cfg_.get(); }
 
   auto candidateWinHorizontal() const { return candidateWinHorizontal_; }
   auto enterKeyClosesPrevWin() const { return enterKeyClosesPrevWin_; }
@@ -66,7 +66,8 @@ private:
   OpenBanglaConfig config_;
   UniqueCPtr<Config, riti_config_free> cfg_;
   FactoryFor<OpenBanglaState> factory_;
-  int64_t lastConfigTimestamp_ = std::numeric_limits<int64_t>::min();
+  std::filesystem::file_time_type lastConfigTimestamp_ =
+      std::filesystem::file_time_type::min();
   bool candidateWinHorizontal_ = true;
   bool enterKeyClosesPrevWin_ = false;
 };
