@@ -18,6 +18,7 @@
  */
 #include "openbangla.h"
 #include "keycode.h"
+#include "shim.h"
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/misc.h>
 #include <fcitx-utils/utf8.h>
@@ -419,8 +420,7 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
 }
 
 void OpenBanglaEngine::reloadConfig() {
-  auto time = StandardPath::global().timestamp(StandardPath::Type::Config,
-                                               "OpenBangla/Keyboard.conf");
+  auto time = timestamp(StandardPath::Type::Config, "OpenBangla/Keyboard.conf");
   if (time < lastConfigTimestamp_) {
     return;
   }
