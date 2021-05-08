@@ -62,8 +62,16 @@ if(OS_LINUX)
 
     include(FindPkgConfig)
     find_package(PkgConfig)
+
     ## Find iBus ##
-    pkg_check_modules(IBUS REQUIRED ibus-1.0)
+    pkg_check_modules(IBUS ibus-1.0)
+    ## Find Fcitx ##
+    find_package(Fcitx5Core 5.0.5)
+
+    if((NOT IBUS_FOUND) AND (NOT Fcitx5Core_FOUND))
+        message(FATAL_ERROR "Both iBus & Fcitx development library was not found!\nPlease atleast install iBus or Fcitx development library.")
+    endif()
+
     ## Find zstd ##
     pkg_check_modules(ZSTD REQUIRED libzstd)
 endif()
