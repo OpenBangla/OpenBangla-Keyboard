@@ -110,7 +110,7 @@ $ sudo pacman -U package.pkg.tar.zst
 
 
 == কমিউনিটি
-https://discord.gg/HXK7QnJ[ডিসকর্ড] এবং https://www.facebook.com/openbanglakeyboard[ফেসবুকে] আমাদের সাথে আলাপ করতে পারেন।
+https://github.com/OpenBangla/OpenBangla-Keyboard/discussions[গিটহাব ডিসকাসন্স] এবং https://www.facebook.com/openbanglakeyboard[ফেসবুকে] আমাদের সাথে আলাপ করতে পারেন।
 
 == কম্পাইল
 

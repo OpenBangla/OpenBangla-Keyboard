@@ -110,7 +110,7 @@ After you have installed OpenBangla Keyboard, you may need to https://github.com
 If this does not work out for you, please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue.]
 
 == Community
-We are on https://discord.gg/HXK7QnJ[Discord] and https://www.facebook.com/openbanglakeyboard[Facebook].
+We are on https://github.com/OpenBangla/OpenBangla-Keyboard/discussions[Github Discussions] and https://www.facebook.com/openbanglakeyboard[Facebook].
 
 == Compiling on GNU/Linux
 
