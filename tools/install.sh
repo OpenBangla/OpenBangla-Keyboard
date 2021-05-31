@@ -73,7 +73,7 @@ case $DISTRO_NAME in
   ;;
 ("arch")
   wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-archlinux.pkg.tar.zst" -O /tmp/OpenBangla.pkg.tar.zst
-  sudo pacman -U /tmp/OpenBangla.pkg.tar.xz
+  sudo pacman -U /tmp/OpenBangla.pkg.tar.zst
   ;;
 ("fedora")
   # fedora version check ?
