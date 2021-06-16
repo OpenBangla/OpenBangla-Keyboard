@@ -53,23 +53,34 @@ if(OS_LINUX)
 
     ## Set Directories for installing and storing files
     set(CMAKE_INSTALL_PREFIX "/usr")
-    set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
-    set(DATADIR "${CMAKE_INSTALL_PREFIX}/share")
-    set(LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/libexec")
+    if(NOT DEFINED BIN_DIR)
+        set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
+    endif()
+    if(NOT DEFINED DATADIR)
+        set(DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+    endif()
+    if(NOT DEFINED LIBEXECDIR)
+        set(LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/libexec")
+    endif()
     set(PROJECT_DATADIR "${DATADIR}/openbangla-keyboard")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
+    add_definitions(-DBIN_DIR="${BIN_DIR}")
     add_definitions(-DLIBEXECDIR="${LIBEXECDIR}")
 
     include(FindPkgConfig)
     find_package(PkgConfig)
 
-    ## Find iBus ##
-    pkg_check_modules(IBUS ibus-1.0)
-    ## Find Fcitx ##
-    find_package(Fcitx5Core 5.0.5)
+    option(ENABLE_IBUS "Enable IBus support" On)
+    option(ENABLE_FCITX "Enable Fcitx support" OFF)
 
-    if((NOT IBUS_FOUND) AND (NOT Fcitx5Core_FOUND))
-        message(FATAL_ERROR "Both iBus & Fcitx development library was not found!\nPlease atleast install iBus or Fcitx development library.")
+    ## Find iBus ##
+    if(ENABLE_IBUS)
+        pkg_check_modules(IBUS REQUIRED ibus-1.0)
+    endif()
+
+    ## Find Fcitx ##
+    if(ENABLE_FCITX)
+        find_package(Fcitx5Core 5.0.5 REQUIRED)
     endif()
 
     ## Find zstd ##

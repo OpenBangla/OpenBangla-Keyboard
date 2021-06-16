@@ -37,6 +37,6 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake ..
+          cmake .. -DENABLE_IBUS=ON -DENABLE_FCITX=ON
           make
 

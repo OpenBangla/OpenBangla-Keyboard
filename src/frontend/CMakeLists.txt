@@ -30,4 +30,4 @@ add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
 target_link_libraries(openbangla-gui ${LINK_LIBS})
 
 install(TARGETS openbangla-gui
-        RUNTIME DESTINATION ${LIBEXECDIR}/openbangla-keyboard)
+        RUNTIME DESTINATION ${BIN_DIR})

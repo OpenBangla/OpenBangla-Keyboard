@@ -3,11 +3,11 @@ if (OS_LINUX)
     ## Platform is Linux
     add_subdirectory(common)
 
-    if (IBUS_FOUND)
+    if (ENABLE_IBUS)
         add_subdirectory(ibus)
     endif()
 
-    if (Fcitx5Core_FOUND)
+    if (ENABLE_FCITX)
         add_subdirectory(fcitx)
     endif()
 endif (OS_LINUX)
