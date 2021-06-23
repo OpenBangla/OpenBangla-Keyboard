@@ -49,10 +49,6 @@
        <property name="text">
         <string>Normal View</string>
        </property>
-       <property name="icon">
-        <iconset resource="images.qrc">
-         <normaloff>:/images/keyboard_layout.png</normaloff>:/images/keyboard_layout.png</iconset>
-       </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
@@ -74,10 +70,6 @@
        </property>
        <property name="text">
         <string>AltGr View</string>
-       </property>
-       <property name="icon">
-        <iconset resource="images.qrc">
-         <normaloff>:/images/keyboard_layout.png</normaloff>:/images/keyboard_layout.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -122,10 +114,6 @@
        </property>
        <property name="text">
         <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="images.qrc">
-         <normaloff>:/images/outline_description_black_18dp.png</normaloff>:/images/outline_description_black_18dp.png</iconset>
        </property>
        <property name="iconSize">
         <size>

@@ -17,6 +17,7 @@
  */
 
 #include <QCloseEvent>
+#include <QPushButton>
 #include <zstd.h>
 #include "LayoutViewer.h"
 #include "Settings.h"
@@ -24,11 +25,17 @@
 #include "base.hpp"
 #include "ui_LayoutViewer.h"
 
-LayoutViewer::LayoutViewer(QWidget *parent) :
+LayoutViewer::LayoutViewer(QString iconTheme, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LayoutViewer) {
   ui->setupUi(this);
   aboutDialog = new AboutFile(this);
+  auto set_icon = [&](QPushButton* obj, QString icon) {
+    obj->setIcon(QIcon(":/images/" + iconTheme + "/" + icon + ".png"));
+  };
+  set_icon(ui->buttonAboutLayout, "description");
+  set_icon(ui->viewAltGr, "layout");
+  set_icon(ui->viewNormal, "layout");
   ui->labelImage->setAlignment(Qt::AlignCenter);
   this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
   this->move(gSettings->getLayoutViewerWindowPosition());

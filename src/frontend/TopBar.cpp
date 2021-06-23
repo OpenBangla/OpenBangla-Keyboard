@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
+#include <QPushButton>
 #include <QMenu>
 #include <QDir>
 #include "TopBar.h"
@@ -39,7 +40,7 @@
 
 static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
-TopBar::TopBar(QWidget *parent) :
+TopBar::TopBar(bool darkIcon, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::TopBar) {
   ui->setupUi(this);
@@ -47,11 +48,23 @@ TopBar::TopBar(QWidget *parent) :
   gLayout = new Layout();
   gSettings = new Settings();
 
+  if(darkIcon) {
+    m_iconTheme = "white";
+  } else {
+    m_iconTheme = "black";
+  }
   /* Dialogs */
   aboutDialog = new AboutDialog(Q_NULLPTR);
-  layoutViewer = new LayoutViewer(Q_NULLPTR);
+  layoutViewer = new LayoutViewer(m_iconTheme, Q_NULLPTR);
   settingsDialog = new SettingsDialog(Q_NULLPTR);
 
+  auto set_icon = [&](QPushButton* obj, QString icon) {
+    obj->setIcon(QIcon(":/images/" + m_iconTheme + "/" + icon + ".png"));
+  };
+  set_icon(ui->buttonSetLayout, "layouts");
+  set_icon(ui->buttonViewLayout, "layout");
+  set_icon(ui->buttonSettings, "settings");
+  set_icon(ui->buttonShutdown, "close");
   ui->buttonIcon->installEventFilter(this);
 
   SetupTopBar();
@@ -110,7 +123,6 @@ void TopBar::checkForUpdate() {
 void TopBar::SetupPopupMenus() {
   // Layout Popup Menu
   layoutMenu = new QMenu("Select a keyboard layout", this);
-  layoutMenu->setIcon(QIcon(":/images/keyboard_layout.png"));
   connect(layoutMenu, &QMenu::aboutToHide, [=]() {
     ui->buttonSetLayout->setChecked(false);
   });

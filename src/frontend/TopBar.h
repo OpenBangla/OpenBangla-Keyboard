@@ -49,7 +49,7 @@ class TopBar : public QMainWindow {
 Q_OBJECT
 
 public:
-  explicit TopBar(QWidget *parent = nullptr);
+  explicit TopBar(bool darkIcon = false, QWidget *parent = nullptr);
 
   ~TopBar() override;
 
@@ -81,6 +81,7 @@ private slots:
 private:
   Ui::TopBar *ui;
   bool canMoveTopbar = false;
+  QString m_iconTheme;
   bool positionChanged = false;
   int pressedMouseX, pressedMouseY;
   QSystemTrayIcon *tray;
