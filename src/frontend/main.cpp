@@ -33,7 +33,9 @@ int main(int argc, char *argv[]) {
   parser.addHelpOption();
   parser.addVersionOption();
   QCommandLineOption darkIcon("dark","Enable dark theme support");
+  QCommandLineOption startInTray("tray","Start in tray");
   parser.addOption(darkIcon);
+  parser.addOption(startInTray);
   parser.process(app);
 
   // Prevent many instances of the app to be launched
@@ -52,5 +54,8 @@ int main(int argc, char *argv[]) {
 
   TopBar w(parser.isSet(darkIcon));
   w.show();
+  if (parser.isSet(darkIcon)) {
+    w.setVisible(false);
+  }
   return app.exec();
 }

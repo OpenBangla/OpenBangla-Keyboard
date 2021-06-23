@@ -178,6 +178,9 @@ void TopBar::SetupTrayIcon() {
   connect(traySettings, &QAction::triggered, this, &TopBar::on_buttonSettings_clicked);
 
   trayTopBarVisibility = new QAction("Hide the TopBar", this);
+  if(not this->isVisible()) {
+    trayTopBarVisibility->setText("Show the TopBar");
+  }
   connect(trayTopBarVisibility, &QAction::triggered, [&]() {
     if(this->isVisible()) {
       this->setVisible(false);
