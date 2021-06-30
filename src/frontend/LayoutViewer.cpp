@@ -34,8 +34,6 @@ LayoutViewer::LayoutViewer(QString iconTheme, QWidget *parent) :
     obj->setIcon(QIcon(":/images/" + iconTheme + "/" + icon + ".png"));
   };
   set_icon(ui->buttonAboutLayout, "description");
-  set_icon(ui->viewAltGr, "layout");
-  set_icon(ui->viewNormal, "layout");
   ui->labelImage->setAlignment(Qt::AlignCenter);
   this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
   this->move(gSettings->getLayoutViewerWindowPosition());
