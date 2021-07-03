@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
   TopBar w(parser.isSet(darkIcon));
   w.show();
-  if (parser.isSet(darkIcon)) {
+  if (parser.isSet(startInTray)) {
     w.setVisible(false);
   }
   return app.exec();
