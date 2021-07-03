@@ -105,7 +105,6 @@ TopBar::~TopBar() {
 void TopBar::SetupTopBar() {
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   this->setFixedSize(QSize(this->width(), this->height()));
-  
 
   if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
     int width = this->frameGeometry().width();
