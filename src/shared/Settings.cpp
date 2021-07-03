@@ -52,6 +52,16 @@ bool Settings::getTopBarVisibility() {
   return setting->value("window/visibility/TopBar", true).toBool();
 }
 
+void Settings::setTrayInfoCount(uint b) {
+  setting->setValue("settings/TrayInfoCount", b);
+  setting->sync();
+}
+
+uint Settings::getTrayInfoCount() {
+  setting->sync();
+  return setting->value("settings/TrayInfoCount", 0).toUInt();
+}
+
 void Settings::setLayoutViewerWindowPosition(QPoint pos) {
   setting->setValue("window/positions/LayoutViewer", pos);
   setting->sync();

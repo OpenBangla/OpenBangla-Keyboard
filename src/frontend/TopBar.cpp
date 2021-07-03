@@ -71,6 +71,15 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   SetupPopupMenus();
   SetupTrayIcon();
   DataMigration();
+
+  uint count = gSettings->getTrayInfoCount();
+  if(count < 4 && !gSettings->getTopBarVisibility()) {
+    tray->showMessage("OpenBangla Keyboard", "Currently running in the system tray.\n"
+                      "You can use the tray icon to change keyboard layouts and other "
+                      "settings and to show the TopBar again.");
+    // Update the counter to show only the message for the first three times
+    gSettings->setTrayInfoCount(count + 1);
+  }
   
 #ifndef NO_UPDATE_CHECK
   updater = QSimpleUpdater::getInstance();

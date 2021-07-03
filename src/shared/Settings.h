@@ -40,6 +40,10 @@ public:
 
   bool getTopBarVisibility();
 
+  void setTrayInfoCount(uint b);
+
+  uint getTrayInfoCount();
+
   void setLayoutViewerWindowPosition(QPoint pos);
 
   QPoint getLayoutViewerWindowPosition();
