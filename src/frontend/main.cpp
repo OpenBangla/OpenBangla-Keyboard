@@ -18,6 +18,8 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 #include "TopBar.h"
 #include "SingleInstance.h"
 
@@ -25,6 +27,16 @@ int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
   app.setApplicationName("OpenBangla Keyboard");
   app.setApplicationVersion(PROJECT_VERSION);
+
+  QCommandLineParser parser;
+  parser.setApplicationDescription("OpenBangla Keyboard");
+  parser.addHelpOption();
+  parser.addVersionOption();
+  QCommandLineOption darkIcon("dark","Enable dark theme support");
+  QCommandLineOption startInTray("tray","Start in tray");
+  parser.addOption(darkIcon);
+  parser.addOption(startInTray);
+  parser.process(app);
 
   // Prevent many instances of the app to be launched
   QString name = "com.openbangla.keyboard";
@@ -40,7 +52,10 @@ int main(int argc, char *argv[]) {
 
   instance.listen(name);
 
-  TopBar w;
+  TopBar w(parser.isSet(darkIcon));
   w.show();
+  if (parser.isSet(startInTray)) {
+    w.setVisible(false);
+  }
   return app.exec();
 }
