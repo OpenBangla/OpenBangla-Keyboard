@@ -46,13 +46,13 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   ui->setupUi(this);
 
   gLayout = new Layout();
-  gSettings = new Settings();
 
   if(darkIcon) {
     m_iconTheme = "white";
   } else {
     m_iconTheme = "black";
   }
+
   /* Dialogs */
   aboutDialog = new AboutDialog(Q_NULLPTR);
   layoutViewer = new LayoutViewer(m_iconTheme, Q_NULLPTR);
@@ -71,8 +71,6 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   SetupPopupMenus();
   SetupTrayIcon();
   DataMigration();
-
-  //this->setVisible(gSettings->getTopBarVisibility());
   
 #ifndef NO_UPDATE_CHECK
   updater = QSimpleUpdater::getInstance();
@@ -94,11 +92,10 @@ TopBar::~TopBar() {
 
   delete ui;
 }
-#include <QDebug>
+
 void TopBar::SetupTopBar() {
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   this->setFixedSize(QSize(this->width(), this->height()));
-  qDebug() << gSettings->getTopBarVisibility();
   
 
   if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
@@ -181,10 +178,11 @@ void TopBar::SetupTrayIcon() {
   traySettings = new QAction("Settings", this);
   connect(traySettings, &QAction::triggered, this, &TopBar::on_buttonSettings_clicked);
 
-  trayTopBarVisibility = new QAction("Hide the TopBar", this);
-  if(not this->isVisible()) {
-    trayTopBarVisibility->setText("Show the TopBar");
-  }
+  trayTopBarVisibility = new QAction(
+    gSettings->getTopBarVisibility() ? "Hide the TopBar" : "Show the TopBar",
+    this
+  );
+  
   connect(trayTopBarVisibility, &QAction::triggered, [&]() {
     if(this->isVisible()) {
       this->setVisible(false);
@@ -306,16 +304,6 @@ void TopBar::on_buttonIcon_clicked() {
     point.setX(point.x() + ui->buttonIcon->geometry().x());
     point.setY(point.y() + this->height());
     iconMenu->exec(point);
-  }
-}
-
-void TopBar::showEvent(QShowEvent *event) {
-  if(gSettings->getTopBarVisibility()) {
-    event->accept();
-    qDebug() << "accepted";
-  } else {
-    event->ignore();
-    qDebug() << "ignored";
   }
 }
 

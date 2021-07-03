@@ -22,9 +22,12 @@
 #include <QCommandLineOption>
 #include "TopBar.h"
 #include "SingleInstance.h"
+#include "Settings.h"
 
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
+  gSettings = new Settings();
+
   app.setApplicationName("OpenBangla Keyboard");
   app.setApplicationVersion(PROJECT_VERSION);
 
@@ -54,7 +57,7 @@ int main(int argc, char *argv[]) {
 
   TopBar w(parser.isSet(darkIcon));
   w.show();
-  if (parser.isSet(startInTray)) {
+  if (parser.isSet(startInTray) || !gSettings->getTopBarVisibility()) {
     w.setVisible(false);
   }
   return app.exec();
