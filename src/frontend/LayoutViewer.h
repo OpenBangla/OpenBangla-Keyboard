@@ -34,7 +34,7 @@ class LayoutViewer : public QDialog {
 Q_OBJECT
 
 public:
-  explicit LayoutViewer(QWidget *parent = nullptr);
+  explicit LayoutViewer(QString iconTheme = "white", QWidget *parent = nullptr);
 
   ~LayoutViewer() override;
 

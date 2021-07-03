@@ -3,10 +3,15 @@
         <file>images/OpenBangla-Keyboard.png</file>
         <file>images/tray.png</file>
         <file>images/icon.png</file>
-        <file>images/outline_keyboard_hide_black_24dp.png</file>
-        <file>images/outline_keyboard_black_24dp.png</file>
-        <file>images/outline_settings_black_24dp.png</file>
-        <file>images/outline_description_black_18dp.png</file>
-        <file>images/outline_close_black_24dp.png</file>
+        <file>images/black/close.png</file>
+        <file>images/black/description.png</file>
+        <file>images/black/settings.png</file>
+        <file>images/black/layout.png</file>
+        <file>images/black/layouts.png</file>
+        <file>images/white/close.png</file>
+        <file>images/white/description.png</file>
+        <file>images/white/settings.png</file>
+        <file>images/white/layout.png</file>
+        <file>images/white/layouts.png</file>
     </qresource>
 </RCC>
