@@ -46,13 +46,13 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   ui->setupUi(this);
 
   gLayout = new Layout();
-  gSettings = new Settings();
 
   if(darkIcon) {
     m_iconTheme = "white";
   } else {
     m_iconTheme = "black";
   }
+
   /* Dialogs */
   aboutDialog = new AboutDialog(Q_NULLPTR);
   layoutViewer = new LayoutViewer(m_iconTheme, Q_NULLPTR);
@@ -72,6 +72,15 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   SetupTrayIcon();
   DataMigration();
 
+  uint count = gSettings->getTrayInfoCount();
+  if(count < 4 && !gSettings->getTopBarVisibility()) {
+    tray->showMessage("OpenBangla Keyboard", "Currently running in the system tray.\n"
+                      "You can use the tray icon to change keyboard layouts and other "
+                      "settings and to show the TopBar again.");
+    // Update the counter to show only the message for the first three times
+    gSettings->setTrayInfoCount(count + 1);
+  }
+  
 #ifndef NO_UPDATE_CHECK
   updater = QSimpleUpdater::getInstance();
 
@@ -177,10 +186,11 @@ void TopBar::SetupTrayIcon() {
   traySettings = new QAction("Settings", this);
   connect(traySettings, &QAction::triggered, this, &TopBar::on_buttonSettings_clicked);
 
-  trayTopBarVisibility = new QAction("Hide the TopBar", this);
-  if(not this->isVisible()) {
-    trayTopBarVisibility->setText("Show the TopBar");
-  }
+  trayTopBarVisibility = new QAction(
+    gSettings->getTopBarVisibility() ? "Hide the TopBar" : "Show the TopBar",
+    this
+  );
+  
   connect(trayTopBarVisibility, &QAction::triggered, [&]() {
     if(this->isVisible()) {
       this->setVisible(false);
@@ -307,6 +317,7 @@ void TopBar::on_buttonIcon_clicked() {
 
 void TopBar::closeEvent(QCloseEvent *event) {
   gSettings->setTopBarWindowPosition(this->pos());
+  gSettings->setTopBarVisibility(this->isVisible());
   event->accept();
 }
 
@@ -346,6 +357,7 @@ void TopBar::on_buttonSetLayout_clicked() {
 
 void TopBar::on_buttonShutdown_clicked() {
   gSettings->setTopBarWindowPosition(this->pos());
+  gSettings->setTopBarVisibility(this->isVisible());
   QApplication::exit();
 }
 
