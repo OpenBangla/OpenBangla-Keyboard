@@ -126,5 +126,10 @@ void Layout::setLayout(QString name) {
   // Get the actual path and load the layout
   loadLayout(layoutMap[name]);
   gSettings->setLayoutName(name);
-  gSettings->setLayoutPath(layoutMap[name]);
+  if(lD.type == Layout_Phonetic) {
+    // Hardcoded Avro Phonetic setting.
+    gSettings->setLayoutPath("avro_phonetic");
+  } else {
+    gSettings->setLayoutPath(layoutMap[name]);
+  }
 }

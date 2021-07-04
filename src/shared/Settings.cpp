@@ -89,7 +89,7 @@ void Settings::setLayoutPath(QString path) {
 
 QString Settings::getLayoutPath() {
   setting->sync();
-  return setting->value("layout/path", AvroPhoneticLayoutPath()).toString();
+  return setting->value("layout/path", "avro_phonetic").toString();
 }
 
 void Settings::setEnterKeyClosesPrevWin(bool b) {
@@ -192,24 +192,24 @@ bool Settings::getUpdateCheck() {
   return setting->value("settings/UpdateCheck", true).toBool();
 }
 
-void Settings::setIncludeEnglishPhonetic(bool b) {
-  setting->setValue("settings/PreviewWin/IncludeEnglishPhonetic", b);
+void Settings::setSuggestionIncludeEnglish(bool b) {
+  setting->setValue("settings/PreviewWin/IncludeEnglish", b);
   setting->sync();
 }
 
-bool Settings::getIncludeEnglishPhonetic() {
+bool Settings::getSuggestionIncludeEnglish() {
   setting->sync();
-  return setting->value("settings/PreviewWin/IncludeEnglishPhonetic", true).toBool();
+  return setting->value("settings/PreviewWin/IncludeEnglish", true).toBool();
 }
 
-void Settings::setIncludeEnglishFixed(bool b) {
-  setting->setValue("settings/PreviewWin/IncludeEnglishFixed", b);
+void Settings::setFixedOldKarOrder(bool b) {
+  setting->setValue("settings/FixedLayout/OldKarOrder", b);
   setting->sync();
 }
 
-bool Settings::getIncludeEnglishFixed() {
+bool Settings::getFixedOldKarOrder() {
   setting->sync();
-  return setting->value("settings/PreviewWin/IncludeEnglishFixed", true).toBool();
+  return setting->value("settings/FixedLayout/OldKarOrder", false).toBool();
 }
 
 void Settings::setPreviousUserDataRemains(bool b) {
