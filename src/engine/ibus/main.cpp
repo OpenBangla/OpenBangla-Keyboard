@@ -17,21 +17,21 @@ static Suggestion *suggestion = nullptr;
 static bool altGr = false;
 
 void update_with_settings() {
-    riti_config_set_layout_file(config, gSettings->getLayoutPath().toStdString().data());
-    riti_config_set_phonetic_suggestion(config, gSettings->getShowCWPhonetic());
-    riti_config_set_phonetic_include_english(config, gSettings->getIncludeEnglishPhonetic());
-    riti_config_set_database_dir(config, DatabasePath().toStdString().data());
-    riti_config_set_fixed_suggestion(config, gSettings->getShowPrevWinFixed());
-    riti_config_set_fixed_include_english(config, gSettings->getIncludeEnglishFixed());
-    riti_config_set_fixed_auto_vowel(config, gSettings->getAutoVowelFormFixed());
-    riti_config_set_fixed_auto_chandra(config, gSettings->getAutoChandraPosFixed());
-    riti_config_set_fixed_traditional_kar(config, gSettings->getTraditionalKarFixed());
-    riti_config_set_fixed_old_reph(config, gSettings->getOldReph());
-    riti_config_set_fixed_numpad(config, gSettings->getNumberPadFixed());
+  riti_config_set_layout_file(config, gSettings->getLayoutPath().toStdString().data());
+  riti_config_set_suggestion_include_english(config, gSettings->getSuggestionIncludeEnglish());
+  riti_config_set_phonetic_suggestion(config, gSettings->getShowCWPhonetic());
+  riti_config_set_database_dir(config, DatabasePath().toStdString().data());
+  riti_config_set_fixed_suggestion(config, gSettings->getShowPrevWinFixed());
+  riti_config_set_fixed_auto_vowel(config, gSettings->getAutoVowelFormFixed());
+  riti_config_set_fixed_auto_chandra(config, gSettings->getAutoChandraPosFixed());
+  riti_config_set_fixed_traditional_kar(config, gSettings->getTraditionalKarFixed());
+  riti_config_set_fixed_old_kar_order(config, gSettings->getFixedOldKarOrder());
+  riti_config_set_fixed_old_reph(config, gSettings->getOldReph());
+  riti_config_set_fixed_numpad(config, gSettings->getNumberPadFixed());
 
-    if(table != nullptr) {
-      ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
-    }
+  if(table != nullptr) {
+    ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
+  }
 }
 
 void engine_update_preedit() {
