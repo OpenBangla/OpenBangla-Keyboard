@@ -96,13 +96,13 @@ public:
 
   bool getUpdateCheck();
 
-  void setIncludeEnglishPhonetic(bool b);
+  void setSuggestionIncludeEnglish(bool b);
 
-  bool getIncludeEnglishPhonetic();
+  bool getSuggestionIncludeEnglish();
 
-  void setIncludeEnglishFixed(bool b);
+  void setFixedOldKarOrder(bool b);
 
-  bool getIncludeEnglishFixed();
+  bool getFixedOldKarOrder();
 
   void setPreviousUserDataRemains(bool b);
 

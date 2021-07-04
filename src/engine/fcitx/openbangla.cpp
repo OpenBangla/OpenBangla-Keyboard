@@ -378,40 +378,39 @@ bool booleanValue(const RawConfig &config, const std::string &path,
 
 void OpenBanglaEngine::populateConfig(const RawConfig &config) {
   // Keep sync with Settings.cpp
-  std::string layoutPath =
-      "/usr/share/openbangla-keyboard/layouts/avrophonetic.json";
+  std::string layoutPath = "avro_phonetic";
   if (auto *path = config.valueByPath("layout/path")) {
     layoutPath = *path;
   }
   const bool showCWPhonetic =
       booleanValue(config, "settings/CandidateWin\\Phonetic", true);
-  const bool includeEnglishPrevWin =
-      booleanValue(config, "settings/PreviewWin\\IncludeEnglishPhonetic", true);
+  const bool includeEnglish =
+      booleanValue(config, "settings/PreviewWin\\IncludeEnglish", true);
   const bool showPrevWinFixed =
       booleanValue(config, "settings/FixedLayout\\ShowPrevWin", true);
-  const bool includeEnglishFixed =
-      booleanValue(config, "settings/PreviewWin\\IncludeEnglishFixed", true);
   const bool autoVowelFormFixed =
       booleanValue(config, "settings/FixedLayout\\AutoVowelForm", true);
   const bool autoChandraPosFixed =
       booleanValue(config, "settings/FixedLayout\\AutoChandraPos", true);
   const bool traditionalKarFixed =
       booleanValue(config, "settings/FixedLayout\\TraditionalKar", false);
+  const bool oldKarOrder =
+      booleanValue(config, "settings/FixedLayout\\OldKarOrder", false);
   const bool oldReph =
       booleanValue(config, "settings/FixedLayout\\OldReph", true);
   const bool numberPadFixed =
       booleanValue(config, "settings/FixedLayout\\NumberPad", true);
 
   riti_config_set_layout_file(cfg_.get(), layoutPath.data());
+  riti_config_set_suggestion_include_english(cfg_.get(), includeEnglish);
   riti_config_set_phonetic_suggestion(cfg_.get(), showCWPhonetic);
-  riti_config_set_phonetic_include_english(cfg_.get(), includeEnglishPrevWin);
   riti_config_set_database_dir(cfg_.get(),
                                "/usr/share/openbangla-keyboard/data");
   riti_config_set_fixed_suggestion(cfg_.get(), showPrevWinFixed);
-  riti_config_set_fixed_include_english(cfg_.get(), includeEnglishFixed);
   riti_config_set_fixed_auto_vowel(cfg_.get(), autoVowelFormFixed);
   riti_config_set_fixed_auto_chandra(cfg_.get(), autoChandraPosFixed);
   riti_config_set_fixed_traditional_kar(cfg_.get(), traditionalKarFixed);
+  riti_config_set_fixed_old_kar_order(cfg_.get(), oldKarOrder);
   riti_config_set_fixed_old_reph(cfg_.get(), oldReph);
   riti_config_set_fixed_numpad(cfg_.get(), numberPadFixed);
 

@@ -29,6 +29,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   autoCorrectDialog = new AutoCorrectDialog(this);
 
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
+  ui->cmbKarOrder->insertItems(0, {"Modern", "Old"});
 
 #ifdef NO_UPDATE_CHECK
   ui->lblUpdateCheck->hide();
@@ -45,18 +46,19 @@ SettingsDialog::~SettingsDialog() {
 }
 
 void SettingsDialog::implementSignals() {
-  // Phonetic Keyboard Layout Group.
-  connect(ui->btnSuggestionPhonetic, &QPushButton::toggled, [=](bool checked) {
-    ui->btnSuggestionPhonetic->setText(checked ? "On" : "Off");
-    // Control other Preview window related settings.
-    ui->btnIncludeEnglishPrevWin->setEnabled(checked);
-    ui->btnACUpdate->setEnabled(checked);
-  });
+  // General Group
   connect(ui->btnEnterClosePW, &QPushButton::toggled, [=](bool checked) {
     ui->btnEnterClosePW->setText(checked ? "On" : "Off");
   });
   connect(ui->btnIncludeEnglishPrevWin, &QPushButton::toggled, [=](bool checked) {
     ui->btnIncludeEnglishPrevWin->setText(checked ? "On" : "Off");
+  });
+  
+  // Phonetic Keyboard Layout Group.
+  connect(ui->btnSuggestionPhonetic, &QPushButton::toggled, [=](bool checked) {
+    ui->btnSuggestionPhonetic->setText(checked ? "On" : "Off");
+    // Control other Preview window related settings.
+    ui->btnACUpdate->setEnabled(checked);
   });
   connect(ui->btnACUpdate, &QPushButton::clicked, [=]() {
     autoCorrectDialog->open();
@@ -65,10 +67,6 @@ void SettingsDialog::implementSignals() {
   // Fixed Keyboard Layout Group.
   connect(ui->btnSuggestionFixed, &QPushButton::toggled, [=](bool checked) {
     ui->btnSuggestionFixed->setText(checked ? "On" : "Off");
-    ui->btnIncludeEnglishFixed->setEnabled(checked);
-  });
-  connect(ui->btnIncludeEnglishFixed, &QPushButton::toggled, [=](bool checked) {
-    ui->btnIncludeEnglishFixed->setText(checked ? "On" : "Off");
   });
   connect(ui->btnAutoVowel, &QPushButton::toggled, [=](bool checked) {
     ui->btnAutoVowel->setText(checked ? "On" : "Off");
@@ -101,17 +99,19 @@ void SettingsDialog::implementSignals() {
 }
 
 void SettingsDialog::updateSettings() {
-  // Phonetic Keyboard Layout Group.
+  // General Group
   ui->btnEnterClosePW->setChecked(gSettings->getEnterKeyClosesPrevWin());
-  ui->btnSuggestionPhonetic->setChecked(gSettings->getShowCWPhonetic());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
-  ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getIncludeEnglishPhonetic());
+  ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getSuggestionIncludeEnglish());
+
+  // Phonetic Keyboard Layout Group.
+  ui->btnSuggestionPhonetic->setChecked(gSettings->getShowCWPhonetic());
 
   // Fixed Keyboard Layout Group.
   ui->btnSuggestionFixed->setChecked(gSettings->getShowPrevWinFixed());
-  ui->btnIncludeEnglishFixed->setChecked(gSettings->getIncludeEnglishFixed());
   ui->btnAutoVowel->setChecked(gSettings->getAutoVowelFormFixed());
   ui->btnAutoChandra->setChecked(gSettings->getAutoChandraPosFixed());
+  ui->cmbKarOrder->setCurrentIndex(gSettings->getFixedOldKarOrder() ? 1 : 0);
   ui->btnOldReph->setChecked(gSettings->getOldReph());
   ui->btnKarJoining->setChecked(gSettings->getTraditionalKarFixed());
   ui->btnNumberpad->setChecked(gSettings->getNumberPadFixed());
@@ -120,17 +120,19 @@ void SettingsDialog::updateSettings() {
 }
 
 void SettingsDialog::saveSettings() {
-  // Phonetic Keyboard Layout Group.
+  // General Group
   gSettings->setEnterKeyClosesPrevWin(ui->btnEnterClosePW->isChecked());
-  gSettings->setShowCWPhonetic(ui->btnSuggestionPhonetic->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
-  gSettings->setIncludeEnglishPhonetic(ui->btnIncludeEnglishPrevWin->isChecked());
+  gSettings->setSuggestionIncludeEnglish(ui->btnIncludeEnglishPrevWin->isChecked());
+
+  // Phonetic Keyboard Layout Group.
+  gSettings->setShowCWPhonetic(ui->btnSuggestionPhonetic->isChecked());
 
   // Fixed Keyboard Layout Group.
   gSettings->setShowPrevWinFixed(ui->btnSuggestionFixed->isChecked());
-  gSettings->setIncludeEnglishFixed(ui->btnIncludeEnglishFixed->isChecked());
   gSettings->setAutoVowelFormFixed(ui->btnAutoVowel->isChecked());
   gSettings->setAutoChandraPosFixed(ui->btnAutoChandra->isChecked());
+  gSettings->setFixedOldKarOrder(ui->cmbKarOrder->currentIndex() == 1);
   gSettings->setOldReph(ui->btnOldReph->isChecked());
   gSettings->setTraditionalKarFixed(ui->btnKarJoining->isChecked());
   gSettings->setNumberPadFixed(ui->btnNumberpad->isChecked());
