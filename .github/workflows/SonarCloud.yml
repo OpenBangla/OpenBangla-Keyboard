@@ -1,0 +1,45 @@
+name: SonarCloud
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+       
+      - name: Prepare Sonar scanner
+        run: |
+          wget -nv https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip -q sonar-scanner-cli-4.6.2.2472-linux.zip
+          echo "${PWD}/sonar-scanner-4.6.2.2472-linux/bin/" >> $GITHUB_PATH
+          wget -nv https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+          unzip -q build-wrapper-linux-x86.zip          
+          echo "${PWD}/build-wrapper-linux-x86" >> $GITHUB_PATH
+      
+      - name: update-system
+        run: sudo apt-get update -qq
+        
+      - name: install-deps
+        run: sudo apt-get install libibus-1.0-dev libzstd-dev qt5-default rustc cargo
+      
+      - name: Clean Build OBK
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          build-wrapper-linux-x86-64 --out-dir ../bw-output make clean all
+        
+      - name: SonarCloud Scan
+        run: |
+          sonar-scanner -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=openbangla -Dsonar.login=$SONAR_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
