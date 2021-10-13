@@ -129,13 +129,12 @@ public:
           ic_->inputPanel().setAuxUp(Text(std::string(aux)));
         }
         riti_string_free(aux);
-        
+
         auto candidateList = std::make_unique<CommonCandidateList>();
         auto len = riti_suggestion_get_length(suggestion_.get());
         for (decltype(len) i = 0; i < len; i++) {
           char *text = riti_suggestion_get_suggestion(suggestion_.get(), i);
-          candidateList->append<OpenBanglaCandidate>(engine_, text,
-                                                     i);
+          candidateList->append<OpenBanglaCandidate>(engine_, text, i);
           riti_string_free(text);
         }
 
