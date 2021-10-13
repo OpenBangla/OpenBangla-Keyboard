@@ -56,12 +56,13 @@ void engine_update_lookup_table() {
     ibus_lookup_table_clear(table);
     ibus_engine_update_auxiliary_text(engine, auxiliary, TRUE);
 
-    char *const *suggestions = riti_suggestion_get_suggestions(suggestion);
     uintptr_t len = riti_suggestion_get_length(suggestion);
 
     for(uintptr_t i = 0; i < len; i++) {
-      IBusText *text = ibus_text_new_from_string(suggestions[i]);
+      char *txt = riti_suggestion_get_suggestion(suggestion, i);
+      IBusText *text = ibus_text_new_from_string(txt);
       ibus_lookup_table_append_candidate(table, text);
+      riti_string_free(txt);
     }
 
     uintptr_t prev_selection = riti_suggestion_previously_selected_index(suggestion);
