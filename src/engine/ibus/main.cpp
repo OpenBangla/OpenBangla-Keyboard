@@ -28,6 +28,7 @@ void update_with_settings() {
   riti_config_set_fixed_old_kar_order(config, gSettings->getFixedOldKarOrder());
   riti_config_set_fixed_old_reph(config, gSettings->getOldReph());
   riti_config_set_fixed_numpad(config, gSettings->getNumberPadFixed());
+  riti_config_set_ansi_encoding(config, /*gSettings->getANSIEncoding()*/ true);
 
   if(table != nullptr) {
     ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
@@ -35,15 +36,18 @@ void update_with_settings() {
 }
 
 void engine_update_preedit() {
-  IBusText *text = nullptr;
+  char *txt = nullptr;
 
   if (!riti_suggestion_is_lonely(suggestion)) {
     ibus_engine_update_lookup_table_fast(engine, table, TRUE);
     guint index = ibus_lookup_table_get_cursor_pos(table);
-    text = ibus_lookup_table_get_candidate(table, index);
+    txt = riti_suggestion_get_pre_edit_text(suggestion, index);
   } else {
-    text = ibus_text_new_from_string(riti_suggestion_get_lonely_suggestion(suggestion));
+    txt = riti_suggestion_get_pre_edit_text(suggestion, 0);
   }
+
+  IBusText *text = ibus_text_new_from_string(txt);
+  riti_string_free(txt);
 
   ibus_engine_update_preedit_text(engine, text, ibus_text_get_length(text), TRUE);
 }
@@ -52,6 +56,7 @@ void engine_update_lookup_table() {
   if (!riti_suggestion_is_lonely(suggestion)) {
     char *aux = riti_suggestion_get_auxiliary_text(suggestion);
     IBusText *auxiliary = ibus_text_new_from_string(aux);
+    riti_string_free(aux);
 
     ibus_lookup_table_clear(table);
     ibus_engine_update_auxiliary_text(engine, auxiliary, TRUE);
@@ -87,18 +92,18 @@ void engine_commit_text(IBusText * text) {
 
 void engine_commit() {
   uintptr_t index = 0;
-  IBusText *text = nullptr;
+  char *text = nullptr;
 
   if (!riti_suggestion_is_lonely(suggestion)) {
     index = ibus_lookup_table_get_cursor_pos(table);
-    text = ibus_lookup_table_get_candidate(table, index);
+    text = riti_suggestion_get_pre_edit_text(suggestion, index);
   } else {
     index = 0;
-    char *txt = riti_suggestion_get_lonely_suggestion(suggestion);
-    text = ibus_text_new_from_string(txt);
+    text = riti_suggestion_get_pre_edit_text(suggestion, 0);
   }
 
-  engine_commit_text(text);
+  engine_commit_text(ibus_text_new_from_string(text));
+  riti_string_free(text);
   riti_context_candidate_committed(ctx, index);
 }
 

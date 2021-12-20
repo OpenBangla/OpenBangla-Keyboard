@@ -104,6 +104,10 @@ public:
 
   bool getFixedOldKarOrder();
 
+  void setANSIEncoding(bool b);
+
+  bool getANSIEncoding();
+
   void setPreviousUserDataRemains(bool b);
 
   bool getPreviousUserDataRemains();
