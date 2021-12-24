@@ -112,6 +112,10 @@ private:
 
   /* Tray Popup Menu */
   QMenu *trayMenu;
+  QMenu *trayOutputMode;
+  QAction *trayOutputModeUnicode;
+  QAction *trayOutputModeANSI;
+  QActionGroup *trayOutputModeGroup;
   QAction *trayLayoutViewer;
   QAction *traySettings;
   QAction *trayTopBarVisibility;

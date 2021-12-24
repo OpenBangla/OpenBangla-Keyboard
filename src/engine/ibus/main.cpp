@@ -28,7 +28,7 @@ void update_with_settings() {
   riti_config_set_fixed_old_kar_order(config, gSettings->getFixedOldKarOrder());
   riti_config_set_fixed_old_reph(config, gSettings->getOldReph());
   riti_config_set_fixed_numpad(config, gSettings->getNumberPadFixed());
-  riti_config_set_ansi_encoding(config, /*gSettings->getANSIEncoding()*/ true);
+  riti_config_set_ansi_encoding(config, gSettings->getANSIEncoding());
 
   if(table != nullptr) {
     ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
