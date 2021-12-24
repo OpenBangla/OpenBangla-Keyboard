@@ -102,23 +102,10 @@ void engine_commit() {
   riti_context_candidate_committed(ctx, index);
 }
 
-/************************************* Callbacks *************************************/
-
-gboolean engine_process_key_event_cb(IBusEngine *engine,
-                                   guint keyval,
-                                   guint keycode,
-                                   guint state) {
+gboolean engine_process_key(guint keyval, guint keycode, guint state) {
   u_int8_t modifier = 0;
   bool ctrl_key = false;
   bool alt_key = false;
-
-  // Don't accept Key Release event
-  if (state & IBUS_RELEASE_MASK) {
-    if(keyval == IBUS_KEY_Alt_R || keyval == IBUS_KEY_ISO_Level3_Shift) {
-      altGr = false;
-    }
-    return FALSE;
-  }
 
   if(!riti_context_ongoing_input_session(ctx)) {
     update_with_settings();
@@ -259,10 +246,31 @@ gboolean engine_process_key_event_cb(IBusEngine *engine,
   if(!riti_suggestion_is_empty(suggestion)) {
     engine_update_lookup_table();
   } else {
-    return FALSE;
+    // Corner case: When old style kar typing is enabled, a lonely suggestion and an empty
+    // suggestion is not distinguishable.
+    return riti_context_ongoing_input_session(ctx);
   }
 
   return TRUE;
+}
+
+/************************************* Callbacks *************************************/
+
+gboolean engine_process_key_event_cb(IBusEngine *engine,
+                                   guint keyval,
+                                   guint keycode,
+                                   guint state) {
+  // Don't accept Key Release event
+  if (state & IBUS_RELEASE_MASK) {
+    if(keyval == IBUS_KEY_Alt_R || keyval == IBUS_KEY_ISO_Level3_Shift) {
+      altGr = false;
+    }
+    return FALSE;
+  }
+  
+  gboolean ret = engine_process_key(keyval, keycode, state);
+  LOG_DEBUG("[IM:iBus]: Key event was %s\n", ret ? "accepted" : "rejected");
+  return ret;
 }
 
 void engine_enable_cb(IBusEngine *engine) {
