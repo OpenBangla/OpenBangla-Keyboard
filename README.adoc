@@ -78,6 +78,7 @@ If this does not workout for you please create an https://github.com/OpenBangla/
 
 === Archlinux and it's derivatives
 TIP: There is a video tutorial about installing OpenBangla Keyboard in Arch Linux. You may check that out from [here](https://youtu.be/C8vnR1AY6sA).
+
 There are two packages for OpenBangla Keyboard in the Arch User Repository(AUR). Use `openbangla-keyboard` if you want to make and install the package from source. Otherwise, use `openbangla-keyboard-bin` to use the binary package released for Arch and its derivatives by the maintainer. You can install it in one command with your favorite aur helper. Example commands for some popular tools:
 
 ==== `openbangla-keyboard`
