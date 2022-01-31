@@ -323,6 +323,14 @@ public:
     if (!riti_suggestion_is_empty(suggestion_.get())) {
       updateUI();
       keyEvent.filterAndAccept();
+      return;
+    }
+
+    // Corner case: When old style kar typing is enabled, a lonely suggestion and an empty
+    // suggestion is not distinguishable. So we check if a input session is ongoing to
+    // accept the key event.
+    if(riti_context_ongoing_input_session(ctx)) {
+      keyEvent.filterAndAccept();
     }
   }
 
