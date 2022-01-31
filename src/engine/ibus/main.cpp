@@ -247,7 +247,8 @@ gboolean engine_process_key(guint keyval, guint keycode, guint state) {
     engine_update_lookup_table();
   } else {
     // Corner case: When old style kar typing is enabled, a lonely suggestion and an empty
-    // suggestion is not distinguishable.
+    // suggestion is not distinguishable. So we accept the key event if a input session
+    // is ongoing.
     return riti_context_ongoing_input_session(ctx);
   }
 
