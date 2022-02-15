@@ -62,8 +62,10 @@ public:
       return;
     }
 
-    ic_->commitString(text);
+    char *txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), index);
+    ic_->commitString(std::string(txt));
     riti_context_candidate_committed(ctx_.get(), index);
+    riti_string_free(txt);
     reset();
   }
 
@@ -77,10 +79,13 @@ public:
       auto candidateList = ic_->inputPanel().candidateList();
       auto index = candidateList->cursorIndex();
       if (index >= 0 && index < candidateList->size()) {
-        text = candidateList->candidate(index).text().toString();
+        //text = candidateList->candidate(index).text().toString();
+        auto txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), index);
+        text = txt;
+        riti_string_free(txt);
       }
     } else {
-      auto txt = riti_suggestion_get_lonely_suggestion(suggestion_.get());
+      auto txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), 0);
       text = txt;
       riti_string_free(txt);
     }
@@ -408,6 +413,8 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
       booleanValue(config, "settings/FixedLayout\\OldReph", true);
   const bool numberPadFixed =
       booleanValue(config, "settings/FixedLayout\\NumberPad", true);
+  const bool ansiOutput =
+      booleanValue(config, "settings/ANSI", false);
 
   riti_config_set_layout_file(cfg_.get(), layoutPath.data());
   riti_config_set_suggestion_include_english(cfg_.get(), includeEnglish);
@@ -421,6 +428,7 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
   riti_config_set_fixed_old_kar_order(cfg_.get(), oldKarOrder);
   riti_config_set_fixed_old_reph(cfg_.get(), oldReph);
   riti_config_set_fixed_numpad(cfg_.get(), numberPadFixed);
+  riti_config_set_ansi_encoding(cfg_.get(), ansiOutput);
 
   candidateWinHorizontal_ =
       booleanValue(config, "settings/CandidateWin\\Horizontal", true);
