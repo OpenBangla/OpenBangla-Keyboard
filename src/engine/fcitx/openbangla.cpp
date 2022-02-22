@@ -114,7 +114,7 @@ public:
         candidateList->candidate(index).select(ic_);
       }
     } else {
-      char *txt = riti_suggestion_get_lonely_suggestion(suggestion_.get());
+      char *txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), 0);
       text = txt;
       ic_->commitString(text);
       riti_string_free(txt);
