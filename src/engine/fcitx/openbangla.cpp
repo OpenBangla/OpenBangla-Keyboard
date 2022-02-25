@@ -75,20 +75,19 @@ public:
     }
 
     std::string text;
+    auto index = 0;
+
     if (!riti_suggestion_is_lonely(suggestion_.get())) {
       auto candidateList = std::dynamic_pointer_cast<CommonCandidateList>(ic_->inputPanel().candidateList());
-      auto index = candidateList->globalCursorIndex();
-      if (index >= 0 && index < candidateList->totalSize()) {
-        //text = candidateList->candidate(index).text().toString();
-        auto txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), index);
-        text = txt;
-        riti_string_free(txt);
+      auto idx = candidateList->globalCursorIndex();
+      if (idx >= 0 && idx < candidateList->totalSize()) {
+        index = idx;
       }
-    } else {
-      auto txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), 0);
-      text = txt;
-      riti_string_free(txt);
     }
+
+    auto txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), index);
+    text = txt;
+    riti_string_free(txt);
 
     Text preedit(std::move(text));
     preedit.setCursor(preedit.textLength());
@@ -104,7 +103,6 @@ public:
     if (!suggestion_) {
       return;
     }
-    auto candidateList = ic_->inputPanel().candidateList();
 
     std::string text;
     if (!riti_suggestion_is_lonely(suggestion_.get())) {
