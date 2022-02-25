@@ -76,9 +76,9 @@ public:
 
     std::string text;
     if (!riti_suggestion_is_lonely(suggestion_.get())) {
-      auto candidateList = ic_->inputPanel().candidateList();
-      auto index = candidateList->cursorIndex();
-      if (index >= 0 && index < candidateList->size()) {
+      auto candidateList = std::dynamic_pointer_cast<CommonCandidateList>(ic_->inputPanel().candidateList());
+      auto index = candidateList->globalCursorIndex();
+      if (index >= 0 && index < candidateList->totalSize()) {
         //text = candidateList->candidate(index).text().toString();
         auto txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), index);
         text = txt;
