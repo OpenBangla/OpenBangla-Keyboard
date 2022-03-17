@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016-2022 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,6 +57,12 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   aboutDialog = new AboutDialog(Q_NULLPTR);
   layoutViewer = new LayoutViewer(m_iconTheme, Q_NULLPTR);
   settingsDialog = new SettingsDialog(Q_NULLPTR);
+
+  // Update tray state after settings have been changed.
+  connect(settingsDialog, &QDialog::finished, [&]() {
+    trayOutputModeUnicode->setChecked(true);
+    trayOutputModeANSI->setChecked(gSettings->getANSIEncoding());
+  });
 
   auto set_icon = [&](QPushButton* obj, QString icon) {
     obj->setIcon(QIcon(":/images/" + m_iconTheme + "/" + icon + ".png"));
