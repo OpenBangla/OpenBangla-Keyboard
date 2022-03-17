@@ -212,6 +212,16 @@ bool Settings::getFixedOldKarOrder() {
   return setting->value("settings/FixedLayout/OldKarOrder", false).toBool();
 }
 
+void Settings::setANSIEncoding(bool b) {
+  setting->setValue("settings/ANSI", b);
+  setting->sync();
+}
+
+bool Settings::getANSIEncoding() {
+  setting->sync();
+  return setting->value("settings/ANSI", false).toBool();
+}
+
 void Settings::setPreviousUserDataRemains(bool b) {
   setting->setValue("settings/PreviousUserDataRemains", b);
   setting->sync();

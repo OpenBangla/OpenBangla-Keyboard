@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016-2022 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   autoCorrectDialog = new AutoCorrectDialog(this);
 
   ui->cmbOrientation->insertItems(0, {"Horizontal", "Vertical"});
+  ui->cmbEncoding->insertItems(0, {"Unicode", "ANSI"});
   ui->cmbKarOrder->insertItems(0, {"Modern", "Old"});
 
 #ifdef NO_UPDATE_CHECK
@@ -92,6 +93,8 @@ void SettingsDialog::implementSignals() {
   connect(ui->btnOK, &QPushButton::clicked, [=]() {
     saveSettings();
     this->hide();
+    // Emit signal
+    emit this->finished(1);
   });
   connect(ui->btnCancel, &QPushButton::clicked, [=]() {
     this->hide();
@@ -103,6 +106,7 @@ void SettingsDialog::updateSettings() {
   ui->btnEnterClosePW->setChecked(gSettings->getEnterKeyClosesPrevWin());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
   ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getSuggestionIncludeEnglish());
+  ui->cmbEncoding->setCurrentIndex(gSettings->getANSIEncoding() ? 1 : 0);
 
   // Phonetic Keyboard Layout Group.
   ui->btnSuggestionPhonetic->setChecked(gSettings->getShowCWPhonetic());
@@ -124,6 +128,7 @@ void SettingsDialog::saveSettings() {
   gSettings->setEnterKeyClosesPrevWin(ui->btnEnterClosePW->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
   gSettings->setSuggestionIncludeEnglish(ui->btnIncludeEnglishPrevWin->isChecked());
+  gSettings->setANSIEncoding(ui->cmbEncoding->currentIndex() == 1);
 
   // Phonetic Keyboard Layout Group.
   gSettings->setShowCWPhonetic(ui->btnSuggestionPhonetic->isChecked());

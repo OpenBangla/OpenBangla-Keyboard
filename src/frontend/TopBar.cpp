@@ -1,6 +1,6 @@
 /*
  *  OpenBangla Keyboard
- *  Copyright (C) 2016-2018 Muhammad Mominul Huque <mominul2082@gmail.com>
+ *  Copyright (C) 2016-2022 Muhammad Mominul Huque <mominul2082@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,6 +57,12 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   aboutDialog = new AboutDialog(Q_NULLPTR);
   layoutViewer = new LayoutViewer(m_iconTheme, Q_NULLPTR);
   settingsDialog = new SettingsDialog(Q_NULLPTR);
+
+  // Update tray state after settings have been changed.
+  connect(settingsDialog, &QDialog::finished, [&]() {
+    trayOutputModeUnicode->setChecked(true);
+    trayOutputModeANSI->setChecked(gSettings->getANSIEncoding());
+  });
 
   auto set_icon = [&](QPushButton* obj, QString icon) {
     obj->setIcon(QIcon(":/images/" + m_iconTheme + "/" + icon + ".png"));
@@ -183,6 +189,22 @@ void TopBar::SetupTrayIcon() {
   trayLayoutViewer = new QAction("Layout Viewer", this);
   connect(trayLayoutViewer, &QAction::triggered, this, &TopBar::on_buttonViewLayout_clicked);
 
+  /* Output Mode Menu */
+  trayOutputMode = new QMenu("Output Mode", this);
+  trayOutputModeUnicode = new QAction("Unicode", this);
+  trayOutputModeANSI = new QAction("ANSI", this);
+  trayOutputModeGroup = new QActionGroup(this);
+  trayOutputModeUnicode->setCheckable(true);
+  trayOutputModeANSI->setCheckable(true);
+  trayOutputModeGroup->addAction(trayOutputModeUnicode);
+  trayOutputModeGroup->addAction(trayOutputModeANSI);
+  trayOutputMode->addActions(trayOutputModeGroup->actions());
+  trayOutputModeUnicode->setChecked(true);
+  trayOutputModeANSI->setChecked(gSettings->getANSIEncoding());
+  connect(trayOutputModeGroup, &QActionGroup::triggered, this, [=]() {
+    gSettings->setANSIEncoding(trayOutputModeANSI->isChecked());
+  });
+
   traySettings = new QAction("Settings", this);
   connect(traySettings, &QAction::triggered, this, &TopBar::on_buttonSettings_clicked);
 
@@ -206,6 +228,7 @@ void TopBar::SetupTrayIcon() {
 
   trayMenu = new QMenu(this);
   trayMenu->addMenu(layoutMenu); // Layout Menu
+  trayMenu->addMenu(trayOutputMode);
   trayMenu->addAction(trayLayoutViewer);
   trayMenu->addAction(traySettings);
   trayMenu->addSeparator();
