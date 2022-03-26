@@ -1,4 +1,5 @@
 build
+src/engine/windows/target
 compile_commands.json
 src/frontend/OpenBanglaKeyboardFrontendUI.pro.user*
 .idea/
