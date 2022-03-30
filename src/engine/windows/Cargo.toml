@@ -8,6 +8,9 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib"]
 
+[dependencies]
+winreg = "0.10"
+
 [dependencies.windows]
 version = "0.34.0"
 features = [
@@ -16,6 +19,4 @@ features = [
     "Win32_System_Com",
     "Win32_System_SystemServices",
     "Win32_System_LibraryLoader",
-    "Win32_System_Registry",
-    "Win32_Security",
 ]

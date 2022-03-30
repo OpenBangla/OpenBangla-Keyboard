@@ -1,11 +1,12 @@
 #![allow(non_snake_case)]
 #![feature(let_else)]
 
-use std::{ffi::c_void, ptr::{null_mut, null}, mem::zeroed};
+use std::{ffi::c_void, ptr::null_mut, mem::zeroed};
 use windows::{
     core::{GUID, HRESULT, Interface, IUnknown},
-    Win32::{Foundation::*, System::{SystemServices::DLL_PROCESS_ATTACH, Com::{IClassFactory, StringFromCLSID, CoTaskMemFree}, LibraryLoader::GetModuleFileNameW, Registry::{RegCreateKeyExW, HKEY_CLASSES_ROOT, REG_OPTION_NON_VOLATILE, KEY_WRITE}}},
+    Win32::{Foundation::*, System::{SystemServices::DLL_PROCESS_ATTACH, Com::IClassFactory, LibraryLoader::GetModuleFileNameW}},
 };
+use winreg::{RegKey, enums::HKEY_CLASSES_ROOT};
 
 pub const TEXT_SERVICE: GUID = GUID::from_u128(0x7ad69a9a_2fe2_4381_91e7_b812e3fc6c2e);
 pub const LANG_PROFILE: GUID = GUID::from_u128(0xb226c8f4_d348_45ae_9e78_04cfccb13271);
@@ -36,7 +37,7 @@ pub unsafe extern "stdcall" fn DllGetClassObject(
     if *riid == IClassFactory::IID || *riid == IUnknown::IID {
         S_OK
     } else {
-        *ppvObj = null_mut();
+        ppvObj.write(null_mut());
         CLASS_E_CLASSNOTAVAILABLE
     }
 }
@@ -50,20 +51,21 @@ pub unsafe extern "stdcall" fn DllRegisterServer() -> HRESULT {
 
     GetModuleFileNameW(INSTANCE, &mut filename);
 
-    let Ok(clsid) = StringFromCLSID(&TEXT_SERVICE) else {
-        return E_FAIL;
-    };
+    let filename = String::from_utf16_lossy(&filename[..filename.iter().position(|&x| x == 0).unwrap()]);
 
-    let mut reg_path = String::from("CLSID\\");
-    reg_path += &to_string(clsid);
+    let reg_path = format!("CLSID\\{{{TEXT_SERVICE:?}}}");
 
-    let mut hkey = zeroed(); 
+    let (key, _) = RegKey::predef(HKEY_CLASSES_ROOT).create_subkey(reg_path).unwrap();
+    key.set_value("", &"OpenBangla Keyboard").unwrap();
 
-    RegCreateKeyExW(HKEY_CLASSES_ROOT, reg_path, 0, None, REG_OPTION_NON_VOLATILE, KEY_WRITE, null(), &mut hkey, null_mut());
+    let (inproc_key, _) = key.create_subkey("InProcServer32").unwrap();
+    inproc_key.set_value("", &filename).unwrap();
+    inproc_key.set_value("ThreadingModel", &"Apartment").unwrap();
 
     S_OK
 }
 
+/*
 unsafe fn to_string(s: windows::core::PWSTR) -> String {
     if s.0.is_null() {
         return String::new();
@@ -79,4 +81,4 @@ unsafe fn to_string(s: windows::core::PWSTR) -> String {
 
     CoTaskMemFree(s.0 as _);
     String::from_utf16_lossy(slice)
-}
+}*/
