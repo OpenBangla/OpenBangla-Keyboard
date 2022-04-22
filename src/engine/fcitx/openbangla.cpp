@@ -57,6 +57,16 @@ public:
     int index_;
   };
 
+  class OpenBanglaCandidateList : public CommonCandidateList {
+  public:
+    void setGlobalCursorIndex(int index) {
+      int items = this->pageSize();
+      int page = index / items;
+      setPage(page);
+      CommonCandidateList::setGlobalCursorIndex(index);
+    }
+  };
+
   void selectCandidate(const std::string &text, int index) {
     if (!suggestion_) {
       return;
@@ -133,7 +143,7 @@ public:
         }
         riti_string_free(aux);
 
-        auto candidateList = std::make_unique<CommonCandidateList>();
+        auto candidateList = std::make_unique<OpenBanglaCandidateList>();
         auto len = riti_suggestion_get_length(suggestion_.get());
         for (decltype(len) i = 0; i < len; i++) {
           char *text = riti_suggestion_get_suggestion(suggestion_.get(), i);
