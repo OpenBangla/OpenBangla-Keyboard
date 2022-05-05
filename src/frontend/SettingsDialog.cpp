@@ -54,6 +54,9 @@ void SettingsDialog::implementSignals() {
   connect(ui->btnIncludeEnglishPrevWin, &QPushButton::toggled, [=](bool checked) {
     ui->btnIncludeEnglishPrevWin->setText(checked ? "On" : "Off");
   });
+  connect(ui->btnSmartQuote, &QPushButton::toggled, [=](bool checked) {
+    ui->btnSmartQuote->setText(checked ? "On" : "Off");
+  });
   
   // Phonetic Keyboard Layout Group.
   connect(ui->btnSuggestionPhonetic, &QPushButton::toggled, [=](bool checked) {
@@ -104,6 +107,7 @@ void SettingsDialog::implementSignals() {
 void SettingsDialog::updateSettings() {
   // General Group
   ui->btnEnterClosePW->setChecked(gSettings->getEnterKeyClosesPrevWin());
+  ui->btnSmartQuote->setChecked(gSettings->getSmartQuoting());
   ui->cmbOrientation->setCurrentIndex(gSettings->getCandidateWinHorizontal() ? 0 : 1);
   ui->btnIncludeEnglishPrevWin->setChecked(gSettings->getSuggestionIncludeEnglish());
   ui->cmbEncoding->setCurrentIndex(gSettings->getANSIEncoding() ? 1 : 0);
@@ -126,6 +130,7 @@ void SettingsDialog::updateSettings() {
 void SettingsDialog::saveSettings() {
   // General Group
   gSettings->setEnterKeyClosesPrevWin(ui->btnEnterClosePW->isChecked());
+  gSettings->setSmartQuoting(ui->btnSmartQuote->isChecked());
   gSettings->setCandidateWinHorizontal((ui->cmbOrientation->currentIndex() == 0));
   gSettings->setSuggestionIncludeEnglish(ui->btnIncludeEnglishPrevWin->isChecked());
   gSettings->setANSIEncoding(ui->cmbEncoding->currentIndex() == 1);

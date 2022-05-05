@@ -108,6 +108,10 @@ public:
 
   bool getANSIEncoding();
 
+  void setSmartQuoting(bool b);
+
+  bool getSmartQuoting();
+
   void setPreviousUserDataRemains(bool b);
 
   bool getPreviousUserDataRemains();

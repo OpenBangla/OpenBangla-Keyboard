@@ -222,6 +222,16 @@ bool Settings::getANSIEncoding() {
   return setting->value("settings/ANSI", false).toBool();
 }
 
+void Settings::setSmartQuoting(bool b) {
+  setting->setValue("settings/SmartQuoting", b);
+  setting->sync();
+}
+
+bool Settings::getSmartQuoting() {
+  setting->sync();
+  return setting->value("settings/SmartQuoting", true).toBool();
+}
+
 void Settings::setPreviousUserDataRemains(bool b) {
   setting->setValue("settings/PreviousUserDataRemains", b);
   setting->sync();

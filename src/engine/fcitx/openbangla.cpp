@@ -423,6 +423,8 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
       booleanValue(config, "settings/FixedLayout\\NumberPad", true);
   const bool ansiOutput =
       booleanValue(config, "settings/ANSI", false);
+  const bool smartQuoting =
+      booleanValue(config, "settings/SmartQuoting", true);
 
   riti_config_set_layout_file(cfg_.get(), layoutPath.data());
   riti_config_set_suggestion_include_english(cfg_.get(), includeEnglish);
@@ -437,6 +439,7 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
   riti_config_set_fixed_old_reph(cfg_.get(), oldReph);
   riti_config_set_fixed_numpad(cfg_.get(), numberPadFixed);
   riti_config_set_ansi_encoding(cfg_.get(), ansiOutput);
+  riti_config_set_smart_quote(cfg_.get(), smartQuoting);
 
   candidateWinHorizontal_ =
       booleanValue(config, "settings/CandidateWin\\Horizontal", true);

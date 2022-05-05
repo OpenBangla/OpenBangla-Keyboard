@@ -29,6 +29,7 @@ void update_with_settings() {
   riti_config_set_fixed_old_reph(config, gSettings->getOldReph());
   riti_config_set_fixed_numpad(config, gSettings->getNumberPadFixed());
   riti_config_set_ansi_encoding(config, gSettings->getANSIEncoding());
+  riti_config_set_smart_quote(config, gSettings->getSmartQuoting());
 
   if(table != nullptr) {
     ibus_lookup_table_set_orientation(table, gSettings->getCandidateWinHorizontal() ? IBUS_ORIENTATION_HORIZONTAL : IBUS_ORIENTATION_VERTICAL);
