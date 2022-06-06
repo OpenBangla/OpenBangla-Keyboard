@@ -16,6 +16,7 @@ pub const LANG_PROFILE: GUID = GUID::from_u128(0xb226c8f4_d348_45ae_9e78_04cfccb
 
 pub static mut INSTANCE: HINSTANCE = HINSTANCE(0);
 
+#[no_mangle]
 pub unsafe extern "stdcall" fn DLLMain(
     hmodule: HINSTANCE,
     reason: u32,
@@ -32,10 +33,12 @@ pub unsafe extern "stdcall" fn DLLMain(
     true.into()
 }
 
+#[no_mangle]
 pub extern "stdcall" fn DllCanUnloadNow() -> HRESULT {
     S_OK
 }
 
+#[no_mangle]
 pub unsafe extern "stdcall" fn DllGetClassObject(
     _rclsid: *const GUID,
     riid: *const GUID,
@@ -49,15 +52,21 @@ pub unsafe extern "stdcall" fn DllGetClassObject(
     }
 }
 
+#[no_mangle]
 pub extern "stdcall" fn DllUnregisterServer() -> HRESULT {
+    registry::unregister_profile().ok();
+    registry::unregister_categories().ok();
+    registry::unregister_server().ok();
     S_OK
 }
 
+#[no_mangle]
 pub unsafe extern "stdcall" fn DllRegisterServer() -> HRESULT {
     let register = || -> windows::core::Result<()> {
         registry::register_server(INSTANCE)
             .map_err(|_| Error::new(E_FAIL, "Failed to register server".into()))?;
         registry::register_profile(INSTANCE)?;
+        registry::register_categories()?;
         Ok(())
     };
 

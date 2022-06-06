@@ -7,7 +7,14 @@ use windows::{
             LibraryLoader::GetModuleFileNameW,
             SystemServices::{LANG_BANGLA, SUBLANG_NEUTRAL},
         },
-        UI::TextServices::{CLSID_TF_InputProcessorProfiles, ITfInputProcessorProfileMgr, HKL},
+        UI::TextServices::{
+            CLSID_TF_CategoryMgr, CLSID_TF_InputProcessorProfiles, ITfCategoryMgr,
+            ITfInputProcessorProfileMgr, GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER,
+            GUID_TFCAT_TIPCAP_COMLESS, GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT,
+            GUID_TFCAT_TIPCAP_INPUTMODECOMPARTMENT, GUID_TFCAT_TIPCAP_SECUREMODE,
+            GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT, GUID_TFCAT_TIPCAP_UIELEMENTENABLED,
+            GUID_TFCAT_TIP_KEYBOARD, HKL,
+        },
     },
 };
 use winreg::{enums::HKEY_CLASSES_ROOT, RegKey};
@@ -47,6 +54,52 @@ pub fn register_profile(handle: HINSTANCE) -> windows::core::Result<()> {
     Ok(())
 }
 
+pub fn unregister_profile() -> Result<(), windows::core::Error> {
+    let profile_manager: ITfInputProcessorProfileMgr =
+        create_instance(&CLSID_TF_InputProcessorProfiles)?;
+
+    unsafe {
+        profile_manager.UnregisterProfile(&TEXT_SERVICE, TEXTSERVICE_LANGID, &LANG_PROFILE, 0)?;
+    }
+
+    Ok(())
+}
+
+static SUPPORT_CATEGORIES: [GUID; 8] = [
+    GUID_TFCAT_TIP_KEYBOARD,
+    GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER,
+    GUID_TFCAT_TIPCAP_UIELEMENTENABLED,
+    GUID_TFCAT_TIPCAP_SECUREMODE,
+    GUID_TFCAT_TIPCAP_COMLESS,
+    GUID_TFCAT_TIPCAP_INPUTMODECOMPARTMENT,
+    GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT,
+    GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT,
+];
+
+pub fn register_categories() -> windows::core::Result<()> {
+    let category_manager: ITfCategoryMgr = create_instance(&CLSID_TF_CategoryMgr)?;
+
+    for guid in SUPPORT_CATEGORIES {
+        unsafe {
+            category_manager.RegisterCategory(&TEXT_SERVICE, &guid, &TEXT_SERVICE)?;
+        }
+    }
+
+    Ok(())
+}
+
+pub fn unregister_categories() -> windows::core::Result<()> {
+    let category_manager: ITfCategoryMgr = create_instance(&CLSID_TF_CategoryMgr)?;
+
+    for guid in SUPPORT_CATEGORIES {
+        unsafe {
+            category_manager.UnregisterCategory(&TEXT_SERVICE, &guid, &TEXT_SERVICE)?;
+        }
+    }
+
+    Ok(())
+}
+
 pub fn register_server(handle: HINSTANCE) -> std::io::Result<()> {
     let mut filename = [0u16; 260];
 
@@ -67,4 +120,9 @@ pub fn register_server(handle: HINSTANCE) -> std::io::Result<()> {
     inproc_key.set_value("ThreadingModel", &"Apartment")?;
 
     Ok(())
+}
+
+pub fn unregister_server() -> std::io::Result<()> {
+    let reg_path = format!("CLSID\\{{{TEXT_SERVICE:?}}}");
+    RegKey::predef(HKEY_CLASSES_ROOT).delete_subkey_all(reg_path)
 }
