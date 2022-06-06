@@ -1,19 +1,26 @@
 #![allow(non_snake_case)]
-#![feature(let_else)]
 
-use std::{ffi::c_void, ptr::null_mut, mem::zeroed};
+use std::{ffi::c_void, ptr::null_mut};
 use windows::{
-    core::{GUID, HRESULT, Interface, IUnknown},
-    Win32::{Foundation::*, System::{SystemServices::DLL_PROCESS_ATTACH, Com::IClassFactory, LibraryLoader::GetModuleFileNameW}},
+    core::{Error, IUnknown, Interface, GUID, HRESULT},
+    Win32::{
+        Foundation::*,
+        System::{Com::IClassFactory, SystemServices::DLL_PROCESS_ATTACH},
+    },
 };
-use winreg::{RegKey, enums::HKEY_CLASSES_ROOT};
+
+mod registry;
 
 pub const TEXT_SERVICE: GUID = GUID::from_u128(0x7ad69a9a_2fe2_4381_91e7_b812e3fc6c2e);
 pub const LANG_PROFILE: GUID = GUID::from_u128(0xb226c8f4_d348_45ae_9e78_04cfccb13271);
 
 pub static mut INSTANCE: HINSTANCE = HINSTANCE(0);
 
-pub unsafe extern "stdcall" fn DLLMain(hmodule: HINSTANCE, reason: u32, _lpReserved: *mut c_void) -> BOOL {
+pub unsafe extern "stdcall" fn DLLMain(
+    hmodule: HINSTANCE,
+    reason: u32,
+    _lpReserved: *mut c_void,
+) -> BOOL {
     match reason {
         DLL_PROCESS_ATTACH => {
             INSTANCE = hmodule;
@@ -47,22 +54,14 @@ pub extern "stdcall" fn DllUnregisterServer() -> HRESULT {
 }
 
 pub unsafe extern "stdcall" fn DllRegisterServer() -> HRESULT {
-    let mut filename: [u16; 260] = zeroed();
+    let register = || -> windows::core::Result<()> {
+        registry::register_server(INSTANCE)
+            .map_err(|_| Error::new(E_FAIL, "Failed to register server".into()))?;
+        registry::register_profile(INSTANCE)?;
+        Ok(())
+    };
 
-    GetModuleFileNameW(INSTANCE, &mut filename);
-
-    let filename = String::from_utf16_lossy(&filename[..filename.iter().position(|&x| x == 0).unwrap()]);
-
-    let reg_path = format!("CLSID\\{{{TEXT_SERVICE:?}}}");
-
-    let (key, _) = RegKey::predef(HKEY_CLASSES_ROOT).create_subkey(reg_path).unwrap();
-    key.set_value("", &"OpenBangla Keyboard").unwrap();
-
-    let (inproc_key, _) = key.create_subkey("InProcServer32").unwrap();
-    inproc_key.set_value("", &filename).unwrap();
-    inproc_key.set_value("ThreadingModel", &"Apartment").unwrap();
-
-    S_OK
+    register().into()
 }
 
 /*
