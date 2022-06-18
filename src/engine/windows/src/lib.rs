@@ -10,6 +10,7 @@ use windows::{
 };
 
 mod registry;
+mod factory;
 
 pub const TEXT_SERVICE: GUID = GUID::from_u128(0x7ad69a9a_2fe2_4381_91e7_b812e3fc6c2e);
 pub const LANG_PROFILE: GUID = GUID::from_u128(0xb226c8f4_d348_45ae_9e78_04cfccb13271);
