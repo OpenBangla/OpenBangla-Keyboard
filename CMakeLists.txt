@@ -80,7 +80,7 @@ if(OS_LINUX)
 
     ## Find Fcitx ##
     if(ENABLE_FCITX)
-        find_package(Fcitx5Core 5.0.5 REQUIRED)
+        find_package(Fcitx5Core 5.0.5 REQUIRED) 
     endif()
 
     ## Find zstd ##
@@ -111,20 +111,15 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 set(CPACK_STRIP_FILES TRUE)
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.github.io/")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
 set(CPACK_RPM_PACKAGE_URL "https://openbangla.github.io/")
-set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, libzstd >= 1.3.3")
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
 # Prevents CPack from generating file conflicts
 set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus/component")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/metainfo")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/pixmaps")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons")
@@ -141,4 +136,18 @@ list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hico
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/48x48/apps")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/512x512")
 list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/512x512/apps")
+# Configure CPack on the basis of which backend we are building for.
+if(ENABLE_IBUS)
+    ## IBUS
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}_${PROJECT_VERSION}-ibus-$ENV{DIST}")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
+    set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, libzstd >= 1.3.3")
+    list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component")
+else()
+    ## FCITX
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}_${PROJECT_VERSION}-fcitx-$ENV{DIST}")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "fcitx5 (>= 5.0.5)")
+    set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3, fcitx5 >= 5.0.5")
+endif()
+
 include(CPack)
