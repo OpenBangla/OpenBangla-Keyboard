@@ -198,7 +198,9 @@ public:
     switch (key.sym()) {
     case FcitxKey_BackSpace:
       if (riti_context_ongoing_input_session(ctx)) {
-        suggestion_.reset(riti_context_backspace_event(ctx));
+        // Is Ctrl key is pressed?
+        auto ctrlKey = key.states().test(KeyState::Ctrl);
+        suggestion_.reset(riti_context_backspace_event(ctx, ctrlKey));
 
         if (!riti_suggestion_is_empty(suggestion_.get())) {
           updateUI();

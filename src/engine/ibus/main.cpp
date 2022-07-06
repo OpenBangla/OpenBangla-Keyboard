@@ -122,7 +122,9 @@ gboolean engine_process_key(guint keyval, guint keycode, guint state) {
   switch (keyval) {
     case IBUS_KEY_BackSpace:
       if(riti_context_ongoing_input_session(ctx)) {
-        suggestion = riti_context_backspace_event(ctx);
+        // Is Ctrl key is pressed?
+        bool ctrl_mod = state & IBUS_CONTROL_MASK;
+        suggestion = riti_context_backspace_event(ctx, ctrl_mod);
 
         if(!riti_suggestion_is_empty(suggestion)) {
           engine_update_lookup_table();
