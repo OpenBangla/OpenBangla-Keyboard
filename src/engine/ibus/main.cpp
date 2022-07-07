@@ -50,7 +50,7 @@ void engine_update_preedit() {
   IBusText *text = ibus_text_new_from_string(txt);
   riti_string_free(txt);
 
-  ibus_engine_update_preedit_text(engine, text, ibus_text_get_length(text), TRUE);
+  ibus_engine_update_preedit_text_with_mode(engine, text, ibus_text_get_length(text), TRUE, IBUS_ENGINE_PREEDIT_COMMIT);
 }
 
 void engine_update_lookup_table() {
@@ -122,7 +122,9 @@ gboolean engine_process_key(guint keyval, guint keycode, guint state) {
   switch (keyval) {
     case IBUS_KEY_BackSpace:
       if(riti_context_ongoing_input_session(ctx)) {
-        suggestion = riti_context_backspace_event(ctx);
+        // Is Ctrl key is pressed?
+        bool ctrl_mod = state & IBUS_CONTROL_MASK;
+        suggestion = riti_context_backspace_event(ctx, ctrl_mod);
 
         if(!riti_suggestion_is_empty(suggestion)) {
           engine_update_lookup_table();
