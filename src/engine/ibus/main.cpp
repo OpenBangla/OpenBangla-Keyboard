@@ -50,7 +50,7 @@ void engine_update_preedit() {
   IBusText *text = ibus_text_new_from_string(txt);
   riti_string_free(txt);
 
-  ibus_engine_update_preedit_text(engine, text, ibus_text_get_length(text), TRUE);
+  ibus_engine_update_preedit_text_with_mode(engine, text, ibus_text_get_length(text), TRUE, IBUS_ENGINE_PREEDIT_COMMIT);
 }
 
 void engine_update_lookup_table() {
