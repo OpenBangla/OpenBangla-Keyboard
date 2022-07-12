@@ -70,8 +70,12 @@ if(OS_LINUX)
     include(FindPkgConfig)
     find_package(PkgConfig)
 
-    option(ENABLE_IBUS "Enable IBus support" On)
+    option(ENABLE_IBUS "Enable IBus support" OFF)
     option(ENABLE_FCITX "Enable Fcitx support" OFF)
+
+    if((NOT ENABLE_IBUS) AND (NOT ENABLE_FCITX))
+        message(FATAL_ERROR "Please set atleast ENABLE_IBUS or ENABLE_FCITX to be ON to build a backend")
+    endif()
 
     ## Find iBus ##
     if(ENABLE_IBUS)
@@ -119,23 +123,14 @@ set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
 set(CPACK_RPM_PACKAGE_URL "https://openbangla.github.io/")
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
 # Prevents CPack from generating file conflicts
-set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/metainfo")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/pixmaps")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/1024x1024")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/1024x1024/apps")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/128x128")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/128x128/apps")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/16x16")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/16x16/apps")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/32x32")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/32x32/apps")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/48x48")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/48x48/apps")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/512x512")
-list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/icons/hicolor/512x512/apps")
+set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/usr/share/metainfo" "/usr/share/pixmaps"
+                                                  "/usr/share/icons" "/usr/share/icons/hicolor" 
+                                                  "/usr/share/icons/hicolor/1024x1024" "/usr/share/icons/hicolor/1024x1024/apps"
+                                                  "/usr/share/icons/hicolor/128x128" "/usr/share/icons/hicolor/128x128/apps"
+                                                  "/usr/share/icons/hicolor/16x16" "/usr/share/icons/hicolor/16x16/apps"
+                                                  "/usr/share/icons/hicolor/32x32" "/usr/share/icons/hicolor/32x32/apps"
+                                                  "/usr/share/icons/hicolor/48x48" "/usr/share/icons/hicolor/48x48/apps"
+                                                  "/usr/share/icons/hicolor/512x512" "/usr/share/icons/hicolor/512x512/apps")
 # Configure CPack on the basis of which backend we are building for.
 if(ENABLE_IBUS)
     ## IBUS
