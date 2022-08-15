@@ -301,6 +301,15 @@ void engine_focus_out_cb(IBusEngine *engine) {
   }
 }
 
+void engine_reset_cb(IBusEngine *engine) {
+  LOG_DEBUG("[IM:iBus]: IM Reset\n");
+
+  if(riti_context_ongoing_input_session(ctx)) {
+    riti_context_finish_input_session(ctx);
+    engine_reset();
+  }
+}
+
 void engine_candidate_clicked_cb(IBusEngine *engine, guint index, guint button, guint state) {
   IBusText *text = ibus_lookup_table_get_candidate(table, index);
   engine_commit_text(text);
@@ -327,6 +336,7 @@ IBusEngine *create_engine_cb(IBusFactory *factory,
   g_signal_connect(engine, "enable", G_CALLBACK(engine_enable_cb), NULL);
   g_signal_connect(engine, "disable", G_CALLBACK(engine_disable_cb), NULL);
   g_signal_connect(engine, "focus-out", G_CALLBACK(engine_focus_out_cb), NULL);
+  g_signal_connect(engine, "reset", G_CALLBACK(engine_reset_cb), NULL);
   g_signal_connect(engine, "candidate-clicked", G_CALLBACK(engine_candidate_clicked_cb), NULL);
 
   return engine;
