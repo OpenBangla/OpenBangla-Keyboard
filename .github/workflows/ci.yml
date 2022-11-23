@@ -25,9 +25,9 @@ jobs:
         with:
           submodules: recursive
       - name: update-system
-        run: apt-get update -qq
+        run: sudo apt-get update -qq
       - name: install-deps
-        run: apt-get -y install build-essential clang cmake rustc cargo libibus-1.0-dev libfcitx5core-dev libzstd-dev qtbase5-dev qtbase5-dev-tools
+        run: sudo apt-get -y install build-essential clang cmake rustc cargo libibus-1.0-dev libfcitx5core-dev libzstd-dev qtbase5-dev qtbase5-dev-tools
       - name: make
         env: ${{ matrix.env }}
         run: |
