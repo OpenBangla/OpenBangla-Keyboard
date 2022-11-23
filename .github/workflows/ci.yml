@@ -11,13 +11,9 @@ on:
 jobs:
   build:
     if: contains(github.event.head_commit.message, 'deploy+') == false
-    runs-on: "ubuntu-latest"
-    # Ubuntu 20.04 doesn't have fcitx 5.0.5 development library which we require.
-    # So we have to run our CI under Ubuntu 21.04 docker image.
-    container:
-      image: "ubuntu:21.04"
-      env:
-        DEBIAN_FRONTEND: noninteractive
+    # Ubuntu latest image (20.04) doesn't have fcitx 5.0.5 development library which we require.
+    # So we have to run our CI under Ubuntu 22.04 image.
+    runs-on: "ubuntu-22.04"
     strategy:
       matrix:
         env:
