@@ -25,6 +25,12 @@
 #include "Settings.h"
 
 int main(int argc, char *argv[]) {
+  if(qEnvironmentVariable("XDG_SESSION_TYPE") == "wayland") {
+    // Use xcb backend under wayland to make the topbar movable.
+    // https://github.com/nuttyartist/notes/issues/429
+    qputenv("QT_QPA_PLATFORM", "xcb");
+  }
+  
   QApplication app(argc, argv);
   gSettings = new Settings();
 

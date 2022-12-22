@@ -17,7 +17,7 @@
  */
 
 #include <QSystemTrayIcon>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
@@ -115,10 +115,12 @@ void TopBar::SetupTopBar() {
   if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
     int width = this->frameGeometry().width();
     int height = this->frameGeometry().height();
-    QDesktopWidget wid;
+    
+    QApplication *app = (QApplication *) QApplication::instance();
+    QScreen *screen = app->primaryScreen();
 
-    int screenWidth = wid.screen()->width();
-    int screenHeight = wid.screen()->height();
+    int screenWidth = screen->geometry().width();
+    int screenHeight = screen->geometry().height();
 
     this->setGeometry((screenWidth / 2) - (width / 2), (screenHeight / 2) - (height / 2), width, height);
   } else {

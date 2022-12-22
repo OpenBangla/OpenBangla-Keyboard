@@ -53,7 +53,8 @@ Downloader::Downloader(QWidget *parent) : QWidget(parent) {
   m_useCustomProcedures = false;
 
   /* Set download directory */
-  m_downloadDir = QDir::homePath() + "/Downloads/";
+  m_downloadDir = QDir::home();
+  m_downloadDir.cd("Downloads");
 
   /* Make the window look like a modal dialog */
   setWindowIcon(QIcon());
@@ -384,7 +385,7 @@ QString Downloader::downloadDir() const {
 
 void Downloader::setDownloadDir(const QString &downloadDir) {
   if (m_downloadDir.absolutePath() != downloadDir) {
-    m_downloadDir = downloadDir;
+    m_downloadDir = QDir(downloadDir);
   }
 }
 
