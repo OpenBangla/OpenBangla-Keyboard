@@ -27,6 +27,8 @@
 int main(int argc, char *argv[]) {
   if(qEnvironmentVariable("XDG_SESSION_TYPE") == "wayland") {
     // Use xcb backend under wayland to make the topbar movable.
+    // TODO: Try out QWindow::startSystemMove() when we can depend on Qt 5.15
+    // https://doc.qt.io/qt-5/qwindow.html#startSystemMove
     // https://github.com/nuttyartist/notes/issues/429
     qputenv("QT_QPA_PLATFORM", "xcb");
   }
@@ -61,7 +63,14 @@ int main(int argc, char *argv[]) {
 
   instance.listen(name);
 
-  TopBar w(parser.isSet(darkIcon));
+  // Detect Dark Mode
+  QPalette palette = app.palette();
+  QColor color = palette.color(QPalette::Button);
+  QColor darker = QColor::fromRgb(55, 55, 55); // Grayish color used for button in dark mode
+
+  bool darkMode = (color == darker) || parser.isSet(darkIcon);
+
+  TopBar w(darkMode);
   w.show();
   if (parser.isSet(startInTray) || !gSettings->getTopBarVisibility()) {
     w.setVisible(false);
