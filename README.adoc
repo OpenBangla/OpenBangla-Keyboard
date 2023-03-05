@@ -129,7 +129,7 @@ OpenBangla Keyboard currently has the following build dependencies:
 === Ubuntu & Debian derivatives
 On a Ubuntu/Debian system you can easily install them like this:
 ```bash
-sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qtbase5-dev qt5-qmake libzstd-dev
+sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qtbase5-dev qtbase5-dev-tools libzstd-dev
 ```
 
 === Fedora
