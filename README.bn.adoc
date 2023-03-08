@@ -129,7 +129,7 @@ https://github.com/OpenBangla/OpenBangla-Keyboard/discussions[গিটহাব
 === উবুন্টু এবং ডেবিয়ান ভিত্তিক
 উবুন্টু/ডেবিয়ান ভিত্তিক সিস্টেমে ডিপেন্ডেসিগুলো ইনস্টলের কমান্ড:
 ```bash
-sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default libzstd-dev
+sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qtbase5-dev qtbase5-dev-tools libzstd-dev
 ```
 
 === ফেদোরা
