@@ -6,7 +6,6 @@ on:
     tags-ignore: [ '**' ]
 
 jobs:
-
   build:
     if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
     strategy:
