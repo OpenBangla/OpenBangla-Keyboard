@@ -18,8 +18,10 @@ jobs:
         # https://fedoraproject.org/wiki/Releases
         ime: [ "ibus", "fcitx" ]
         exclude:
-          - ime: "fcitx"
-            container: [ "ubuntu:18.04", "ubuntu:20.04" ]
+          - container: "ubuntu:18.04"
+            ime: "fcitx"
+          - container: "ubuntu:20.04"
+            ime: "fcitx"
     runs-on: "ubuntu-latest"
     container:
       image: ${{ matrix.container }}
