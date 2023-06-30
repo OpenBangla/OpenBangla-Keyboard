@@ -5,12 +5,13 @@ RELEASE_STUB="OpenBangla-Keyboard_${RELEASE_VERSION}-${IME}-"
 
 makeDeb () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
-    apt-get -y install build-essential pkg-config libibus-1.0-dev libfcitx5core-dev cmake libzstd-dev ninja-build curl qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools file
+    apt-get -y install build-essential pkg-config libibus-1.0-dev cmake libzstd-dev ninja-build curl qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools file
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
     if [[ "${IME}" == "ibus" ]]; then
         cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DENABLE_IBUS=ON -DCPACK_GENERATOR=DEB
     else
+        apt-get -y install libfcitx5core-dev
         cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DENABLE_FCITX=ON -DCPACK_GENERATOR=DEB
     fi
 
@@ -28,7 +29,7 @@ makeRpm () {
     else
         cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DENABLE_FCITX=ON -DCPACK_GENERATOR=RPM
     fi
-    
+
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
 }
