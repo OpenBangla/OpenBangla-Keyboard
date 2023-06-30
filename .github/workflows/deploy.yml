@@ -6,21 +6,29 @@ on:
     tags-ignore: [ '**' ]
 
 jobs:
-
   build:
     if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
     strategy:
       matrix:
-        container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38", "archlinux:latest" ]
+        # container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38", "archlinux:latest" ]
+        container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38" ]
         # this list should be updated from time to time by consulting these pages:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases
         # https://fedoraproject.org/wiki/Releases
+        ime: [ "ibus", "fcitx" ]
+        # Some distributions doesn't have the required version of fcitx library, so we exclude them.
+        exclude:
+          - container: "ubuntu:18.04"
+            ime: "fcitx"
+          - container: "ubuntu:20.04"
+            ime: "fcitx"
     runs-on: "ubuntu-latest"
     container:
       image: ${{ matrix.container }}
       env:
         DIST: ${{ matrix.container }}
+        IME: ${{ matrix.ime }}
         DEBIAN_FRONTEND: noninteractive
     steps:
       - name: checkout-source
