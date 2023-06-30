@@ -5,7 +5,7 @@ RELEASE_STUB="OpenBangla-Keyboard_${RELEASE_VERSION}-${IME}-"
 
 makeDeb () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
-    apt-get -y install build-essential cmake libzstd-dev ninja-build curl qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools file
+    apt-get -y install build-essential pkg-config cmake libzstd-dev ninja-build curl qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools file
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
     if [[ "${IME}" == "ibus" ]]; then
