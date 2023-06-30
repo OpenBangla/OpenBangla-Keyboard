@@ -17,6 +17,7 @@ jobs:
         # https://wiki.debian.org/DebianReleases#Production_Releases
         # https://fedoraproject.org/wiki/Releases
         ime: [ "ibus", "fcitx" ]
+        # Some distributions doesn't have the required version of fcitx library, so we exclude them.
         exclude:
           - container: "ubuntu:18.04"
             ime: "fcitx"
