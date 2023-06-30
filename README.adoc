@@ -77,6 +77,8 @@ bash -c "$(wget -q https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keybo
 If this does not workout for you please create an https://github.com/OpenBangla/OpenBangla-Keyboard/issues[Issue]. While we look into the problem you can check the https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[Wiki] for Distrowise/Distro-specific Install Instructions.
 
 === Archlinux and it's derivatives
+TIP: There is a video tutorial about installing OpenBangla Keyboard in Arch Linux. You may check that out from https://youtu.be/C8vnR1AY6sA[here].
+
 There are two packages for OpenBangla Keyboard in the Arch User Repository(AUR). Use `openbangla-keyboard` if you want to make and install the package from source. Otherwise, use `openbangla-keyboard-bin` to use the binary package released for Arch and its derivatives by the maintainer. You can install it in one command with your favorite aur helper. Example commands for some popular tools:
 
 ==== `openbangla-keyboard`
@@ -127,7 +129,7 @@ OpenBangla Keyboard currently has the following build dependencies:
 === Ubuntu & Debian derivatives
 On a Ubuntu/Debian system you can easily install them like this:
 ```bash
-sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default libzstd-dev
+sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qtbase5-dev qtbase5-dev-tools libzstd-dev
 ```
 
 === Fedora

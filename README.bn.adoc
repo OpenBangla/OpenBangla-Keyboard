@@ -76,6 +76,8 @@ bash -c "$(wget -q https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keybo
 যদি এতে আপনার কাজ না হয় তাহলে দয়া করে একটি https://github.com/OpenBangla/OpenBangla-Keyboard/issues[ইস্যু] তৈরি করুন। এমতাবস্থায় https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[উইকি] থেকে ডিস্ট্রো-ভেদে ইন্সটল নির্দেশাবলী দেখে নিতে পারেন।
 
 === আর্চলিনাক্স ভিত্তিক ডিস্ট্রো
+TIP: আর্চ লিনাক্সে ওপেনবাংলা কীবোর্ড ইনস্টল করার বিষয়ে একটি ভিডিও টিউটোরিয়াল রয়েছে। আপনি এটি https://youtu.be/C8vnR1AY6sA[এখান] থেকে দেখতে পারেন।
+
 Arch User Repository(AUR) তে ওপেনবাংলা কিবোর্ডের দুটো প্যাকেজ রয়েছে। `openbangla-keyboard` ব্যবহার করুন যদি আপনি সোর্স থেকে প্যাকেজটি তৈরি এবং ইন্সটল করতে চান। অথবা `openbangla-keyboard-bin` ব্যবহার করুন যদি আপনি বাইনারি প্যাকেজটি ব্যবহার করতে চান যেটি আর্চলিনাক্স ভিত্তিক ডিস্ট্রো গুলোর জন্য প্যাকেজটির মেইন্টেইনার তৈরি করেছেন। আপনি আপনার পছন্দের AUR হেল্পার ব্যবহার করে একটি কম্যান্ডের মাধ্যমেই ইন্সটল করতে পারবেন। কিছু জনপ্রিয় টুলের উদাহরণ:
 
 ==== `openbangla-keyboard`
@@ -127,7 +129,7 @@ https://github.com/OpenBangla/OpenBangla-Keyboard/discussions[গিটহাব
 === উবুন্টু এবং ডেবিয়ান ভিত্তিক
 উবুন্টু/ডেবিয়ান ভিত্তিক সিস্টেমে ডিপেন্ডেসিগুলো ইনস্টলের কমান্ড:
 ```bash
-sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qt5-default libzstd-dev
+sudo apt-get install build-essential rustc cargo cmake libibus-1.0-dev qtbase5-dev qtbase5-dev-tools libzstd-dev
 ```
 
 === ফেদোরা
