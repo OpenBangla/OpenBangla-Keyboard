@@ -17,6 +17,9 @@ jobs:
         # https://wiki.debian.org/DebianReleases#Production_Releases
         # https://fedoraproject.org/wiki/Releases
         ime: [ "ibus", "fcitx" ]
+        exclude:
+          - ime: "fcitx"
+            container: [ "ubuntu:18.04", "ubuntu:20.04" ]
     runs-on: "ubuntu-latest"
     container:
       image: ${{ matrix.container }}
