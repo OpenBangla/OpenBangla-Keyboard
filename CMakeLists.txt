@@ -18,6 +18,8 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 
+message(STATUS "Qt5 framework version: ${Qt5Core_VERSION}")
+
 # Get system information. WIN32 and APPLE are defined by CMake
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(OS_LINUX 1)
