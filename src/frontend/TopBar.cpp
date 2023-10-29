@@ -41,8 +41,8 @@
 static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
 TopBar::TopBar(bool darkIcon, QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::TopBar) {
+  QMainWindow(parent),
+  ui(new Ui::TopBar) {
   ui->setupUi(this);
 
   gLayout = new Layout();
@@ -86,7 +86,7 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
     // Update the counter to show only the message for the first three times
     gSettings->setTrayInfoCount(count + 1);
   }
-  
+
 #ifndef NO_UPDATE_CHECK
   updater = QSimpleUpdater::getInstance();
 
@@ -115,7 +115,7 @@ void TopBar::SetupTopBar() {
   if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
     int width = this->frameGeometry().width();
     int height = this->frameGeometry().height();
-    
+
     QApplication *app = (QApplication *) QApplication::instance();
     QScreen *screen = app->primaryScreen();
 
@@ -214,7 +214,7 @@ void TopBar::SetupTrayIcon() {
     gSettings->getTopBarVisibility() ? "Hide the TopBar" : "Show the TopBar",
     this
   );
-  
+
   connect(trayTopBarVisibility, &QAction::triggered, [&]() {
     if(this->isVisible()) {
       this->setVisible(false);
@@ -236,7 +236,7 @@ void TopBar::SetupTrayIcon() {
   trayMenu->addSeparator();
   trayMenu->addAction(trayTopBarVisibility);
   trayMenu->addAction(trayQuit);
-  
+
   tray->setContextMenu(trayMenu);
   tray->setVisible(true);
 }
@@ -293,9 +293,9 @@ void TopBar::layoutMenuLayouts_clicked() {
 
 void TopBar::layoutMenuInstall_clicked() {
   QString fileName = QFileDialog::getOpenFileName(Q_NULLPTR, "Select Keyboard Layout", QDir::homePath(),
-                                                  "Avro Keyboard 5 Keyboard Layout (*.avrolayout)");
+                     "All Supported Layouts (*.avrolayout *.json);;Avro Keyboard 5 Keyboard Layout (*.avrolayout);;OpenBangla Keyboard Layout (*.json)");
   LayoutConverter conv;
-  if (fileName.contains(".avrolayout") && fileName != "") {
+  if (fileName.endsWith(".avrolayout")) {
     ConversionResult res = conv.convertAvroLayout(fileName);
     switch (res) {
     case Ok:
@@ -306,6 +306,26 @@ void TopBar::layoutMenuInstall_clicked() {
       QMessageBox::critical(Q_NULLPTR,
                             "OpenBangla Keyboard",
                             "Unsupported Layout file!\nOpenBangla Keyboard only supports Avro Keyboard 5 layouts.",
+                            QMessageBox::Ok);
+      break;
+    case OpenError:
+      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard",
+                            "An error occurred while opening the layout file!", QMessageBox::Ok);
+      break;
+    case SaveError:
+      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Error occurred while saving the file!",
+                            QMessageBox::Ok);
+      break;
+    }
+  } else if (fileName.endsWith(".json")) {
+    ConversionResult res = conv.saveLayout(fileName);
+    switch (res) {
+    case Ok:
+      QMessageBox::information(Q_NULLPTR, "OpenBangla Keyboard", "Layout Installed Successfully",
+                               QMessageBox::Ok);
+      break;
+    case UnsupportedLayout:
+      QMessageBox::critical(Q_NULLPTR, "OpenBangla Keyboard", "Unsupported Layout file!",
                             QMessageBox::Ok);
       break;
     case OpenError:

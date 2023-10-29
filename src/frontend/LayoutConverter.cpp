@@ -403,6 +403,22 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path) {
   return saveLayout(layout, savePath);
 }
 
+ConversionResult LayoutConverter::saveLayout(QString path) {
+  QFile jsonFile(path);
+  if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    return OpenError;
+  }
+  QString version = QJsonDocument::fromJson(jsonFile.readAll()).object()
+                    .value("info").toObject()
+                    .value("version").toString();
+  if (version == "1") return convertLayoutFormat(path);
+  if (version != "2") return UnsupportedLayout;
+
+  QFileInfo fileInfo(jsonFile);
+  QString savePath = folders.getUserLayoutPath() + fileInfo.fileName();
+  return jsonFile.copy(savePath) ? Ok : SaveError;
+}
+
 ConversionResult LayoutConverter::saveLayout(QJsonObject obj, QString path) {
   QFile saveFile(path);
   if (!saveFile.open(QIODevice::WriteOnly)) {

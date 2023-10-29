@@ -39,4 +39,5 @@ class LayoutConverter {
 public:
   ConversionResult convertAvroLayout(QString path);
   ConversionResult convertLayoutFormat(QString path);
+  ConversionResult saveLayout(QString path);
 };
