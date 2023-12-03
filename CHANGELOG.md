@@ -1,4 +1,38 @@
 # Change Log
+## 3.0.0
+* Fcitx5 engine for KDE based distributions ([#202])
+* Use [okkhor] as the Avro Phonetic implementation. It is substantially faster than the previous implementation ([#15])
+* Emoji input support ([#23])
+* ANSI encoding support ([#33])
+* Smart Quoting feature ([#35])
+* Whole word deletion by <kbd>Ctrl</kbd> + <kbd>Backspace</kbd> keypress combination feature ([#36])
+* Old style typing in Fixed method ([#20])
+* Inclusion of typed English word in Fixed method suggestions.
+* Introduce System tray entry for TopBar ([#209])
+* Installation support for new Fixed method layouts ([#355])
+* Edit National keyboard to conform with Ekushey's National layout ([#281])
+* Missing ZWJ character is added in the Borno layout
+* Fix focus out behavior of preedit text in iBus engine ([#298], [#300])
+* Prevent the preedit from reappearing at the new position after a mouse click in iBus engine ([#313])
+* Detect Dark Mode to enable the Dark mode theme of the TopBar
+* Performance optimizations ([#16], [#26])
+
+[okkhor]: https://github.com/gulshan/okkhor/
+[#15]: https://github.com/OpenBangla/riti/pull/15
+[#16]: https://github.com/OpenBangla/riti/pull/16
+[#20]: https://github.com/OpenBangla/riti/pull/20
+[#23]: https://github.com/OpenBangla/riti/pull/23
+[#26]: https://github.com/OpenBangla/riti/pull/26
+[#33]: https://github.com/OpenBangla/riti/pull/33
+[#35]: https://github.com/OpenBangla/riti/pull/35
+[#36]: https://github.com/OpenBangla/riti/pull/36
+[#209]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/209
+[#202]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/202
+[#281]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/281
+[#298]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/298
+[#300]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/300
+[#313]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/313
+[#355]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/355
 ## 2.0.0
 * Complete re-implementation of input method functionalities in Rust. ([#107][107]) It is [~1.2x faster in searching][3] dictionary suggestions.
 * Dictionary suggestion is now available in Fixed Method Layouts(Provat, National etc.) ([#61][61], [#6][6])
