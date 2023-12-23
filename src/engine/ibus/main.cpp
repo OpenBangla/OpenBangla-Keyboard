@@ -249,7 +249,13 @@ gboolean engine_process_key(guint keyval, guint keycode, guint state) {
     modifier |= MODIFIER_ALT_GR;
   }
 
-  suggestion = riti_get_suggestion_for_key(ctx, key, modifier);
+  int index = 0;
+
+  if (riti_context_ongoing_input_session(ctx) && !riti_suggestion_is_lonely(suggestion)) {
+    index = ibus_lookup_table_get_cursor_pos(table);
+  }
+
+  suggestion = riti_get_suggestion_for_key(ctx, key, modifier, index);
 
   if(!riti_suggestion_is_empty(suggestion)) {
     engine_update_lookup_table();
