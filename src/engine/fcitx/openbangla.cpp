@@ -332,8 +332,18 @@ public:
     if ((ctrlKey && altKey) || altGrPressed_) {
       modifier |= MODIFIER_ALT_GR;
     }
+   
+    auto index = 0;
 
-    suggestion_.reset(riti_get_suggestion_for_key(ctx, ritiKey, modifier));
+    if (riti_context_ongoing_input_session(ctx) && !riti_suggestion_is_lonely(suggestion_.get())) {
+      auto candidateList = std::dynamic_pointer_cast<CommonCandidateList>(ic_->inputPanel().candidateList());
+      auto idx = candidateList->globalCursorIndex();
+      if (idx >= 0 && idx < candidateList->totalSize()) {
+        index = idx;
+      }
+    }
+
+    suggestion_.reset(riti_get_suggestion_for_key(ctx, ritiKey, modifier, index));
 
     if (!riti_suggestion_is_empty(suggestion_.get())) {
       updateUI();

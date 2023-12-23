@@ -6,6 +6,7 @@
 * ANSI encoding support ([#33])
 * Smart Quoting feature ([#35])
 * Whole word deletion by <kbd>Ctrl</kbd> + <kbd>Backspace</kbd> keypress combination feature ([#36])
+* Preserve user's candidate selection if the keypress was a punctuation mark in Phonetic Method ([#363])
 * Old style typing in Fixed method ([#20])
 * Inclusion of typed English word in Fixed method suggestions.
 * Introduce System tray entry for TopBar ([#209])
@@ -33,6 +34,8 @@
 [#300]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/300
 [#313]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/313
 [#355]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/355
+[#363]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/363
+
 ## 2.0.0
 * Complete re-implementation of input method functionalities in Rust. ([#107][107]) It is [~1.2x faster in searching][3] dictionary suggestions.
 * Dictionary suggestion is now available in Fixed Method Layouts(Provat, National etc.) ([#61][61], [#6][6])
