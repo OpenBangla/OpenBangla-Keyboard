@@ -19,31 +19,31 @@
 #include "FileSystem.h"
 
 QString LayoutsFilePath() {
-    return "/usr/share/openbangla-keyboard/layouts";
+    return PROJECT_DATADIR "/layouts";
 }
 
 QString AvroPhoneticLayoutPath() {
-    return "/usr/share/openbangla-keyboard/layouts/avrophonetic.json";
+    return PROJECT_DATADIR "/layouts/avrophonetic.json";
 }
 
 QString DatabasePath() {
-    return "/usr/share/openbangla-keyboard/data";
+    return PROJECT_DATADIR "/data";
 }
 
 QString DictionaryPath() {
-    return "/usr/share/openbangla-keyboard/data/dictionary.json";
+    return PROJECT_DATADIR "/data/dictionary.json";
 }
 
 QString SuffixDictPath() {
-    return "/usr/share/openbangla-keyboard/data/suffix.json";
+    return PROJECT_DATADIR "/data/suffix.json";
 }
 
 QString RegexDictPath() {
-    return "/usr/share/openbangla-keyboard/data/regex.json";
+    return PROJECT_DATADIR "/data/regex.json";
 }
 
 QString AutoCorrectFilePath() {
-    return "/usr/share/openbangla-keyboard/data/autocorrect.json";
+    return PROJECT_DATADIR "/data/autocorrect.json";
 }
 
 QString environmentVariable(const char *varName, const QString &defaultValue)

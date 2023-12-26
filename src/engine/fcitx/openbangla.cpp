@@ -442,7 +442,7 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
   riti_config_set_suggestion_include_english(cfg_.get(), includeEnglish);
   riti_config_set_phonetic_suggestion(cfg_.get(), showCWPhonetic);
   riti_config_set_database_dir(cfg_.get(),
-                               "/usr/share/openbangla-keyboard/data");
+                               PROJECT_DATADIR "/data");
   riti_config_set_fixed_suggestion(cfg_.get(), showPrevWinFixed);
   riti_config_set_fixed_auto_vowel(cfg_.get(), autoVowelFormFixed);
   riti_config_set_fixed_auto_chandra(cfg_.get(), autoChandraPosFixed);

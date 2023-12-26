@@ -53,8 +53,6 @@ if(OS_LINUX)
     # Generate compile_commands.json to satisfy vscode linux configuration
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-    ## Set Directories for installing and storing files
-    set(CMAKE_INSTALL_PREFIX "/usr")
     if(NOT DEFINED BIN_DIR)
         set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
     endif()
