@@ -1,9 +1,27 @@
 #!/bin/bash
-BUILD_DIR_OBK="$HOME/.obk-build/"
-rm -r "$BUILD_DIR_OBK"{config.bash,distro.list} > /dev/null 2>&1
-mkdir "$BUILD_DIR_OBK" > /dev/null 2>&1
-touch "$BUILD_DIR_OBK"config.bash > /dev/null 2>&1
-touch "$BUILD_DIR_OBK"distro.list > /dev/null 2>&1
+
+#VARDOC
+#FILE_DIR_OBK (PERSIST) : General path where the scripts will store config, git repos etc etc
+#DISTRO_COUNT (TEMP) : Counter to check if user tries to compile for multiple distros without --toolbox flag
+#config.bash : As toolbox containers donot inherit any environment variables, PERSISTENT variables are stored in here and loaded into other .sh files using source command
+#IM_*_OBK, TOOLBOX_ENABLE_OBK, <DISTRO>*_OBK (PERSIST) : self-explanatory
+#cleanup : cleans FILE_DIR_OBK and removes containers created by the script
+#help : shows helpinfo
+
+# Guide to add new distros
+# 1. add distro switch to the #ARGUMENT HANDLING section of make-pkgs.sh and declare variables appropriately
+# 2. add appropriate distro-specific commands to #TOOLBOX USAGE section
+# 3. add appropriate distro-specific commands to #TOOLBOX NO USAGE section
+# 4. add appropriate make-<DISTRO>.sh file (optional but recommended)
+# 5. call make-build.sh with appropriate arguments
+
+#Initial vars
+FILE_DIR_OBK="$HOME/.obk-build/"
+mkdir "$FILE_DIR_OBK" > /dev/null 2>&1
+rm -r "$FILE_DIR_OBK"config.bash > /dev/null 2>&1
+touch "$FILE_DIR_OBK"config.bash > /dev/null 2>&1
+#rm -r "$FILE_DIR_OBK"distro.list > /dev/null 2>&1
+#touch "$FILE_DIR_OBK"distro.list > /dev/null 2>&1
 
 #cleanup function
 cleanup () {
@@ -12,7 +30,7 @@ cleanup () {
     toolbox rm -f "$tbc"
   done
   echo "Cleaning build directory..."
-  rm -rf "$BUILD_DIR_OBK" > /dev/null 2>&1
+  rm -rf "$FILE_DIR_OBK" > /dev/null 2>&1
 }
 #help function
 help () {
@@ -28,29 +46,31 @@ help () {
     echo "  --toolbox       Compile inside of a toolbox"
     echo "    NOTE: When compiling inside of a toolbox, an additional <version> can be specified for the distro flags."
     echo "          (e.g. --fedora 37) This will generate packages for a specific version of a distro."
-    echo "  --clean         Clean \"$BUILD_DIR_OBK\" directory and remove obk-toolbox-* containers"
+    echo "  --clean         Clean \"$FILE_DIR_OBK\" directory and remove obk-toolbox-* containers"
     echo "  --help          Display this help message"
     echo "Example: "
     echo "  $0 --ibus --fcitx --develop --fedora 37 --debian --toolbox"
     echo "  $0 --ibus --develop --debian"
 }
 
-#storing args
+#storing vars
 DISTRO_COUNT=0
+
+#ARGUMENT HANDLING
 for arg in "$@"; do
   case $arg in
-    ("--ibus") echo 'IM_IBUS_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash ;;
-    ("--fcitx") echo 'IM_FCITX_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash ;;
-    ("--develop") echo 'BRANCH_OBK='"'develop'" >> "$BUILD_DIR_OBK"config.bash ;;
-    ("--toolbox") echo 'TOOLBOX_ENABLE_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash ;;
+    ("--ibus") echo 'IM_IBUS_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash ;;
+    ("--fcitx") echo 'IM_FCITX_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash ;;
+    ("--develop") echo 'BRANCH_OBK='"'develop'" >> "$FILE_DIR_OBK"config.bash ;;
+    ("--toolbox") echo 'TOOLBOX_ENABLE_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash ;;
     ("--fedora")
-      echo 'FEDORA_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash
-      echo "FEDORA_VERSION_OBK=$(echo "$@" | sed -n 's/.*--fedora \([0-9]*\).*/\1/p')" >> "$BUILD_DIR_OBK"config.bash
+      echo 'FEDORA_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash
+      echo "FEDORA_VERSION_OBK=$(echo "$@" | sed -n 's/.*--fedora \([0-9]*\).*/\1/p')" >> "$FILE_DIR_OBK"config.bash
       ((DISTRO_COUNT++))
         ;;
     ("--debian")
-      echo 'DEBIAN_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash
-      echo "DEBIAN_VERSION_OBK=$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')" >> "$BUILD_DIR_OBK"config.bash
+      echo 'DEBIAN_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash
+      echo "DEBIAN_VERSION_OBK=$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')" >> "$FILE_DIR_OBK"config.bash
       ((DISTRO_COUNT++))
         ;;
     ("--clean") 
@@ -70,47 +90,51 @@ for arg in "$@"; do
 done
 
 #load vars from file
-source "$BUILD_DIR_OBK"config.bash 2>&1
-cat "$BUILD_DIR_OBK"config.bash
+# shellcheck source=/dev/null
+source "$FILE_DIR_OBK"config.bash 2>&1
+cat "$FILE_DIR_OBK"config.bash
 
-#if user wants to use a toolbox
+#TOOLBOX USAGE
 if [ "$TOOLBOX_ENABLE_OBK" = 'YES' ]; then
   #create toolbox
   echo "Creating toolbox..."
+  toolbox_error () { echo "Something went wrong with the toolbox, Exiting..." && exit 1 ;}
+# i attempted at rewriting this part to be distro-agnostic and setup toolboxes from a distro.list file, but the current approach is more modular and more extensible
+# e.g. if different distros want to target different/specific toolbox images/repos
+
+# disabled the checking for versions in toolobx sections, the container and pathnames will end up with an extra hyphen - in the end, but it will simplify the toolbox aspect
 
   #fedora toolbox
   if [ "$FEDORA_OBK" = 'YES' ]; then
     chmod +x make-fedora.sh
-    if [ -z "$FEDORA_VERSION_OBK" ]; then
-    #if the user didnt specified a version
-        toolbox create obk-toolbox-fedora -d fedora
-        toolbox run -c obk-toolbox-fedora ./make-fedora.sh
-        exit 1
-    else
+    echo "Setting up Fedora toolbox."
+#    if [ -z "$FEDORA_VERSION_OBK" ]; then
+#    #if the user didnt specified a version
+#       ( toolbox create obk-toolbox-fedora -d fedora ) || echo "Failed creating Fedora toolbox" && exit 1
+#       ( toolbox run -c obk-toolbox-fedora ./make-fedora.sh ) || echo "Failed entering Fedora toolbox"  && exit 1
+#    else
     #if user did
-        toolbox create obk-toolbox-fedora-"$FEDORA_VERSION_OBK" -d fedora -r "$FEDORA_VERSION_OBK"
-        toolbox run -c obk-toolbox-fedora-"$FEDORA_VERSION_OBK" ./make-fedora.sh
-        exit 1
-    fi
+        ( toolbox create obk-toolbox-fedora-"$FEDORA_VERSION_OBK" -d fedora -r "$FEDORA_VERSION_OBK" ) || toolbox_error
+        ( toolbox run -c obk-toolbox-fedora-"$FEDORA_VERSION_OBK" ./make-fedora.sh "$FILE_DIR_OBK" ) || toolbox_error
+#    fi
   fi
 
   #debian toolbox
   if [ "$DEBIAN_OBK" = 'YES' ]; then
-    chmod +x make-debian.sh
-    if [ -z "$DEBIAN_VERSION_OBK" ]; then
-    #if the user didnt specified a version
-        toolbox create obk-toolbox-debian -i quay.io/toolbx-images/debian-toolbox
-        toolbox run -c obk-toolbox-debian ./make-debian.sh
-        exit 1
-    else
+  chmod +x make-debian.sh
+  echo "Setting up Debian toolbox."
+#    if [ -z "$DEBIAN_VERSION_OBK" ]; then
+#    #if the user didnt specified a version
+#        toolbox create obk-toolbox-debian -i quay.io/toolbx-images/debian-toolbox
+#        toolbox run -c obk-toolbox-debian ./make-debian.sh
+#    else
     #if user did
-        toolbox create obk-toolbox-debian-"$DEBIAN_VERSION_OBK" -i quay.io/toolbx-images/debian-toolbox:"$DEBIAN_VERSION_OBK"
-        toolbox run -c obk-toolbox-debian-"$DEBIAN_VERSION_OBK" ./make-debian.sh
-        exit 1
-    fi
+       ( toolbox create obk-toolbox-debian-"$DEBIAN_VERSION_OBK" -i quay.io/toolbx-images/debian-toolbox:"$DEBIAN_VERSION_OBK" ) || toolbox_error
+       ( toolbox run -c obk-toolbox-debian-"$DEBIAN_VERSION_OBK" ./make-debian.sh "$FILE_DIR_OBK" ) || toolbox_error
+#    fi
   fi
 
-#if user doesn't want ot use a toolbox
+#TOOLBOX NO USAGE
 elif [[ "$DISTRO_COUNT" -ne 1 ]]; then
       echo "Cannot use more than one distro without --toolbox flag."
       echo "Exiting..."
@@ -118,12 +142,13 @@ elif [[ "$DISTRO_COUNT" -ne 1 ]]; then
 else
   if [ "$FEDORA_OBK" = 'YES' ]; then
     chmod +x make-fedora.sh
-    ./make-fedora.sh
+    ./make-fedora.sh "$FILE_DIR_OBK"
     exit 1
   fi
   if [ "$DEBIAN_OBK" = 'YES' ]; then
     chmod +x make-debian.sh
-    ./make-debian.sh
+    ./make-debian.sh "$FILE_DIR_OBK"
+
     exit 1
   fi
 fi
