@@ -4,7 +4,35 @@ mkdir ~/.obk-build/ > /dev/null 2>&1
 touch ~/.obk-build/config.bash > /dev/null 2>&1
 
 #cleanup function
+cleanup () {
+  echo "Removing obk-toolbox containers..."
+  for tbc in $(toolbox list | sed -n 's/.*\(obk-toolbox[^\ ]*\).*/\1/p'); do
+    toolbox rm -f "$tbc"
+  done
+  echo "Cleaning build directory..."
+  rm -rf ~/.obk-build/ > /dev/null 2>&1
+}
 #help function
+help () {
+    echo "Usage: $0 [OPTIONS]"
+    echo "Options:"
+    echo "  --ibus          Compile IBus version"
+    echo "  --fcitx         Compile Fcitx version (Doesn't work for OBK2 and earlier)"
+    echo "  --develop       Compile from the develop branch"
+    echo "  --fedora        Compile for Fedora"
+    echo "  --debian        Compile for Debian"
+    echo "    NOTE: User needs to specify the --toolbox flag to compile for multiple distros at the same time."
+    echo "          Otherwise, only one flag can be used at a time (e.g. --fedora and --debian can't be used together without --toolbox)"
+    echo "  --toolbox       Compile inside of a toolbox"
+    echo "    NOTE: When compiling inside of a toolbox, an additional <version> can be specified for the distro flags."
+    echo "          (e.g. --fedora 37) This will generate packages for a specific version of a distro."
+    echo "  --clean         Clean ~/.obk-build/ directory and remove obk-toolbox-* containers"
+    echo "  --help          Display this help message"
+    echo "Example: "
+    echo "  $0 --ibus --fcitx --develop --fedora 37 --debian --toolbox"
+    echo "  $0 --ibus --develop --debian"
+}
+
 #storing args
 DISTRO_COUNT=0
 for arg in "$@"; do
@@ -22,12 +50,20 @@ for arg in "$@"; do
       echo 'DEBIAN_OBK='YES'' >> ~/.obk-build/config.bash
       echo "DEBIAN_VERSION_OBK="$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')"" >> ~/.obk-build/config.bash
       ((DISTRO_COUNT++))
-         ;;
+        ;;
+    ("--clean") 
+      cleanup
+      exit 1
+        ;;
+    ("--help")
+      help
+      exit 1
+        ;;
     (--*)
       echo "Unknown argument: $arg"
+      help
       echo "Exiting..."
-      exit 1
-         ;;
+      exit 1 ;;
     esac
 done
 
