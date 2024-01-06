@@ -1,7 +1,9 @@
 #!/bin/bash
-rm -r ~/.obk-build/config.bash > /dev/null 2>&1
-mkdir ~/.obk-build/ > /dev/null 2>&1
-touch ~/.obk-build/config.bash > /dev/null 2>&1
+BUILD_DIR_OBK="$HOME/.obk-build/"
+rm -r "$BUILD_DIR_OBK"{config.bash,distro.list} > /dev/null 2>&1
+mkdir "$BUILD_DIR_OBK" > /dev/null 2>&1
+touch "$BUILD_DIR_OBK"config.bash > /dev/null 2>&1
+touch "$BUILD_DIR_OBK"distro.list > /dev/null 2>&1
 
 #cleanup function
 cleanup () {
@@ -10,7 +12,7 @@ cleanup () {
     toolbox rm -f "$tbc"
   done
   echo "Cleaning build directory..."
-  rm -rf ~/.obk-build/ > /dev/null 2>&1
+  rm -rf "$BUILD_DIR_OBK" > /dev/null 2>&1
 }
 #help function
 help () {
@@ -26,7 +28,7 @@ help () {
     echo "  --toolbox       Compile inside of a toolbox"
     echo "    NOTE: When compiling inside of a toolbox, an additional <version> can be specified for the distro flags."
     echo "          (e.g. --fedora 37) This will generate packages for a specific version of a distro."
-    echo "  --clean         Clean ~/.obk-build/ directory and remove obk-toolbox-* containers"
+    echo "  --clean         Clean \"$BUILD_DIR_OBK\" directory and remove obk-toolbox-* containers"
     echo "  --help          Display this help message"
     echo "Example: "
     echo "  $0 --ibus --fcitx --develop --fedora 37 --debian --toolbox"
@@ -37,18 +39,18 @@ help () {
 DISTRO_COUNT=0
 for arg in "$@"; do
   case $arg in
-    ("--ibus") echo 'IM_IBUS_OBK='YES'' >> ~/.obk-build/config.bash ;;
-    ("--fcitx") echo 'IM_FCITX_OBK='YES'' >> ~/.obk-build/config.bash ;;
-    ("--develop") echo 'BRANCH_OBK='develop'' >> ~/.obk-build/config.bash ;;
-    ("--toolbox") echo 'TOOLBOX_ENABLE_OBK='YES'' >> ~/.obk-build/config.bash ;;
+    ("--ibus") echo 'IM_IBUS_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash ;;
+    ("--fcitx") echo 'IM_FCITX_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash ;;
+    ("--develop") echo 'BRANCH_OBK='"'develop'" >> "$BUILD_DIR_OBK"config.bash ;;
+    ("--toolbox") echo 'TOOLBOX_ENABLE_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash ;;
     ("--fedora")
-      echo 'FEDORA_OBK='YES'' >> ~/.obk-build/config.bash
-      echo "FEDORA_VERSION_OBK="$(echo "$@" | sed -n 's/.*--fedora \([0-9]*\).*/\1/p')"" >> ~/.obk-build/config.bash
+      echo 'FEDORA_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash
+      echo "FEDORA_VERSION_OBK=$(echo "$@" | sed -n 's/.*--fedora \([0-9]*\).*/\1/p')" >> "$BUILD_DIR_OBK"config.bash
       ((DISTRO_COUNT++))
         ;;
     ("--debian")
-      echo 'DEBIAN_OBK='YES'' >> ~/.obk-build/config.bash
-      echo "DEBIAN_VERSION_OBK="$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')"" >> ~/.obk-build/config.bash
+      echo 'DEBIAN_OBK='"'YES'" >> "$BUILD_DIR_OBK"config.bash
+      echo "DEBIAN_VERSION_OBK=$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')" >> "$BUILD_DIR_OBK"config.bash
       ((DISTRO_COUNT++))
         ;;
     ("--clean") 
@@ -68,8 +70,8 @@ for arg in "$@"; do
 done
 
 #load vars from file
-source ~/.obk-build/config.bash 2>&1
-#cat ~/.obk-build/config.bash
+source "$BUILD_DIR_OBK"config.bash 2>&1
+cat "$BUILD_DIR_OBK"config.bash
 
 #if user wants to use a toolbox
 if [ "$TOOLBOX_ENABLE_OBK" = 'YES' ]; then
@@ -107,7 +109,6 @@ if [ "$TOOLBOX_ENABLE_OBK" = 'YES' ]; then
         exit 1
     fi
   fi
-fi
 
 #if user doesn't want ot use a toolbox
 elif [[ "$DISTRO_COUNT" -ne 1 ]]; then

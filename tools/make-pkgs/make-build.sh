@@ -1,17 +1,11 @@
 #!/bin/bash
-echo "Generating Debian packages..."
-source ~/.obk-build/config.bash > /dev/null 2>&1
-cd ~/.obk-build/
-
-#update the system and install builddeps
-sudo apt update -y && sudo apt upgrade -y
-sudo apt-get install -y build-essential file rustc cargo cmake meson ninja-build libibus-1.0-dev libfcitx5core-dev fcitx5 qtbase5-dev qtbase5-dev-tools libzstd-dev git
+source "$BUILD_DIR_OBK"config.bash
 
 #git clone obk, update if exists
-if [ -d ~/.obk-build/OpenBangla-Keyboard ]; then
+if [ -d "$BUILD_DIR_OBK"OpenBangla-Keyboard ]; then
   cd OpenBangla-Keyboard && git pull
 else
-  git clone --recursive https://github.com/OpenBangla/OpenBangla-Keyboard.git && cd OpenBangla-Keyboard
+  ( git clone --recursive https://github.com/OpenBangla/OpenBangla-Keyboard.git && cd OpenBangla-Keyboard ) || ( echo "Error cloning git repo, Exiting..." && rm -rf "$BUILD_DIR_OBK" && exit 1 )
 fi
 #determine branch
 if [ "$BRANCH_OBK" = 'develop' ]; then
