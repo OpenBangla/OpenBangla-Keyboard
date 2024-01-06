@@ -45,3 +45,15 @@ esac
     mkdir build-fcitx-"$1"
     cmake -Bbuild-fcitx-"$1" -GNinja -DCPACK_GENERATOR="$PACKAGE_FORMAT" -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_FCITX=ON && ninja package -C build-fcitx-"$1"
   fi
+
+
+#copying generated file to builds folder of make-pkgs.sh's location
+if [ ! -d "$START_DIR_OBK/builds/" ]; then
+  ( mkdir "$START_DIR_OBK/builds/" ) || { echo "Build was successful, but failed to copy files to $START_DIR_OBK, Exiting..." && exit 1 ;}
+fi
+
+find "$FILE_DIR_OBK" -type f -iname "*.$PACKAGE_FORMAT" -print0 | while IFS= read -r -d $'\0' PACKAGE_FILE; do
+    # Copy each file to the destination directory
+    cp "$PACKAGE_FILE" "$START_DIR_OBK/builds/"
+    echo "Copied: $PACKAGE_FILE to $START_DIR_OBK/builds/"
+done

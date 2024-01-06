@@ -20,6 +20,7 @@ FILE_DIR_OBK="$HOME/.obk-build/"
 mkdir "$FILE_DIR_OBK" > /dev/null 2>&1
 rm -r "$FILE_DIR_OBK"config.bash > /dev/null 2>&1
 touch "$FILE_DIR_OBK"config.bash > /dev/null 2>&1
+echo "START_DIR_OBK=$(pwd)" >> "$FILE_DIR_OBK"config.bash
 #rm -r "$FILE_DIR_OBK"distro.list > /dev/null 2>&1
 #touch "$FILE_DIR_OBK"distro.list > /dev/null 2>&1
 
