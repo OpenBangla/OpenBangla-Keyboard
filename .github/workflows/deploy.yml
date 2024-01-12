@@ -11,8 +11,7 @@ jobs:
     strategy:
       matrix:
         # container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38", "archlinux:latest" ]
-        #container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:38", "opensuse/tumbleweed" ]
-        container: [ "opensuse/leap:15.5" ]
+        container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:38", "opensuse/tumbleweed" ]
         # this list should be updated from time to time by consulting these pages:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases

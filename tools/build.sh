@@ -39,7 +39,7 @@ makeRpmOpenSuse () {
     export DIST=$(echo "$DIST" | tr '/' '-')
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
 
-    zypper install -y libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake ninja ibus-devel ibus fcitx5 fcitx5-devel gcc patterns-devel-base-devel_basis curl rpm-build
+    zypper install -y libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel cmake ninja ibus-devel fcitx5-devel gcc curl rpm-build
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
     if [[ "${IME}" == "ibus" ]]; then
