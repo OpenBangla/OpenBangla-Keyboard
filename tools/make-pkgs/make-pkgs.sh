@@ -75,9 +75,14 @@ for arg in "$@"; do
       echo "DEBIAN_VERSION_OBK=$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')" >> "$FILE_DIR_OBK"config.bash
       ((DISTRO_COUNT++))
         ;;
-    ("--clean") 
-      cleanup
-      exit 1
+    ("--clean")
+      if [[ $(echo "$@" | wc -w) -gt 1 ]]; then
+        echo "--clean cannot be used with other flags. Exiting..."
+        exit 1
+      else
+        cleanup
+        exit 1
+      fi
         ;;
     ("--help")
       help
@@ -97,7 +102,7 @@ source "$FILE_DIR_OBK"config.bash 2>&1
 cat "$FILE_DIR_OBK"config.bash
 
 #TOOLBOX USAGE
-if [ "$TOOLBOX_ENABLE_OBK" = 'YES' ]; then
+if [[ "$TOOLBOX_ENABLE_OBK" = 'YES' ]]; then
   #create toolbox
   echo "Creating toolbox..."
   toolbox_error () { echo "Something went wrong with the toolbox, Exiting..." && exit 1 ;}
@@ -107,7 +112,7 @@ if [ "$TOOLBOX_ENABLE_OBK" = 'YES' ]; then
 # disabled the checking for versions in toolobx sections, the container and pathnames will end up with an extra hyphen - in the end, but it will simplify the toolbox aspect
 
   #fedora toolbox
-  if [ "$FEDORA_OBK" = 'YES' ]; then
+  if [[ "$FEDORA_OBK" = 'YES' ]]; then
     chmod +x make-fedora.sh
     echo "Setting up Fedora toolbox."
 #    if [ -z "$FEDORA_VERSION_OBK" ]; then
@@ -117,12 +122,14 @@ if [ "$TOOLBOX_ENABLE_OBK" = 'YES' ]; then
 #    else
     #if user did
         ( toolbox create obk-toolbox-fedora-"$FEDORA_VERSION_OBK" -d fedora -r "$FEDORA_VERSION_OBK" ) || toolbox_error
+        #add extra tweak for faster downloads
+        #( toolbox run -c obk-toolbox-fedora-"$FEDORA_VERSION_OBK" echo "max_parallel_downloads=19" | sudo tee -a /etc/dnf/dnf.conf ) || toolbox_error
         ( toolbox run -c obk-toolbox-fedora-"$FEDORA_VERSION_OBK" ./make-fedora.sh "$FILE_DIR_OBK" ) || toolbox_error
 #    fi
   fi
 
   #debian toolbox
-  if [ "$DEBIAN_OBK" = 'YES' ]; then
+  if [[ "$DEBIAN_OBK" = 'YES' ]]; then
   chmod +x make-debian.sh
   echo "Setting up Debian toolbox."
 #    if [ -z "$DEBIAN_VERSION_OBK" ]; then
@@ -142,15 +149,14 @@ elif [[ "$DISTRO_COUNT" -ne 1 ]]; then
       echo "Exiting..."
       exit 1
 else
-  if [ "$FEDORA_OBK" = 'YES' ]; then
+  if [[ "$FEDORA_OBK" = 'YES' ]]; then
     chmod +x make-fedora.sh
     ./make-fedora.sh "$FILE_DIR_OBK"
     exit 1
   fi
-  if [ "$DEBIAN_OBK" = 'YES' ]; then
+  if [[ "$DEBIAN_OBK" = 'YES' ]]; then
     chmod +x make-debian.sh
     ./make-debian.sh "$FILE_DIR_OBK"
-
     exit 1
   fi
 fi

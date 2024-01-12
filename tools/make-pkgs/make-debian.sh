@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # If insufficent args provided, exit
-if [ -z "$1" ]; then
+if [[ -z "$1" ]]; then
     echo "Insufficent arguments for this script, Exiting..."
     exit 1
 fi
