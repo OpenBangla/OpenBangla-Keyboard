@@ -9,25 +9,41 @@ makeDeb () {
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
     if [[ "${IME}" == "ibus" ]]; then
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DENABLE_IBUS=ON -DCPACK_GENERATOR=DEB
+        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_IBUS=ON -DCPACK_GENERATOR=DEB
     else
         apt-get -y install libfcitx5core-dev
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DENABLE_FCITX=ON -DCPACK_GENERATOR=DEB
+        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_FCITX=ON -DCPACK_GENERATOR=DEB
     fi
 
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
 }
 
-makeRpm () {
+makeRpmFedora () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
     dnf install -y --allowerasing @buildsys-build cmake ibus-devel fcitx5-devel libzstd-devel qt5-qtdeclarative-devel ninja-build curl
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
     if [[ "${IME}" == "ibus" ]]; then
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DENABLE_IBUS=ON -DCPACK_GENERATOR=RPM
+        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_IBUS=ON -DCPACK_GENERATOR=RPM
     else
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DENABLE_FCITX=ON -DCPACK_GENERATOR=RPM
+        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_FCITX=ON -DCPACK_GENERATOR=RPM
+    fi
+
+    ninja package -C /build
+    RELEASE_FILE="/build/${RELEASE_FILENAME}"
+}
+
+makeRpmOpenSuse () {
+    RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
+    # dnf install -y --allowerasing @buildsys-build cmake ibus-devel fcitx5-devel libzstd-devel qt5-qtdeclarative-devel ninja-build curl
+    zypper install libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake ninja ibus-devel ibus fcitx5 fcitx5-devel gcc patterns-devel-base-devel_basis curl
+    curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
+    
+    if [[ "${IME}" == "ibus" ]]; then
+        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_IBUS=ON -DCPACK_GENERATOR=RPM
+    else
+        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_FCITX=ON -DCPACK_GENERATOR=RPM
     fi
 
     ninja package -C /build
@@ -63,7 +79,11 @@ if [[ $DIST =~ ^(ubuntu|debian) ]]; then
 elif [[ $DIST =~ ^fedora ]]; then
     dnf -y --allowerasing distro-sync
     dnf -y install git
-    BUILDFUNC=makeRpm
+    BUILDFUNC=makeRpmFedora
+elif [[ $DIST =~ ^opensuse ]]; then
+    #dnf -y --allowerasing distro-sync
+    #dnf -y install git
+    BUILDFUNC=makeRpmOpenSuse
 elif [[ $DIST =~ ^archlinux ]]; then
     pacman -Syyu --noconfirm --needed
     pacman -S --noconfirm --needed base git
