@@ -17,6 +17,7 @@ jobs:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases
         # https://fedoraproject.org/wiki/Releases
+        # https://en.wikipedia.org/wiki/OpenSUSE#Version_history
         ime: [ "ibus", "fcitx" ]
         # Some distributions doesn't have the required version of fcitx library, so we exclude them.
         exclude:
