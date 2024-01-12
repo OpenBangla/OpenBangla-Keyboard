@@ -10,7 +10,6 @@ FILE_DIR_OBK="$1"
 # shellcheck source=/dev/null
 source "$FILE_DIR_OBK"config.bash > /dev/null 2>&1
 echo "Generating Fedora packages..."
-#cd "$FILE_DIR_OBK" || exit 1
 
 #update the system and install builddeps
 sudo dnf -y update
