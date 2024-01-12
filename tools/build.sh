@@ -37,7 +37,7 @@ makeRpmFedora () {
 makeRpmOpenSuse () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
     # dnf install -y --allowerasing @buildsys-build cmake ibus-devel fcitx5-devel libzstd-devel qt5-qtdeclarative-devel ninja-build curl
-    zypper install libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake ninja ibus-devel ibus fcitx5 fcitx5-devel gcc patterns-devel-base-devel_basis curl
+    zypper install -y libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake ninja ibus-devel ibus fcitx5 fcitx5-devel gcc patterns-devel-base-devel_basis curl
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
     if [[ "${IME}" == "ibus" ]]; then
