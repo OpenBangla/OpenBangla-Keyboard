@@ -12,13 +12,17 @@
 # shellcheck source=/dev/null
 source function.bash
 filedir_init
+#DEBUG
+[[ "$1" = '-v' ]] && { add_config 'DEBUG_OBK=YES' ;}
 parse_args "$@"
 
-#cat "$FILE_DIR_OBK"config.bash
+cat "$FILE_DIR_OBK"config.bash
 
 #load vars from filedir
 # shellcheck source=/dev/null
 source "$FILE_DIR_OBK"config.bash
+#DEBUG
+log_debug "$0"
 #cat "$FILE_DIR_OBK"config.bash
 
 #TOOLBOX USAGE

@@ -30,33 +30,46 @@ help () {
     echo "  $0 --ibus --fcitx --develop --fedora 37 --debian --toolbox"
     echo "  $0 --ibus --develop --debian"
 }
+add_config () {
+  echo "$1" >> "$FILE_DIR_OBK"config.bash
+}
 #init FILE_DIR_OBK
 filedir_init () {
     mkdir "$FILE_DIR_OBK" > /dev/null 2>&1
     rm -r "$FILE_DIR_OBK"config.bash > /dev/null 2>&1
     touch "$FILE_DIR_OBK"config.bash > /dev/null 2>&1
-    echo "START_DIR_OBK=$(pwd)" >> "$FILE_DIR_OBK"config.bash
+    add_config "START_DIR_OBK=$(pwd)"
+    add_config 'add_config () {
+  echo "$1" >> "$FILE_DIR_OBK"config.bash
+}'
+    add_config 'log_debug () {
+  if [[ "$DEBUG_OBK" = "YES" ]]; then
+  set -x
+  exec > "$1".log
+  fi
+}'
+
     #rm -r "$FILE_DIR_OBK"distro.list > /dev/null 2>&1
     #touch "$FILE_DIR_OBK"distro.list > /dev/null 2>&1
 }
 parse_args () {
   for arg in "$@"; do
     case $arg in
-      ("--ibus") echo 'IM_IBUS_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash ;;
-      ("--fcitx") echo 'IM_FCITX_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash ;;
-      ("--develop") echo 'BRANCH_OBK='"'develop'" >> "$FILE_DIR_OBK"config.bash ;;
-      ("--toolbox") echo 'TOOLBOX_ENABLE_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash ;;
+      ("--ibus") add_config 'IM_IBUS_OBK=YES' ;;
+      ("--fcitx") add_config 'IM_FCITX_OBK=YES' ;;
+      ("--develop") add_config 'BRANCH_OBK=develop' ;;
+      ("--toolbox") add_config 'TOOLBOX_ENABLE_OBK=YES' ;;
       ("--fedora")
-        echo 'FEDORA_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash
-        echo "FEDORA_VERSION_OBK=$(echo "$@" | sed -n 's/.*--fedora \([0-9]*\).*/\1/p')" >> "$FILE_DIR_OBK"config.bash        
+        add_config 'FEDORA_OBK=YES'
+        add_config "FEDORA_VERSION_OBK=$(echo "$@" | sed -n 's/.*--fedora \([0-9]*\).*/\1/p')"        
         ((DISTRO_COUNT++)) ;;
       ("--debian")
-        echo 'DEBIAN_OBK='"'YES'" >> "$FILE_DIR_OBK"config.bash
-        echo "DEBIAN_VERSION_OBK=$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')" >> "$FILE_DIR_OBK"config.bash
+        add_config 'DEBIAN_OBK=YES'
+        add_config "DEBIAN_VERSION_OBK=$(echo "$@" | sed -n 's/.*--debian \([0-9]*\).*/\1/p')"
         ((DISTRO_COUNT++)) ;;
       ("--clean")
         if [[ $(echo "$@" | wc -w) -gt 1 ]]; then
-          echo "Error: --clean cannot be used with other flags. Exiting..."
+          echo 'Error: --clean cannot be used with other flags. Exiting...'
           exit 1
         else
           cleanup
@@ -78,6 +91,12 @@ toolbox_error () {
 missing_version () {
   echo "Error: cersion for $1 missing. Exiting..."
   exit 1
+}
+log_debug () {
+  if [[ "$DEBUG_OBK" = 'YES' ]]; then
+  set -x
+  exec > "$1".log
+  fi
 }
 
 #FILE_DIR_OBK (PERSIST) : General path where the scripts will store config, git repos etc etc
