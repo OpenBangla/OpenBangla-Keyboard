@@ -10,7 +10,8 @@
 
 #load functions and initial vars, setup filedir, handle args
 # shellcheck source=/dev/null
-source function.bash
+source function.bash >/dev/null 2>&1
+echo "source"
 filedir_init
 #DEBUG
 [[ "$1" = '-v' ]] && { add_config 'DEBUG_OBK=YES' ;}
@@ -53,10 +54,10 @@ if [[ "$TOOLBOX_ENABLE_OBK" = 'YES' ]]; then
     [ -z "$DEBIAN_VERSION_OBK" ] && missing_version "debian"
 
     echo "Setting up Debian toolbox..."
-      {
+      (
         toolbox create -y obk-toolbox-debian-"$DEBIAN_VERSION_OBK" -i quay.io/toolbx-images/debian-toolbox:"$DEBIAN_VERSION_OBK"
         toolbox run -c obk-toolbox-debian-"$DEBIAN_VERSION_OBK" ./make-debian.sh "$FILE_DIR_OBK"
-      } || toolbox_error
+      ) || toolbox_error
   fi
 
 #TOOLBOX NO USAGE

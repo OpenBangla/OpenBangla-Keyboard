@@ -45,7 +45,7 @@ filedir_init () {
     add_config 'log_debug () {
   if [[ "$DEBUG_OBK" = "YES" ]]; then
   set -x
-  exec > "$1".log
+  exec &> >(tee -a "$1.log")
   fi
 }'
 
@@ -95,7 +95,7 @@ missing_version () {
 log_debug () {
   if [[ "$DEBUG_OBK" = 'YES' ]]; then
   set -x
-  exec > "$1".log
+  exec &> >(tee -a "$1.log")
   fi
 }
 
