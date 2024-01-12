@@ -35,6 +35,8 @@ makeRpmFedora () {
 }
 
 makeRpmOpenSuse () {
+    # Replace '/' with '-'
+    export DIST=$(echo "$DIST" | tr '/' '-')
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
     # dnf install -y --allowerasing @buildsys-build cmake ibus-devel fcitx5-devel libzstd-devel qt5-qtdeclarative-devel ninja-build curl
     zypper install -y libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel libzstd1 cmake ninja ibus-devel ibus fcitx5 fcitx5-devel gcc patterns-devel-base-devel_basis curl rpm-build
