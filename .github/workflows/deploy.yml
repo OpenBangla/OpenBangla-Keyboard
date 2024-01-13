@@ -11,11 +11,12 @@ jobs:
     strategy:
       matrix:
         # container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38", "archlinux:latest" ]
-        container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38" ]
+        container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:38", "opensuse/tumbleweed" ]
         # this list should be updated from time to time by consulting these pages:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases
         # https://fedoraproject.org/wiki/Releases
+        # https://en.wikipedia.org/wiki/OpenSUSE#Version_history
         ime: [ "ibus", "fcitx" ]
         # Some distributions doesn't have the required version of fcitx library, so we exclude them.
         exclude:
