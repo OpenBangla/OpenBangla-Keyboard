@@ -8,6 +8,12 @@
 # 4. add appropriate distro-specific commands to #TOOLBOX NO USAGE section
 # 5. call make-build.sh with appropriate arguments
 
+#NOTE :
+# 1. All script files after make-pkgs.sh need to be passed FILE_DIR_OBK as their first argument
+#    this needs to be done so the scripts know where to load config.bash from
+# 2. make-build.sh needs to be passed <distro name>-<DISTRO_VERSION_OBK> as 2nd argument
+#    e.g. ./make-build.sh "$FILE_DIR_OBK" fedora-"$FEDORA_VERSION_OBK"
+
 #load functions and initial vars, setup filedir, handle args
 # shellcheck source=/dev/null
 source function.bash
