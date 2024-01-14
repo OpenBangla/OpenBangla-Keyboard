@@ -2,28 +2,26 @@
 
 # Variable documentation -> see function.bash
 # Guide to add new distros
-# 1. add distro switch to the #ARGUMENT HANDLING section of make-pkgs.sh and declare variables appropriately
-# 2. add appropriate distro-specific commands to #TOOLBOX USAGE section
-# 3. add appropriate distro-specific commands to #TOOLBOX NO USAGE section
-# 4. add appropriate make-<DISTRO>.sh file (optional but recommended)
+# 1. add distro switch to parse_args function of function.bash of declare variables <DISTRO>_OBK and <DISTRO_VERSION>_OBK appropriately
+# 2. add appropriate make-<DISTRO>.sh file (optional but recommended)
+# 3. add appropriate distro-specific commands to #TOOLBOX USAGE section (use #fedora toolbox and #debian toolbox as templates)
+# 4. add appropriate distro-specific commands to #TOOLBOX NO USAGE section
 # 5. call make-build.sh with appropriate arguments
 
 #load functions and initial vars, setup filedir, handle args
 # shellcheck source=/dev/null
-source function.bash >/dev/null 2>&1
-echo "source"
+source function.bash
 filedir_init
 #DEBUG
 [[ "$1" = '-v' ]] && { add_config 'DEBUG_OBK=YES' ;}
 parse_args "$@"
-
-cat "$FILE_DIR_OBK"config.bash
 
 #load vars from filedir
 # shellcheck source=/dev/null
 source "$FILE_DIR_OBK"config.bash
 #DEBUG
 log_debug "$0"
+#check what variables are loaded
 #cat "$FILE_DIR_OBK"config.bash
 
 #TOOLBOX USAGE

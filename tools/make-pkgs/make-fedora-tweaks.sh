@@ -1,3 +1,3 @@
 #!/bin/bash
-log_debug "$0"
-echo "max_parallel_downloads=19" | sudo tee -a /etc/dnf/dnf.conf > /dev/null 2>&1
+echo "Adding Fedora tweaks..."
+echo "max_parallel_downloads=19" | sudo tee -a /etc/dnf/dnf.conf

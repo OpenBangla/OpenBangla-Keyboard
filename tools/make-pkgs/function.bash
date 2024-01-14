@@ -89,7 +89,7 @@ toolbox_error () {
   exit 1
 }
 missing_version () {
-  echo "Error: cersion for $1 missing. Exiting..."
+  echo "Error: version for $1 missing. Exiting..."
   exit 1
 }
 log_debug () {
@@ -99,14 +99,40 @@ log_debug () {
   fi
 }
 
-#FILE_DIR_OBK (PERSIST) : General path where the scripts will store config, git repos etc etc
-#DISTRO_COUNT (TEMP) : Counter to check if user tries to compile for multiple distros without --toolbox flag
+# SOURCE FILES
+#function.bash : Contains initial variables and functions for use in make-pkgs.sh
 #config.bash : As toolbox containers donot inherit any environment variables, PERSISTENT variables are stored in here and loaded into other .sh files using source command
-#START_DIR_OBK : directory from where the script was called
-#IM_*_OBK, TOOLBOX_ENABLE_OBK, <DISTRO>*_OBK (PERSIST) : self-explanatory
-#cleanup : cleans FILE_DIR_OBK and removes containers created by the script
-#help : shows helpinfo
-#filedir_init : inits the FILE_DIR_OBK
-#parse_args : parses arguments
-#toolbox_error : shows error on toolbox container error
-#missing_version : shows error on missing version with distro flag
+
+# VARIABLES
+# YOU NEED TO LOAD config.bash TO HAVE PERSIST VARS AVAILABLE IN YOUR SHELL SCRIPTS
+#FILE_DIR_OBK (PERSIST) : General path where the scripts will store config data, git repos,build artifacts etc etc
+#START_DIR_OBK (PERSIST) : directory from where the script was called
+#DEBUG_OBK (PERSIST) : check if the debug flag is set
+#IM_*_OBK, TOOLBOX_ENABLE_OBK, <DISTRO>*_OBK, BRANCH_OBK (PERSIST) : self-explanatory
+#DISTRO_COUNT (TEMP) (make-pkgs.sh) : Counter to check if user tries to compile for multiple distros without --toolbox flag
+#PACKAGE_FORMAT, PACKAGE_FILE (TEMP) (make-build.sh) : stores which package format the compilation should use, and the path to the generated package file.
+
+# FUNCTIONS
+#add_config (1 args) (PERSIST) : takes one argument as input and appends it to config.bash
+#log_debug (1 args) (PERSIST) : takes one argument as the lof filename, checks if DEBUG_OBK is set, enables debugging.
+#filedir_init (noargs) (make-pkgs.sh) : cleans and creates config.bash, then adds the FILE_DIR_OBK, START_DIR_OBK, add_config, log_debug to that.
+#parse_args (1 args) (make-pkgs.sh) : parses arguments
+#cleanup (noargs) (make-pkgs.sh) : cleans FILE_DIR_OBK and removes obk-toolbox containers created by the script
+#help (noargs) (make_pkgs.sh) : shows helpinfo
+#toolbox_error (noargs) (make_pkgs.sh) : shows error on toolbox container error
+#missing_version (noargs) (make_pkgs.sh) : shows error on missing version with distro flag
+
+# STRUCTURE OF THE PROJECT
+#                    make-pkgs.sh
+#                        |
+#   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   |                    |                   |
+# toolbox            no toolbox           (others?)
+#   |                    |                   |
+#   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   |                    |                   |    
+# (fedora)            (debian)            (others)
+#   |                    |                   |    
+#   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                        |
+#                  make-build.sh
