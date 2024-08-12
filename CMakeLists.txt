@@ -9,7 +9,7 @@ set(APP_NAME "OpenBangla-Keyboard")
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 ## Set Compiler Standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 enable_language(Rust)
 include(CMakeCargo)

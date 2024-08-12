@@ -118,7 +118,7 @@ We are on https://github.com/OpenBangla/OpenBangla-Keyboard/discussions[Github D
 
 OpenBangla Keyboard currently has the following build dependencies:
 
-* GNU GCC, G++ compiler or Clang
+* GNU GCC 8 (or later) or Clang 7 (or later) compiler
 * Rust 1.34.0 or later
 * GNU Make or Ninja
 * CMake
