@@ -77,7 +77,7 @@ case $DISTRO_NAME in
   ;;
 ("fedora")
   # fedora version check ?
-  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora34.rpm" -O /tmp/OpenBangla.rpm
+  wget -q  "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora38.rpm" -O /tmp/OpenBangla.rpm
   sudo dnf install /tmp/OpenBangla.rpm
   ;;
 (*)
