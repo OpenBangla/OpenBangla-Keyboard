@@ -82,14 +82,12 @@ TIP: There is a video tutorial about installing OpenBangla Keyboard in Arch Linu
 There are two packages for OpenBangla Keyboard in the Arch User Repository(AUR). Use `openbangla-keyboard` if you want to make and install the package from source. Otherwise, use `openbangla-keyboard-bin` to use the binary package released for Arch and its derivatives by the maintainer. You can install it in one command with your favorite aur helper. Example commands for some popular tools:
 
 ==== `openbangla-keyboard`
-* `$ pacaur -S openbangla-keyboard`
+* `$ paru -S openbangla-keyboard`
 * `$ yay -S openbangla-keyboard`
-* `$ yaourt -S openbangla-keyboard`
 
 ==== `openbangla-keyboard-bin`
-* `$ pacaur -S openbangla-keyboard-bin`
+* `$ paru -S openbangla-keyboard-bin`
 * `$ yay -S openbangla-keyboard-bin`
-* `$ yaourt -S openbangla-keyboard-bin`
 
 Or install manually:
 ```bash

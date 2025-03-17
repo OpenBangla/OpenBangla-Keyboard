@@ -81,14 +81,12 @@ TIP: আর্চ লিনাক্সে ওপেনবাংলা কীব
 Arch User Repository(AUR) তে ওপেনবাংলা কিবোর্ডের দুটো প্যাকেজ রয়েছে। `openbangla-keyboard` ব্যবহার করুন যদি আপনি সোর্স থেকে প্যাকেজটি তৈরি এবং ইন্সটল করতে চান। অথবা `openbangla-keyboard-bin` ব্যবহার করুন যদি আপনি বাইনারি প্যাকেজটি ব্যবহার করতে চান যেটি আর্চলিনাক্স ভিত্তিক ডিস্ট্রো গুলোর জন্য প্যাকেজটির মেইন্টেইনার তৈরি করেছেন। আপনি আপনার পছন্দের AUR হেল্পার ব্যবহার করে একটি কম্যান্ডের মাধ্যমেই ইন্সটল করতে পারবেন। কিছু জনপ্রিয় টুলের উদাহরণ:
 
 ==== `openbangla-keyboard`
-* `$ pacaur -S openbangla-keyboard`
+* `$ paru -S openbangla-keyboard`
 * `$ yay -S openbangla-keyboard`
-* `$ yaourt -S openbangla-keyboard`
 
 ==== `openbangla-keyboard-bin`
-* `$ pacaur -S openbangla-keyboard-bin`
+* `$ paru -S openbangla-keyboard-bin`
 * `$ yay -S openbangla-keyboard-bin`
-* `$ yaourt -S openbangla-keyboard-bin`
 
 অথবা ম্যানুয়ালি ইন্সটল করুন:
 ```bash
