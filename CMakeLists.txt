@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
@@ -11,8 +11,10 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 17)
 
-enable_language(Rust)
-include(CMakeCargo)
+if(NOT WIN32)
+    enable_language(Rust)
+    include(CMakeCargo)
+endif()
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -89,6 +91,15 @@ if(OS_LINUX)
 
     ## Find zstd ##
     pkg_check_modules(ZSTD REQUIRED libzstd)
+endif()
+
+# For Windows
+if(WIN32)
+    find_package(zstd CONFIG REQUIRED)
+    set(PROJECT_DATADIR "$ENV{LOCALAPPDATA}\\OpenBangla" CACHE PATH "Path to Data Directory")
+    set(BIN_DIR "${PROJECT_DATADIR}/bin")
+    add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
+    add_definitions(-DBIN_DIR="${BIN_DIR}")
 endif()
 
 add_subdirectory(src/engine)
