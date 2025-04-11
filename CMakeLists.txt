@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.10)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
@@ -14,9 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 enable_language(Rust)
 include(CMakeCargo)
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Network REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
 
 # Get system information. WIN32 and APPLE are defined by CMake
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
