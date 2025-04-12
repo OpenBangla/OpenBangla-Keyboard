@@ -48,9 +48,9 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   gLayout = new Layout();
 
   if(darkIcon) {
-    m_iconTheme = "white";
-  } else {
     m_iconTheme = "black";
+  } else {
+    m_iconTheme = "white";
   }
 
   /* Dialogs */
@@ -65,7 +65,7 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   });
 
   auto set_icon = [&](QPushButton* obj, QString icon) {
-    obj->setIcon(QIcon(":/images/" + m_iconTheme + "/" + icon + ".png"));
+    obj->setIcon(QIcon(":/images/" + m_iconTheme + "/" + icon + ".svg"));
   };
   set_icon(ui->buttonSetLayout, "layouts");
   set_icon(ui->buttonViewLayout, "layout");
@@ -111,6 +111,7 @@ TopBar::~TopBar() {
 void TopBar::SetupTopBar() {
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   this->setFixedSize(QSize(this->width(), this->height()));
+  this->setAttribute(Qt::WA_TranslucentBackground);
 
   if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
     int width = this->frameGeometry().width();
