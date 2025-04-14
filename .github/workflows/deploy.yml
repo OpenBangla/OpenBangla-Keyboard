@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         # container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38", "archlinux:latest" ]
-        container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "ubuntu:24.04", "debian:11", "debian:12", "fedora:39", "fedora:40", "opensuse/tumbleweed" ]
+        container: [ "ubuntu:20.04", "ubuntu:22.04", "ubuntu:24.04", "debian:11", "debian:12", "fedora:40", "fedora:41", "opensuse/tumbleweed" ]
         # this list should be updated from time to time by consulting these pages:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases
@@ -20,8 +20,6 @@ jobs:
         ime: [ "ibus", "fcitx" ]
         # Some distributions doesn't have the required version of fcitx library, so we exclude them.
         exclude:
-          - container: "ubuntu:18.04"
-            ime: "fcitx"
           - container: "ubuntu:20.04"
             ime: "fcitx"
     runs-on: "ubuntu-latest"
@@ -32,64 +30,63 @@ jobs:
         IME: ${{ matrix.ime }}
         DEBIAN_FRONTEND: noninteractive
     steps:
+      - name: install-git
+        run: |
+          # Install Git based on distro
+          if command -v apt-get >/dev/null; then
+            apt-get update -y
+            apt-get install -y git
+          elif command -v dnf >/dev/null; then
+            dnf install -y git
+          elif command -v zypper >/dev/null; then
+            zypper install -y git
+          elif command -v pacman >/dev/null; then
+            pacman -Sy git --noconfirm
+          fi
+      
       - name: checkout-source
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
       - name: run-builder
         shell: bash
         run: ./tools/build.sh
+
+      - name: Sanitize container name
+        id: sanitizer
+        shell: bash
+        run: |
+          # Replace colons and slashes with dashes
+          SANITIZED_CONTAINER=$(echo "${{ matrix.container }}" | sed 's/[:\\/]/-/g')
+          echo "sanitized_container=$SANITIZED_CONTAINER" >> $GITHUB_OUTPUT
+
       - name: upload-artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: package-archives
+          name: pkg-${{ steps.sanitizer.outputs.sanitized_container }}-${{ matrix.ime }}
           path: artifact
 
-  deploy:
+  release:
     if: contains(github.event.head_commit.message, 'deploy+')
     needs: build
     runs-on: "ubuntu-latest"
-    container:
-      image: "archlinux:latest"
-    env:
-      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-      BINTRAY_APIKEY: ${{ secrets.BINTRAY_APIKEY }}
-      BINTRAY_GPG_DATA: ${{ secrets.GPG_DATA }}
-      BINTRAY_GPG_ID: ${{ secrets.GPG_ID }}
-      JFROG_CLI_OFFER_CONFIG: false
     steps:
       - name: checkout-source
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: install-jfrog-cli
-        uses: jfrog/setup-jfrog-cli@v1
-      - name: download-artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: package-archives
-          path: artifact
-      - name: bintray-publish
-        shell: bash
-        run: ./tools/publish.sh
 
-  release:
-    needs: deploy
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: checkout-source
-        uses: actions/checkout@v4
       - name: get-version
         id: get_version
         shell: bash
         run: |
           RELEASE_VERSION=$(cat version.txt | head -n1)
-          echo ::set-output name=RELEASE_VERSION::$RELEASE_VERSION
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+    
       - name: download-artifacts
         uses: actions/download-artifact@v4
         with:
-          name: package-archives
-          path: artifact
+          path: artifacts
+      
       - name: create-release
         id: create_release
         uses: ncipollo/release-action@v1
@@ -97,7 +94,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.get_version.outputs.RELEASE_VERSION }}
           name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
-          artifacts: "artifact/*"
+          artifacts: "artifacts/*/*"
           allowUpdates: true
           draft: true
           body: |
