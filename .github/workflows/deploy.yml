@@ -80,15 +80,12 @@ jobs:
         shell: bash
         run: |
           RELEASE_VERSION=$(cat version.txt | head -n1)
-          echo ::set-output name=RELEASE_VERSION::$RELEASE_VERSION
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_OUTPUT
     
       - name: download-artifacts
         uses: actions/download-artifact@v4
         with:
-          name: pkg-*
           path: artifacts
-          pattern: pkg-*
-          merge-multiple: true
       
       - name: create-release
         id: create_release
@@ -97,7 +94,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.get_version.outputs.RELEASE_VERSION }}
           name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
-          artifacts: "artifacts/*"
+          artifacts: "artifacts/*/*"
           allowUpdates: true
           draft: true
           body: |
