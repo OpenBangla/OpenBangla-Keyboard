@@ -51,10 +51,20 @@ jobs:
       - name: run-builder
         shell: bash
         run: ./tools/build.sh
+
+      - name: Sanitize container name
+        id: sanitizer
+        shell: bash
+        run: |
+          # Replace colons and slashes with dashes
+          SANITIZED_CONTAINER=$(echo "${{ matrix.container }}" | sed 's/[:\\/]/-/g')
+          echo "sanitized_container=$SANITIZED_CONTAINER" >> $GITHUB_OUTPUT
+
+
       - name: upload-artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: package-${{ matrix.container }}-${{ matrix.ime }}
+          name: pkg-${{ steps.sanitizer.outputs.sanitized_container }}-${{ matrix.ime }}
           path: artifact
 
   release:
