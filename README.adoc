@@ -151,7 +151,7 @@ sudo zypper install libQt5Core-devel libQt5Widgets-devel libQt5Network-devel lib
 === Solus
 On Solus you can easily install them like this:
 ```bash
-sudo eopkg install -c system.devel rust qt5-base-devel ibus-devel zstd-devel git cargo
+sudo eopkg install -c system.devel rust qt5-base-devel ibus-devel zstd-devel git
 ```
 
 === Finally

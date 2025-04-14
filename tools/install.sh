@@ -60,7 +60,7 @@ case $DISTRO_NAME in
    	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
 	  case ${VERSION_ID%%.*} in
-	  	23|22|21|20|18) VERSION_ID=${VERSION_ID%%.*}.04;UBUNTU_SUPPORTED=1;;
+	  	24|23|22|21|20|18) VERSION_ID=${VERSION_ID%%.*}.04;UBUNTU_SUPPORTED=1;;
 	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle";exit 1;;
 	  esac
   if [[ $UBUNTU_SUPPORTED = 1 ]]; then
@@ -77,7 +77,7 @@ case $DISTRO_NAME in
   ;;
 ("fedora")
   # fedora version check ?
-  wget -q --show-progress "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora34.rpm" -O /tmp/OpenBangla.rpm
+  wget -q  "${URL_STUB}/OpenBangla-Keyboard_${APP_VERSION}-fedora38.rpm" -O /tmp/OpenBangla.rpm
   sudo dnf install /tmp/OpenBangla.rpm
   ;;
 (*)
