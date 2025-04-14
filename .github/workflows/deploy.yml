@@ -20,8 +20,6 @@ jobs:
         ime: [ "ibus", "fcitx" ]
         # Some distributions doesn't have the required version of fcitx library, so we exclude them.
         exclude:
-          - container: "ubuntu:18.04"
-            ime: "fcitx"
           - container: "ubuntu:20.04"
             ime: "fcitx"
     runs-on: "ubuntu-latest"
