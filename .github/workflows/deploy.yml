@@ -45,36 +45,9 @@ jobs:
           name: package-archives
           path: artifact
 
-  deploy:
+  release:
     if: contains(github.event.head_commit.message, 'deploy+')
     needs: build
-    runs-on: "ubuntu-latest"
-    container:
-      image: "archlinux:latest"
-    env:
-      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-      BINTRAY_APIKEY: ${{ secrets.BINTRAY_APIKEY }}
-      BINTRAY_GPG_DATA: ${{ secrets.GPG_DATA }}
-      BINTRAY_GPG_ID: ${{ secrets.GPG_ID }}
-      JFROG_CLI_OFFER_CONFIG: false
-    steps:
-      - name: checkout-source
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: install-jfrog-cli
-        uses: jfrog/setup-jfrog-cli@v1
-      - name: download-artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: package-archives
-          path: artifact
-      - name: bintray-publish
-        shell: bash
-        run: ./tools/publish.sh
-
-  release:
-    needs: deploy
     runs-on: "ubuntu-latest"
     steps:
       - name: checkout-source
