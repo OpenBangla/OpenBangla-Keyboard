@@ -32,6 +32,20 @@ jobs:
         IME: ${{ matrix.ime }}
         DEBIAN_FRONTEND: noninteractive
     steps:
+      - name: install-git
+        run: |
+          # Install Git based on distro
+          if command -v apt-get >/dev/null; then
+            apt-get update -y
+            apt-get install -y git
+          elif command -v dnf >/dev/null; then
+            dnf install -y git
+          elif command -v zypper >/dev/null; then
+            zypper install -y git
+          elif command -v pacman >/dev/null; then
+            pacman -Sy git --noconfirm
+          fi
+      
       - name: checkout-source
         uses: actions/checkout@v4
         with:
