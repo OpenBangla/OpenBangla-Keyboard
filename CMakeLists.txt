@@ -40,10 +40,6 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "In-source builds are not allowed.\nPlease create a build directory and initiate cmake from there.")
 endif()
 
-if(NO_UPDATE_CHECK) 
-    add_definitions(-DNO_UPDATE_CHECK)
-endif()
-
 # For Linux.
 if(OS_LINUX)
     ## Additions for Linux ##

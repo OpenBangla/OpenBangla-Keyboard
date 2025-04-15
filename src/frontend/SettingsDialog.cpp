@@ -32,11 +32,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui->cmbEncoding->insertItems(0, {"Unicode", "ANSI"});
   ui->cmbKarOrder->insertItems(0, {"Modern", "Old"});
 
-#ifdef NO_UPDATE_CHECK
-  ui->lblUpdateCheck->hide();
-  ui->btnCheckUpdate->hide();
-#endif
-
   implementSignals();
   updateSettings();
 }
@@ -88,11 +83,6 @@ void SettingsDialog::implementSignals() {
     ui->btnNumberpad->setText(checked ? "On" : "Off");
   });
 
-  // General 
-  connect(ui->btnCheckUpdate, &QPushButton::toggled, [=](bool checked) {
-    ui->btnCheckUpdate->setText(checked ? "On" : "Off");
-  });
-
   connect(ui->btnOK, &QPushButton::clicked, [=]() {
     saveSettings();
     this->hide();
@@ -123,8 +113,6 @@ void SettingsDialog::updateSettings() {
   ui->btnOldReph->setChecked(gSettings->getOldReph());
   ui->btnKarJoining->setChecked(gSettings->getTraditionalKarFixed());
   ui->btnNumberpad->setChecked(gSettings->getNumberPadFixed());
-
-  ui->btnCheckUpdate->setChecked(gSettings->getUpdateCheck());
 }
 
 void SettingsDialog::saveSettings() {
@@ -146,8 +134,6 @@ void SettingsDialog::saveSettings() {
   gSettings->setOldReph(ui->btnOldReph->isChecked());
   gSettings->setTraditionalKarFixed(ui->btnKarJoining->isChecked());
   gSettings->setNumberPadFixed(ui->btnNumberpad->isChecked());
-
-  gSettings->setUpdateCheck(ui->btnCheckUpdate->isChecked());
 }
 
 void SettingsDialog::closeEvent(QCloseEvent *event) {

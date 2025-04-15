@@ -34,11 +34,7 @@
 #include "LayoutConverter.h"
 #include "AutoCorrectDialog.h"
 #include "ui_TopBar.h"
-#ifndef NO_UPDATE_CHECK
-# include "QSimpleUpdater.h"
-#endif
 
-static const QString DEFS_URL = "https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/UPDATES.json";
 
 TopBar::TopBar(bool darkIcon, QWidget *parent) :
   QMainWindow(parent),
@@ -86,14 +82,6 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
     // Update the counter to show only the message for the first three times
     gSettings->setTrayInfoCount(count + 1);
   }
-
-#ifndef NO_UPDATE_CHECK
-  updater = QSimpleUpdater::getInstance();
-
-  if (gSettings->getUpdateCheck()) {
-    checkForUpdate();
-  }
-#endif
 }
 
 TopBar::~TopBar() {
@@ -128,15 +116,6 @@ void TopBar::SetupTopBar() {
   }
 }
 
-void TopBar::checkForUpdate() {
-#ifndef NO_UPDATE_CHECK
-  updater->setModuleVersion(DEFS_URL, PROJECT_VERSION);
-  updater->setNotifyOnUpdate(DEFS_URL, true);
-  updater->setDownloaderEnabled(DEFS_URL, false);
-  updater->checkForUpdates(DEFS_URL);
-#endif
-}
-
 void TopBar::SetupPopupMenus() {
   // Layout Popup Menu
   layoutMenu = new QMenu("Select a keyboard layout", this);
@@ -169,18 +148,10 @@ void TopBar::SetupPopupMenus() {
   iconMenuAbout = new QAction("About OpenBangla Keyboard", this);
   connect(iconMenuAbout, SIGNAL(triggered()), this, SLOT(iconMenuAbout_clicked()));
 
-  iconMenuUpdate = new QAction("Check for Updates", this);
-  connect(iconMenuUpdate, &QAction::triggered, [=]() {
-    checkForUpdate();
-  });
-
   iconMenu = new QMenu(this);
   iconMenu->addAction(iconMenuHide);
   iconMenu->addAction(iconMenuLayout);
   iconMenu->addAction(iconMenuAbout);
-#ifndef NO_UPDATE_CHECK
-  iconMenu->addAction(iconMenuUpdate);
-#endif
 }
 
 void TopBar::SetupTrayIcon() {

@@ -86,10 +86,6 @@ private:
   int pressedMouseX, pressedMouseY;
   QSystemTrayIcon *tray;
 
-#ifndef NO_UPDATE_CHECK
-  QSimpleUpdater *updater;
-#endif
-
   /* Dialogs */
   AboutDialog *aboutDialog;
   LayoutViewer *layoutViewer;

@@ -92,10 +92,6 @@ public:
 
   bool getShowCWPhonetic();
 
-  void setUpdateCheck(bool b);
-
-  bool getUpdateCheck();
-
   void setSuggestionIncludeEnglish(bool b);
 
   bool getSuggestionIncludeEnglish();
