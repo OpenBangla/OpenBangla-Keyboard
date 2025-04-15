@@ -23,6 +23,8 @@
 #include "TopBar.h"
 #include "SingleInstance.h"
 #include "Settings.h"
+#include "PlatformConfig.h"
+#include "Log.h"
 
 int main(int argc, char *argv[]) {
   if(qgetenv("XDG_SESSION_TYPE") == "wayland") {
@@ -48,6 +50,8 @@ int main(int argc, char *argv[]) {
   parser.addOption(darkIcon);
   parser.addOption(startInTray);
   parser.process(app);
+
+  LOG_DEBUG("Detected Desktop Environment: %s\n", desktopEnvironmentToString(detectDesktopEnvironment()).toStdString().c_str());
 
   // Prevent many instances of the app to be launched
   QString name = "com.openbangla.keyboard";

@@ -17,7 +17,8 @@ set(SRC_MAIN main.cpp
         LayoutConverter.cpp
         LayoutConverter.h
         SingleInstance.cpp
-        AvroPhonetic.cpp)
+        AvroPhonetic.cpp
+        PlatformConfig.cpp)
 
 set(LINK_LIBS libShared Qt5::Widgets Qt5::Network ${ZSTD_LIBRARIES})
 
