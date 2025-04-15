@@ -53,6 +53,8 @@ int main(int argc, char *argv[]) {
 
   LOG_DEBUG("Detected Desktop Environment: %s\n", desktopEnvironmentToString(detectDesktopEnvironment()).toStdString().c_str());
 
+  setupInputSources();
+
   // Prevent many instances of the app to be launched
   QString name = "com.openbangla.keyboard";
   SingleInstance instance;

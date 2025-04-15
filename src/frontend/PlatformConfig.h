@@ -39,3 +39,5 @@ DesktopEnvironment detectDesktopEnvironment();
 QString desktopEnvironmentToString(DesktopEnvironment de);
 bool isAppIndicatorEnabled();
 bool shouldShowTrayIcon();
+
+void setupInputSources();

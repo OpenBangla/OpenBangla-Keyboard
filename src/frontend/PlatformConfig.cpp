@@ -20,8 +20,10 @@
 #include <QProcess>
 #include <QDebug>
 #include <QStringList>
+#include <QString>
 
 #include "PlatformConfig.h"
+#include "Log.h"
 
 DesktopEnvironment detectDesktopEnvironment() {
     const QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -127,4 +129,86 @@ bool shouldShowTrayIcon() {
     }
 
     return true;
+}
+
+QString getGnomeInputSources() {
+    QString key = "/org/gnome/desktop/input-sources/sources";
+
+    QProcess process;
+    process.start("dconf", {"read", key});
+    process.waitForFinished();
+
+    if (process.exitCode() == 0) {
+        QString output = process.readAllStandardOutput().trimmed();
+        return output;
+    } else {
+        LOG_ERROR("getGnomeInputSources Error: %s\n", process.readAllStandardError().toStdString().c_str());
+        return "";
+    }
+}
+
+void setGnomeInputSources(QString value) {
+    QString key = "/org/gnome/desktop/input-sources/sources";
+
+    // Execute: dconf write <key> "<value>"
+    QProcess process;
+    process.start("dconf", {"write", key, value});
+    process.waitForFinished();
+
+    if (process.exitCode() == 0) {
+        LOG_DEBUG("Successfully updated DConf settings!\n");
+    } else {
+        LOG_ERROR("Error updating DConf settings: %s\n", process.readAllStandardError().toStdString().c_str());
+    }
+}
+
+void setupGnomeIME() {
+    QString sources = getGnomeInputSources();
+    QStringList sourcesList;
+
+    // It comes in an array of tuples like this:
+    // [('xkb', 'us'), ('ibus', 'OpenBangla')]
+    // So we need to do some preprocessing.
+    auto string = sources.replace("[", "").replace("]", "");
+    auto index = string.indexOf("),");
+
+    while(index != -1) {
+        auto sub = string.mid(0, index + 1).trimmed();
+        sourcesList.append(sub);
+        string.remove(0, index + 2);
+        index = string.indexOf("),");
+    }
+
+    if(!string.isEmpty()) {
+        sourcesList.append(string.trimmed());
+    }
+
+    for (const auto &source : sourcesList) {
+        LOG_DEBUG("Source: %s\n", source.toStdString().c_str());
+    }
+
+    // Check if OpenBangla exists in the sources
+    bool found = sourcesList.contains("('ibus', 'OpenBangla')");
+
+    if (found) {
+        LOG_DEBUG("OpenBangla found in sources\n");
+    } else {
+        LOG_DEBUG("OpenBangla not found in sources\n");
+        // Add OpenBangla to the sources
+        sourcesList.append("('ibus', 'OpenBangla')");
+        auto sourcesString = QString("[%1]").arg(sourcesList.join(", "));
+        setGnomeInputSources(sourcesString);
+        LOG_DEBUG("Added OpenBangla to sources\n");
+    }
+}
+
+
+void setupInputSources() {
+    auto de = detectDesktopEnvironment();
+
+    if(de == DesktopEnvironment::GNOME) {
+        setupGnomeIME();
+    } else {
+        LOG_DEBUG("Desktop Environment not supported for input source setup\n");
+    }
 }
