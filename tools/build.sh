@@ -1,19 +1,14 @@
 #! /bin/bash
 RELEASE_VERSION=$(cat version.txt | head -n1)
 # follow cmake PACKAGE_FILE_NAME directive in main repo
-RELEASE_STUB="${IME}-openbangla_${RELEASE_VERSION}-"
+RELEASE_STUB="openbangla_keyboard_${RELEASE_VERSION}-"
 
 makeDeb () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
-    apt-get -y install build-essential pkg-config libibus-1.0-dev cmake libzstd-dev ninja-build curl qtbase5-dev qtbase5-dev-tools file
+    apt-get -y install build-essential pkg-config libibus-1.0-dev libfcitx5core-dev cmake libzstd-dev ninja-build curl qtbase5-dev qtbase5-dev-tools file
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
-    if [[ "${IME}" == "ibus" ]]; then
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_IBUS=ON -DCPACK_GENERATOR=DEB
-    else
-        apt-get -y install libfcitx5core-dev
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_FCITX=ON -DCPACK_GENERATOR=DEB
-    fi
+    cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_BOTH=ON -DCPACK_GENERATOR=DEB
 
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
@@ -24,11 +19,7 @@ makeRpmFedora () {
     dnf install -y --allowerasing @buildsys-build cmake ibus-devel fcitx5-devel libzstd-devel qt5-qtdeclarative-devel ninja-build curl
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
-    if [[ "${IME}" == "ibus" ]]; then
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_IBUS=ON -DCPACK_GENERATOR=RPM
-    else
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_FCITX=ON -DCPACK_GENERATOR=RPM
-    fi
+    cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_BOTH=ON -DCPACK_GENERATOR=RPM
 
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"
@@ -42,11 +33,7 @@ makeRpmOpenSuse () {
     zypper install -y libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel cmake ninja ibus-devel fcitx5-devel gcc curl rpm-build
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
-    if [[ "${IME}" == "ibus" ]]; then
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_IBUS=ON -DCPACK_GENERATOR=RPM
-    else
-        cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_FCITX=ON -DCPACK_GENERATOR=RPM
-    fi
+    cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_BOTH=ON -DCPACK_GENERATOR=RPM
 
     ninja package -C /build
     RELEASE_FILE="/build/${RELEASE_FILENAME}"

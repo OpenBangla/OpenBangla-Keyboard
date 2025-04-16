@@ -66,9 +66,10 @@ if(OS_LINUX)
 
     option(ENABLE_IBUS "Enable IBus support" OFF)
     option(ENABLE_FCITX "Enable Fcitx support" OFF)
+    option(ENABLE_BOTH "Enable both IBus and Fcitx support" OFF)
 
-    if((NOT ENABLE_IBUS) AND (NOT ENABLE_FCITX))
-        message(FATAL_ERROR "Please set atleast ENABLE_IBUS or ENABLE_FCITX to be ON to build a backend")
+    if((NOT ENABLE_IBUS) AND (NOT ENABLE_FCITX) AND (NOT ENABLE_BOTH))
+        message(FATAL_ERROR "Please set atleast ENABLE_IBUS or ENABLE_FCITX or ENABLE_BOTH to be ON to build a backend")
     endif()
 
     ## Find iBus ##
@@ -79,6 +80,11 @@ if(OS_LINUX)
     ## Find Fcitx ##
     if(ENABLE_FCITX)
         find_package(Fcitx5Core 5.0.5 REQUIRED) 
+    endif()
+
+    if(ENABLE_BOTH)
+        pkg_check_modules(IBUS REQUIRED ibus-1.0)
+        find_package(Fcitx5Core 5.0.5 REQUIRED)
     endif()
 
     ## Find zstd ##
@@ -132,12 +138,18 @@ if(ENABLE_IBUS)
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, libzstd >= 1.3.3")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component")
-else()
+elseif(ENABLE_FCITX)
     ## FCITX
     set(CPACK_PACKAGE_NAME "fcitx-openbangla")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "fcitx5 (>= 5.0.5)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3, fcitx5 >= 5.0.5")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib64/fcitx5" "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
+elseif(ENABLE_BOTH)
+    set(CPACK_PACKAGE_NAME "openbangla_keyboard")
+    # set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
+    # set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3")
+    list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component" "/usr/lib64/fcitx5" 
+                                                              "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
 endif()
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 
