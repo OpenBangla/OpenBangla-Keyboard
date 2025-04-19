@@ -107,11 +107,13 @@ bool isAppIndicatorEnabled() {
     
     const QString output = QString::fromUtf8(process.readAllStandardOutput());
     const QString targetUUID = "appindicatorsupport@rgcjonas.gmail.com";
+    const QString targetUUID2 = "ubuntu-appindicators@ubuntu.com";
     
     // Check each line for exact match
     const QStringList extensions = output.split('\n', Qt::SkipEmptyParts);
     for (const QString &ext : extensions) {
-        if (ext.trimmed() == targetUUID) {
+        auto trimmedExt = ext.trimmed();
+        if (trimmedExt == targetUUID || trimmedExt == targetUUID2) {
             return true;
         }
     }
@@ -147,9 +149,7 @@ QString getGnomeInputSources() {
     }
 }
 
-void setGnomeInputSources(QString value) {
-    QString key = "/org/gnome/desktop/input-sources/sources";
-
+void writeDConfSetting(QString key, QString value) {
     // Execute: dconf write <key> "<value>"
     QProcess process;
     process.start("dconf", {"write", key, value});
@@ -187,6 +187,8 @@ void setupGnomeIME() {
         LOG_DEBUG("Source: %s\n", source.toStdString().c_str());
     }
 
+    QString firstSource = sourcesList.first();
+
     // Check if OpenBangla exists in the sources
     bool found = sourcesList.contains("('ibus', 'OpenBangla')");
 
@@ -197,7 +199,8 @@ void setupGnomeIME() {
         // Add OpenBangla to the sources
         sourcesList.append("('ibus', 'OpenBangla')");
         auto sourcesString = QString("[%1]").arg(sourcesList.join(", "));
-        setGnomeInputSources(sourcesString);
+        writeDConfSetting("/org/gnome/desktop/input-sources/sources", sourcesString);
+        writeDConfSetting("/org/gnome/desktop/input-sources/mru-sources", QString("[%1]").arg(firstSource));
         LOG_DEBUG("Added OpenBangla to sources\n");
     }
 }
