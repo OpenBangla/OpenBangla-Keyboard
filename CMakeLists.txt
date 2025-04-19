@@ -156,7 +156,7 @@ elseif(ENABLE_FCITX)
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3, fcitx5 >= 5.0.5")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib64/fcitx5" "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
 elseif(ENABLE_BOTH)
-    set(CPACK_PACKAGE_NAME "openbangla_keyboard")
+    set(CPACK_PACKAGE_NAME "openbangla-keyboard")
     # set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
     # set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component" "/usr/lib64/fcitx5" 
