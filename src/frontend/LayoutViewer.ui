@@ -7,26 +7,113 @@
     <x>0</x>
     <y>0</y>
     <width>914</width>
-    <height>192</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Keyboard Layout Viewer</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+    background: #18181b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+QPushButton {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    min-width: 140px;
+    font-weight: 500;
+}
+
+QPushButton:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 1);
+}
+
+QPushButton:pressed {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+QPushButton:checked {
+    background: rgba(14, 165, 233, 0.2);
+    border: 1px solid rgba(14, 165, 233, 0.4);
+    color: rgba(255, 255, 255, 1);
+}
+
+QPushButton:checked:hover {
+    background: rgba(14, 165, 233, 0.25);
+    border: 1px solid rgba(14, 165, 233, 0.5);
+}
+
+QPushButton#buttonAboutLayout {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    min-width: 44px;
+    width: 44px;
+    padding: 12px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+QPushButton#buttonAboutLayout:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 1);
+}
+
+QLabel {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
+QLabel#labelImage {
+    background: #27272a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 32px;
+}
+
+QToolTip {
+    background: #27272a;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px 12px;
+}</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>24</number>
+   </property>
+   <property name="leftMargin">
+    <number>32</number>
+   </property>
+   <property name="topMargin">
+    <number>32</number>
+   </property>
+   <property name="rightMargin">
+    <number>32</number>
+   </property>
+   <property name="bottomMargin">
+    <number>32</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>16</number>
+     </property>
      <item>
       <spacer name="horizontalSpacer">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -40,12 +127,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="viewNormal">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Normal View</string>
        </property>
@@ -62,20 +143,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="viewAltGr">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>AltGr View</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
        </property>
        <property name="autoExclusive">
         <bool>true</bool>
@@ -84,12 +156,6 @@
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -103,17 +169,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="buttonAboutLayout">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>About this Layout</string>
        </property>
        <property name="text">
-        <string/>
+        <string>ℹ</string>
        </property>
        <property name="iconSize">
         <size>
@@ -127,14 +187,29 @@
    </item>
    <item>
     <widget class="QLabel" name="labelImage">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>400</height>
+      </size>
+     </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

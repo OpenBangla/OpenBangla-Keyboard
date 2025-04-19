@@ -1,0 +1,11 @@
+<svg height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg">
+  <path fill="white" d="m20 1h-16a3 3 0 0 0 -3 3v10a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3v-10a3 3 0 0 0 -3-3zm1 13a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1-1v-10a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1z"/>
+  <path fill="white" d="m18 11h-12a1 1 0 0 0 0 2h12a1 1 0 0 0 0-2z"/>
+  <path fill="white" d="m6 7h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2z"/>
+  <path fill="white" d="m11 7h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2z"/>
+  <path fill="white" d="m18 5h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2z"/>
+  <path fill="white" d="m6 10h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2z"/>
+  <path fill="white" d="m11 10h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2z"/>
+  <path fill="white" d="m18 8h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2z"/>
+  <path fill="white" d="m12.707 19.293a1 1 0 0 0 -1.414 0l-2 2a1 1 0 0 0 1.414 1.414l1.293-1.293 1.293 1.293a1 1 0 0 0 1.414-1.414z"/>
+</svg>
