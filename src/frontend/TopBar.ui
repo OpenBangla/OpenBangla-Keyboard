@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>130</width>
-    <height>27</height>
+    <width>260</width>
+    <height>40</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -22,27 +22,90 @@
   <property name="windowTitle">
    <string>OpenBangla Keyboard</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="images.qrc">
-    <normaloff>:/images/OpenBangla-Keyboard.png</normaloff>:/images/OpenBangla-Keyboard.png</iconset>
-  </property>
-  <property name="documentMode">
-   <bool>false</bool>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background-color: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+QPushButton {
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 2px;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 18px;
+}
+
+QPushButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+QPushButton:pressed {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+QPushButton#buttonSetLayout:checked {
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    border-radius: 10px;
+}
+
+QPushButton#buttonShutdown:hover {
+    background: rgba(255, 0, 0, 0.55);
+    border-radius: 10px;
+}
+QWidget#centralwidget {
+    background-color: #000000;
+    border-radius: 10px;
+}
+QToolTip {
+    background: #0f0f0f;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px 12px;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="maximumSize">
     <size>
-     <width>16777187</width>
-     <height>16777215</height>
+     <width>520</width>
+     <height>80</height>
     </size>
    </property>
+   <widget class="QPushButton" name="buttonIcon">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>54</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Move</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>28</width>
+      <height>24</height>
+     </size>
+    </property>
+   </widget>
    <widget class="QPushButton" name="buttonSetLayout">
     <property name="geometry">
      <rect>
-      <x>26</x>
+      <x>52</x>
       <y>0</y>
-      <width>27</width>
-      <height>27</height>
+      <width>54</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -50,7 +113,7 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>24</width>
+      <width>28</width>
       <height>24</height>
      </size>
     </property>
@@ -61,10 +124,10 @@
    <widget class="QPushButton" name="buttonViewLayout">
     <property name="geometry">
      <rect>
-      <x>52</x>
+      <x>104</x>
       <y>0</y>
-      <width>27</width>
-      <height>27</height>
+      <width>54</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -72,7 +135,7 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>24</width>
+      <width>28</width>
       <height>24</height>
      </size>
     </property>
@@ -80,10 +143,10 @@
    <widget class="QPushButton" name="buttonSettings">
     <property name="geometry">
      <rect>
-      <x>78</x>
+      <x>156</x>
       <y>0</y>
-      <width>27</width>
-      <height>27</height>
+      <width>54</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -91,7 +154,7 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>24</width>
+      <width>28</width>
       <height>24</height>
      </size>
     </property>
@@ -99,55 +162,24 @@
    <widget class="QPushButton" name="buttonShutdown">
     <property name="geometry">
      <rect>
-      <x>104</x>
+      <x>208</x>
       <y>0</y>
-      <width>27</width>
-      <height>27</height>
+      <width>54</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="toolTip">
      <string>Quit</string>
     </property>
-    <property name="text">
-     <string/>
-    </property>
     <property name="iconSize">
      <size>
-      <width>24</width>
+      <width>28</width>
       <height>24</height>
-     </size>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonIcon">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>27</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Move</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="images.qrc">
-      <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>16</width>
-      <height>16</height>
      </size>
     </property>
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
