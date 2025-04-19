@@ -23,14 +23,14 @@
 
 #include <cstdio>
 
-#define LOG_INFO(a...) std::fprintf(stdout, "[OpenBangla-Info]: " a)
+#define LOG_INFO(...) std::fprintf(stdout, "[OpenBangla-Info]: " __VA_ARGS__)
 
 #if DEBUG
-#define LOG_DEBUG(a...) std::fprintf(stdout, "[OpenBangla-Debug]: " a)
+#define LOG_DEBUG(...) std::fprintf(stdout, "[OpenBangla-Debug]: " __VA_ARGS__)
 #else
-#define LOG_DEBUG(a...)
+#define LOG_DEBUG(...)
 #endif
 
-#define LOG_ERROR(a...) std::fprintf(stderr, "[OpenBangla-Error]: " a)
+#define LOG_ERROR(...) std::fprintf(stderr, "[OpenBangla-Error]: " __VA_ARGS__)
 
 #endif /* end of include guard: LOG_H */

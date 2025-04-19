@@ -19,6 +19,150 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+    background: #0f0f0f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+QGroupBox {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 8px;
+    padding: 0 4px;
+}
+
+QLabel {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+}
+
+QPushButton {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 6px 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    min-width: 80px;
+}
+
+QPushButton:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+QPushButton:pressed {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+QPushButton:checked {
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+QPushButton#btnOK {
+    background: #0ea5e9;
+    border: none;
+    color: white;
+}
+
+QPushButton#btnOK:hover {
+    background: #0284c7;
+}
+
+QPushButton#btnOK:pressed {
+    background: #0369a1;
+}
+
+QPushButton#btnCancel {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+QPushButton#btnCancel:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+QComboBox {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 6px 12px;
+    padding-right: 36px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    min-width: 120px;
+    max-width: 200px;
+}
+
+QComboBox:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+QComboBox:on {
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 32px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+QComboBox::down-arrow {
+    image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuOSkiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjkpIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTYgOWw2IDYgNi02Ii8+PC9zdmc+);
+    width: 16px;
+    height: 16px;
+}
+
+QComboBox::down-arrow:on {
+    transform: rotate(180deg);
+}
+
+QComboBox QAbstractItemView {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 4px;
+    selection-background-color: rgba(14, 165, 233, 0.15);
+    selection-color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+QComboBox QAbstractItemView::item {
+    min-height: 24px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+QToolTip {
+    background: #0f0f0f;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px 12px;
+}</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -133,10 +277,16 @@
           <item row="3" column="1">
            <widget class="QComboBox" name="cmbOrientation">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>0</height>
+             </size>
             </property>
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
@@ -425,7 +575,20 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QComboBox" name="cmbKarOrder"/>
+         <widget class="QComboBox" name="cmbKarOrder">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>0</height>
+             </size>
+            </property>
+         </widget>
         </item>
        </layout>
       </widget>

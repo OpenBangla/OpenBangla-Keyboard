@@ -33,7 +33,7 @@ LayoutViewer::LayoutViewer(QString iconTheme, QWidget *parent) :
   auto set_icon = [&](QPushButton* obj, QString icon) {
     obj->setIcon(QIcon(":/images/" + iconTheme + "/" + icon + ".png"));
   };
-  set_icon(ui->buttonAboutLayout, "description");
+  // set_icon(ui->buttonAboutLayout, "description");
   ui->labelImage->setAlignment(Qt::AlignCenter);
   this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
   this->move(gSettings->getLayoutViewerWindowPosition());
