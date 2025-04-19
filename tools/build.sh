@@ -1,7 +1,7 @@
 #! /bin/bash
 RELEASE_VERSION=$(cat version.txt | head -n1)
 # follow cmake PACKAGE_FILE_NAME directive in main repo
-RELEASE_STUB="openbangla_keyboard_${RELEASE_VERSION}-"
+RELEASE_STUB="openbangla-keyboard_${RELEASE_VERSION}-"
 
 makeDeb () {
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
