@@ -77,16 +77,19 @@ If you'd like to contribute code, please follow these steps:
     ```
 
 8.  **Create a Pull Request (PR)** through the GitHub website. When creating a PR:
+
     - Provide a clear and descriptive title for your PR.
     - In the description, explain the changes you've made and the problem they solve (if applicable).
     - Reference any related issues in the PR description (e.g., `Closes #123`, `Fixes #456`).
 
 ### Contributing Documentation
 
-Good documentation is crucial! If you'd like to contribute to the documentation:
+Good documentation is crucial! We have a dedicated repository for OpenBangla Keyboard documentation: https://github.com/OpenBangla/manual. Most documentation contributions should be made there, unless it's something that is related to this repository. If you'd like to contribute to the documentation:
 
 - **Submit issues** for any unclear or incorrect documentation you find.
 - **Create pull requests** to fix typos, improve clarity, or add new documentation. Follow the same Git workflow as contributing code. Ensure your documentation changes are well-formatted (e.g., using AsciiDoc or Markdown).
+
+`Note: The contribution guidelines in the OpenBangla/manual repository are the preferred and prioritized source for documentation contributions.`
 
 ## Pull Request Guidelines
 
