@@ -12,6 +12,11 @@ if (OS_LINUX)
         add_subdirectory(fcitx)
     endif()
 
+    if(ENABLE_BOTH)
+        add_subdirectory(ibus)
+        add_subdirectory(fcitx)
+    endif()
+
     ## Include subdirectories
     add_subdirectory(riti)
 endif (OS_LINUX)
