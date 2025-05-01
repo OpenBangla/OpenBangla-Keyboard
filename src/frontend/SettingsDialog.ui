@@ -23,7 +23,7 @@
    <string notr="true">QDialog {
     background: #0f0f0f;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    border-radius: 0px;
 }
 
 QGroupBox {

@@ -26,13 +26,13 @@
    <string notr="true">QMainWindow {
     background-color: #000000;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 0px;
 }
 
 QPushButton {
     background: transparent;
     border: none;
-    border-radius: 10px;
+    border-radius: 0px;
     padding: 12px;
     margin: 2px;
     color: rgba(0, 0, 0, 0.7);
@@ -50,22 +50,22 @@ QPushButton:pressed {
 QPushButton#buttonSetLayout:checked {
     background: rgba(14, 165, 233, 0.15);
     border: 1px solid rgba(14, 165, 233, 0.2);
-    border-radius: 10px;
+    border-radius: 0px;
 }
 
 QPushButton#buttonShutdown:hover {
     background: rgba(255, 0, 0, 0.55);
-    border-radius: 10px;
+    border-radius: 0px;
 }
 QWidget#centralwidget {
     background-color: #000000;
-    border-radius: 10px;
+    border-radius: 0px;
 }
 QToolTip {
     background: #0f0f0f;
     color: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 0px;
     padding: 8px 12px;
 }</string>
   </property>
