@@ -1,0 +1,43 @@
+---
+name: Feature Request
+description: Suggest an idea for improving OpenBangla Keyboard
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement for OpenBangla Keyboard (OBK). Please provide as much detail as possible to help us understand your idea.
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Describe the Feature
+      description: A clear and concise description of the feature you'd like to see.
+      placeholder: What feature would you like to add to OBK?
+    validations:
+      required: true
+  - type: textarea
+    id: problem-solved
+    attributes:
+      label: Problem or Use Case
+      description: What problem does this feature solve, or what use case does it address?
+      placeholder: Describe the problem or scenario this feature would improve.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How do you envision this feature working? Provide details on the implementation or behavior.
+      placeholder: Describe how you think this should work in OBK.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other details, such as specific keyboard layouts, user workflows, or examples from other software.
+      placeholder: Add any relevant details or examples here.
+    validations:
+      required: false
+---

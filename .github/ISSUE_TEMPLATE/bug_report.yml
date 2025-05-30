@@ -1,0 +1,99 @@
+---
+name: Bug Report
+description: File a bug report to help us improve OpenBangla Keyboard
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug in OpenBangla Keyboard (OBK). Please provide as much detail as possible to help us diagnose and fix the issue.
+  - type: input
+    id: obk-version
+    attributes:
+      label: OBK Version
+      description: What version of OpenBangla Keyboard are you using? (e.g., 3.0.0)
+      placeholder: e.g., 3.0.0
+    validations:
+      required: true
+  - type: input
+    id: os-details
+    attributes:
+      label: Operating System
+      description: Which Linux distribution and version are you using? (e.g., Ubuntu 24.04, Arch Linux)
+      placeholder: e.g., Ubuntu 24.04
+    validations:
+      required: true
+  - type: input
+    id: environment-details
+    attributes:
+      label: Environment Details
+      description: Which Linux destop environment and display type are you using? (e.g., GNOME Wayland, Plasma X11, Hyprland)
+      placeholder: e.g., GNOME Wayland
+    validations:
+      required: true
+  - type: dropdown
+    id: input-method
+    attributes:
+      label: Input Method Framework
+      description: Which input method framework are you using? (e.g., IBus, Fcitx)
+      multiple: true
+      options:
+        - IBus
+        - Fcitx
+        - Other (please specify in Additional Context)
+    validations:
+      required: true
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Provide detailed steps to reproduce the bug.
+      placeholder: |
+        1. Open OBK
+        2. Select a specific layout
+        3. Type specific characters
+        4. Observe the issue
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: A clear and concise description of what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: A clear and concise description of what occurred.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Screenshots
+      description: If applicable, please include relevant logs, screenshots, or other files to help explain the problem.
+      placeholder: Paste logs here or describe how to access screenshots.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem, such as specific keyboard layouts or system configurations.
+      placeholder: Add any relevant details here.
+    validations:
+      required: false
+---
