@@ -44,7 +44,7 @@ If you'd like to contribute code, please follow these steps:
 7.  **Push your branch** to your fork on GitHub
 8.  **Create a Pull Request (PR)** targeting OBK's `develop` branch and while creating your PR, it's highly appreciated if you follow [Semantic PR](https://pulsar.apache.org/contribute/develop-semantic-title/) conventions
 
-`NOTE: The contribution guidelines in the OpenBangla/manual repository are the preferred and prioritized source for documentation contributions.`
+> NOTE: All documentation for OBK will be managed in the [OpenBangla/manual](https://github.com/OpenBangla/manual) repository. Its contribution guidelines are the preferred and prioritized source for documentation contributions.
 
 ## Questions?
 
