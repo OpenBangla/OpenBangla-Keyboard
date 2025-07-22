@@ -33,14 +33,14 @@ We are always open to suggestions for new features and improvements. When sugges
 
 ### Contributing Code or Documentation
 
-If you'd like to contribute code, please follow these steps:
+If you'd like to contribute code or documentation, please follow these steps:
 
-1.  **Fork the repository** on GitHub
+1.  **Fork the repository** on your GitHub account
 2.  **Clone your fork** to your local machine
 3.  **Create a new branch** for your changes and choose a descriptive name (e.g., feature/smth, fix/smth)
 4.  **Make your changes** and ensure your code follows the project's coding style (if applicable)
 5.  **Add your changes** to Git
-6.  **Commit your changes** with a clear and concise commit message. It's highly encouraged follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages which will help us to auto-generate `CHANGELOGS.md`
+6.  **Commit your changes** with a clear and concise commit message. It's highly encouraged follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages which will help us to auto-generate `CHANGELOG.md`
 7.  **Push your branch** to your fork on GitHub
 8.  **Create a Pull Request (PR)** targeting OBK's `develop` branch and while creating your PR, it's highly appreciated if you follow [Semantic PR](https://pulsar.apache.org/contribute/develop-semantic-title/) conventions
 
