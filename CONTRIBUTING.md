@@ -31,77 +31,20 @@ We are always open to suggestions for new features and improvements. When sugges
 - **If possible, suggest how the enhancement might be implemented.**
 - **Check if a similar feature request already exists** before creating a new one.
 
-### Contributing Code
+### Contributing Code or Documentation
 
 If you'd like to contribute code, please follow these steps:
 
-1.  **Fork the repository** on GitHub.
-2.  **Clone your fork** to your local machine:
+1.  **Fork the repository** on GitHub
+2.  **Clone your fork** to your local machine
+3.  **Create a new branch** for your changes and choose a descriptive name (e.g., feature/smth, fix/smth)
+4.  **Make your changes** and ensure your code follows the project's coding style (if applicable)
+5.  **Add your changes** to Git
+6.  **Commit your changes** with a clear and concise commit message. It's highly encouraged follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages which will help us to auto-generate `CHANGELOGS.md`
+7.  **Push your branch** to your fork on GitHub
+8.  **Create a Pull Request (PR)** targeting OBK's `develop` branch and while creating your PR, it's highly appreciated if you follow [Semantic PR](https://pulsar.apache.org/contribute/develop-semantic-title/) conventions
 
-    ```bash
-    git clone --recursive https://github.com/OpenBangla/OpenBangla-Keyboard.git
-    cd OpenBangla-Keyboard
-    ```
-
-3.  **Create a new branch** for your changes. Choose a descriptive name:
-
-    ```bash
-    git checkout -b feature/your-feature-name
-    # or
-    git checkout -b bugfix/your-bug-fix
-    ```
-
-4.  **Make your changes** and ensure your code follows the project's coding style (if any).
-5.  **Add your changes** to Git:
-
-    ```bash
-    git add .
-    ```
-
-6.  **Commit your changes** with a clear and concise commit message. Follow these guidelines for commit messages:
-
-    - Separate the subject from the body with a blank line.
-    - Try limiting the subject line to 50 characters.
-    - Do not end the subject line with a period.
-    - Use the imperative mood ("Fix bug", "Add feature").
-    - Optionally, provide a more detailed body for context.
-
-    ```bash
-    git commit -m "Add feature: Implement bangla spell checker"
-    ```
-
-7.  **Push your branch** to your fork on GitHub:
-
-    ```bash
-    git push origin your-feature-name
-    ```
-
-8.  **Create a Pull Request (PR)** through the GitHub website. When creating a PR:
-
-    - Provide a clear and descriptive title for your PR.
-    - In the description, explain the changes you've made and the problem they solve (if applicable).
-    - Reference any related issues in the PR description (e.g., `Closes #123`, `Fixes #456`).
-
-### Contributing Documentation
-
-Good documentation is crucial! We have a dedicated repository for OpenBangla Keyboard documentation: https://github.com/OpenBangla/manual. Most documentation contributions should be made there, unless it's something that is related to this repository. If you'd like to contribute to the documentation:
-
-- **Submit issues** for any unclear or incorrect documentation you find.
-- **Create pull requests** to fix typos, improve clarity, or add new documentation. Follow the same Git workflow as contributing code. Ensure your documentation changes are well-formatted (e.g., using AsciiDoc or Markdown).
-
-`Note: The contribution guidelines in the OpenBangla/manual repository are the preferred and prioritized source for documentation contributions.`
-
-## Pull Request Guidelines
-
-To ensure your pull request is reviewed and merged efficiently, please follow these guidelines:
-
-- **Target your pull request to the `develop` branch** (or the designated development branch), not the `main` branch.
-- **Keep your PR focused** on a single issue or feature. Avoid making unrelated changes in the same PR.
-- **Ensure your code builds and passes all tests** (if applicable).
-- **Follow the project's coding style** and conventions.
-- **Write clear and concise commit messages.**
-- **Provide a detailed description** in your pull request explaining your changes and their purpose.
-- **Be responsive to feedback** during the code review process.
+`NOTE: The contribution guidelines in the OpenBangla/manual repository are the preferred and prioritized source for documentation contributions.`
 
 ## Questions?
 
