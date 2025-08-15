@@ -1,7 +1,7 @@
 /*
  *  OpenBangla Keyboard
  *  Copyright (C) 2012-2012 Yichao Yu
- *  Copyright (C) 2020-2021 CSSlayer <wengxt@gmail.com>
+ *  Copyright (C) 2020-2025 CSSlayer <wengxt@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +22,16 @@
 #include "riti.h"
 #include <fcitx-config/configuration.h>
 #include <fcitx-config/iniparser.h>
+#include <fcitx-config/option.h>
+#include <fcitx-config/rawconfig.h>
 #include <fcitx-utils/i18n.h>
+#include <fcitx-utils/misc.h>
+#include <fcitx-utils/trackableobject.h>
 #include <fcitx/addonfactory.h>
+#include <fcitx/addoninstance.h>
 #include <fcitx/addonmanager.h>
+#include <fcitx/event.h>
+#include <fcitx/inputcontext.h>
 #include <fcitx/inputcontextproperty.h>
 #include <fcitx/inputmethodengine.h>
 #include <fcitx/instance.h>
@@ -35,17 +42,17 @@ namespace fcitx {
 class OpenBanglaState;
 
 FCITX_CONFIGURATION(OpenBanglaConfig,
-                    ExternalOption config{
-                        this, "OpenBanglaKeyboard", _("OpenBangla Keyboard"),
-                        BIN_DIR "/openbangla-gui"};);
+                    ExternalOption config{this, "OpenBanglaKeyboard",
+                                          _("OpenBangla Keyboard"),
+                                          BIN_DIR "/openbangla-gui"};);
 
 class OpenBanglaEngine final : public InputMethodEngine {
 public:
   OpenBanglaEngine(Instance *instance);
   ~OpenBanglaEngine();
 
-  void activate(const fcitx::InputMethodEntry &,
-                fcitx::InputContextEvent &) override;
+  void activate(const fcitx::InputMethodEntry & /*entry*/,
+                fcitx::InputContextEvent & /*event*/) override;
   void keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) override;
   void reset(const InputMethodEntry &entry, InputContextEvent &event) override;
 
@@ -54,10 +61,13 @@ public:
 
   const Configuration *getConfig() const override { return &config_; }
 
-  auto ritiConfig() const { return cfg_.get(); }
-
   auto candidateWinHorizontal() const { return candidateWinHorizontal_; }
   auto enterKeyClosesPrevWin() const { return enterKeyClosesPrevWin_; }
+
+  RitiContext *context(InputContext *ic);
+
+  auto *suggestion() const { return suggestion_.get(); }
+  void setSuggestion(Suggestion *suggestion) { suggestion_.reset(suggestion); }
 
 private:
   void populateConfig(const RawConfig &config);
@@ -65,6 +75,9 @@ private:
   Instance *instance_;
   OpenBanglaConfig config_;
   UniqueCPtr<Config, riti_config_free> cfg_;
+  UniqueCPtr<RitiContext, riti_context_free> ctx_;
+  UniqueCPtr<Suggestion, riti_suggestion_free> suggestion_;
+  TrackableObjectReference<InputContext> currentIC_;
   FactoryFor<OpenBanglaState> factory_;
   std::filesystem::file_time_type lastConfigTimestamp_ =
       std::filesystem::file_time_type::min();
