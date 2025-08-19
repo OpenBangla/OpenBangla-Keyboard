@@ -1,7 +1,7 @@
 /*
  *  OpenBangla Keyboard
  *  Copyright (C) 2012-2012 Yichao Yu
- *  Copyright (C) 2020-2021 CSSlayer <wengxt@gmail.com>
+ *  Copyright (C) 2020-2025 CSSlayer <wengxt@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,16 +18,33 @@
  */
 #include "openbangla.h"
 #include "keycode.h"
+#include "riti.h"
+#include <cstdint>
+#include <fcitx-config/iniparser.h>
+#include <fcitx-config/rawconfig.h>
+#include <fcitx-utils/capabilityflags.h>
+#include <fcitx-utils/fs.h>
+#include <fcitx-utils/keysym.h>
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/misc.h>
 #include <fcitx-utils/standardpath.h>
+#include <fcitx-utils/stringutils.h>
 #include <fcitx-utils/utf8.h>
+#include <fcitx/addoninstance.h>
+#include <fcitx/candidatelist.h>
+#include <fcitx/event.h>
 #include <fcitx/inputcontext.h>
 #include <fcitx/inputcontextmanager.h>
+#include <fcitx/inputmethodentry.h>
 #include <fcitx/inputpanel.h>
+#include <fcitx/text.h>
+#include <fcitx/userinterface.h>
 #include <fcntl.h>
 #include <filesystem>
 #include <memory>
+#include <stdexcept>
+#include <string>
+#include <utility>
 
 FCITX_DEFINE_LOG_CATEGORY(openbangla, "openbangla");
 #define FCITX_OPENBANGLA_DEBUG() FCITX_LOGC(openbangla, Debug)
@@ -37,8 +54,7 @@ namespace fcitx {
 class OpenBanglaState : public InputContextProperty {
 public:
   OpenBanglaState(OpenBanglaEngine *engine, InputContext &ic)
-      : engine_(engine), ic_(&ic),
-        ctx_(riti_context_new_with_config(engine->ritiConfig())) {}
+      : engine_(engine), ic_(&ic) {}
 
   ~OpenBanglaState() {}
 
@@ -49,7 +65,7 @@ public:
     }
 
     void select(InputContext *inputContext) const override {
-      auto state = inputContext->propertyFor(engine_->factory());
+      auto *state = inputContext->propertyFor(engine_->factory());
       state->selectCandidate(text().toString(), index_);
     }
 
@@ -68,35 +84,39 @@ public:
     }
   };
 
-  void selectCandidate(const std::string &text, int index) {
-    if (!suggestion_) {
+  void selectCandidate(const std::string & /*text*/, int index) {
+    auto *ctx = engine_->context(ic_);
+    auto *suggestion = engine_->suggestion();
+    if (!suggestion) {
       return;
     }
 
-    char *txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), index);
+    char *txt = riti_suggestion_get_pre_edit_text(suggestion, index);
     ic_->commitString(std::string(txt));
-    riti_context_candidate_committed(ctx_.get(), index);
+    riti_context_candidate_committed(ctx, index);
     riti_string_free(txt);
     reset();
   }
 
   void updatePreedit() {
-    if (!suggestion_) {
+    auto *suggestion = engine_->suggestion();
+    if (!suggestion) {
       return;
     }
 
     std::string text;
     auto index = 0;
 
-    if (!riti_suggestion_is_lonely(suggestion_.get())) {
-      auto candidateList = std::dynamic_pointer_cast<CommonCandidateList>(ic_->inputPanel().candidateList());
+    if (!riti_suggestion_is_lonely(suggestion)) {
+      auto candidateList = std::dynamic_pointer_cast<CommonCandidateList>(
+          ic_->inputPanel().candidateList());
       auto idx = candidateList->globalCursorIndex();
       if (idx >= 0 && idx < candidateList->totalSize()) {
         index = idx;
       }
     }
 
-    auto txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), index);
+    auto *txt = riti_suggestion_get_pre_edit_text(suggestion, index);
     text = txt;
     riti_string_free(txt);
 
@@ -111,43 +131,46 @@ public:
   }
 
   void commit() {
-    if (!suggestion_) {
+    auto *ctx = engine_->context(ic_);
+    auto *suggestion = engine_->suggestion();
+    if (!suggestion) {
       return;
     }
 
     std::string text;
-    if (!riti_suggestion_is_lonely(suggestion_.get())) {
+    if (!riti_suggestion_is_lonely(suggestion)) {
       auto candidateList = ic_->inputPanel().candidateList();
       auto index = candidateList->cursorIndex();
       if (index >= 0 && index < candidateList->size()) {
         candidateList->candidate(index).select(ic_);
       }
     } else {
-      char *txt = riti_suggestion_get_pre_edit_text(suggestion_.get(), 0);
+      char *txt = riti_suggestion_get_pre_edit_text(suggestion, 0);
       text = txt;
       ic_->commitString(text);
       riti_string_free(txt);
-      riti_context_candidate_committed(ctx_.get(), 0);
+      riti_context_candidate_committed(ctx, 0);
       reset();
     }
   }
   void updateUI() {
     ic_->inputPanel().reset();
     do {
-      if (!suggestion_) {
+      auto *suggestion = engine_->suggestion();
+      if (!suggestion) {
         break;
       }
-      if (!riti_suggestion_is_lonely(suggestion_.get())) {
-        char *aux = riti_suggestion_get_auxiliary_text(suggestion_.get());
+      if (!riti_suggestion_is_lonely(suggestion)) {
+        char *aux = riti_suggestion_get_auxiliary_text(suggestion);
         if (aux && aux[0]) {
           ic_->inputPanel().setAuxUp(Text(std::string(aux)));
         }
         riti_string_free(aux);
 
         auto candidateList = std::make_unique<OpenBanglaCandidateList>();
-        auto len = riti_suggestion_get_length(suggestion_.get());
+        auto len = riti_suggestion_get_length(suggestion);
         for (decltype(len) i = 0; i < len; i++) {
-          char *text = riti_suggestion_get_suggestion(suggestion_.get(), i);
+          char *text = riti_suggestion_get_suggestion(suggestion, i);
           candidateList->append<OpenBanglaCandidate>(engine_, text, i);
           riti_string_free(text);
         }
@@ -155,8 +178,7 @@ public:
         candidateList->setLayoutHint(engine_->candidateWinHorizontal()
                                          ? CandidateLayoutHint::Horizontal
                                          : CandidateLayoutHint::Vertical);
-        auto index =
-            riti_suggestion_previously_selected_index(suggestion_.get());
+        auto index = riti_suggestion_previously_selected_index(suggestion);
         if (index >= len) {
           index = 0;
         }
@@ -170,9 +192,10 @@ public:
 
   void reset() {
     altGrPressed_ = false;
-    suggestion_.reset();
-    if (riti_context_ongoing_input_session(ctx_.get())) {
-      riti_context_finish_input_session(ctx_.get());
+    engine_->setSuggestion(nullptr);
+    auto *ctx = engine_->context(ic_);
+    if (riti_context_ongoing_input_session(ctx)) {
+      riti_context_finish_input_session(ctx);
     }
     ic_->inputPanel().reset();
     ic_->updatePreedit();
@@ -189,10 +212,9 @@ public:
       return;
     }
 
-    auto ctx = ctx_.get();
+    auto *ctx = engine_->context(ic_);
     if (!riti_context_ongoing_input_session(ctx)) {
       engine_->reloadConfig();
-      riti_context_update_engine(ctx, engine_->ritiConfig());
     }
     auto candidateList = ic_->inputPanel().candidateList();
     // At first, handle the special keys.
@@ -201,15 +223,17 @@ public:
       if (riti_context_ongoing_input_session(ctx)) {
         // Is Ctrl key is pressed?
         auto ctrlKey = key.states().test(KeyState::Ctrl);
-        suggestion_.reset(riti_context_backspace_event(ctx, ctrlKey));
+        engine_->setSuggestion(riti_context_backspace_event(ctx, ctrlKey));
 
-        if (!riti_suggestion_is_empty(suggestion_.get())) {
+        if (engine_->suggestion() &&
+            !riti_suggestion_is_empty(engine_->suggestion())) {
           updateUI();
         } else {
           reset();
         }
 
-        return keyEvent.filterAndAccept();
+        keyEvent.filterAndAccept();
+        return;
       }
       reset();
       return;
@@ -235,49 +259,21 @@ public:
      **/
     case FcitxKey_Right:
     case FcitxKey_Left:
+    case FcitxKey_Up:
+    case FcitxKey_Down:
+    case FcitxKey_Tab:
       if (riti_context_ongoing_input_session(ctx)) {
-        if (engine_->candidateWinHorizontal() &&
-            !riti_suggestion_is_lonely(suggestion_.get()) && candidateList &&
-            candidateList->toCursorMovable()) {
-          if (key.sym() == FcitxKey_Right) {
+        if (engine_->candidateWinHorizontal() && engine_->suggestion() &&
+            !riti_suggestion_is_lonely(engine_->suggestion()) &&
+            candidateList && candidateList->toCursorMovable()) {
+          if (key.sym() == FcitxKey_Right || key.sym() == FcitxKey_Tab ||
+              key.sym() == FcitxKey_Down) {
             candidateList->toCursorMovable()->nextCandidate();
           } else {
             candidateList->toCursorMovable()->prevCandidate();
           }
           updatePreedit();
 
-          ic_->updateUserInterface(UserInterfaceComponent::InputPanel);
-          return keyEvent.filterAndAccept();
-        } else {
-          commit();
-        }
-      }
-      return;
-    case FcitxKey_Up:
-    case FcitxKey_Down:
-      if (riti_context_ongoing_input_session(ctx)) {
-        if (!engine_->candidateWinHorizontal() &&
-            !riti_suggestion_is_lonely(suggestion_.get()) && candidateList &&
-            candidateList->toCursorMovable()) {
-          if (key.sym() == FcitxKey_Up) {
-            candidateList->toCursorMovable()->prevCandidate();
-          } else {
-            candidateList->toCursorMovable()->nextCandidate();
-          }
-          updatePreedit();
-          ic_->updateUserInterface(UserInterfaceComponent::InputPanel);
-          keyEvent.filterAndAccept();
-        } else {
-          commit();
-        }
-      }
-      return;
-    case FcitxKey_Tab:
-      if (riti_context_ongoing_input_session(ctx)) {
-        if (!riti_suggestion_is_lonely(suggestion_.get()) && candidateList &&
-            candidateList->toCursorMovable()) {
-          candidateList->toCursorMovable()->nextCandidate();
-          updatePreedit();
           ic_->updateUserInterface(UserInterfaceComponent::InputPanel);
           keyEvent.filterAndAccept();
         } else {
@@ -333,29 +329,33 @@ public:
     if ((ctrlKey && altKey) || altGrPressed_) {
       modifier |= MODIFIER_ALT_GR;
     }
-   
+
     auto index = 0;
 
-    if (riti_context_ongoing_input_session(ctx) && !riti_suggestion_is_lonely(suggestion_.get())) {
-      auto candidateList = std::dynamic_pointer_cast<CommonCandidateList>(ic_->inputPanel().candidateList());
+    if (riti_context_ongoing_input_session(ctx) && engine_->suggestion() &&
+        !riti_suggestion_is_lonely(engine_->suggestion())) {
+      auto candidateList = std::dynamic_pointer_cast<CommonCandidateList>(
+          ic_->inputPanel().candidateList());
       auto idx = candidateList->globalCursorIndex();
       if (idx >= 0 && idx < candidateList->totalSize()) {
         index = idx;
       }
     }
 
-    suggestion_.reset(riti_get_suggestion_for_key(ctx, ritiKey, modifier, index));
+    engine_->setSuggestion(
+        riti_get_suggestion_for_key(ctx, ritiKey, modifier, index));
 
-    if (!riti_suggestion_is_empty(suggestion_.get())) {
+    if (engine_->suggestion() &&
+        !riti_suggestion_is_empty(engine_->suggestion())) {
       updateUI();
       keyEvent.filterAndAccept();
       return;
     }
 
-    // Corner case: When old style kar typing is enabled, a lonely suggestion and an empty
-    // suggestion is not distinguishable. So we check if a input session is ongoing to
-    // accept the key event.
-    if(riti_context_ongoing_input_session(ctx)) {
+    // Corner case: When old style kar typing is enabled, a lonely suggestion
+    // and an empty suggestion is not distinguishable. So we check if a input
+    // session is ongoing to accept the key event.
+    if (riti_context_ongoing_input_session(ctx)) {
       keyEvent.filterAndAccept();
     }
   }
@@ -365,8 +365,6 @@ private:
   InputContext *ic_;
   /* Unfortunately, we have to keep track of the right Alt Key. */
   bool altGrPressed_ = false;
-  UniqueCPtr<RitiContext, riti_context_free> ctx_;
-  UniqueCPtr<Suggestion, riti_suggestion_free> suggestion_;
 };
 
 OpenBanglaEngine::OpenBanglaEngine(Instance *instance)
@@ -385,26 +383,45 @@ OpenBanglaEngine::OpenBanglaEngine(Instance *instance)
 
 OpenBanglaEngine::~OpenBanglaEngine() {}
 
-void OpenBanglaEngine::activate(const InputMethodEntry &, InputContextEvent &) {
+void OpenBanglaEngine::activate(const InputMethodEntry & /*entry*/,
+                                InputContextEvent & /*event*/) {
   reloadConfig();
 }
 
-void OpenBanglaEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
-  auto ic = keyEvent.inputContext();
-  auto state = ic->propertyFor(&factory_);
+void OpenBanglaEngine::keyEvent(const InputMethodEntry & /*entry*/,
+                                KeyEvent &keyEvent) {
+  auto *ic = keyEvent.inputContext();
+  auto *state = ic->propertyFor(&factory_);
   state->keyEvent(keyEvent);
 }
 
-void OpenBanglaEngine::reset(const InputMethodEntry &,
+void OpenBanglaEngine::reset(const InputMethodEntry & /*entry*/,
                              InputContextEvent &event) {
-  auto state = event.inputContext()->propertyFor(&factory_);
+  auto *state = event.inputContext()->propertyFor(&factory_);
   state->reset();
+}
+
+RitiContext *OpenBanglaEngine::context(InputContext *ic) {
+  // Check if the last input context is same as the current one.
+  // Since RitiContext is shared, reset any existing state if needed.
+  if (currentIC_.isValid() && ic != currentIC_.get()) {
+    suggestion_.reset();
+    if (riti_context_ongoing_input_session(ctx_.get())) {
+      riti_context_finish_input_session(ctx_.get());
+    }
+    auto *oldIC = currentIC_.get();
+    oldIC->inputPanel().reset();
+    oldIC->updatePreedit();
+    oldIC->updateUserInterface(UserInterfaceComponent::InputPanel);
+    currentIC_ = ic->watch();
+  }
+  return ctx_.get();
 }
 
 bool booleanValue(const RawConfig &config, const std::string &path,
                   bool defaultValue) {
   bool value = defaultValue;
-  if (auto *option = config.valueByPath(path)) {
+  if (const auto *option = config.valueByPath(path)) {
     value = *option == "true";
   }
   return value;
@@ -413,7 +430,7 @@ bool booleanValue(const RawConfig &config, const std::string &path,
 void OpenBanglaEngine::populateConfig(const RawConfig &config) {
   // Keep sync with Settings.cpp
   std::string layoutPath = "avro_phonetic";
-  if (auto *path = config.valueByPath("layout/path")) {
+  if (const auto *path = config.valueByPath("layout/path")) {
     layoutPath = *path;
   }
   const bool showCWPhonetic =
@@ -434,22 +451,19 @@ void OpenBanglaEngine::populateConfig(const RawConfig &config) {
       booleanValue(config, "settings/FixedLayout\\OldReph", true);
   const bool numberPadFixed =
       booleanValue(config, "settings/FixedLayout\\NumberPad", true);
-  const bool ansiOutput =
-      booleanValue(config, "settings/ANSI", false);
-  const bool smartQuoting =
-      booleanValue(config, "settings/SmartQuoting", true);
+  const bool ansiOutput = booleanValue(config, "settings/ANSI", false);
+  const bool smartQuoting = booleanValue(config, "settings/SmartQuoting", true);
 
-  if(!riti_config_set_layout_file(cfg_.get(), layoutPath.data())) {
+  if (!riti_config_set_layout_file(cfg_.get(), layoutPath.data())) {
     FCITX_OPENBANGLA_DEBUG() << "Failed to set layout file: " << layoutPath;
   }
-  
+
   riti_config_set_suggestion_include_english(cfg_.get(), includeEnglish);
   riti_config_set_phonetic_suggestion(cfg_.get(), showCWPhonetic);
 
-  if(!riti_config_set_database_dir(cfg_.get(),
-                               PROJECT_DATADIR "/data")) {
-    FCITX_OPENBANGLA_DEBUG() << "Failed to set database directory: "
-                             << PROJECT_DATADIR << "/data";
+  if (!riti_config_set_database_dir(cfg_.get(), PROJECT_DATADIR "/data")) {
+    FCITX_OPENBANGLA_DEBUG()
+        << "Failed to set database directory: " << PROJECT_DATADIR << "/data";
   }
 
   riti_config_set_fixed_suggestion(cfg_.get(), showPrevWinFixed);
@@ -488,6 +502,12 @@ void OpenBanglaEngine::reloadConfig() {
     readFromIni(config, configFile.fd());
   }
   populateConfig(config);
+  suggestion_.reset();
+  if (ctx_) {
+    riti_context_update_engine(ctx_.get(), cfg_.get());
+  } else {
+    ctx_.reset(riti_context_new_with_config(cfg_.get()));
+  }
 }
 
 FCITX_ADDON_FACTORY(OpenBanglaFactory);
