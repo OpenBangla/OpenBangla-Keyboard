@@ -144,3 +144,5 @@ fabric.properties
 *.out
 *.app
 .cache
+
+.DS_Store

@@ -31,7 +31,16 @@ if(WIN32)
     set(CMAKE_WIN32_EXECUTABLE ON)
 endif(WIN32)
 
-add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
+if(APPLE)
+    list(APPEND LINK_LIBS zstd::libzstd)
+endif(APPLE)
+
+if(APPLE)
+    add_executable(openbangla-gui MACOSX_BUNDLE ${SRC_MAIN} ${SRC_GUI})
+else()
+    add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
+endif()
+
 target_link_libraries(openbangla-gui ${LINK_LIBS})
 
 if(WIN32)
@@ -46,5 +55,7 @@ if(WIN32)
     )
 endif()
 
+if(OS_LINUX)
 install(TARGETS openbangla-gui
         RUNTIME DESTINATION ${BIN_DIR})
+endif()
