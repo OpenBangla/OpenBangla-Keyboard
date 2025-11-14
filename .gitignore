@@ -143,3 +143,5 @@ fabric.properties
 *.exe
 *.out
 *.app
+
+.DS_Store

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+set(CMAKE_OSX_DEPLOYMENT_TARGET 15)
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
 project("OpenBangla-Keyboard" VERSION ${VERSION_STRING})
@@ -11,7 +12,7 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 17)
 
-if(NOT WIN32)
+if(NOT WIN32 AND NOT APPLE)
     enable_language(Rust)
     include(CMakeCargo)
 endif()
@@ -92,6 +93,15 @@ if(WIN32)
     find_package(zstd CONFIG REQUIRED)
     set(PROJECT_DATADIR "$ENV{LOCALAPPDATA}\\OpenBangla" CACHE PATH "Path to Data Directory")
     set(BIN_DIR "${PROJECT_DATADIR}/bin")
+    add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
+    add_definitions(-DBIN_DIR="${BIN_DIR}")
+endif()
+
+# For Apple
+if(APPLE)
+    find_package(zstd CONFIG REQUIRED)
+    set(PROJECT_DATADIR "" CACHE PATH "Path to Data Directory")
+    set(BIN_DIR "")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
     add_definitions(-DBIN_DIR="${BIN_DIR}")
 endif()
