@@ -6,182 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>600</height>
+    <width>390</width>
+    <height>465</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Edit Phonetic AutoCorrect Entries</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QDialog {
-    background: #18181b;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-}
-
-QLabel {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 13px;
-    font-weight: 500;
-}
-
-QLineEdit {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 13px;
-}
-
-QLineEdit:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-QLineEdit:focus {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(14, 165, 233, 0.4);
-}
-
-QGroupBox {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 16px;
-    margin-top: 24px;
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 600;
-}
-
-QGroupBox::title {
-    subcontrol-origin: margin;
-    left: 8px;
-    padding: 0 8px;
-}
-
-QPushButton {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 8px 16px;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 13px;
-    min-width: 100px;
-    font-weight: 500;
-}
-
-QPushButton:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 1);
-}
-
-QPushButton:pressed {
-    background: rgba(255, 255, 255, 0.04);
-}
-
-QPushButton#btnUpdate {
-    background: #0ea5e9;
-    border: none;
-    color: white;
-}
-
-QPushButton#btnUpdate:hover {
-    background: #0284c7;
-}
-
-QPushButton#btnUpdate:pressed {
-    background: #0369a1;
-}
-
-QPushButton#btnClear {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-QPushButton#btnClear:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-QTreeWidget {
-    background: #27272a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 8px;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-QTreeWidget::item {
-    padding: 8px;
-    border-radius: 4px;
-}
-
-QTreeWidget::item:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-QTreeWidget::item:selected {
-    background: rgba(14, 165, 233, 0.15);
-    color: white;
-}
-
-QHeaderView::section {
-    background: #27272a;
-    color: rgba(255, 255, 255, 0.7);
-    padding: 8px;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-QScrollBar:vertical {
-    background: transparent;
-    width: 16px;
-    margin: 0;
-}
-
-QScrollBar::handle:vertical {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    min-height: 32px;
-}
-
-QScrollBar::handle:vertical:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-QScrollBar::add-line:vertical,
-QScrollBar::sub-line:vertical {
-    height: 0;
-}
-
-QScrollBar::up-arrow:vertical,
-QScrollBar::down-arrow:vertical {
-    background: none;
-}</string>
+   <string>Edit Phonetic AutoCorrect entries</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>16</number>
-   </property>
-   <property name="leftMargin">
-    <number>24</number>
-   </property>
-   <property name="topMargin">
-    <number>24</number>
-   </property>
-   <property name="rightMargin">
-    <number>24</number>
-   </property>
-   <property name="bottomMargin">
-    <number>24</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <property name="spacing">
-      <number>16</number>
-     </property>
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -200,32 +34,23 @@ QScrollBar::down-arrow:vertical {
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <property name="spacing">
-      <number>16</number>
-     </property>
      <item>
       <widget class="QLineEdit" name="txtReplace">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="placeholderText">
-        <string>Enter text to replace...</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="txtWith">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="placeholderText">
-        <string>Enter replacement text...</string>
        </property>
       </widget>
      </item>
@@ -237,36 +62,21 @@ QScrollBar::down-arrow:vertical {
       <string>Preview</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>16</number>
-      </property>
       <item>
        <widget class="QLabel" name="lblPreviewR">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>48</height>
-         </size>
-        </property>
         <property name="font">
          <font>
           <family>Noto Serif Bengali</family>
-          <pointsize>14</pointsize>
          </font>
         </property>
-        <property name="styleSheet">
-         <string notr="true">background: #27272a;
-padding: 8px 16px;
-border-radius: 8px;</string>
-        </property>
         <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+         <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="text">
          <string/>
@@ -276,30 +86,18 @@ border-radius: 8px;</string>
       <item>
        <widget class="QLabel" name="lblPreviewW">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>48</height>
-         </size>
-        </property>
         <property name="font">
          <font>
           <family>Noto Serif Bengali</family>
-          <pointsize>14</pointsize>
          </font>
         </property>
-        <property name="styleSheet">
-         <string notr="true">background: #27272a;
-padding: 8px 16px;
-border-radius: 8px;</string>
-        </property>
         <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+         <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="text">
          <string/>
@@ -311,9 +109,6 @@ border-radius: 8px;</string>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="spacing">
-      <number>16</number>
-     </property>
      <item>
       <widget class="QPushButton" name="btnClear">
        <property name="text">
@@ -345,38 +140,17 @@ border-radius: 8px;</string>
    </item>
    <item>
     <widget class="QTreeWidget" name="autoCorrect">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>200</height>
-      </size>
-     </property>
      <column>
       <property name="text">
-       <string>Replace</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>With</string>
+       <string notr="true">1</string>
       </property>
      </column>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="lblEntries">
-     <property name="styleSheet">
-      <string notr="true">color: rgba(255, 255, 255, 0.7);
-font-size: 12px;</string>
-     </property>
      <property name="text">
-      <string>Total Entries: 0</string>
+      <string>Total</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
