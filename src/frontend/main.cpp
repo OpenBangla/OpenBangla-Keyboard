@@ -24,15 +24,7 @@
 #include "SingleInstance.h"
 #include "Settings.h"
 
-int main(int argc, char *argv[]) {
-  if(qgetenv("XDG_SESSION_TYPE") == "wayland") {
-    // Use xcb backend under wayland to make the topbar movable.
-    // TODO: Try out QWindow::startSystemMove() when we can depend on Qt 5.15
-    // https://doc.qt.io/qt-5/qwindow.html#startSystemMove
-    // https://github.com/nuttyartist/notes/issues/429
-    qputenv("QT_QPA_PLATFORM", "xcb");
-  }
-  
+int main(int argc, char *argv[]) {  
   QApplication app(argc, argv);
   gSettings = new Settings();
 

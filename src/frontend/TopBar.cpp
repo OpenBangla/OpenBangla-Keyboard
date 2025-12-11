@@ -18,6 +18,7 @@
 
 #include <QSystemTrayIcon>
 #include <QScreen>
+#include <QWindow>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
@@ -349,9 +350,11 @@ bool TopBar::eventFilter(QObject *object, QEvent *event) {
       event->accept();
     } else if (event->type() == QEvent::MouseMove) {
       if (canMoveTopbar) {
-        QMouseEvent *e = (QMouseEvent *) event;
-        ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
-        move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+        if(!this->windowHandle()->startSystemMove()){
+            QMouseEvent *e = (QMouseEvent *) event;
+            ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
+            move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+        }
         positionChanged = true;
       }
     } else if (event->type() == QEvent::MouseButtonRelease) {
