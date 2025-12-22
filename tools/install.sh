@@ -60,7 +60,7 @@ case $DISTRO_NAME in
    	VERSION_ID=$(grep DISTRIB_RELEASE /etc/upstream-release/lsb-release|cut -d= -f2)
   fi
 	  case ${VERSION_ID%%.*} in
-	  	24|23|22|21|20|18) VERSION_ID=${VERSION_ID%%.*}.04;UBUNTU_SUPPORTED=1;;
+	  	25|24|23|22|21|20|18) VERSION_ID=${VERSION_ID%%.*}.04;UBUNTU_SUPPORTED=1;;
 	  	*) echo "This Ubuntu release \"$VERSION_ID\" is too young or too old for me to handle";exit 1;;
 	  esac
   if [[ $UBUNTU_SUPPORTED = 1 ]]; then
