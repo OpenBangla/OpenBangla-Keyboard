@@ -22,24 +22,29 @@
 #include <QDir>
 #include "Log.h"
 
-// TODO: Use qEnvironmentVariable function when we are able to use Qt 5.10 version.
-QString environmentVariable(const char *varName, const QString &defaultValue);
-
-/* We follow XDG Directory Specification for storing user specific data.
+/* For Linux we follow XDG Directory Specification for storing user specific data.
    https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+
+   On macOS we use ~/Library/Containers/org.openbangla.inputmethod.keyboard/Data/Library/Application Support/org.openbangla.inputmethod.keyboard
+   as the user specific data folder and copy data files from the application bundle to this folder on first run.
  */
 class UserFolders {
   QString path;
   QDir dir;
 public:
   UserFolders() {
-    path = environmentVariable("XDG_DATA_HOME", dir.homePath() + "/.local/share") + "/openbangla-keyboard";
-    // Create our folder in the user specific data folder
-    dir.mkpath(path);
-    // Create user specific layouts folder
-    dir.mkpath(path + "/layouts/");
+      #ifdef Q_OS_LINUX
+          setupLinux();
+      #elif defined(Q_OS_MACOS)
+          setupMacOS();
+      #else
+          LOG_ERROR("Unsupported OS for UserFolders\n");
+      #endif
   }
 
+  void setupLinux();
+  void setupMacOS();
+  
   QString dataPath() {
     return path;
   }
@@ -72,5 +77,8 @@ QString RegexDictPath();
 QString AutoCorrectFilePath();
 
 bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst);
+
+/* Global */
+extern UserFolders *gUserFolders;
 
 #endif /* end of include guard: FILE_SYSTEM_H */

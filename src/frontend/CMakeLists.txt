@@ -33,10 +33,24 @@ endif(WIN32)
 
 if(APPLE)
     list(APPEND LINK_LIBS zstd::libzstd)
+    list(APPEND LINK_LIBS "-framework Foundation")
 endif(APPLE)
 
 if(APPLE)
     set(APP_ICON "${CMAKE_SOURCE_DIR}/data/openbangla.icns")
+
+    set(APP_DATA
+        "${CMAKE_SOURCE_DIR}/data/autocorrect.json"
+    )
+
+    set(LAYOUT_DATA
+        "${CMAKE_SOURCE_DIR}/data/avrophonetic.json"
+        "${CMAKE_SOURCE_DIR}/data/Avro_Easy.json"
+        "${CMAKE_SOURCE_DIR}/data/Borno.json"
+        "${CMAKE_SOURCE_DIR}/data/Munir_Optima.json"
+        "${CMAKE_SOURCE_DIR}/data/National_Jatiya.json"
+        "${CMAKE_SOURCE_DIR}/data/Probhat.json"
+    )
 
     set_source_files_properties(
         ${APP_ICON}
@@ -44,7 +58,19 @@ if(APPLE)
         MACOSX_PACKAGE_LOCATION "Resources"
     )
 
-    add_executable(openbangla-gui MACOSX_BUNDLE ${SRC_MAIN} ${SRC_GUI} ${APP_ICON})
+    set_source_files_properties(
+            ${APP_DATA}
+            PROPERTIES
+            MACOSX_PACKAGE_LOCATION "Resources/data"
+    )
+    
+    set_source_files_properties(
+            ${LAYOUT_DATA}
+            PROPERTIES
+            MACOSX_PACKAGE_LOCATION "Resources/layouts"
+    )
+
+    add_executable(openbangla-gui MACOSX_BUNDLE ${SRC_MAIN} ${SRC_GUI} ${APP_ICON} ${APP_DATA} ${LAYOUT_DATA})
 
     set_target_properties(openbangla-gui PROPERTIES
         OUTPUT_NAME "OpenBangla Keyboard"
@@ -52,6 +78,10 @@ if(APPLE)
         MACOSX_BUNDLE_BUNDLE_NAME "OpenBangla Keyboard"
         MACOSX_BUNDLE_INFO_STRING "OpenBangla Keyboard"
         MACOSX_BUNDLE_GUI_IDENTIFIER "org.openbangla.keyboard"
+        MACOSX_BUNDLE_COPYRIGHT "© 2025 OpenBangla"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     )
 else()
     add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})

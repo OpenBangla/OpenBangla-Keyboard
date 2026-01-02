@@ -21,6 +21,27 @@
 #ifndef LOG_H
 #define LOG_H
 
+#ifdef __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+extern "C" {
+    void NSLog(CFStringRef format, ...);
+}
+
+// Helper macro to create format string
+#define NS_FORMAT(fmt) CFSTR("[OpenBangla-Info]: " fmt)
+#define LOG_INFO(fmt, ...) NSLog(NS_FORMAT(fmt), ##__VA_ARGS__)
+
+#if DEBUG
+#define NS_DEBUG_FORMAT(fmt) CFSTR("[OpenBangla-Debug]: " fmt)
+#define LOG_DEBUG(fmt, ...) NSLog(NS_DEBUG_FORMAT(fmt), ##__VA_ARGS__)
+#else
+#define LOG_DEBUG(...)
+#endif
+
+#define NS_ERROR_FORMAT(fmt) CFSTR("[OpenBangla-Error]: " fmt)
+#define LOG_ERROR(fmt, ...) NSLog(NS_ERROR_FORMAT(fmt), ##__VA_ARGS__)
+
+#else
 #include <cstdio>
 
 #define LOG_INFO(...) std::fprintf(stdout, "[OpenBangla-Info]: " __VA_ARGS__)
@@ -32,5 +53,7 @@
 #endif
 
 #define LOG_ERROR(...) std::fprintf(stderr, "[OpenBangla-Error]: " __VA_ARGS__)
+
+#endif /* __APPLE__ */
 
 #endif /* end of include guard: LOG_H */

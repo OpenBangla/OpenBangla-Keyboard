@@ -11,6 +11,7 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(NOT WIN32 AND NOT APPLE)
     enable_language(Rust)
@@ -46,9 +47,6 @@ endif()
 # For Linux.
 if(OS_LINUX)
     ## Additions for Linux ##
-
-    # Generate compile_commands.json to satisfy vscode linux configuration
-    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
     if(NOT DEFINED BIN_DIR)
         set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")

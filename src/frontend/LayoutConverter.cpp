@@ -24,6 +24,7 @@
 #include <QJsonObject>
 #include <zstd.h>
 #include "LayoutConverter.h"
+#include "FileSystem.h"
 #include "base.hpp"
 
 // This map is used for when converting from previous layout format(version 1) or Avro keyboard layout.
@@ -292,7 +293,7 @@ ConversionResult LayoutConverter::convertLayoutFormat(QString path) {
   oldFile.close();
 
   QFileInfo fileInfo(oldFile);
-  QString savePath = folders.getUserLayoutPath() + fileInfo.baseName() + ".json";
+  QString savePath = gUserFolders->getUserLayoutPath() + fileInfo.baseName() + ".json";
   return saveLayout(layout, savePath);
 }
 
@@ -399,7 +400,7 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path) {
   delete xmlReader;
 
   QFileInfo fileInfo(xmlFile);
-  QString savePath = folders.getUserLayoutPath() + fileInfo.baseName() + ".json";
+  QString savePath = gUserFolders->getUserLayoutPath() + fileInfo.baseName() + ".json";
   return saveLayout(layout, savePath);
 }
 
@@ -415,7 +416,7 @@ ConversionResult LayoutConverter::saveLayout(QString path) {
   if (version != "2") return UnsupportedLayout;
 
   QFileInfo fileInfo(jsonFile);
-  QString savePath = folders.getUserLayoutPath() + fileInfo.fileName();
+  QString savePath = gUserFolders->getUserLayoutPath() + fileInfo.fileName();
   return jsonFile.copy(savePath) ? Ok : SaveError;
 }
 
