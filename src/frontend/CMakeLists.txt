@@ -63,7 +63,7 @@ if(APPLE)
             PROPERTIES
             MACOSX_PACKAGE_LOCATION "Resources/data"
     )
-    
+
     set_source_files_properties(
             ${LAYOUT_DATA}
             PROPERTIES
@@ -83,6 +83,20 @@ if(APPLE)
         MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     )
+
+    get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
+        get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+        find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
+    
+        add_custom_command(TARGET openbangla-gui POST_BUILD
+            COMMAND "${MACDEPLOYQT_EXECUTABLE}"
+                    "$<TARGET_BUNDLE_DIR:openbangla-gui>"
+                    -always-overwrite
+            COMMAND codesign --force --deep --sign -
+                    "$<TARGET_BUNDLE_DIR:openbangla-gui>"
+            COMMENT "Deploying Qt and signing app"
+            VERBATIM
+        )
 else()
     add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
 endif()

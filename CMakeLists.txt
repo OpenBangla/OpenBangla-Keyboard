@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-set(CMAKE_OSX_DEPLOYMENT_TARGET 15)
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
 project("OpenBangla-Keyboard" VERSION ${VERSION_STRING})
@@ -97,6 +96,7 @@ endif()
 
 # For Apple
 if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
     find_package(zstd CONFIG REQUIRED)
     set(PROJECT_DATADIR "" CACHE PATH "Path to Data Directory")
     set(BIN_DIR "")
