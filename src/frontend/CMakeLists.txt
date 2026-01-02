@@ -36,7 +36,23 @@ if(APPLE)
 endif(APPLE)
 
 if(APPLE)
-    add_executable(openbangla-gui MACOSX_BUNDLE ${SRC_MAIN} ${SRC_GUI})
+    set(APP_ICON "${CMAKE_SOURCE_DIR}/data/openbangla.icns")
+
+    set_source_files_properties(
+        ${APP_ICON}
+        PROPERTIES
+        MACOSX_PACKAGE_LOCATION "Resources"
+    )
+
+    add_executable(openbangla-gui MACOSX_BUNDLE ${SRC_MAIN} ${SRC_GUI} ${APP_ICON})
+
+    set_target_properties(openbangla-gui PROPERTIES
+        OUTPUT_NAME "OpenBangla Keyboard"
+        MACOSX_BUNDLE_ICON_FILE openbangla.icns
+        MACOSX_BUNDLE_BUNDLE_NAME "OpenBangla Keyboard"
+        MACOSX_BUNDLE_INFO_STRING "OpenBangla Keyboard"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "org.openbangla.keyboard"
+    )
 else()
     add_executable(openbangla-gui ${SRC_MAIN} ${SRC_GUI})
 endif()
@@ -56,6 +72,6 @@ if(WIN32)
 endif()
 
 if(OS_LINUX)
-install(TARGETS openbangla-gui
+    install(TARGETS openbangla-gui
         RUNTIME DESTINATION ${BIN_DIR})
 endif()
