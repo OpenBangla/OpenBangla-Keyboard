@@ -27,8 +27,8 @@
 
 int main(int argc, char *argv[]) {  
   QApplication app(argc, argv);
-  gSettings = new Settings();
   gUserFolders = new UserFolders();
+  gSettings = new Settings();
 
   app.setApplicationName("OpenBangla Keyboard");
   app.setApplicationVersion(PROJECT_VERSION);

@@ -43,6 +43,7 @@ void UserFolders::setupMacOS() {
     QString resourcePath = QCoreApplication::applicationDirPath() + "/../Resources/";
     QDir resourceDir =  QDir(resourcePath);
 
+    LOG_DEBUG("OpenBangla user folder: %s\n", path.toStdString().c_str());
     LOG_DEBUG("OpenBangla GUI path: %s\n", resourceDir.absolutePath().toUtf8().constData());
 
     QDir layoutsDir = QDir(resourceDir.filePath("layouts"));
