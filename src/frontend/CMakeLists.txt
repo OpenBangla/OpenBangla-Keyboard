@@ -119,3 +119,8 @@ if(OS_LINUX)
     install(TARGETS openbangla-gui
         RUNTIME DESTINATION ${BIN_DIR})
 endif()
+
+if(APPLE)
+    install(TARGETS openbangla-gui
+        BUNDLE DESTINATION /Applications)
+endif()
