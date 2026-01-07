@@ -45,6 +45,6 @@ set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES
 )
 
 install(DIRECTORY "${STAGED_APP_PATH}"
-    DESTINATION "/Library/Input Methods"
+    DESTINATION "Library/Input Methods"
     USE_SOURCE_PERMISSIONS
 )

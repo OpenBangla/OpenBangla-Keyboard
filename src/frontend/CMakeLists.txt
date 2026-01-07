@@ -122,5 +122,5 @@ endif()
 
 if(APPLE)
     install(TARGETS openbangla-gui
-        BUNDLE DESTINATION /Applications)
+        BUNDLE DESTINATION "Applications")
 endif()
