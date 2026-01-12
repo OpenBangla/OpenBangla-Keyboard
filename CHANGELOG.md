@@ -17,6 +17,7 @@
 * Prevent the preedit from reappearing at the new position after a mouse click in iBus engine ([#313])
 * Detect Dark Mode to enable the Dark mode theme of the TopBar
 * Performance optimizations ([#16], [#26])
+* Add new autocorrect entries ([#48])
 
 [okkhor]: https://github.com/gulshan/okkhor/
 [#15]: https://github.com/OpenBangla/riti/pull/15
@@ -27,6 +28,7 @@
 [#33]: https://github.com/OpenBangla/riti/pull/33
 [#35]: https://github.com/OpenBangla/riti/pull/35
 [#36]: https://github.com/OpenBangla/riti/pull/36
+[#48]: https://github.com/OpenBangla/riti/pull/48
 [#209]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/209
 [#202]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/202
 [#281]: https://github.com/OpenBangla/OpenBangla-Keyboard/pull/281
