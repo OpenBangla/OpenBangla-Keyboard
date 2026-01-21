@@ -61,7 +61,7 @@ if(NOT APPLE)
         install(FILES ${CMAKE_SOURCE_DIR}/data/Probhat.json
                 DESTINATION ${PROJECT_DATADIR}/layouts)
 
-        install(FILES ${CMAKE_SOURCE_DIR}/data/autocorrect.json
+        install(FILES ${CMAKE_SOURCE_DIR}/src/engine/riti/data/autocorrect.json
                 DESTINATION ${PROJECT_DATADIR}/data)
 
         install(FILES ${CMAKE_SOURCE_DIR}/data/dictionary.json

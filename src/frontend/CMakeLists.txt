@@ -40,7 +40,7 @@ if(APPLE)
     set(APP_ICON "${CMAKE_SOURCE_DIR}/data/openbangla.icns")
 
     set(APP_DATA
-        "${CMAKE_SOURCE_DIR}/data/autocorrect.json"
+        "${CMAKE_SOURCE_DIR}/src/engine/riti/data/autocorrect.json"
     )
 
     set(LAYOUT_DATA
