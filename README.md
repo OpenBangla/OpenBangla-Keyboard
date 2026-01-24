@@ -52,6 +52,7 @@ If you find a bug or have a feature request, please [open an issue](https://gith
 - [Mehdi Hasan Khan](https://github.com/mugli), for originally developing and maintaining Avro Keyboard.
 - [Rifat Nabi](https://github.com/torifat), for porting Avro Phonetic to Javascript.
 - [Sarim Khan](https://github.com/sarim), for writing ibus-avro.
+- [Dec_32](https://github.com/dec32), for [Ajemi](https://github.com/dec32/Ajemi) project.
 - [Saiful Islam](https://github.com/saaiful), for the icon.
 - [Material Design Icons](https://material.io/resources/icons).
 - [QSimpleUpdater](https://github.com/alex-spataru/QSimpleUpdater), for providing the update mechanism.
