@@ -21,6 +21,7 @@ class OpenBanglaIMKInputController: IMKInputController {
     private var _candidates: [String] = [] // list of candidates to choose from
     private var _prevSelectedCandidateIndex: UInt = 0
     private var _selectedCandidateIndex: UInt = 0
+    private var _ritiSuggestion: RitiSuggestion? = nil
 
     // handle system events
 
@@ -164,6 +165,7 @@ class OpenBanglaIMKInputController: IMKInputController {
         self._candidates = []
         self._prevSelectedCandidateIndex = 0
         self._selectedCandidateIndex = 0
+        self._ritiSuggestion = nil
     }
 
     // update mark/candidates for the current transliteration
@@ -219,21 +221,28 @@ class OpenBanglaIMKInputController: IMKInputController {
     override func candidateSelectionChanged(_ candidateString: NSAttributedString!) {
         NSLog("OpenBanglaIMKInputController::candidateSelectionChanged")
         openbanglaLog(logLevel: .VERBOSE, "selection '\(String(describing: candidateString))'")
-        self._composedString = candidateString.string
         
         for (index, candidate) in self._candidates.enumerated() {
-            if candidate == self._composedString {
+            if candidate == candidateString.string {
                 self._selectedCandidateIndex = UInt(index)
             }
         }
+        
+        self._composedString = self._ritiSuggestion!.preEditText(at: self._selectedCandidateIndex)
     }
 
     // user made a selection
     override func candidateSelected(_ candidateString: NSAttributedString!) {
         NSLog("OpenBanglaIMKInputController::candidateSelected")
         openbanglaLog(logLevel: .VERBOSE, "selection '\(String(describing: candidateString))'")
+        
+        for (index, candidate) in self._candidates.enumerated() {
+            if candidate == candidateString.string {
+                self._selectedCandidateIndex = UInt(index)
+            }
+        }
 
-        self._composedString = candidateString.string
+        self._composedString = self._ritiSuggestion!.preEditText(at: self._selectedCandidateIndex)
         commitComposition(self.client())
         NSLog("OpenBanglaIMKInputController::candidateSelected - wrote a space")
         writeTextToClient(downcastSender(self.client()), " ")
@@ -253,9 +262,15 @@ class OpenBanglaIMKInputController: IMKInputController {
     // handle user keypress
     private func handleKeyDown(_ event: NSEvent, _ sender: (IMKTextInput & IMKUnicodeTextInput)) -> Bool {
         // openbanglaLog("")
-        NSLog("OpenBanglaIMKInputController::handleKeyDown - v05-01-1")
+        NSLog("OpenBanglaIMKInputController::handleKeyDown - v06-25-1")
         let keyCode = event.keyCode
         NSLog("OpenBanglaIMKInputController::handleKeyDown - keycode: '\(keyCode)'")
+        
+//        let ctrl = event.modifierFlags.contains(.control)
+        let altgr = event.modifierFlags.contains(.option)
+        let shift = event.modifierFlags.contains(.shift)
+        
+        NSLog("OpenBanglaIMKInputController::handleKeyDown - alt: \(altgr) shift: \(shift)")
         
         if !riti.hasOngoingInputSession {
             settings.update()
@@ -286,10 +301,6 @@ class OpenBanglaIMKInputController: IMKInputController {
         
         let char = event.characters!.first!
         NSLog("OpenBanglaIMKInputController::handleKeyDown -> '\(char)'")
-        
-        let ctrl = event.modifierFlags.contains(.control)
-        let alt = event.modifierFlags.contains(.option)
-        let shift = event.modifierFlags.contains(.shift)
 
         // if a command sequence was not handled by the application, ignore it
         // We capture the Backspace (delete) key
@@ -315,15 +326,21 @@ class OpenBanglaIMKInputController: IMKInputController {
             // backspace is straightforward
             } else if char == toChar(NSBackspaceCharacter) {
                 let update = riti.backspace(ctrl: event.modifierFlags.contains(.command))
+                
+                self._ritiSuggestion = update
 
                 if !update.isEmpty {
                     if !update.isLonely {
-                        self._originalString = update.auxiliaryText
+                        if settings.ansiEncoding {
+                            self._originalString = update.preEditText(at: 0)
+                        } else {
+                            self._originalString = update.auxiliaryText
+                        }
                         self._composedString = update.preEditText(at: 0)
                         self._candidates = update.suggestions
                     } else {
-                        self._originalString = update.lonelySuggestion
-                        self._composedString = update.lonelySuggestion
+                        self._originalString = update.preEditText(at: 0)
+                        self._composedString = update.preEditText(at: 0)
                         self._candidates = []
                     }
                     
@@ -351,7 +368,7 @@ class OpenBanglaIMKInputController: IMKInputController {
         
         var modifiers: UInt8 = 0
         
-        if ctrl && alt {
+        if altgr {
             modifiers |= 1 << 1; // MODIFIER_ALT_GR
         }
         
@@ -361,15 +378,21 @@ class OpenBanglaIMKInputController: IMKInputController {
         
         let suggestion = riti.getSuggestion(forKey: keycode, modifier: modifiers, selection: UInt8(self._selectedCandidateIndex))
         
+        self._ritiSuggestion = suggestion
+        
         if !suggestion.isEmpty {
             if !suggestion.isLonely {
-                self._originalString = suggestion.auxiliaryText
+                if settings.ansiEncoding {
+                    self._originalString = suggestion.preEditText(at: 0)
+                } else {
+                    self._originalString = suggestion.auxiliaryText
+                }
                 self._composedString = suggestion.preEditText(at: 0)
                 self._candidates = suggestion.suggestions
                 self._prevSelectedCandidateIndex = suggestion.previouslySelectedIndex
             } else {
-                self._originalString = suggestion.lonelySuggestion
-                self._composedString = suggestion.lonelySuggestion
+                self._originalString = suggestion.preEditText(at: 0)
+                self._composedString = suggestion.preEditText(at: 0)
                 self._candidates = []
             }
             
