@@ -8,7 +8,10 @@
 
 import Foundation
 
-// Key code constants
+// Mac Virtual Keycode Mappings
+// https://boredzo.org/blog/wp-content/uploads/2007/05/IMTx-virtual-keycodes.pdf
+
+// Key code constants of Riti library
 let VC_GRAVE: UInt16 = 0x0029
 let VC_TILDE: UInt16 = 0x0001
 let VC_1: UInt16 = 0x0002
@@ -136,116 +139,322 @@ let VC_KP_0: UInt16 = 0x0052
 /// Converts a character to its corresponding keycode
 /// - Parameter char: The character to convert
 /// - Returns: The keycode as UInt16, or nil if the character is not mapped
-func charToKeycode(_ char: Character) -> UInt16? {
-    switch char {
+func charToKeycode(_ char: Character, macKeycode: UInt16) -> UInt16? {
+    switch (char, macKeycode) {
     // Special characters
-    case "`": return VC_GRAVE
-    case "~": return VC_TILDE
+    case ("`", _): return VC_GRAVE
+    case ("~", _): return VC_TILDE
     
-    // Numbers
-    case "0": return VC_0
-    case "1": return VC_1
-    case "2": return VC_2
-    case "3": return VC_3
-    case "4": return VC_4
-    case "5": return VC_5
-    case "6": return VC_6
-    case "7": return VC_7
-    case "8": return VC_8
-    case "9": return VC_9
+    // Numbers & Numpad numbers
+    case ("0", 82): return VC_KP_0
+    case ("0", _): return VC_0
+    
+    case ("1", 83): return VC_KP_1
+    case ("1", _): return VC_1
+    
+    case ("2", 84): return VC_KP_2
+    case ("2", _): return VC_2
+    
+    case ("3", 85): return VC_KP_3
+    case ("3", _): return VC_3
+    
+    case ("4", 86): return VC_KP_4
+    case ("4", _): return VC_4
+    
+    case ("5", 87): return VC_KP_5
+    case ("5", _): return VC_5
+    
+    case ("6", 88): return VC_KP_6
+    case ("6", _): return VC_6
+    
+    case ("7", 89): return VC_KP_7
+    case ("7", _): return VC_7
+    
+    case ("8", 91): return VC_KP_8
+    case ("8", _): return VC_8
+    
+    case ("9", 92): return VC_KP_9
+    case ("9", _): return VC_9
+    
     
     // Shifted numbers
-    case "!": return VC_EXCLAIM
-    case "@": return VC_AT
-    case "#": return VC_HASH
-    case "$": return VC_DOLLAR
-    case "%": return VC_PERCENT
-    case "^": return VC_CIRCUM
-    case "&": return VC_AMPERSAND
-    case "*": return VC_ASTERISK
-    case "(": return VC_PAREN_LEFT
-    case ")": return VC_PAREN_RIGHT
+    case ("!", _): return VC_EXCLAIM
+    case ("@", _): return VC_AT
+    case ("#", _): return VC_HASH
+    case ("$", _): return VC_DOLLAR
+    case ("%", _): return VC_PERCENT
+    case ("^", _): return VC_CIRCUM
+    case ("&", _): return VC_AMPERSAND
+    
+    case ("*", 67): return VC_KP_MULTIPLY
+    case ("*", _): return VC_ASTERISK
+    
+    case ("(", _): return VC_PAREN_LEFT
+    case (")", _): return VC_PAREN_RIGHT
     
     // Lowercase letters
-    case "a": return VC_A
-    case "b": return VC_B
-    case "c": return VC_C
-    case "d": return VC_D
-    case "e": return VC_E
-    case "f": return VC_F
-    case "g": return VC_G
-    case "h": return VC_H
-    case "i": return VC_I
-    case "j": return VC_J
-    case "k": return VC_K
-    case "l": return VC_L
-    case "m": return VC_M
-    case "n": return VC_N
-    case "o": return VC_O
-    case "p": return VC_P
-    case "q": return VC_Q
-    case "r": return VC_R
-    case "s": return VC_S
-    case "t": return VC_T
-    case "u": return VC_U
-    case "v": return VC_V
-    case "w": return VC_W
-    case "x": return VC_X
-    case "y": return VC_Y
-    case "z": return VC_Z
+    case ("a", _): return VC_A
+    case ("b", _): return VC_B
+    case ("c", _): return VC_C
+    case ("d", _): return VC_D
+    case ("e", _): return VC_E
+    case ("f", _): return VC_F
+    case ("g", _): return VC_G
+    case ("h", _): return VC_H
+    case ("i", _): return VC_I
+    case ("j", _): return VC_J
+    case ("k", _): return VC_K
+    case ("l", _): return VC_L
+    case ("m", _): return VC_M
+    case ("n", _): return VC_N
+    case ("o", _): return VC_O
+    case ("p", _): return VC_P
+    case ("q", _): return VC_Q
+    case ("r", _): return VC_R
+    case ("s", _): return VC_S
+    case ("t", _): return VC_T
+    case ("u", _): return VC_U
+    case ("v", _): return VC_V
+    case ("w", _): return VC_W
+    case ("x", _): return VC_X
+    case ("y", _): return VC_Y
+    case ("z", _): return VC_Z
     
     // Uppercase letters
-    case "A": return VC_A_SHIFT
-    case "B": return VC_B_SHIFT
-    case "C": return VC_C_SHIFT
-    case "D": return VC_D_SHIFT
-    case "E": return VC_E_SHIFT
-    case "F": return VC_F_SHIFT
-    case "G": return VC_G_SHIFT
-    case "H": return VC_H_SHIFT
-    case "I": return VC_I_SHIFT
-    case "J": return VC_J_SHIFT
-    case "K": return VC_K_SHIFT
-    case "L": return VC_L_SHIFT
-    case "M": return VC_M_SHIFT
-    case "N": return VC_N_SHIFT
-    case "O": return VC_O_SHIFT
-    case "P": return VC_P_SHIFT
-    case "Q": return VC_Q_SHIFT
-    case "R": return VC_R_SHIFT
-    case "S": return VC_S_SHIFT
-    case "T": return VC_T_SHIFT
-    case "U": return VC_U_SHIFT
-    case "V": return VC_V_SHIFT
-    case "W": return VC_W_SHIFT
-    case "X": return VC_X_SHIFT
-    case "Y": return VC_Y_SHIFT
-    case "Z": return VC_Z_SHIFT
+    case ("A", _): return VC_A_SHIFT
+    case ("B", _): return VC_B_SHIFT
+    case ("C", _): return VC_C_SHIFT
+    case ("D", _): return VC_D_SHIFT
+    case ("E", _): return VC_E_SHIFT
+    case ("F", _): return VC_F_SHIFT
+    case ("G", _): return VC_G_SHIFT
+    case ("H", _): return VC_H_SHIFT
+    case ("I", _): return VC_I_SHIFT
+    case ("J", _): return VC_J_SHIFT
+    case ("K", _): return VC_K_SHIFT
+    case ("L", _): return VC_L_SHIFT
+    case ("M", _): return VC_M_SHIFT
+    case ("N", _): return VC_N_SHIFT
+    case ("O", _): return VC_O_SHIFT
+    case ("P", _): return VC_P_SHIFT
+    case ("Q", _): return VC_Q_SHIFT
+    case ("R", _): return VC_R_SHIFT
+    case ("S", _): return VC_S_SHIFT
+    case ("T", _): return VC_T_SHIFT
+    case ("U", _): return VC_U_SHIFT
+    case ("V", _): return VC_V_SHIFT
+    case ("W", _): return VC_W_SHIFT
+    case ("X", _): return VC_X_SHIFT
+    case ("Y", _): return VC_Y_SHIFT
+    case ("Z", _): return VC_Z_SHIFT
     
     // Other symbols
-    case "-": return VC_MINUS
-    case "_": return VC_UNDERSCORE
-    case "=": return VC_EQUALS
-    case "+": return VC_PLUS
+    case ("-", 78): return VC_KP_SUBTRACT
+    case ("-", _): return VC_MINUS
     
-    case "[": return VC_BRACKET_LEFT
-    case "]": return VC_BRACKET_RIGHT
-    case "{": return VC_BRACE_LEFT
-    case "}": return VC_BRACE_RIGHT
-    case "\\": return VC_BACK_SLASH
-    case "|": return VC_BAR
+    case ("_", _): return VC_UNDERSCORE
     
-    case ";": return VC_SEMICOLON
-    case ":": return VC_COLON
-    case "'": return VC_APOSTROPHE
-    case "\"": return VC_QUOTE
+    case ("=", 81): return VC_KP_EQUALS
+    case ("=", _): return VC_EQUALS
     
-    case ",": return VC_COMMA
-    case "<": return VC_LESS
-    case ".": return VC_PERIOD
-    case ">": return VC_GREATER
-    case "/": return VC_SLASH
-    case "?": return VC_QUESTION
+    case ("+", 69): return VC_PLUS
+    case ("+", _): return VC_PLUS
+    
+    case ("[", _): return VC_BRACKET_LEFT
+    case ("]", _): return VC_BRACKET_RIGHT
+    case ("{", _): return VC_BRACE_LEFT
+    case ("}", _): return VC_BRACE_RIGHT
+    case ("\\", _): return VC_BACK_SLASH
+    case ("|", _): return VC_BAR
+    
+    case (";", _): return VC_SEMICOLON
+    case (":", _): return VC_COLON
+    case ("'", _): return VC_APOSTROPHE
+    case ("\"", _): return VC_QUOTE
+    
+    case (",", _): return VC_COMMA
+    case ("<", _): return VC_LESS
+    
+    case (".", 65): return VC_KP_DECIMAL
+    case (".", _): return VC_PERIOD
+    
+    case (">", _): return VC_GREATER
+    
+    case ("/", 75): return VC_KP_DECIMAL
+    case ("/", _): return VC_SLASH
+    
+    case ("?", _): return VC_QUESTION
+    
+    default: return nil
+    }
+}
+
+/// Maps Mac virtual keycodes (from Apple Extended Keyboard II) to VC_ keycodes
+func macKeycodeToKeycode(_ macKeycode: UInt16, shift: Bool) -> UInt16? {
+    switch (macKeycode, shift) {
+    // Number row
+    case (50, false): return VC_GRAVE      // `
+    case (50, true): return VC_TILDE       // ~
+    
+    case (18, false): return VC_1
+    case (18, true): return VC_EXCLAIM
+    
+    case (19, false): return VC_2
+    case (19, true): return VC_AT
+    
+    case (20, false): return VC_3
+    case (20, true): return VC_HASH
+    
+    case (21, false): return VC_4
+    case (21, true): return VC_DOLLAR
+    
+    case (23, false): return VC_5
+    case (23, true): return VC_PERCENT
+    
+    case (22, false): return VC_6
+    case (22, true): return VC_CIRCUM
+    
+    case (26, false): return VC_7
+    case (26, true): return VC_AMPERSAND
+    
+    case (28, false): return VC_8
+    case (28, true): return VC_ASTERISK
+        
+    case (25, false): return VC_9
+    case (25, true): return VC_PAREN_LEFT
+    
+    case (29, false): return VC_0
+    case (29, true): return VC_PAREN_RIGHT
+    
+    case (27, false): return VC_MINUS      // -
+    case (27, true): return VC_UNDERSCORE  // _
+    
+    case (24, false): return VC_EQUALS     // =
+    case (24, true): return VC_PLUS        // +
+    
+    // Top letter row
+    case (12, false): return VC_Q
+    case (12, true): return VC_Q_SHIFT
+    
+    case (13, false): return VC_W
+    case (13, true): return VC_W_SHIFT
+    
+    case (14, false): return VC_E
+    case (14, true): return VC_E_SHIFT
+    
+    case (15, false): return VC_R
+    case (15, true): return VC_R_SHIFT
+    
+    case (17, false): return VC_T
+    case (17, true): return VC_T_SHIFT
+    
+    case (16, false): return VC_Y
+    case (16, true): return VC_Y_SHIFT
+    
+    case (32, false): return VC_U
+    case (32, true): return VC_U_SHIFT
+    
+    case (34, false): return VC_I
+    case (34, true): return VC_I_SHIFT
+    
+    case (31, false): return VC_O
+    case (31, true): return VC_O_SHIFT
+    
+    case (35, false): return VC_P
+    case (35, true): return VC_P_SHIFT
+    
+    case (33, false): return VC_BRACKET_LEFT   // [
+    case (33, true): return VC_BRACE_LEFT      // {
+    
+    case (30, false): return VC_BRACKET_RIGHT  // ]
+    case (30, true): return VC_BRACE_RIGHT     // }
+    
+    case (42, false): return VC_BACK_SLASH     // \
+    case (42, true): return VC_BAR            // |
+    
+    // Home row
+    case (0, false): return VC_A
+    case (0, true): return VC_A_SHIFT
+    
+    case (1, false): return VC_S
+    case (1, true): return VC_S_SHIFT
+    
+    case (2, false): return VC_D
+    case (2, true): return VC_D_SHIFT
+    
+    case (3, false): return VC_F
+    case (3, true): return VC_F_SHIFT
+    
+    case (5, false): return VC_G
+    case (5, true): return VC_G_SHIFT
+    
+    case (4, false): return VC_H
+    case (4, true): return VC_H_SHIFT
+    
+    case (38, false): return VC_J
+    case (38, true): return VC_J_SHIFT
+    
+    case (40, false): return VC_K
+    case (40, true): return VC_K_SHIFT
+    
+    case (37, false): return VC_L
+    case (37, true): return VC_L_SHIFT
+    
+    case (41, false): return VC_SEMICOLON  // ;
+    case (41, true): return VC_COLON      // :
+    
+    case (39, false): return VC_APOSTROPHE // '
+    case (39, true): return VC_QUOTE      // "
+    
+    // Bottom letter row
+    case (6, false): return VC_Z
+    case (6, true): return VC_Z_SHIFT
+    
+    case (7, false): return VC_X
+    case (7, true): return VC_X_SHIFT
+    
+    case (8, false): return VC_C
+    case (8, true): return VC_C_SHIFT
+    
+    case (9, false): return VC_V
+    case (9, true): return VC_V_SHIFT
+    
+    case (11, false): return VC_B
+    case (11, true): return VC_B_SHIFT
+    
+    case (45, false): return VC_N
+    case (45, true): return VC_N_SHIFT
+    
+    case (46, false): return VC_M
+    case (46, true): return VC_M_SHIFT
+    
+    case (43, false): return VC_COMMA      // ,
+    case (43, true): return VC_LESS       // <
+    
+    case (47, false): return VC_PERIOD     // .
+    case (47, true): return VC_GREATER     // >
+    
+    case (44, false): return VC_SLASH      // /
+    case (44, true): return VC_QUESTION    // ?
+    
+    // Numeric keypad
+    case (81, _): return VC_KP_EQUALS
+    case (75, _): return VC_KP_DIVIDE
+    case (67, _): return VC_KP_MULTIPLY
+    case (89, _): return VC_KP_7
+    case (91, _): return VC_KP_8
+    case (92, _): return VC_KP_9
+    case (78, _): return VC_KP_SUBTRACT
+    case (86, _): return VC_KP_4
+    case (87, _): return VC_KP_5
+    case (88, _): return VC_KP_6
+    case (69, _): return VC_KP_ADD
+    case (83, _): return VC_KP_1
+    case (84, _): return VC_KP_2
+    case (85, _): return VC_KP_3
+    case (76, _): return VC_KP_ENTER
+    case (82, _): return VC_KP_0
+    case (65, _): return VC_KP_DECIMAL
     
     default: return nil
     }

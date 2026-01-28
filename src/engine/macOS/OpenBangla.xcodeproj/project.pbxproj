@@ -135,12 +135,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8BA912A9245CC85000C9A683 /* Build configuration list for PBXNativeTarget "OpenBangla" */;
 			buildPhases = (
-				8B562AE524744139005AC1BE /* Force Rebuild (Workaround 41254808) */,
 				8BA91297245CC84D00C9A683 /* Sources */,
 				8BA91298245CC84D00C9A683 /* Frameworks */,
 				8BA91299245CC84D00C9A683 /* Resources */,
 				8B94E62924739A4700E56568 /* Set Build Version and Number */,
-				8B4AFF7C245E41A00031303B /* Install Input Method */,
 			);
 			buildRules = (
 			);
@@ -215,42 +213,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8B4AFF7C245E41A00031303B /* Install Input Method */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Install Input Method";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# only install this way when developing\n#if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n#    DEST=\"${HOME}/Library/Input Methods\"\n#    echo \"Installing Goftam into ${DEST}\"\n#    killall -9 \"${EXECUTABLE_NAME}\"\n#    cp -R \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" \"${DEST}\"\n#fi\n";
-		};
-		8B562AE524744139005AC1BE /* Force Rebuild (Workaround 41254808) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Force Rebuild (Workaround 41254808)";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Incremental builds may fail to codesign properly for non-source\n# related changes to your project, such as resource file modifications,\n# which can result in the app failing to launch. (41254808)\n\n# Workaround: Change a source file within the same target to\n# trigger the codesign process, or perform a clean build.\n\n# present as of Xcode Version 11.4.1 (11E503a)\n\n# this bug does not play nicely with the run script to automatically\n# generate build version and number from git. workaround until\n# the bug is fixed.\n\n#rm -rf ${BUILT_PRODUCTS_DIR}\n";
-		};
 		8B94E62924739A4700E56568 /* Set Build Version and Number */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -269,7 +231,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "BUILD_NUMBER=$(git rev-list HEAD --count)\nBUILD_VERSION=$(git describe --tags --always --dirty)\nPLIST=\"\"\n\n# handle archiving\nif [ \"${ACTION}\" == \"install\" ]; then\n    PLIST=\"${INSTALL_DIR}/${INFOPLIST_PATH}\"\nelse\n    PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\nfi\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUILD_NUMBER\" \"${PLIST}\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${BUILD_VERSION#*v}\" \"${PLIST}\"\n";
+			shellScript = "BUILD_NUMBER=$(git rev-list HEAD --count)\nPLIST=\"\"\n\n# handle archiving\nif [ \"${ACTION}\" == \"install\" ]; then\n    PLIST=\"${INSTALL_DIR}/${INFOPLIST_PATH}\"\nelse\n    PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\nfi\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUILD_NUMBER\" \"${PLIST}\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${MARKETING_VERSION}\" \"${PLIST}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

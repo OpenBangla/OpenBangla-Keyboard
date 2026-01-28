@@ -28,7 +28,13 @@ enum OpenBanglaLogLevel: Int {
     case VERBOSE = 0
     case ALWAYS_PRINT
 }
+
+#if DEBUG
 let currentLogLevel: OpenBanglaLogLevel = .VERBOSE
+#else
+let currentLogLevel: OpenBanglaLogLevel = .ALWAYS_PRINT
+#endif
+
 func openbanglaLog(logLevel: OpenBanglaLogLevel = .ALWAYS_PRINT, _ format: String,
                file: String = #file, caller: String = #function, args: CVarArg...) {
     if (logLevel.rawValue >= currentLogLevel.rawValue) {
@@ -47,7 +53,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
         let buildNumber: String =
             Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
-        openbanglaLog("version \(version) (\(buildNumber))")
+        
+        #if DEBUG
+        let buildType = "Debug"
+        #else
+        let buildType = "Release"
+        #endif
+        
+        openbanglaLog("\(buildType) build version \(version) (\(buildNumber))")
 
         // no matter what Info.plist and openbangla.entitlements say, the connection name
         // requested from the sandbox seems to be $(PRODUCT_BUNDLE_IDENTIFIER)_Connection,
@@ -66,8 +79,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // scrolling to the bottom of the scrolling panel puts selection numbers out of alignment
         candidatesWindow = IMKCandidates(server: server,
                                          panelType: kind)
-//                                         panelType: kIMKSingleColumnScrollingCandidatePanel)
-                                         //panelType: kIMKSingleRowSteppingCandidatePanel)
 
         // as of 10.15.3, default candidates window key event handling is buggy
         // (number selector keys don't work). workaround involves bypassing default window handling.
