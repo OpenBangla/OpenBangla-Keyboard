@@ -42,32 +42,34 @@ if(OS_LINUX)
                 DESTINATION ${DATADIR}/metainfo)
 endif()
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
-        DESTINATION ${PROJECT_DATADIR}/layouts)
+if(NOT APPLE)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
+                DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/Borno.json
-        DESTINATION ${PROJECT_DATADIR}/layouts)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/Borno.json
+                DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/Avro_Easy.json
-        DESTINATION ${PROJECT_DATADIR}/layouts)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/Avro_Easy.json
+                DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/Munir_Optima.json
-        DESTINATION ${PROJECT_DATADIR}/layouts)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/Munir_Optima.json
+                DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/National_Jatiya.json
-        DESTINATION ${PROJECT_DATADIR}/layouts)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/National_Jatiya.json
+                DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/Probhat.json
-        DESTINATION ${PROJECT_DATADIR}/layouts)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/Probhat.json
+                DESTINATION ${PROJECT_DATADIR}/layouts)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/autocorrect.json
-        DESTINATION ${PROJECT_DATADIR}/data)
+        install(FILES ${CMAKE_SOURCE_DIR}/src/engine/riti/data/autocorrect.json
+                DESTINATION ${PROJECT_DATADIR}/data)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/dictionary.json
-        DESTINATION ${PROJECT_DATADIR}/data)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/dictionary.json
+                DESTINATION ${PROJECT_DATADIR}/data)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/suffix.json
-        DESTINATION ${PROJECT_DATADIR}/data)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/suffix.json
+                DESTINATION ${PROJECT_DATADIR}/data)
 
-install(FILES ${CMAKE_SOURCE_DIR}/data/regex.json
-        DESTINATION ${PROJECT_DATADIR}/data)
+        install(FILES ${CMAKE_SOURCE_DIR}/data/regex.json
+                DESTINATION ${PROJECT_DATADIR}/data)
+endif() # not APPLE

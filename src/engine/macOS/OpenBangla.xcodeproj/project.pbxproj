@@ -1,0 +1,436 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		125DFDA62F0E292700DC72A4 /* libriti.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 125DFDA42F0E28AE00DC72A4 /* libriti.a */; };
+		8B47A60624798B39004A391C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B558A2C2477059600F627F3 /* MainMenu.xib */; };
+		8B523E79246DB8DB00B4A04C /* Base.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8B523E78246DB8DB00B4A04C /* Base.lproj */; };
+		8BA9129F245CC84D00C9A683 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9129E245CC84D00C9A683 /* AppDelegate.swift */; };
+		8BA912A1245CC85000C9A683 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BA912A0245CC85000C9A683 /* Assets.xcassets */; };
+		8BA912B1245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA912B0245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift */; };
+		C3615D5E2D64A03900E733FF /* RitiWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3615D5D2D64A03900E733FF /* RitiWrapper.swift */; };
+		C362D0F02F0916CC006D0813 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362D0EF2F0916CC006D0813 /* Settings.swift */; };
+		C362D0F32F091B47006D0813 /* SupportDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362D0F22F091B33006D0813 /* SupportDirectory.swift */; };
+		C3F3B8E12EAD351A00AA2647 /* Keycodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F3B8E02EAD351300AA2647 /* Keycodes.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		125DFDA32F0E28AE00DC72A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 125DFD9D2F0E28AE00DC72A4 /* riti.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CA00B9937C4654FCDE10A9EB;
+			remoteInfo = "riti.a (static library)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		125DFD9D2F0E28AE00DC72A4 /* riti.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = riti.xcodeproj; path = ../riti/riti.xcodeproj; sourceTree = SOURCE_ROOT; };
+		125DFDA52F0E28F900DC72A4 /* riti.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = riti.h; path = ../riti/include/riti.h; sourceTree = SOURCE_ROOT; };
+		8B21E639245D45FA008B802F /* openbangla.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = openbangla.entitlements; sourceTree = "<group>"; };
+		8B523E78246DB8DB00B4A04C /* Base.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base.lproj; sourceTree = "<group>"; };
+		8B523E7E246DB93B00B4A04C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B558A2C2477059600F627F3 /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		8BA9129B245CC84D00C9A683 /* OpenBangla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenBangla.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BA9129E245CC84D00C9A683 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8BA912A0245CC85000C9A683 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8BA912B0245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenBanglaIMKInputController.swift; sourceTree = "<group>"; };
+		C3615D5A2D649EE600E733FF /* OpenBangla-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpenBangla-Bridging-Header.h"; sourceTree = "<group>"; };
+		C3615D5D2D64A03900E733FF /* RitiWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitiWrapper.swift; sourceTree = "<group>"; };
+		C362D0EF2F0916CC006D0813 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		C362D0F22F091B33006D0813 /* SupportDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportDirectory.swift; sourceTree = "<group>"; };
+		C3F3B8E02EAD351300AA2647 /* Keycodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycodes.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8BA91298245CC84D00C9A683 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				125DFDA62F0E292700DC72A4 /* libriti.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		125DFDA02F0E28AE00DC72A4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				125DFDA42F0E28AE00DC72A4 /* libriti.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8B523E77246DB82800B4A04C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8B558A2C2477059600F627F3 /* MainMenu.xib */,
+				8B21E639245D45FA008B802F /* openbangla.entitlements */,
+				8B523E7E246DB93B00B4A04C /* Info.plist */,
+				8B523E78246DB8DB00B4A04C /* Base.lproj */,
+				8BA912A0245CC85000C9A683 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8BA91292245CC84D00C9A683 = {
+			isa = PBXGroup;
+			children = (
+				8B523E77246DB82800B4A04C /* Resources */,
+				8BA9129D245CC84D00C9A683 /* Sources */,
+				8BA9129C245CC84D00C9A683 /* Products */,
+				C3615D5B2D649F1C00E733FF /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		8BA9129C245CC84D00C9A683 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8BA9129B245CC84D00C9A683 /* OpenBangla.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8BA9129D245CC84D00C9A683 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C3615D522D649E7400E733FF /* Other */,
+				8BA9129E245CC84D00C9A683 /* AppDelegate.swift */,
+				8BA912B0245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift */,
+				C3F3B8E02EAD351300AA2647 /* Keycodes.swift */,
+				C362D0EF2F0916CC006D0813 /* Settings.swift */,
+				C3615D5D2D64A03900E733FF /* RitiWrapper.swift */,
+				C362D0F22F091B33006D0813 /* SupportDirectory.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		C3615D522D649E7400E733FF /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				125DFDA52F0E28F900DC72A4 /* riti.h */,
+				125DFD9D2F0E28AE00DC72A4 /* riti.xcodeproj */,
+				C3615D5A2D649EE600E733FF /* OpenBangla-Bridging-Header.h */,
+			);
+			name = Other;
+			sourceTree = "<group>";
+		};
+		C3615D5B2D649F1C00E733FF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8BA9129A245CC84D00C9A683 /* OpenBangla */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BA912A9245CC85000C9A683 /* Build configuration list for PBXNativeTarget "OpenBangla" */;
+			buildPhases = (
+				8BA91297245CC84D00C9A683 /* Sources */,
+				8BA91298245CC84D00C9A683 /* Frameworks */,
+				8BA91299245CC84D00C9A683 /* Resources */,
+				8B94E62924739A4700E56568 /* Set Build Version and Number */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OpenBangla;
+			productName = openbangla;
+			productReference = 8BA9129B245CC84D00C9A683 /* OpenBangla.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8BA91293245CC84D00C9A683 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Brett Gutstein";
+				TargetAttributes = {
+					8BA9129A245CC84D00C9A683 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 8BA91296245CC84D00C9A683 /* Build configuration list for PBXProject "OpenBangla" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8BA91292245CC84D00C9A683;
+			productRefGroup = 8BA9129C245CC84D00C9A683 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 125DFDA02F0E28AE00DC72A4 /* Products */;
+					ProjectRef = 125DFD9D2F0E28AE00DC72A4 /* riti.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				8BA9129A245CC84D00C9A683 /* OpenBangla */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		125DFDA42F0E28AE00DC72A4 /* libriti.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libriti.a;
+			remoteRef = 125DFDA32F0E28AE00DC72A4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8BA91299245CC84D00C9A683 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B47A60624798B39004A391C /* MainMenu.xib in Resources */,
+				8BA912A1245CC85000C9A683 /* Assets.xcassets in Resources */,
+				8B523E79246DB8DB00B4A04C /* Base.lproj in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8B94E62924739A4700E56568 /* Set Build Version and Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+				"$(INSTALL_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Set Build Version and Number";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "BUILD_NUMBER=$(git rev-list HEAD --count)\nPLIST=\"\"\n\n# handle archiving\nif [ \"${ACTION}\" == \"install\" ]; then\n    PLIST=\"${INSTALL_DIR}/${INFOPLIST_PATH}\"\nelse\n    PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\nfi\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUILD_NUMBER\" \"${PLIST}\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${MARKETING_VERSION}\" \"${PLIST}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8BA91297245CC84D00C9A683 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3F3B8E12EAD351A00AA2647 /* Keycodes.swift in Sources */,
+				8BA912B1245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift in Sources */,
+				C3615D5E2D64A03900E733FF /* RitiWrapper.swift in Sources */,
+				C362D0F32F091B47006D0813 /* SupportDirectory.swift in Sources */,
+				C362D0F02F0916CC006D0813 /* Settings.swift in Sources */,
+				8BA9129F245CC84D00C9A683 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8BA912A7245CC85000C9A683 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8BA912A8245CC85000C9A683 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		8BA912AA245CC85000C9A683 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Resources/openbangla.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.openbangla.inputmethod.keyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OpenBangla-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		8BA912AB245CC85000C9A683 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Resources/openbangla.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.openbangla.inputmethod.keyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OpenBangla-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8BA91296245CC84D00C9A683 /* Build configuration list for PBXProject "OpenBangla" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BA912A7245CC85000C9A683 /* Debug */,
+				8BA912A8245CC85000C9A683 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BA912A9245CC85000C9A683 /* Build configuration list for PBXNativeTarget "OpenBangla" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BA912AA245CC85000C9A683 /* Debug */,
+				8BA912AB245CC85000C9A683 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8BA91293245CC84D00C9A683 /* Project object */;
+}

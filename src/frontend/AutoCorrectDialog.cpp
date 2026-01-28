@@ -19,6 +19,7 @@
 #include <QTreeWidget>
 #include <QJsonDocument>
 #include "AutoCorrectDialog.h"
+#include "FileSystem.h"
 #include "ui_AutoCorrectDialog.h"
 
 AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
@@ -51,7 +52,7 @@ void AutoCorrectDialog::loadData() {
   QJsonDocument json(QJsonDocument::fromJson(data));
   dict = json.object();
   
-  dictFile.setFileName(folders.getUserAutoCorrectFile());
+  dictFile.setFileName(gUserFolders->getUserAutoCorrectFile());
   if (!dictFile.open(QIODevice::ReadOnly)) {
     LOG_ERROR("[AutoCorrect]: Error: Couldn't open user specific AutoCorrect file!\n");
   }
@@ -110,7 +111,7 @@ void AutoCorrectDialog::addEntryInViewer(QString replace, QString with) {
 
 void AutoCorrectDialog::on_buttonBox_accepted() {
   // Save changes in user specific auto correct file.
-  QFile saveFile(folders.getUserAutoCorrectFile());
+  QFile saveFile(gUserFolders->getUserAutoCorrectFile());
   if (!saveFile.open(QIODevice::WriteOnly)) {
     LOG_ERROR("[AutoCorrect:Save]: Error couldn't open save file.\n");
     return;

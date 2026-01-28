@@ -23,7 +23,11 @@
 Settings *gSettings;
 
 Settings::Settings() {
+#ifdef Q_OS_MACOS
+  setting = new QSettings(gUserFolders->dataPath() + "/org.openbangla.keyboard.plist", QSettings::NativeFormat);
+#else
   setting = new QSettings("OpenBangla", "Keyboard");
+#endif
   setting->sync();
 }
 

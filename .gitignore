@@ -144,3 +144,13 @@ fabric.properties
 *.out
 *.app
 .cache
+
+*~
+*.DS_Store
+.*.swp
+*mode1v3
+*pbxuser
+*perspectivev3
+*xcuserdata*
+*xcworkspace*
+/build

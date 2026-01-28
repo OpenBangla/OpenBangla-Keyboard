@@ -18,7 +18,6 @@
 
 #include <QFile>
 #include <QJsonObject>
-#include "FileSystem.h"
 
 enum ConversionResult {
   Ok,
@@ -28,8 +27,6 @@ enum ConversionResult {
 };
 
 class LayoutConverter {
-  UserFolders folders;
-
   QString decodeCompressAndEncode(QString &data);
 
   ConversionResult saveLayout(QJsonObject obj, QString path);

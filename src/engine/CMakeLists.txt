@@ -15,3 +15,8 @@ if (OS_LINUX)
     ## Include subdirectories
     add_subdirectory(riti)
 endif (OS_LINUX)
+
+if (APPLE)
+    ## Platform is macOS
+    add_subdirectory(macOS)
+endif (APPLE)
