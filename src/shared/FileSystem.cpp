@@ -53,7 +53,7 @@ void UserFolders::setupMacOS() {
 
     for (const QString &file : files) {
         // Migrate data files to user specific folder on first run
-        bool ret = migrateFile(file, layoutsDir, userLayoutsDir);
+        bool ret = migrateFile(file, layoutsDir, userLayoutsDir, false);
         LOG_DEBUG("Migrating layout %s: %d\n", file.toStdString().c_str(), ret);
     }
 }
@@ -74,22 +74,6 @@ QString AvroPhoneticLayoutPath() {
 #endif
 }
 
-QString DatabasePath() {
-    return PROJECT_DATADIR "/data";
-}
-
-QString DictionaryPath() {
-    return PROJECT_DATADIR "/data/dictionary.json";
-}
-
-QString SuffixDictPath() {
-    return PROJECT_DATADIR "/data/suffix.json";
-}
-
-QString RegexDictPath() {
-    return PROJECT_DATADIR "/data/regex.json";
-}
-
 QString AutoCorrectFilePath() {
 #ifdef Q_OS_MACOS
     return QCoreApplication::applicationDirPath() + "/../Resources/data/autocorrect.json";
@@ -98,13 +82,38 @@ QString AutoCorrectFilePath() {
 #endif
 }
 
+#ifndef Q_OS_MACOS
+    QString DatabasePath() {
+        return PROJECT_DATADIR "/data";
+    }
+    
+    QString DictionaryPath() {
+        return PROJECT_DATADIR "/data/dictionary.json";
+    }
+    
+    QString SuffixDictPath() {
+        return PROJECT_DATADIR "/data/suffix.json";
+    }
+    
+    QString RegexDictPath() {
+        return PROJECT_DATADIR "/data/regex.json";
+    }
+#endif
+
+
 /// Copy the `fileName` from `src` to `dst`.
-/// This function overwrites if the file already exists in the destination.
-bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst) {
+/// 
+/// overwrite: overwrite the file if it already exists in the destination.
+/// 
+/// return true if the file was copied successfully, false otherwise.
+bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst, bool overwrite) {
     QString srcFile = src.filePath(fileName);
     QString dstFile = dst.filePath(fileName);
 
     if(QFile::exists(srcFile) && QFile::exists(dstFile)) {
+        if(!overwrite) {
+            return false;
+        }
         QFile::remove(dstFile);
     }
 

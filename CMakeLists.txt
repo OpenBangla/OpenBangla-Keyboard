@@ -96,12 +96,9 @@ endif()
 
 # For Apple
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
     find_package(zstd CONFIG REQUIRED)
-    set(PROJECT_DATADIR "" CACHE PATH "Path to Data Directory")
-    set(BIN_DIR "")
-    add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
-    add_definitions(-DBIN_DIR="${BIN_DIR}")
+
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
     set(CMAKE_INSTALL_PREFIX "/")
 endif()
 
@@ -139,11 +136,11 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_STRIP_FILES TRUE)
 set(CPACK_PRODUCTBUILD_IDENTITY_NAME "" CACHE STRING "Code signing identity for productbuild")
 set(CPACK_PRODUCTBUILD_KEYCHAIN_PATH "" CACHE STRING "Keychain path for code signing")
-set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.github.io/")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.org/")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
-set(CPACK_RPM_PACKAGE_URL "https://openbangla.github.io/")
+set(CPACK_RPM_PACKAGE_URL "https://openbangla.org/")
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
 # Prevents CPack from generating file conflicts
 set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/usr/share/metainfo" "/usr/share/pixmaps"

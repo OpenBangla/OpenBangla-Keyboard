@@ -66,17 +66,19 @@ QString LayoutsFilePath();
 
 QString AvroPhoneticLayoutPath();
 
-QString DatabasePath();
-
-QString DictionaryPath();
-
-QString SuffixDictPath();
-
-QString RegexDictPath();
-
 QString AutoCorrectFilePath();
 
-bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst);
+#ifndef Q_OS_MACOS
+    QString DatabasePath();
+    
+    QString DictionaryPath();
+    
+    QString SuffixDictPath();
+    
+    QString RegexDictPath();
+#endif
+
+bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst, bool overwrite=true);
 
 /* Global */
 extern UserFolders *gUserFolders;
