@@ -37,7 +37,7 @@ if(APPLE)
 endif(APPLE)
 
 if(APPLE)
-    set(APP_ICON "${CMAKE_SOURCE_DIR}/data/openbangla.icns")
+    set(APP_ICON "${CMAKE_SOURCE_DIR}/data/AppIcon.icns")
 
     set(APP_DATA
         "${CMAKE_SOURCE_DIR}/src/engine/riti/data/autocorrect.json"
@@ -74,7 +74,7 @@ if(APPLE)
 
     set_target_properties(openbangla-gui PROPERTIES
         OUTPUT_NAME "OpenBangla Keyboard"
-        MACOSX_BUNDLE_ICON_FILE openbangla.icns
+        MACOSX_BUNDLE_ICON_FILE AppIcon.icns
         MACOSX_BUNDLE_BUNDLE_NAME "OpenBangla Keyboard"
         MACOSX_BUNDLE_INFO_STRING "OpenBangla Keyboard"
         MACOSX_BUNDLE_GUI_IDENTIFIER "org.openbangla.keyboard"
