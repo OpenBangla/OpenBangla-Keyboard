@@ -23,9 +23,11 @@
 #include "TopBar.h"
 #include "SingleInstance.h"
 #include "Settings.h"
+#include "FileSystem.h"
 
 int main(int argc, char *argv[]) {  
   QApplication app(argc, argv);
+  gUserFolders = new UserFolders();
   gSettings = new Settings();
 
   app.setApplicationName("OpenBangla Keyboard");

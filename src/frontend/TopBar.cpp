@@ -33,7 +33,7 @@
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
-#include "AutoCorrectDialog.h"
+#include "FileSystem.h"
 #include "ui_TopBar.h"
 
 
@@ -397,14 +397,13 @@ void TopBar::on_buttonSettings_clicked() {
  * This function checks and migrates data files into the new user data directory.
  **/
 void TopBar::DataMigration() {
-  UserFolders usr;
   LayoutConverter converter;
   if(gSettings->getPreviousUserDataRemains()) {
-    QDir previousUserDataPath = QDir(environmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
+    QDir previousUserDataPath = QDir(qEnvironmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
     if(previousUserDataPath.exists()) {
       // Handle the data files.
-      migrateFile("phonetic-candidate-selection.json", previousUserDataPath, usr.dataPath());
-      migrateFile("autocorrect.json", previousUserDataPath, usr.dataPath());
+      migrateFile("phonetic-candidate-selection.json", previousUserDataPath, gUserFolders->dataPath());
+      migrateFile("autocorrect.json", previousUserDataPath, gUserFolders->dataPath());
       // Convert old layout files if present.
       previousUserDataPath.cd("Layouts");
       QStringList list = previousUserDataPath.entryList(QStringList("*.json"));
