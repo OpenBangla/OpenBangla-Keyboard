@@ -25,6 +25,10 @@
 #include "PlatformConfig.h"
 #include "Log.h"
 
+#ifdef Q_OS_MACOS
+#include "macOS.h"
+#endif
+
 DesktopEnvironment detectDesktopEnvironment() {
     const QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
@@ -211,6 +215,10 @@ void setupInputSources() {
 
     if(de == DesktopEnvironment::GNOME) {
         setupGnomeIME();
+    } else if(de == DesktopEnvironment::macOS) {
+        #ifdef Q_OS_MACOS
+            macOS::sayHello();
+        #endif
     } else {
         LOG_DEBUG("Desktop Environment not supported for input source setup\n");
     }

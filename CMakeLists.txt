@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.26...3.29)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
@@ -17,7 +17,18 @@ if(NOT WIN32 AND NOT APPLE)
     include(CMakeCargo)
 endif()
 
+if(APPLE)
+    enable_language(Swift)
+
+    # Set up swiftrt.o and runtime library search paths
+    include(InitializeSwift)
+    # cmake/modules/AddSwift.cmake provides the function for creating the Swift to
+    # C++ bridging header
+    include(AddSwift)
+endif()
+
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
+find_package(zstd CONFIG REQUIRED)
 
 message(STATUS "Qt5 framework version: ${Qt5Core_VERSION}")
 
@@ -86,14 +97,10 @@ if(OS_LINUX)
         pkg_check_modules(IBUS REQUIRED ibus-1.0)
         find_package(Fcitx5Core 5.0.5 REQUIRED)
     endif()
-
-    ## Find zstd ##
-    pkg_check_modules(ZSTD REQUIRED libzstd)
 endif()
 
 # For Windows
 if(WIN32)
-    find_package(zstd CONFIG REQUIRED)
     set(PROJECT_DATADIR "$ENV{LOCALAPPDATA}\\OpenBangla" CACHE PATH "Path to Data Directory")
     set(BIN_DIR "${PROJECT_DATADIR}/bin")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
@@ -102,8 +109,6 @@ endif()
 
 # For Apple
 if(APPLE)
-    find_package(zstd CONFIG REQUIRED)
-
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
     set(CMAKE_INSTALL_PREFIX "/")
 endif()

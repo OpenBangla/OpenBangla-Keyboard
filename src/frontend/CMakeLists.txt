@@ -1,4 +1,4 @@
-include_directories(../shared 3rdParty)
+include_directories(../shared 3rdParty macOS)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -21,19 +21,16 @@ set(SRC_MAIN main.cpp
         AvroPhonetic.cpp
         PlatformConfig.cpp)
 
-set(LINK_LIBS libShared Qt5::Widgets Qt5::Network)
-
-if(OS_LINUX)
-    list(APPEND LINK_LIBS ${ZSTD_LIBRARIES})
-endif(OS_LINUX)
+set(LINK_LIBS libShared Qt5::Widgets Qt5::Network zstd::libzstd)
 
 if(WIN32)
-    list(APPEND LINK_LIBS zstd::libzstd)
     set(CMAKE_WIN32_EXECUTABLE ON)
 endif(WIN32)
 
 if(APPLE)
-    list(APPEND LINK_LIBS zstd::libzstd)
+    add_subdirectory(macOS)
+
+    list(APPEND LINK_LIBS macOS)
     list(APPEND LINK_LIBS "-framework Foundation")
 endif(APPLE)
 
