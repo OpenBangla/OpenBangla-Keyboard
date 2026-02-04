@@ -120,7 +120,7 @@ https://github.com/OpenBangla/OpenBangla-Keyboard/discussions[গিটহাব
 * Rust 1.34.0 or later
 * GNU Make or Ninja
 * CMake
-* Qt 5.5 or later
+* Qt 5.15 or later
 * iBus development library
 * Zstandard compression library (zstd)
 

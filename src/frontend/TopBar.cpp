@@ -18,6 +18,7 @@
 
 #include <QSystemTrayIcon>
 #include <QScreen>
+#include <QWindow>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QFileDialog>
@@ -34,6 +35,7 @@
 #include "LayoutConverter.h"
 #include "AutoCorrectDialog.h"
 #include "PlatformConfig.h"
+#include "FileSystem.h"
 #include "ui_TopBar.h"
 
 
@@ -353,9 +355,11 @@ bool TopBar::eventFilter(QObject *object, QEvent *event) {
       event->accept();
     } else if (event->type() == QEvent::MouseMove) {
       if (canMoveTopbar) {
-        QMouseEvent *e = (QMouseEvent *) event;
-        ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
-        move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+        if(!this->windowHandle()->startSystemMove()){
+            QMouseEvent *e = (QMouseEvent *) event;
+            ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
+            move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+        }
         positionChanged = true;
       }
     } else if (event->type() == QEvent::MouseButtonRelease) {
@@ -398,14 +402,13 @@ void TopBar::on_buttonSettings_clicked() {
  * This function checks and migrates data files into the new user data directory.
  **/
 void TopBar::DataMigration() {
-  UserFolders usr;
   LayoutConverter converter;
   if(gSettings->getPreviousUserDataRemains()) {
-    QDir previousUserDataPath = QDir(environmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
+    QDir previousUserDataPath = QDir(qEnvironmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
     if(previousUserDataPath.exists()) {
       // Handle the data files.
-      migrateFile("phonetic-candidate-selection.json", previousUserDataPath, usr.dataPath());
-      migrateFile("autocorrect.json", previousUserDataPath, usr.dataPath());
+      migrateFile("phonetic-candidate-selection.json", previousUserDataPath, gUserFolders->dataPath());
+      migrateFile("autocorrect.json", previousUserDataPath, gUserFolders->dataPath());
       // Convert old layout files if present.
       previousUserDataPath.cd("Layouts");
       QStringList list = previousUserDataPath.entryList(QStringList("*.json"));

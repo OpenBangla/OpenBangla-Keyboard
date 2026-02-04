@@ -109,10 +109,16 @@ LayoutList Layout::searchLayouts() {
   layoutMap.clear();
 
   QDir dir;
+  
+#ifndef Q_OS_MACOS
+  // Search in system layouts folder
+  // On macOS we don't have a system layouts folder, all layouts are stored in user folder
+  // so we skip this part
   dir.setPath(LayoutsFilePath());
   lst << searchLayoutsEx(dir);
+#endif
 
-  dir.setPath(folders.getUserLayoutPath());
+  dir.setPath(gUserFolders->getUserLayoutPath());
   if (dir.exists()) {
     lst << searchLayoutsEx(dir);
   } else {
