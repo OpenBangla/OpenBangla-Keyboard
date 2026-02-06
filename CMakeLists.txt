@@ -115,6 +115,14 @@ endif()
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
     set(CMAKE_INSTALL_PREFIX "/")
+
+    # Determine host architectures for the .pkg installer distribution.
+    # Without hostArchitectures, macOS assumes x86_64 and prompts for Rosetta.
+    if(CMAKE_OSX_ARCHITECTURES)
+        string(REPLACE ";" "," CPACK_HOST_ARCHITECTURES "${CMAKE_OSX_ARCHITECTURES}")
+    else()
+        set(CPACK_HOST_ARCHITECTURES "${CMAKE_SYSTEM_PROCESSOR}")
+    endif()
 endif()
 
 add_subdirectory(src/engine)
@@ -148,7 +156,11 @@ endif()
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-set(CPACK_STRIP_FILES TRUE)
+if(NOT APPLE)
+    # Stripping on macOS invalidates ad-hoc code signatures, causing
+    # installed apps to be killed by the system.
+    set(CPACK_STRIP_FILES TRUE)
+endif()
 set(CPACK_PRODUCTBUILD_IDENTITY_NAME "" CACHE STRING "Code signing identity for productbuild")
 set(CPACK_PRODUCTBUILD_KEYCHAIN_PATH "" CACHE STRING "Keychain path for code signing")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.org/")

@@ -119,8 +119,12 @@ if(OS_LINUX)
 endif()
 
 if(APPLE)
-    install(TARGETS openbangla-gui
-        BUNDLE DESTINATION "Applications"
+    # Install the bundle as a directory rather than a target to prevent
+    # install_name_tool from modifying the binary and invalidating the
+    # code signature applied after macdeployqt.
+    install(DIRECTORY "$<TARGET_BUNDLE_DIR:openbangla-gui>"
+        DESTINATION "Applications"
+        USE_SOURCE_PERMISSIONS
         COMPONENT GUI
     )
 endif()
