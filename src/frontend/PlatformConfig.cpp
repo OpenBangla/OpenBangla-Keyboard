@@ -217,7 +217,8 @@ void setupInputSources() {
         setupGnomeIME();
     } else if(de == DesktopEnvironment::macOS) {
         #ifdef Q_OS_MACOS
-            macOS::sayHello();
+            bool enabled = macOS::getInputSourceEnabled();
+            LOG_DEBUG("OpenBangla Input Source Enabled: %s\n", enabled ? "true" : "false");
         #endif
     } else {
         LOG_DEBUG("Desktop Environment not supported for input source setup\n");

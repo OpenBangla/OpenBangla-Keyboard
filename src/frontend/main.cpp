@@ -27,6 +27,10 @@
 #include "Log.h"
 #include "FileSystem.h"
 
+#ifdef Q_OS_MACOS
+  #include "macOS.h"
+#endif
+
 int main(int argc, char *argv[]) {  
   QApplication app(argc, argv);
   gUserFolders = new UserFolders();
@@ -43,7 +47,20 @@ int main(int argc, char *argv[]) {
   QCommandLineOption startInTray("tray","Start in tray");
   parser.addOption(darkIcon);
   parser.addOption(startInTray);
+
+  #ifdef Q_OS_MACOS
+    QCommandLineOption setTIS("setup-macos","Setup macOS input source");
+    parser.addOption(setTIS);
+  #endif
+
   parser.process(app);
+
+  #ifdef Q_OS_MACOS
+    if(parser.isSet(setTIS)) {
+        macOS::setupOpenBanglaInputSource();
+        return 0;
+    }
+  #endif
 
   LOG_DEBUG("Detected Desktop Environment: %s\n", desktopEnvironmentToString(detectDesktopEnvironment()).toStdString().c_str());
 

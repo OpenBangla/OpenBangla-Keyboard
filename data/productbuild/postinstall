@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Launch IME to register
+open /Library/Input\ Methods/OpenBangla.app
+sleep 1
+
+# Run helper to enable it
+/Applications/OpenBangla\ Keyboard.app/Contents/MacOS/OpenBangla\ Keyboard --help
+
+exit 0

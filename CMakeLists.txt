@@ -20,6 +20,10 @@ endif()
 if(APPLE)
     enable_language(Swift)
 
+    if("${CMAKE_Swift_COMPILER_VERSION}" VERSION_LESS 5.9)
+        message(FATAL_ERROR "Bidirectional C++ Interop requires Swift 5.9 or greater. Have ${CMAKE_Swift_COMPILER_VERSION}")
+    endif()
+
     # Set up swiftrt.o and runtime library search paths
     include(InitializeSwift)
     # cmake/modules/AddSwift.cmake provides the function for creating the Swift to
@@ -192,7 +196,9 @@ elseif(APPLE)
     set(CPACK_COMPONENTS_ALL IME GUI)
     set(CPACK_COMPONENT_IME_REQUIRED TRUE)
     set(CPACK_COMPONENT_GUI_REQUIRED TRUE)
+    set(CPACK_COMPONENT_GUI_DEPENDS IME)
     set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED "FALSE")
+    set(CPACK_POSTFLIGHT_GUI_SCRIPT "${CMAKE_SOURCE_DIR}/data/productbuild/postinstall")
     set(CPACK_PRODUCTBUILD_RESOURCES_DIR "${CMAKE_SOURCE_DIR}/data/productbuild")
     set(CPACK_PRODUCTBUILD_BACKGROUND "installer.png")
     set(CPACK_PRODUCTBUILD_BACKGROUND_ALIGNMENT "left")
