@@ -21,7 +21,7 @@ set(SRC_MAIN main.cpp
         AvroPhonetic.cpp
         PlatformConfig.cpp)
 
-set(LINK_LIBS libShared Qt5::Widgets Qt5::Network zstd::libzstd)
+set(LINK_LIBS libShared Qt5::Widgets Qt5::Network zstd::libzstd_shared)
 
 if(WIN32)
     set(CMAKE_WIN32_EXECUTABLE ON)

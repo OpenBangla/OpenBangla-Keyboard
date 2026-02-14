@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DENABLE_IBUS=ON -DENABLE_FCITX=ON
+          cmake .. -DENABLE_BOTH=ON
           make
 
   build-macos:
@@ -44,7 +44,7 @@ jobs:
           submodules: recursive
 
       - name: install-deps
-        run: brew install cmake qt@5 zstd
+        run: brew install cmake qt@5 zstd ninja
 
       - name: setup-qt
         run: echo "$(brew --prefix qt@5)/bin" >> $GITHUB_PATH
@@ -53,6 +53,6 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)"
+          cmake .. -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)" -GNinja
           make
 

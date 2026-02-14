@@ -32,7 +32,7 @@ if(APPLE)
 endif()
 
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
-find_package(zstd CONFIG REQUIRED)
+find_package(Zstd REQUIRED)
 
 message(STATUS "Qt5 framework version: ${Qt5Core_VERSION}")
 
