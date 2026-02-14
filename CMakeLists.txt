@@ -153,20 +153,21 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "OpenBangla Team <openbanglateam@gmail.com>"
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/data/Readme.txt")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/data/Readme.txt")
 if(APPLE)
+    set(CPACK_PACKAGE_NAME "OpenBangla Keyboard")
     # macOS productbuild requires license files with .txt, .rtf, .rtfd, or .html extension
     configure_file("${CMAKE_SOURCE_DIR}/LICENSE" "${CMAKE_BINARY_DIR}/LICENSE.txt" COPYONLY)
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt")
 else()
+    set(CPACK_PACKAGE_NAME "openbangla-keyboard")
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
-endif()
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-if(NOT APPLE)
+
     # Stripping on macOS invalidates ad-hoc code signatures, causing
     # installed apps to be killed by the system.
     set(CPACK_STRIP_FILES TRUE)
 endif()
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PRODUCTBUILD_IDENTITY_NAME "" CACHE STRING "Code signing identity for productbuild")
 set(CPACK_PRODUCTBUILD_KEYCHAIN_PATH "" CACHE STRING "Keychain path for code signing")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.org/")
@@ -188,18 +189,17 @@ set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}
 # Configure CPack on the basis of which backend we are building for.
 if(ENABLE_IBUS)
     ## IBUS
-    set(CPACK_PACKAGE_NAME "ibus-openbangla")
+    # set(CPACK_PACKAGE_NAME "ibus-openbangla")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, libzstd >= 1.3.3")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component")
 elseif(ENABLE_FCITX)
     ## FCITX
-    set(CPACK_PACKAGE_NAME "fcitx-openbangla")
+    # set(CPACK_PACKAGE_NAME "fcitx-openbangla")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "fcitx5 (>= 5.0.5)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3, fcitx5 >= 5.0.5")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib64/fcitx5" "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
 elseif(ENABLE_BOTH)
-    set(CPACK_PACKAGE_NAME "openbangla-keyboard")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "fcitx5 (>= 5.0.5) | ibus (>= 1.5.1)")
     set(CPACK_RPM_PACKAGE_REQUIRES
         "(ibus >= 1.5.1 if gnome-shell else fcitx5 >= 5.0.5), (gnome-shell-extension-appindicator if gnome-shell), qt5-qtbase >= 5.15.0, libzstd >= 1.3.3"
@@ -207,7 +207,6 @@ elseif(ENABLE_BOTH)
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component" "/usr/lib64/fcitx5" 
                                                               "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
 elseif(APPLE)
-    set(CPACK_PACKAGE_NAME "OpenBangla Keyboard")
     set(CPACK_PACKAGE_VENDOR "OpenBangla")
     set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
     set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}")
