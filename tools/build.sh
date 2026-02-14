@@ -26,8 +26,6 @@ makeRpmFedora () {
 }
 
 makeRpmOpenSuse () {
-    # Replace '/' with '-'
-    export DIST=$(echo "$DIST" | tr '/' '-')
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
 
     zypper install -y libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel cmake ninja ibus-devel fcitx5-devel gcc curl rpm-build
