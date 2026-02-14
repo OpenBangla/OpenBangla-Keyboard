@@ -21,10 +21,16 @@ set(SRC_MAIN main.cpp
         AvroPhonetic.cpp
         PlatformConfig.cpp)
 
-set(LINK_LIBS libShared Qt5::Widgets Qt5::Network zstd::libzstd_shared)
+set(LINK_LIBS libShared Qt5::Widgets Qt5::Network)
+
+if(OS_LINUX)
+    list(APPEND LINK_LIBS ${ZSTD_LIBRARIES})
+endif(OS_LINUX)
 
 if(WIN32)
     set(CMAKE_WIN32_EXECUTABLE ON)
+
+    list(APPEND LINK_LIBS zstd::libzstd)
 endif(WIN32)
 
 if(APPLE)
@@ -32,6 +38,7 @@ if(APPLE)
 
     list(APPEND LINK_LIBS macOS)
     list(APPEND LINK_LIBS "-framework Foundation")
+    list(APPEND LINK_LIBS zstd::libzstd)
 endif(APPLE)
 
 if(APPLE)

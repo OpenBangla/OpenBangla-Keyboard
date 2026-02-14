@@ -54,5 +54,5 @@ jobs:
           mkdir build
           cd build
           cmake .. -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)" -GNinja
-          make
+          ninja
 

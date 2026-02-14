@@ -32,7 +32,6 @@ if(APPLE)
 endif()
 
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
-find_package(Zstd REQUIRED)
 
 message(STATUS "Qt5 framework version: ${Qt5Core_VERSION}")
 
@@ -86,6 +85,9 @@ if(OS_LINUX)
     if((NOT ENABLE_IBUS) AND (NOT ENABLE_FCITX) AND (NOT ENABLE_BOTH))
         message(FATAL_ERROR "Please set atleast ENABLE_IBUS or ENABLE_FCITX or ENABLE_BOTH to be ON to build a backend")
     endif()
+    
+    ## Find zstd ##
+    pkg_check_modules(ZSTD REQUIRED libzstd)
 
     ## Find iBus ##
     if(ENABLE_IBUS)
@@ -105,6 +107,8 @@ endif()
 
 # For Windows
 if(WIN32)
+    find_package(zstd CONFIG REQUIRED)
+
     set(PROJECT_DATADIR "$ENV{LOCALAPPDATA}\\OpenBangla" CACHE PATH "Path to Data Directory")
     set(BIN_DIR "${PROJECT_DATADIR}/bin")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
@@ -113,6 +117,8 @@ endif()
 
 # For Apple
 if(APPLE)
+    find_package(zstd CONFIG REQUIRED)
+
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
     set(CMAKE_INSTALL_PREFIX "/")
 
