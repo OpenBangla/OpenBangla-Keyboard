@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25...3.29)
+cmake_minimum_required(VERSION 3.18...3.29)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
