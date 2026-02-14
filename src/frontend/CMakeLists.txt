@@ -36,9 +36,7 @@ endif(WIN32)
 if(APPLE)
     add_subdirectory(macOS)
 
-    list(APPEND LINK_LIBS macOS)
-    list(APPEND LINK_LIBS "-framework Foundation")
-    list(APPEND LINK_LIBS zstd::libzstd)
+    list(APPEND LINK_LIBS macOS "-framework Foundation" zstd::libzstd)
 endif(APPLE)
 
 if(APPLE)
