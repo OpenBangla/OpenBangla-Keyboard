@@ -65,9 +65,11 @@ int main(int argc, char *argv[]) {
   bool darkMode = (color == darker) || parser.isSet(darkIcon);
 
   TopBar w(darkMode);
-  w.show();
-  if (parser.isSet(startInTray) || !gSettings->getTopBarVisibility()) {
-    w.setVisible(false);
-  }
+  if (parser.isSet(startInTray))
+    app.setProperty("invokedAsTray", parser.isSet(startInTray));
+  else if(gSettings->getTopBarVisibility())
+    w.show();
+
+  app.setQuitOnLastWindowClosed(false);
   return app.exec();
 }
