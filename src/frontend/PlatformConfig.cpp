@@ -21,6 +21,10 @@
 #include <QDebug>
 #include <QStringList>
 #include <QString>
+#include <QFile>
+#include <QDir>
+#include <QStandardPaths>
+#include <QSettings>
 
 #include "PlatformConfig.h"
 #include "Log.h"
@@ -210,11 +214,216 @@ void setupGnomeIME() {
 }
 
 
+QString findFcitx5WaylandLauncher() {
+    QStringList candidates = {
+        "/usr/share/applications/fcitx5-wayland-launcher.desktop",
+        "/usr/local/share/applications/fcitx5-wayland-launcher.desktop",
+    };
+
+    // Also check XDG data dirs
+    QString xdgDataDirs = QProcessEnvironment::systemEnvironment().value("XDG_DATA_DIRS", "/usr/share:/usr/local/share");
+    for (const auto &dir : xdgDataDirs.split(':')) {
+        QString path = dir + "/applications/fcitx5-wayland-launcher.desktop";
+        if (!candidates.contains(path)) {
+            candidates.append(path);
+        }
+    }
+
+    for (const auto &path : candidates) {
+        if (QFile::exists(path)) {
+            return path;
+        }
+    }
+
+    return "";
+}
+
+void setupKdeVirtualKeyboard() {
+    QString launcherPath = findFcitx5WaylandLauncher();
+    if (launcherPath.isEmpty()) {
+        LOG_DEBUG("Fcitx5 Wayland launcher desktop file not found\n");
+        return;
+    }
+
+    // Read current virtual keyboard setting
+    QProcess readProcess;
+    readProcess.start("kreadconfig6", {"--file", "kwinrc", "--group", "Wayland", "--key", "InputMethod"});
+    readProcess.waitForFinished();
+
+    QString currentValue = readProcess.readAllStandardOutput().trimmed();
+
+    if (currentValue == launcherPath) {
+        LOG_DEBUG("KDE virtual keyboard already set to Fcitx5\n");
+        return;
+    }
+
+    // Set Fcitx5 as the virtual keyboard
+    QProcess writeProcess;
+    writeProcess.start("kwriteconfig6", {"--file", "kwinrc", "--group", "Wayland", "--key", "InputMethod", launcherPath});
+    writeProcess.waitForFinished();
+
+    if (writeProcess.exitCode() == 0) {
+        LOG_DEBUG("Set KDE virtual keyboard to Fcitx5: %s\n", launcherPath.toStdString().c_str());
+    } else {
+        LOG_ERROR("Failed to set KDE virtual keyboard: %s\n", writeProcess.readAllStandardError().toStdString().c_str());
+    }
+}
+
+bool addOpenBanglaToFcitx5ViaDBus() {
+    // Get current input method group info
+    QProcess getProcess;
+    getProcess.start("gdbus", {"call", "--session",
+        "--dest", "org.fcitx.Fcitx5",
+        "--object-path", "/controller",
+        "--method", "org.fcitx.Fcitx.Controller1.InputMethodGroupInfo",
+        "Default"});
+    getProcess.waitForFinished();
+
+    if (getProcess.exitCode() != 0) {
+        return false;
+    }
+
+    // Output format: ('us', [('keyboard-us', ''), ('openbangla', '')])
+    QString output = getProcess.readAllStandardOutput().trimmed();
+
+    if (output.contains("'openbangla'")) {
+        LOG_DEBUG("OpenBangla already in Fcitx5 input method group\n");
+        return true;
+    }
+
+    // Parse the default layout from the output
+    // Format: ('layout', [...])
+    QString defaultLayout = "us";
+    int firstQuote = output.indexOf('\'');
+    int secondQuote = output.indexOf('\'', firstQuote + 1);
+    if (firstQuote >= 0 && secondQuote > firstQuote) {
+        defaultLayout = output.mid(firstQuote + 1, secondQuote - firstQuote - 1);
+    }
+
+    // Parse the existing input methods array
+    // We need to reconstruct the array with openbangla added
+    int arrayStart = output.indexOf('[');
+    int arrayEnd = output.lastIndexOf(']');
+    QString existingArray;
+    if (arrayStart >= 0 && arrayEnd > arrayStart) {
+        existingArray = output.mid(arrayStart, arrayEnd - arrayStart + 1);
+    }
+
+    // Build new array: insert openbangla before the closing bracket
+    QString newArray;
+    if (existingArray.isEmpty() || existingArray == "[]") {
+        newArray = "[('keyboard-us', ''), ('openbangla', '')]";
+    } else {
+        // Remove trailing ] and add openbangla
+        newArray = existingArray.left(existingArray.length() - 1) + ", ('openbangla', '')]";
+    }
+
+    QProcess setProcess;
+    setProcess.start("gdbus", {"call", "--session",
+        "--dest", "org.fcitx.Fcitx5",
+        "--object-path", "/controller",
+        "--method", "org.fcitx.Fcitx.Controller1.SetInputMethodGroupInfo",
+        "Default", defaultLayout, newArray});
+    setProcess.waitForFinished();
+
+    if (setProcess.exitCode() == 0) {
+        LOG_DEBUG("Added OpenBangla to Fcitx5 input method group via DBus\n");
+        return true;
+    }
+
+    LOG_ERROR("Failed to add OpenBangla via DBus: %s\n", setProcess.readAllStandardError().toStdString().c_str());
+    return false;
+}
+
+void addOpenBanglaToFcitx5Profile() {
+    QString profilePath = QDir::homePath() + "/.config/fcitx5/profile";
+
+    // Ensure the directory exists
+    QDir().mkpath(QDir::homePath() + "/.config/fcitx5");
+
+    if (QFile::exists(profilePath)) {
+        // Read existing profile and check if openbangla is already present
+        QSettings profile(profilePath, QSettings::IniFormat);
+
+        // Scan existing groups for openbangla
+        int itemCount = 0;
+        bool found = false;
+
+        for (const auto &group : profile.childGroups()) {
+            if (group.startsWith("Groups/0/Items/")) {
+                itemCount++;
+                profile.beginGroup(group);
+                if (profile.value("Name").toString() == "openbangla") {
+                    found = true;
+                }
+                profile.endGroup();
+            }
+        }
+
+        if (found) {
+            LOG_DEBUG("OpenBangla already in Fcitx5 profile\n");
+            return;
+        }
+
+        // Add openbangla as the next item
+        QString newGroup = QString("Groups/0/Items/%1").arg(itemCount);
+        profile.beginGroup(newGroup);
+        profile.setValue("Name", "openbangla");
+        profile.setValue("Layout", "");
+        profile.endGroup();
+        profile.sync();
+
+        LOG_DEBUG("Added OpenBangla to existing Fcitx5 profile\n");
+    } else {
+        // Create a new profile with keyboard-us and openbangla
+        QSettings profile(profilePath, QSettings::IniFormat);
+
+        profile.beginGroup("Groups/0");
+        profile.setValue("Name", "Default");
+        profile.setValue("Default Layout", "us");
+        profile.setValue("DefaultIM", "openbangla");
+        profile.endGroup();
+
+        profile.beginGroup("Groups/0/Items/0");
+        profile.setValue("Name", "keyboard-us");
+        profile.setValue("Layout", "");
+        profile.endGroup();
+
+        profile.beginGroup("Groups/0/Items/1");
+        profile.setValue("Name", "openbangla");
+        profile.setValue("Layout", "");
+        profile.endGroup();
+
+        profile.beginGroup("GroupOrder");
+        profile.setValue("0", "Default");
+        profile.endGroup();
+
+        profile.sync();
+
+        LOG_DEBUG("Created new Fcitx5 profile with OpenBangla\n");
+    }
+}
+
+void setupFcitx5InputMethod() {
+    // Try DBus first (works when Fcitx5 is already running)
+    if (!addOpenBanglaToFcitx5ViaDBus()) {
+        LOG_DEBUG("Fcitx5 DBus not available, writing profile directly\n");
+        addOpenBanglaToFcitx5Profile();
+    }
+}
+
+void setupKdeIME() {
+    setupKdeVirtualKeyboard();
+    setupFcitx5InputMethod();
+}
+
 void setupInputSources() {
     auto de = detectDesktopEnvironment();
 
     if(de == DesktopEnvironment::GNOME) {
         setupGnomeIME();
+    } else if(de == DesktopEnvironment::KDE) {
+        setupKdeIME();
     } else if(de == DesktopEnvironment::macOS) {
         #ifdef Q_OS_MACOS
             bool enabled = macOS::getInputSourceEnabled();
