@@ -424,6 +424,8 @@ void setupInputSources() {
         setupGnomeIME();
     } else if(de == DesktopEnvironment::KDE) {
         setupKdeIME();
+    } else if(de == DesktopEnvironment::Deepin) {
+        setupFcitx5InputMethod();
     } else if(de == DesktopEnvironment::macOS) {
         #ifdef Q_OS_MACOS
             bool enabled = macOS::getInputSourceEnabled();
