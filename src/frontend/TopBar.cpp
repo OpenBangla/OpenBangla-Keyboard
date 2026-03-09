@@ -361,8 +361,17 @@ bool TopBar::eventFilter(QObject *object, QEvent *event) {
       event->accept();
     } else if (event->type() == QEvent::MouseMove) {
       if (canMoveTopbar) {
-        if(!this->windowHandle()->startSystemMove()){
-            QMouseEvent *e = (QMouseEvent *) event;
+        QMouseEvent *e = (QMouseEvent *) event;
+        if (!(e->buttons() & Qt::LeftButton)) {
+            // Mouse release event was missed; stop dragging.
+            canMoveTopbar = false;
+            ui->buttonIcon->setCursor(Qt::ArrowCursor);
+        } else if(this->windowHandle()->startSystemMove()){
+            // The window manager now owns the drag and will consume the
+            // mouse release event, so reset our drag state immediately.
+            canMoveTopbar = false;
+            ui->buttonIcon->setCursor(Qt::ArrowCursor);
+        } else {
             ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
             move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
         }
