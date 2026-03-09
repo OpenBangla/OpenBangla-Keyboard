@@ -358,7 +358,7 @@ bool TopBar::eventFilter(QObject *object, QEvent *event) {
       QMouseEvent *e = (QMouseEvent *) event;
       pressedMouseX = e->x();
       pressedMouseY = e->y();
-      event->accept();
+      // Let press pass through so QPushButton tracks its own state and grab.
     } else if (event->type() == QEvent::MouseMove) {
       if (canMoveTopbar) {
         QMouseEvent *e = (QMouseEvent *) event;
@@ -366,21 +366,39 @@ bool TopBar::eventFilter(QObject *object, QEvent *event) {
             // Mouse release event was missed; stop dragging.
             canMoveTopbar = false;
             ui->buttonIcon->setCursor(Qt::ArrowCursor);
+            positionChanged = true;
+            // Post release to QWindow to clear QPushButton pressed state
+            // and Qt's implicit mouse grab (qt_button_down).
+            QCoreApplication::postEvent(this->windowHandle(),
+                new QMouseEvent(QEvent::MouseButtonRelease,
+                    this->mapFromGlobal(QCursor::pos()), QCursor::pos(),
+                    Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
         } else if(this->windowHandle()->startSystemMove()){
             // The window manager now owns the drag and will consume the
             // mouse release event, so reset our drag state immediately.
             canMoveTopbar = false;
             ui->buttonIcon->setCursor(Qt::ArrowCursor);
+            positionChanged = true;
+            // Post release to QWindow to clear QPushButton pressed state
+            // and Qt's implicit mouse grab (qt_button_down).
+            QCoreApplication::postEvent(this->windowHandle(),
+                new QMouseEvent(QEvent::MouseButtonRelease,
+                    this->mapFromGlobal(QCursor::pos()), QCursor::pos(),
+                    Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
         } else {
             ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
             move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
+            positionChanged = true;
         }
-        positionChanged = true;
+        return true; // Consume move during drag
       }
+      // Not dragging — let move events pass through for hover tracking
     } else if (event->type() == QEvent::MouseButtonRelease) {
       canMoveTopbar = false;
       ui->buttonIcon->setCursor(Qt::ArrowCursor);
-      event->accept();
+      // Let release pass through so QPushButton clears pressed state and grab.
+      // on_buttonIcon_clicked() is called via the clicked() signal and checks
+      // positionChanged to distinguish a click from a drag.
     }
   }
 
