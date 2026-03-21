@@ -11,10 +11,8 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 17)
 
-if(NOT WIN32)
-    enable_language(Rust)
-    include(CMakeCargo)
-endif()
+enable_language(Rust)
+include(CMakeCargo)
 
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
 

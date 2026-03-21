@@ -1,6 +1,5 @@
 {
   "dependencies": [
-    "qt5-base",
     "zstd"
   ]
 }

@@ -15,3 +15,7 @@ if (OS_LINUX)
     ## Include subdirectories
     add_subdirectory(riti)
 endif (OS_LINUX)
+
+if (WIN32)
+    add_subdirectory(windows)
+endif (WIN32)
