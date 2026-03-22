@@ -19,3 +19,8 @@ endif (OS_LINUX)
 if (WIN32)
     add_subdirectory(windows)
 endif (WIN32)
+
+if (APPLE)
+    ## Platform is macOS
+    add_subdirectory(macOS)
+endif (APPLE)

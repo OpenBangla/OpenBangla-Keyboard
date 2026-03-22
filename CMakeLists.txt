@@ -10,9 +10,12 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 ## Set Compiler Standard
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-enable_language(Rust)
-include(CMakeCargo)
+if(NOT APPLE)
+    enable_language(Rust)
+    include(CMakeCargo)
+endif()
 
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
 
@@ -43,9 +46,6 @@ endif()
 # For Linux.
 if(OS_LINUX)
     ## Additions for Linux ##
-
-    # Generate compile_commands.json to satisfy vscode linux configuration
-    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
     if(NOT DEFINED BIN_DIR)
         set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
@@ -94,6 +94,14 @@ if(WIN32)
     add_definitions(-DBIN_DIR="${BIN_DIR}")
 endif()
 
+# For Apple
+if(APPLE)
+    find_package(zstd CONFIG REQUIRED)
+
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
+    set(CMAKE_INSTALL_PREFIX "/")
+endif()
+
 add_subdirectory(src/engine)
 add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
@@ -114,16 +122,25 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSource Bengali input method")
 set(CPACK_PACKAGE_VENDOR "OpenBangla Team")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "OpenBangla Team <openbanglateam@gmail.com>")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/data/Readme.txt")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/data/Readme.txt")
+if(APPLE)
+    # macOS productbuild requires license files with .txt, .rtf, .rtfd, or .html extension
+    configure_file("${CMAKE_SOURCE_DIR}/LICENSE" "${CMAKE_BINARY_DIR}/LICENSE.txt" COPYONLY)
+    set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt")
+else()
+    set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+endif()
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_STRIP_FILES TRUE)
-set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.github.io/")
+set(CPACK_PRODUCTBUILD_IDENTITY_NAME "" CACHE STRING "Code signing identity for productbuild")
+set(CPACK_PRODUCTBUILD_KEYCHAIN_PATH "" CACHE STRING "Keychain path for code signing")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.org/")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
-set(CPACK_RPM_PACKAGE_URL "https://openbangla.github.io/")
+set(CPACK_RPM_PACKAGE_URL "https://openbangla.org/")
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
 # Prevents CPack from generating file conflicts
 set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/usr/share/metainfo" "/usr/share/pixmaps"
@@ -134,6 +151,7 @@ set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/us
                                                   "/usr/share/icons/hicolor/32x32" "/usr/share/icons/hicolor/32x32/apps"
                                                   "/usr/share/icons/hicolor/48x48" "/usr/share/icons/hicolor/48x48/apps"
                                                   "/usr/share/icons/hicolor/512x512" "/usr/share/icons/hicolor/512x512/apps")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 # Configure CPack on the basis of which backend we are building for.
 if(ENABLE_IBUS)
     ## IBUS
@@ -141,13 +159,28 @@ if(ENABLE_IBUS)
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, libzstd >= 1.3.3")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component")
-else()
+elseif(ENABLE_FCITX)
     ## FCITX
     set(CPACK_PACKAGE_NAME "fcitx-openbangla")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "fcitx5 (>= 5.0.5)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3, fcitx5 >= 5.0.5")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib64/fcitx5" "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
+elseif(APPLE)
+    set(CPACK_PACKAGE_NAME "OpenBangla Keyboard")
+    set(CPACK_PACKAGE_VENDOR "OpenBangla")
+    set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+    set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}")
+    set(CPACK_PACKAGING_INSTALL_PREFIX "/")
+    set(CPACK_MONOLITHIC_INSTALL OFF)
+    set(CPACK_COMPONENTS_ALL IME GUI)
+    set(CPACK_COMPONENT_IME_REQUIRED TRUE)
+    set(CPACK_COMPONENT_GUI_REQUIRED TRUE)
+    set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED "FALSE")
+    set(CPACK_PRODUCTBUILD_RESOURCES_DIR "${CMAKE_SOURCE_DIR}/data/productbuild")
+    set(CPACK_PRODUCTBUILD_BACKGROUND "installer.png")
+    set(CPACK_PRODUCTBUILD_BACKGROUND_ALIGNMENT "left")
+    set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA "installer.png")
+    set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA_ALIGNMENT "left")
 endif()
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 
 include(CPack)

@@ -21,7 +21,6 @@
 
 #include <QDialog>
 #include "AvroPhonetic.h"
-#include "FileSystem.h"
 
 class QTreeWidgetItem;
 
@@ -56,7 +55,6 @@ private slots:
 private:
   Ui::AutoCorrectDialog *ui;
   AvroPhonetic phonetic;
-  UserFolders folders;
 
   QJsonObject dict;
   QJsonObject usrDict;
