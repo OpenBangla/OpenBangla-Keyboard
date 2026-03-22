@@ -53,7 +53,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
           cmake --build . --config Release
 
   build-windows-arm:
@@ -65,21 +65,25 @@ jobs:
         with:
           submodules: recursive
 
-      - name: install-qt
-        uses: jurplel/install-qt-action@v4
+      - name: setup-msys2
+        uses: msys2/setup-msys2@v2
         with:
-          version: '5.15.2'
-          arch: win64_msvc2019_arm64
-
-      - name: setup-rust-target
-        run: rustup target add aarch64-pc-windows-msvc
+          msystem: CLANGARM64
+          install: >-
+            mingw-w64-clang-aarch64-cmake
+            mingw-w64-clang-aarch64-clang
+            mingw-w64-clang-aarch64-ninja
+            mingw-w64-clang-aarch64-qt5-base
+            mingw-w64-clang-aarch64-zstd
+            mingw-w64-clang-aarch64-rust
 
       - name: build
+        shell: msys2 {0}
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=arm64-windows -A ARM64
-          cmake --build . --config Release
+          cmake .. -G Ninja
+          cmake --build .
 
   build-macos:
     if: contains(github.event.head_commit.message, 'deploy+') == false
