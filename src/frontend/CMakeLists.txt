@@ -109,8 +109,13 @@ if(WIN32)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
     find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt-qt5 windeployqt HINTS "${_qt_bin_dir}")
 
+    set(_windeployqt_flags "")
+    if(MINGW)
+        list(APPEND _windeployqt_flags --no-angle --no-opengl-sw)
+    endif()
+
     add_custom_command(TARGET openbangla-gui POST_BUILD
-    COMMAND ${WINDEPLOYQT_EXECUTABLE} $<TARGET_FILE:openbangla-gui>
+    COMMAND ${WINDEPLOYQT_EXECUTABLE} ${_windeployqt_flags} $<TARGET_FILE:openbangla-gui>
     COMMENT "Deploying Qt..."
     VERBATIM
     )
