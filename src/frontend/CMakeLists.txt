@@ -121,6 +121,17 @@ if(WIN32)
     )
 endif()
 
+if(WIN32)
+    install(TARGETS openbangla-gui RUNTIME DESTINATION .)
+
+    # Deploy Qt DLLs alongside the installed executable
+    if(MINGW)
+        install(CODE "execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" --no-angle --no-opengl-sw \"\${CMAKE_INSTALL_PREFIX}/openbangla-gui.exe\")")
+    else()
+        install(CODE "execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" \"\${CMAKE_INSTALL_PREFIX}/openbangla-gui.exe\")")
+    endif()
+endif()
+
 if(OS_LINUX)
     install(TARGETS openbangla-gui
         RUNTIME DESTINATION ${BIN_DIR})

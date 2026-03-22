@@ -2,15 +2,15 @@ cargo_build(NAME openbangla SHARED)
 
 get_target_property(IME_DLL_PATH openbangla IMPORTED_LOCATION)
 
-# Install the DLL
-install(FILES "${IME_DLL_PATH}" DESTINATION "${BIN_DIR}")
+# Install the DLL (relative path for CPack compatibility)
+install(FILES "${IME_DLL_PATH}" DESTINATION bin)
 
 # Build 32-bit DLL for x86_64 to support WOW64 (32-bit) applications
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
     cargo_build(NAME openbangla_x86 SHARED TARGET i686-pc-windows-msvc CRATE_NAME openbangla)
 
     get_target_property(IME_DLL_X86_PATH openbangla_x86 IMPORTED_LOCATION)
-    install(FILES "${IME_DLL_X86_PATH}" DESTINATION "${BIN_DIR}/x86")
+    install(FILES "${IME_DLL_X86_PATH}" DESTINATION bin/x86)
 endif()
 
 # Convenience targets for IME registration (requires elevated privileges)

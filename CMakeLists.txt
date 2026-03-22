@@ -92,6 +92,24 @@ if(WIN32)
     set(BIN_DIR "${PROJECT_DATADIR}/bin")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
     add_definitions(-DBIN_DIR="${BIN_DIR}")
+
+    include(InstallRequiredSystemLibraries)
+
+    # Install data files
+    install(FILES
+        "${CMAKE_SOURCE_DIR}/data/dictionary.json"
+        "${CMAKE_SOURCE_DIR}/data/regex.json"
+        "${CMAKE_SOURCE_DIR}/data/suffix.json"
+        "${CMAKE_SOURCE_DIR}/src/engine/riti/data/autocorrect.json"
+        DESTINATION data)
+    install(FILES
+        "${CMAKE_SOURCE_DIR}/data/avrophonetic.json"
+        "${CMAKE_SOURCE_DIR}/data/Avro_Easy.json"
+        "${CMAKE_SOURCE_DIR}/data/Borno.json"
+        "${CMAKE_SOURCE_DIR}/data/Munir_Optima.json"
+        "${CMAKE_SOURCE_DIR}/data/National_Jatiya.json"
+        "${CMAKE_SOURCE_DIR}/data/Probhat.json"
+        DESTINATION layouts)
 endif()
 
 # For Apple
@@ -181,6 +199,57 @@ elseif(APPLE)
     set(CPACK_PRODUCTBUILD_BACKGROUND_ALIGNMENT "left")
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA "installer.png")
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA_ALIGNMENT "left")
+elseif(WIN32)
+    set(CPACK_GENERATOR "NSIS")
+    set(CPACK_PACKAGE_NAME "OpenBangla-Keyboard")
+    set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}-x86_64")
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenBangla-Keyboard")
+    set(CPACK_PACKAGE_EXECUTABLES "openbangla-gui" "OpenBangla Keyboard")
+    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+    set(CPACK_NSIS_DISPLAY_NAME "OpenBangla Keyboard ${PROJECT_VERSION}")
+    set(CPACK_NSIS_PACKAGE_NAME "OpenBangla Keyboard")
+    set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/src/frontend/openbangla.ico")
+    set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/src/frontend/openbangla.ico")
+    set(CPACK_NSIS_INSTALLED_ICON_NAME "openbangla-gui.exe")
+    set(CPACK_NSIS_URL_INFO_ABOUT "https://openbangla.github.io/")
+    set(CPACK_NSIS_HELP_LINK "https://github.com/OpenBangla/OpenBangla-Keyboard")
+    set(CPACK_NSIS_MODIFY_PATH OFF)
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+
+    # NSIS install commands: register DLLs and deploy data to %LOCALAPPDATA%
+    # Note: NSIS installer is 32-bit, so $SYSDIR points to SysWOW64 (32-bit)
+    # and $WINDIR\Sysnative points to the real System32 (64-bit).
+    set(_nsis_install_commands
+        # Deploy data files to %LOCALAPPDATA%\OpenBangla
+        "CreateDirectory \"$LOCALAPPDATA\\OpenBangla\\data\""
+        "CreateDirectory \"$LOCALAPPDATA\\OpenBangla\\layouts\""
+        "CopyFiles /SILENT \"$INSTDIR\\data\\*.*\" \"$LOCALAPPDATA\\OpenBangla\\data\""
+        "CopyFiles /SILENT \"$INSTDIR\\layouts\\*.*\" \"$LOCALAPPDATA\\OpenBangla\\layouts\""
+        # Register 64-bit IME DLL (use Sysnative to reach 64-bit regsvr32)
+        "ExecWait '\"$WINDIR\\Sysnative\\regsvr32.exe\" /s \"$INSTDIR\\bin\\openbangla.dll\"'"
+    )
+    set(_nsis_uninstall_commands
+        # Unregister 64-bit IME DLL
+        "ExecWait '\"$WINDIR\\Sysnative\\regsvr32.exe\" /s /u \"$INSTDIR\\bin\\openbangla.dll\"'"
+        # Clean up data directory
+        "RMDir /r \"$LOCALAPPDATA\\OpenBangla\""
+    )
+
+    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
+        list(APPEND _nsis_install_commands
+            # Register 32-bit IME DLL (use $SYSDIR which is SysWOW64 in 32-bit NSIS)
+            "ExecWait '\"$SYSDIR\\regsvr32.exe\" /s \"$INSTDIR\\bin\\x86\\openbangla.dll\"'"
+        )
+        list(INSERT _nsis_uninstall_commands 0
+            # Unregister 32-bit IME DLL
+            "ExecWait '\"$SYSDIR\\regsvr32.exe\" /s /u \"$INSTDIR\\bin\\x86\\openbangla.dll\"'"
+        )
+    endif()
+
+    string(REPLACE ";" "\n    " _nsis_install_str "${_nsis_install_commands}")
+    string(REPLACE ";" "\n    " _nsis_uninstall_str "${_nsis_uninstall_commands}")
+    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "    ${_nsis_install_str}")
+    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "    ${_nsis_uninstall_str}")
 endif()
 
 include(CPack)
