@@ -1,31 +1,43 @@
 function(cargo_build)
-    cmake_parse_arguments(CARGO "SHARED" "NAME" "" ${ARGN})
-    string(REPLACE "-" "_" LIB_NAME ${CARGO_NAME})
+    cmake_parse_arguments(CARGO "SHARED" "NAME;TARGET;CRATE_NAME" "" ${ARGN})
+
+    # Use CRATE_NAME for the output file if specified, otherwise derive from NAME
+    if(CARGO_CRATE_NAME)
+        string(REPLACE "-" "_" LIB_NAME ${CARGO_CRATE_NAME})
+    else()
+        string(REPLACE "-" "_" LIB_NAME ${CARGO_NAME})
+    endif()
 
     set(CARGO_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
-    execute_process(COMMAND ${RUSTC_EXECUTABLE} --version --verbose OUTPUT_VARIABLE LIB_TARGET OUTPUT_STRIP_TRAILING_WHITESPACE)
-	string(REGEX MATCH "[a-z][a-z0-9_]+-[a-z0-9]+(-[a-z0-9]+)+" LIB_TARGET "${LIB_TARGET}")
+    # Use explicit TARGET if provided, otherwise auto-detect
+    if(CARGO_TARGET)
+        set(LIB_TARGET ${CARGO_TARGET})
+    else()
+        execute_process(COMMAND ${RUSTC_EXECUTABLE} --version --verbose OUTPUT_VARIABLE LIB_TARGET OUTPUT_STRIP_TRAILING_WHITESPACE)
+        string(REGEX MATCH "[a-z][a-z0-9_]+-[a-z0-9]+(-[a-z0-9]+)+" LIB_TARGET "${LIB_TARGET}")
+
+        if(ANDROID)
+            if(ANDROID_SYSROOT_ABI STREQUAL "x86")
+                set(LIB_TARGET "i686-linux-android")
+            elseif(ANDROID_SYSROOT_ABI STREQUAL "x86_64")
+                set(LIB_TARGET "x86_64-linux-android")
+            elseif(ANDROID_SYSROOT_ABI STREQUAL "arm")
+                set(LIB_TARGET "arm-linux-androideabi")
+            elseif(ANDROID_SYSROOT_ABI STREQUAL "arm64")
+                set(LIB_TARGET "aarch64-linux-android")
+            endif()
+        endif()
+
+        if(CMAKE_CROSSCOMPILING)
+            # Get target triple from environment
+            if(DEFINED ENV{RUST_TARGET}) # For Void Linux
+                set(LIB_TARGET $ENV{RUST_TARGET})
+            endif()
+        endif()
+    endif()
+
     message(STATUS "Rust Compiler Target: ${LIB_TARGET}")
-
-	if(ANDROID)
-        if(ANDROID_SYSROOT_ABI STREQUAL "x86")
-            set(LIB_TARGET "i686-linux-android")
-        elseif(ANDROID_SYSROOT_ABI STREQUAL "x86_64")
-            set(LIB_TARGET "x86_64-linux-android")
-        elseif(ANDROID_SYSROOT_ABI STREQUAL "arm")
-            set(LIB_TARGET "arm-linux-androideabi")
-        elseif(ANDROID_SYSROOT_ABI STREQUAL "arm64")
-            set(LIB_TARGET "aarch64-linux-android")
-        endif()
-    endif()
-
-    if(CMAKE_CROSSCOMPILING)
-        # Get target triple from environment
-        if(DEFINED ENV{RUST_TARGET}) # For Void Linux
-            set(LIB_TARGET $ENV{RUST_TARGET})
-        endif()
-    endif()
 
     if(NOT CMAKE_BUILD_TYPE)
         set(LIB_BUILD_TYPE "debug")
