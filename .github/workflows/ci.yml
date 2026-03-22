@@ -34,6 +34,53 @@ jobs:
           cmake .. -DENABLE_IBUS=ON -DENABLE_FCITX=ON
           make
 
+  build-windows-x86_64:
+    if: contains(github.event.head_commit.message, 'deploy+') == false
+    runs-on: windows-latest
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: install-qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          arch: win64_msvc2019_64
+
+      - name: build
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+          cmake --build . --config Release
+
+  build-windows-arm:
+    if: contains(github.event.head_commit.message, 'deploy+') == false
+    runs-on: windows-11-arm
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: install-qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          arch: win64_msvc2019_arm64
+
+      - name: setup-rust-target
+        run: rustup target add aarch64-pc-windows-msvc
+
+      - name: build
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=arm64-windows -A ARM64
+          cmake --build . --config Release
+
   build-macos:
     if: contains(github.event.head_commit.message, 'deploy+') == false
     runs-on: macos-latest
