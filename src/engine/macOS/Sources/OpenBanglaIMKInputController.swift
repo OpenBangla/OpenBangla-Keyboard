@@ -9,7 +9,7 @@
 
 import InputMethodKit
 
-class OpenBanglaIMKInputController: IMKInputController {
+class OpenBanglaIMKInputController: IMKInputController, CandidateWindowDelegate {
 
     // fields and constructor
 
@@ -18,7 +18,6 @@ class OpenBanglaIMKInputController: IMKInputController {
     private var _originalString: String = "" // what the user typed
     private var _composedString: String = "" // currently selected transliteration candidate
     private var _candidates: [String] = [] // list of candidates to choose from
-    private var _prevSelectedCandidateIndex: UInt = 0
     private var _selectedCandidateIndex: UInt = 0
     private var _ritiSuggestion: RitiSuggestion? = nil
 
@@ -39,13 +38,7 @@ class OpenBanglaIMKInputController: IMKInputController {
     // called when the client gains focus
     override func activateServer(_ sender: Any!) {
         openbanglaLog(logLevel: .VERBOSE, "client \(String(describing: sender))")
-        // the user may have been changing keyboard layouts while we were deactivated
-        // (but the controller survives so init() may not be called again).
-        // openbangla will use the most recent ASCII capable keyboard layout to translate key
-        // events (see TextInputSources.h:TISSetInputMethodKeyboardLayoutOverride()).
-        // set the candidates window to use the same keyboard layout.
-        let lastASCIIlayout = TISCopyCurrentASCIICapableKeyboardLayoutInputSource().takeRetainedValue()
-        candidatesWindow.setSelectionKeysKeylayout(lastASCIIlayout)
+        candidateWindow.delegate = self
     }
 
     // generate inputmethod menu and handle user clicks
@@ -143,17 +136,16 @@ class OpenBanglaIMKInputController: IMKInputController {
 
         writeTextToClient(downcastSender(sender), self._composedString)
         
-        if candidatesWindow.isVisible() {
+        if candidateWindow.isVisible {
             riti.commitCandidate(at: self._selectedCandidateIndex)
-            candidatesWindow.hide()
         } else {
             riti.finishInputSession()
         }
+        candidateWindow.hide()
 
         self._originalString = ""
         self._composedString = ""
         self._candidates = []
-        self._prevSelectedCandidateIndex = 0
         self._selectedCandidateIndex = 0
         self._ritiSuggestion = nil
     }
@@ -164,24 +156,22 @@ class OpenBanglaIMKInputController: IMKInputController {
 
         writeMarkToClient(downcastSender(self.client()), self._originalString)
 
-        if self._candidates.count == 0 {
-            candidatesWindow.hide()
+        if self._candidates.isEmpty {
+            candidateWindow.hide()
         } else {
-            candidatesWindow.update()
-            if !candidatesWindow.isVisible() {
-                candidatesWindow.show()
-            }
-            
-            if self._prevSelectedCandidateIndex != 0 {
-                for _ in 0..<self._prevSelectedCandidateIndex {
-                    if settings.candidateWinHorizontal {
-                        candidatesWindow.moveRight(self.client())
-                    } else {
-                        candidatesWindow.moveDown(self.client())
-                    }
-                }
-            }
+            candidateWindow.update(
+                preedit:          self._originalString,
+                candidates:       self._candidates,
+                highlightedIndex: Int(self._selectedCandidateIndex),
+                cursorRect:       getCursorRect()
+            )
         }
+    }
+
+    // cursor rect in screen coordinates for candidate window positioning
+    private func getCursorRect() -> NSRect {
+        let c = downcastSender(self.client())
+        return c.firstRect(forCharacterRange: c.markedRange(), actualRange: nil)
     }
 
     // cancel the current transliteration
@@ -197,37 +187,16 @@ class OpenBanglaIMKInputController: IMKInputController {
         self._originalString = ""
         self._composedString = ""
         self._candidates = []
-        self._prevSelectedCandidateIndex = 0
         self._selectedCandidateIndex = 0
 
-        candidatesWindow.hide()
+        candidateWindow.hide()
     }
 
-    // input from candidates window
+    // MARK: - CandidateWindowDelegate
 
-    // user highlighted a selection
-    override func candidateSelectionChanged(_ candidateString: NSAttributedString!) {
-        openbanglaLog(logLevel: .VERBOSE, "selection '\(String(describing: candidateString))'")
-        
-        for (index, candidate) in self._candidates.enumerated() {
-            if candidate == candidateString.string {
-                self._selectedCandidateIndex = UInt(index)
-            }
-        }
-        
-        self._composedString = self._ritiSuggestion!.preEditText(at: self._selectedCandidateIndex)
-    }
-
-    // user made a selection
-    override func candidateSelected(_ candidateString: NSAttributedString!) {
-        openbanglaLog(logLevel: .VERBOSE, "selection '\(String(describing: candidateString))'")
-        
-        for (index, candidate) in self._candidates.enumerated() {
-            if candidate == candidateString.string {
-                self._selectedCandidateIndex = UInt(index)
-            }
-        }
-
+    func candidateWindow(_ window: CandidateWindow, didSelectCandidateAt index: Int) {
+        openbanglaLog(logLevel: .VERBOSE, "selection at index \(index)")
+        self._selectedCandidateIndex = UInt(index)
         self._composedString = self._ritiSuggestion!.preEditText(at: self._selectedCandidateIndex)
         commitComposition(self.client())
         writeTextToClient(downcastSender(self.client()), " ")
@@ -255,13 +224,6 @@ class OpenBanglaIMKInputController: IMKInputController {
         
         if !riti.hasOngoingInputSession {
             settings.update()
-            
-            if settings.candidateWinHorizontal {
-                candidatesWindow.setPanelType(kIMKSingleRowSteppingCandidatePanel)
-            } else {
-                candidatesWindow.setPanelType(kIMKSingleColumnScrollingCandidatePanel)
-            }
-            
             riti.updateEngine()
         }
         
@@ -291,17 +253,30 @@ class OpenBanglaIMKInputController: IMKInputController {
         
 
         if riti.hasOngoingInputSession {
-            // send relevant keys to the candidates window
-            if candidatesWindow.isVisible() && (char == toChar(NSCarriageReturnCharacter) ||
+            // navigate the custom candidate window
+            if candidateWindow.isVisible && (char == toChar(NSCarriageReturnCharacter) ||
                char == toChar(NSUpArrowFunctionKey) ||
                char == toChar(NSDownArrowFunctionKey) ||
                char == toChar(NSRightArrowFunctionKey) ||
-                char == toChar(NSLeftArrowFunctionKey)) {
-                //candidatesWindow.interpretKeyEvents([event])
-                // use this private function to workaround buggy candidates
-                // window as of 10.15.3
-                openbanglaLog(logLevel: .VERBOSE, "Sending relevant keys to the candidates window - char: '\(char)'")
-                candidatesWindow.perform(Selector(("handleKeyboardEvent:")), with: event)
+               char == toChar(NSLeftArrowFunctionKey)) {
+                switch char {
+                case toChar(NSCarriageReturnCharacter):
+                    commitComposition(sender)
+                case toChar(NSUpArrowFunctionKey), toChar(NSLeftArrowFunctionKey):
+                    if self._selectedCandidateIndex > 0 {
+                        self._selectedCandidateIndex -= 1
+                        self._composedString = self._ritiSuggestion!.preEditText(at: self._selectedCandidateIndex)
+                        updateComposition()
+                    }
+                case toChar(NSDownArrowFunctionKey), toChar(NSRightArrowFunctionKey):
+                    if self._selectedCandidateIndex + 1 < UInt(self._candidates.count) {
+                        self._selectedCandidateIndex += 1
+                        self._composedString = self._ritiSuggestion!.preEditText(at: self._selectedCandidateIndex)
+                        updateComposition()
+                    }
+                default:
+                    break
+                }
                 return true
 
             // backspace is straightforward
@@ -319,6 +294,7 @@ class OpenBanglaIMKInputController: IMKInputController {
                         }
                         self._composedString = update.preEditText(at: 0)
                         self._candidates = update.suggestions
+                        self._selectedCandidateIndex = update.previouslySelectedIndex
                     } else {
                         self._originalString = update.preEditText(at: 0)
                         self._composedString = update.preEditText(at: 0)
@@ -373,7 +349,7 @@ class OpenBanglaIMKInputController: IMKInputController {
                 }
                 self._composedString = suggestion.preEditText(at: 0)
                 self._candidates = suggestion.suggestions
-                self._prevSelectedCandidateIndex = suggestion.previouslySelectedIndex
+                self._selectedCandidateIndex = suggestion.previouslySelectedIndex
             } else {
                 self._originalString = suggestion.preEditText(at: 0)
                 self._composedString = suggestion.preEditText(at: 0)

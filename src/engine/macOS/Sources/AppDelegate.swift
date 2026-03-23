@@ -14,9 +14,9 @@ import InputMethodKit
 
 var supportDirectory: SupportDirectory = SupportDirectory()
 
-// only need one candidates window for the entire input method
-// because only one such window should be visible at a time
-var candidatesWindow: IMKCandidates = IMKCandidates()
+// only one candidate window for the entire input method —
+// only one should be visible at a time
+var candidateWindow = CandidateWindow()
 
 var settings = OpenBanglaSettings(plistPath: supportDirectory.path() + "/org.openbangla.keyboard.plist")
 
@@ -48,6 +48,9 @@ func openbanglaLog(logLevel: OpenBanglaLogLevel = .ALWAYS_PRINT, _ format: Strin
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    // IMKServer must be kept alive for the duration of the app's life.
+    private var server: IMKServer?
+
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let version: String =
             Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
@@ -65,24 +68,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // no matter what Info.plist and openbangla.entitlements say, the connection name
         // requested from the sandbox seems to be $(PRODUCT_BUNDLE_IDENTIFIER)_Connection,
         // so Info.plist and openbangla.entitlements have been set to comply with this choice
-        let server = IMKServer(name: Bundle.main.infoDictionary?["InputMethodConnectionName"] as? String,
-                               bundleIdentifier: Bundle.main.bundleIdentifier)
+        server = IMKServer(name: Bundle.main.infoDictionary?["InputMethodConnectionName"] as? String,
+                           bundleIdentifier: Bundle.main.bundleIdentifier)
         
-        var kind = 0
-        
-        if settings.candidateWinHorizontal {
-            kind = kIMKSingleRowSteppingCandidatePanel
-        } else {
-            kind = kIMKSingleColumnScrollingCandidatePanel
-        }
-
-        // scrolling to the bottom of the scrolling panel puts selection numbers out of alignment
-        candidatesWindow = IMKCandidates(server: server,
-                                         panelType: kind)
-
-        // as of 10.15.3, default candidates window key event handling is buggy
-        // (number selector keys don't work). workaround involves bypassing default window handling.
-        candidatesWindow.setAttributes([IMKCandidatesSendServerKeyEventFirst : NSNumber(booleanLiteral: true)])
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
