@@ -1,54 +1,71 @@
-
 import Carbon
 import Foundation
 
-let bundleID = "org.openbangla.inputmethod.keyboard"
+private let bundleID = "org.openbangla.inputmethod.keyboard"
+private let imeName  = "OpenBangla"
 
-func getInputSource() -> TISInputSource? {
-    // Create properties to find your specific input source
-    let properties: [CFString: Any] = [
-        kTISPropertyBundleID: bundleID
+// MARK: - IME location
+
+/// Returns the URL of the installed IME bundle, checking system-wide and
+/// per-user Input Methods directories in that order.
+private func locateIME() -> URL? {
+    let candidates = [
+        URL(fileURLWithPath: "/Library/Input Methods/\(imeName).app"),
+        FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Input Methods/\(imeName).app"),
     ]
-    
-    guard let sourceList = TISCreateInputSourceList(properties as CFDictionary, false)?.takeRetainedValue() as? [TISInputSource],
-          let inputSource = sourceList.first else {
-        NSLog("Error: Could not find OpenBangla input source")
-        return nil
-    }
-    
-    return inputSource
+    return candidates.first { FileManager.default.fileExists(atPath: $0.path) }
 }
 
-public func getInputSourceEnabled() -> Bool { 
-    guard let inputSource = getInputSource() else {
-        return false
-    }
+// MARK: - TIS helpers
 
-    let isEnabled = TISGetInputSourceProperty(inputSource, kTISPropertyInputSourceIsEnabled)
-
-    if let enabled = isEnabled, Unmanaged<CFBoolean>.fromOpaque(enabled).takeUnretainedValue() == kCFBooleanTrue {
-        return true
-    }
-
-    return false
+/// Find the OpenBangla input source, **including disabled / not-yet-enabled
+/// sources** (`includeAllInstalled: true`).
+private func findInputSource() -> TISInputSource? {
+    let props = [kTISPropertyBundleID: bundleID] as CFDictionary
+    guard
+        let list = TISCreateInputSourceList(props, true)?.takeRetainedValue() as? [TISInputSource]
+    else { return nil }
+    return list.first
 }
 
+private func getBool(_ source: TISInputSource, _ key: CFString) -> Bool {
+    guard let ref = TISGetInputSourceProperty(source, key) else { return false }
+    return CFBooleanGetValue(unsafeBitCast(ref, to: CFBoolean.self))
+}
+
+// MARK: - Public API
+
+/// Returns `true` when the OpenBangla input source is installed and enabled.
+public func getInputSourceEnabled() -> Bool {
+    guard let source = findInputSource() else { return false }
+    return getBool(source, kTISPropertyInputSourceIsEnabled)
+}
+
+/// Registers and enables the OpenBangla input source.
 public func setupOpenBanglaInputSource() {
-    guard let inputSource = getInputSource() else {
+    if getInputSourceEnabled() {
+        NSLog("OpenBangla input source is already enabled.")
         return
     }
 
-    let enableStatus = TISEnableInputSource(inputSource)
-    if enableStatus != noErr {
-        NSLog("Error: Failed to enable input source: \(enableStatus)")
+    guard let imeURL = locateIME() else {
+        NSLog("Error: OpenBangla.app not found in any Input Methods directory.")
         return
     }
-    
-    // let selectStatus = TISSelectInputSource(inputSource)
-    // if selectStatus != noErr {
-    //     print("Failed to select input source: \(selectStatus)")
-    //     return
-    // }
-    
-    NSLog("OpenBangla IME enabled!")
+
+    // Register the bundle so TIS can see it even before it is enabled.
+    TISRegisterInputSource(imeURL as CFURL)
+
+    guard let source = findInputSource() else {
+        NSLog("Error: OpenBangla input source not found after registration (\(imeURL.path)).")
+        return
+    }
+
+    let status = TISEnableInputSource(source)
+    if status == noErr {
+        NSLog("OpenBangla IME enabled.")
+    } else {
+        NSLog("Error: TISEnableInputSource failed with status \(status).")
+    }
 }
