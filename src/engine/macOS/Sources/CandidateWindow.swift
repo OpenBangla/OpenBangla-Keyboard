@@ -70,7 +70,7 @@ final class CandidateWindow: NSPanel {
     private let content = CandidateContentView()
 
     // MARK: State
-    weak var delegate: CandidateWindowDelegate?
+    weak var candidateDelegate: CandidateWindowDelegate?
     private var cursorRect: NSRect = .zero
 
     /// Currently hovered candidate index — drives the hover highlight.
@@ -135,7 +135,7 @@ final class CandidateWindow: NSPanel {
 
         content.onSelect = { [weak self] idx in
             guard let self else { return }
-            self.delegate?.candidateWindow(self, didSelectCandidateAt: idx)
+            self.candidateDelegate?.candidateWindow(self, didSelectCandidateAt: idx)
         }
     }
 
@@ -203,7 +203,7 @@ final class CandidateWindow: NSPanel {
             let windowPt  = convertPoint(fromScreen: screenPt)
             let contentPt = content.convert(windowPt, from: nil)
             if let idx = content.candidateIndex(at: contentPt) {
-                delegate?.candidateWindow(self, didSelectCandidateAt: idx)
+                candidateDelegate?.candidateWindow(self, didSelectCandidateAt: idx)
             }
 
         default:
@@ -232,11 +232,15 @@ private extension CandidateWindow {
                   ?? NSScreen.screens[0]
         let sf = screen.visibleFrame   // excludes Dock and menu bar
 
-        // 3. Preferred placement: just below the cursor.
+        // 3. Preferred placement: just below the cursor line.
+        //    In macOS screen coordinates Y grows upward.  The cursor rect
+        //    returned by firstRect(forCharacterRange:) has its origin at the
+        //    bottom-left of the text line.  Place the panel so its top edge
+        //    sits just below that line.
         var ox = cursorRect.minX
         var oy = cursorRect.minY - Style.cursorGap - panelH
 
-        // Not enough space below ─ flip the panel above the cursor.
+        // Not enough space below ─ flip the panel above the cursor line.
         if oy < sf.minY {
             oy = cursorRect.maxY + Style.cursorGap
         }

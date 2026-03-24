@@ -16,7 +16,7 @@ var supportDirectory: SupportDirectory = SupportDirectory()
 
 // only one candidate window for the entire input method —
 // only one should be visible at a time
-var candidateWindow = CandidateWindow()
+var candidatePanel = CandidateWindow()
 
 var settings = OpenBanglaSettings(plistPath: supportDirectory.path() + "/org.openbangla.keyboard.plist")
 

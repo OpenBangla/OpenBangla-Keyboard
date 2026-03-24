@@ -13,6 +13,7 @@
 		8BA9129F245CC84D00C9A683 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9129E245CC84D00C9A683 /* AppDelegate.swift */; };
 		8BA912A1245CC85000C9A683 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BA912A0245CC85000C9A683 /* Assets.xcassets */; };
 		8BA912B1245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA912B0245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift */; };
+		A1B83A512F725B72003AF369 /* CandidateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B83A502F725B72003AF369 /* CandidateWindow.swift */; };
 		C3615D5E2D64A03900E733FF /* RitiWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3615D5D2D64A03900E733FF /* RitiWrapper.swift */; };
 		C362D0F02F0916CC006D0813 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362D0EF2F0916CC006D0813 /* Settings.swift */; };
 		C362D0F32F091B47006D0813 /* SupportDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362D0F22F091B33006D0813 /* SupportDirectory.swift */; };
@@ -40,6 +41,7 @@
 		8BA9129E245CC84D00C9A683 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BA912A0245CC85000C9A683 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8BA912B0245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenBanglaIMKInputController.swift; sourceTree = "<group>"; };
+		A1B83A502F725B72003AF369 /* CandidateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidateWindow.swift; sourceTree = "<group>"; };
 		C3615D5A2D649EE600E733FF /* OpenBangla-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpenBangla-Bridging-Header.h"; sourceTree = "<group>"; };
 		C3615D5D2D64A03900E733FF /* RitiWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitiWrapper.swift; sourceTree = "<group>"; };
 		C362D0EF2F0916CC006D0813 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 		8BA9129D245CC84D00C9A683 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A1B83A502F725B72003AF369 /* CandidateWindow.swift */,
 				C3615D522D649E7400E733FF /* Other */,
 				8BA9129E245CC84D00C9A683 /* AppDelegate.swift */,
 				8BA912B0245CCA4F00C9A683 /* OpenBanglaIMKInputController.swift */,
@@ -246,6 +249,7 @@
 				C362D0F32F091B47006D0813 /* SupportDirectory.swift in Sources */,
 				C362D0F02F0916CC006D0813 /* Settings.swift in Sources */,
 				8BA9129F245CC84D00C9A683 /* AppDelegate.swift in Sources */,
+				A1B83A512F725B72003AF369 /* CandidateWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

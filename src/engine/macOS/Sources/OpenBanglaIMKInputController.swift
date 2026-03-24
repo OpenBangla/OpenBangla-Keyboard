@@ -38,7 +38,7 @@ class OpenBanglaIMKInputController: IMKInputController, CandidateWindowDelegate 
     // called when the client gains focus
     override func activateServer(_ sender: Any!) {
         openbanglaLog(logLevel: .VERBOSE, "client \(String(describing: sender))")
-        candidateWindow.delegate = self
+        candidatePanel.candidateDelegate = self
     }
 
     // generate inputmethod menu and handle user clicks
@@ -136,12 +136,12 @@ class OpenBanglaIMKInputController: IMKInputController, CandidateWindowDelegate 
 
         writeTextToClient(downcastSender(sender), self._composedString)
         
-        if candidateWindow.isVisible {
+        if candidatePanel.isVisible {
             riti.commitCandidate(at: self._selectedCandidateIndex)
         } else {
             riti.finishInputSession()
         }
-        candidateWindow.hide()
+        candidatePanel.hide()
 
         self._originalString = ""
         self._composedString = ""
@@ -157,9 +157,9 @@ class OpenBanglaIMKInputController: IMKInputController, CandidateWindowDelegate 
         writeMarkToClient(downcastSender(self.client()), self._originalString)
 
         if self._candidates.isEmpty {
-            candidateWindow.hide()
+            candidatePanel.hide()
         } else {
-            candidateWindow.update(
+            candidatePanel.update(
                 preedit:          self._originalString,
                 candidates:       self._candidates,
                 highlightedIndex: Int(self._selectedCandidateIndex),
@@ -171,7 +171,12 @@ class OpenBanglaIMKInputController: IMKInputController, CandidateWindowDelegate 
     // cursor rect in screen coordinates for candidate window positioning
     private func getCursorRect() -> NSRect {
         let c = downcastSender(self.client())
-        return c.firstRect(forCharacterRange: c.markedRange(), actualRange: nil)
+        // Squirrel (RIME) approach: attributes(forCharacterIndex:lineHeightRectangle:)
+        // with index 0 gives the position at the start of composing text and
+        // reliably includes the line height in the returned rect.
+        var lineRect = NSRect.zero
+        c.attributes(forCharacterIndex: 0, lineHeightRectangle: &lineRect)
+        return lineRect
     }
 
     // cancel the current transliteration
@@ -189,7 +194,7 @@ class OpenBanglaIMKInputController: IMKInputController, CandidateWindowDelegate 
         self._candidates = []
         self._selectedCandidateIndex = 0
 
-        candidateWindow.hide()
+        candidatePanel.hide()
     }
 
     // MARK: - CandidateWindowDelegate
@@ -254,7 +259,7 @@ class OpenBanglaIMKInputController: IMKInputController, CandidateWindowDelegate 
 
         if riti.hasOngoingInputSession {
             // navigate the custom candidate window
-            if candidateWindow.isVisible && (char == toChar(NSCarriageReturnCharacter) ||
+            if candidatePanel.isVisible && (char == toChar(NSCarriageReturnCharacter) ||
                char == toChar(NSUpArrowFunctionKey) ||
                char == toChar(NSDownArrowFunctionKey) ||
                char == toChar(NSRightArrowFunctionKey) ||
