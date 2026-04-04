@@ -516,6 +516,13 @@ void setupMateIME() {
     setupFcitx5InputMethod();
 }
 
+void setupBudgieIME() {
+    configureImConfigForFcitx5();
+    setFcitx5EnvVarsForSession();
+    startFcitx5IfNeeded();
+    setupFcitx5InputMethod();
+}
+
 void setupInputSources() {
     auto de = detectDesktopEnvironment();
 
@@ -531,6 +538,8 @@ void setupInputSources() {
         setupXfceIME();
     } else if(de == DesktopEnvironment::MATE) {
         setupMateIME();
+    } else if(de == DesktopEnvironment::Budgie) {
+        setupBudgieIME();
     } else if(de == DesktopEnvironment::macOS) {
         #ifdef Q_OS_MACOS
             bool enabled = macOS::getInputSourceEnabled();
