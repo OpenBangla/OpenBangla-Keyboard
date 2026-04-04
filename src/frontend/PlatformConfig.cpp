@@ -55,6 +55,7 @@ DesktopEnvironment detectDesktopEnvironment() {
 
     const QString de = desktopEnvs.join(';').toLower();
 
+    if (de.contains("zorin")) return DesktopEnvironment::ZorinOS;
     if (de.contains("gnome")) return DesktopEnvironment::GNOME;
     if (de.contains("kde")) return DesktopEnvironment::KDE;
     if (de.contains("xfce")) return DesktopEnvironment::XFCE;
@@ -91,6 +92,7 @@ QString desktopEnvironmentToString(DesktopEnvironment de) {
     case DesktopEnvironment::Unity: return "Unity";
     case DesktopEnvironment::Pantheon: return "Pantheon";
     case DesktopEnvironment::Deepin: return "Deepin";
+    case DesktopEnvironment::ZorinOS: return "ZorinOS";
     case DesktopEnvironment::Wayland: return "Wayland";
     case DesktopEnvironment::X11: return "X11";
     default: return "Unknown";
@@ -131,7 +133,7 @@ bool isAppIndicatorEnabled() {
 
 bool shouldShowTrayIcon() {
     DesktopEnvironment de = detectDesktopEnvironment();
-    if (de == DesktopEnvironment::GNOME) {
+    if (de == DesktopEnvironment::GNOME || de == DesktopEnvironment::ZorinOS) {
         return isAppIndicatorEnabled();
     } else if(de == DesktopEnvironment::Pantheon) {
         // Pantheon (Elementary OS) does not support AppIndicator
@@ -440,7 +442,7 @@ void setupKdeIME() {
 void setupInputSources() {
     auto de = detectDesktopEnvironment();
 
-    if(de == DesktopEnvironment::GNOME) {
+    if(de == DesktopEnvironment::GNOME || de == DesktopEnvironment::ZorinOS) {
         setupGnomeIME();
     } else if(de == DesktopEnvironment::KDE) {
         setupKdeIME();

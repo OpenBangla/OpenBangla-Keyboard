@@ -31,6 +31,7 @@
     Unity,
     Pantheon,
     Deepin,
+    ZorinOS,
     Wayland,
     X11
 };
