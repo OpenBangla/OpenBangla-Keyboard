@@ -141,18 +141,15 @@ bool shouldShowTrayIcon() {
     return true;
 }
 
-QString getGnomeInputSources() {
-    QString key = "/org/gnome/desktop/input-sources/sources";
-
+QString readDConfKey(const QString &key) {
     QProcess process;
     process.start("dconf", {"read", key});
     process.waitForFinished();
 
     if (process.exitCode() == 0) {
-        QString output = process.readAllStandardOutput().trimmed();
-        return output;
+        return process.readAllStandardOutput().trimmed();
     } else {
-        LOG_ERROR("getGnomeInputSources Error: %s\n", process.readAllStandardError().toStdString().c_str());
+        LOG_ERROR("readDConfKey(%s) Error: %s\n", key.toStdString().c_str(), process.readAllStandardError().toStdString().c_str());
         return "";
     }
 }
@@ -170,14 +167,13 @@ void writeDConfSetting(QString key, QString value) {
     }
 }
 
-void setupGnomeIME() {
-    QString sources = getGnomeInputSources();
+QStringList parseDConfInputSources(const QString &raw) {
     QStringList sourcesList;
 
     // It comes in an array of tuples like this:
     // [('xkb', 'us'), ('ibus', 'OpenBangla')]
     // So we need to do some preprocessing.
-    auto string = sources.replace("[", "").replace("]", "");
+    auto string = QString(raw).replace("[", "").replace("]", "");
     auto index = string.indexOf("),");
 
     while(index != -1) {
@@ -195,6 +191,13 @@ void setupGnomeIME() {
         LOG_DEBUG("Source: %s\n", source.toStdString().c_str());
     }
 
+    return sourcesList;
+}
+
+void setupGnomeIME() {
+    QString sources = readDConfKey("/org/gnome/desktop/input-sources/sources");
+    QStringList sourcesList = parseDConfInputSources(sources);
+
     QString firstSource = sourcesList.first();
 
     // Check if OpenBangla exists in the sources
@@ -210,6 +213,23 @@ void setupGnomeIME() {
         writeDConfSetting("/org/gnome/desktop/input-sources/sources", sourcesString);
         writeDConfSetting("/org/gnome/desktop/input-sources/mru-sources", QString("[%1]").arg(firstSource));
         LOG_DEBUG("Added OpenBangla to sources\n");
+    }
+}
+
+void setupCinnamonIME() {
+    QString sources = readDConfKey("/org/cinnamon/desktop/input-sources/sources");
+    QStringList sourcesList = parseDConfInputSources(sources);
+
+    bool found = sourcesList.contains("('ibus', 'OpenBangla')");
+
+    if (found) {
+        LOG_DEBUG("[Cinnamon] OpenBangla found in sources\n");
+    } else {
+        LOG_DEBUG("[Cinnamon] OpenBangla not found in sources\n");
+        sourcesList.append("('ibus', 'OpenBangla')");
+        auto sourcesString = QString("[%1]").arg(sourcesList.join(", "));
+        writeDConfSetting("/org/cinnamon/desktop/input-sources/sources", sourcesString);
+        LOG_DEBUG("[Cinnamon] Added OpenBangla to sources\n");
     }
 }
 
@@ -424,6 +444,8 @@ void setupInputSources() {
         setupGnomeIME();
     } else if(de == DesktopEnvironment::KDE) {
         setupKdeIME();
+    } else if(de == DesktopEnvironment::Cinnamon) {
+        setupCinnamonIME();
     } else if(de == DesktopEnvironment::Deepin) {
         setupFcitx5InputMethod();
     } else if(de == DesktopEnvironment::macOS) {
