@@ -449,7 +449,7 @@ void configureImConfigForFcitx5() {
             QString content = file.readAll();
             file.close();
             if (content.contains("run_im fcitx5")) {
-                LOG_DEBUG("[XFCE] im-config already set to fcitx5\n");
+                LOG_DEBUG("[Fcitx5] im-config already set to fcitx5\n");
                 return;
             }
         }
@@ -461,9 +461,9 @@ void configureImConfigForFcitx5() {
     process.waitForFinished();
 
     if (process.exitCode() == 0) {
-        LOG_DEBUG("[XFCE] Configured im-config to use fcitx5\n");
+        LOG_DEBUG("[Fcitx5] Configured im-config to use fcitx5\n");
     } else {
-        LOG_ERROR("[XFCE] Failed to configure im-config: %s\n", process.readAllStandardError().toStdString().c_str());
+        LOG_ERROR("[Fcitx5] Failed to configure im-config: %s\n", process.readAllStandardError().toStdString().c_str());
     }
 }
 
@@ -480,9 +480,9 @@ void setFcitx5EnvVarsForSession() {
     process.waitForFinished();
 
     if (process.exitCode() == 0) {
-        LOG_DEBUG("[XFCE] Updated DBus activation environment for fcitx5\n");
+        LOG_DEBUG("[Fcitx5] Updated DBus activation environment for fcitx5\n");
     } else {
-        LOG_ERROR("[XFCE] Failed to update DBus environment: %s\n", process.readAllStandardError().toStdString().c_str());
+        LOG_ERROR("[Fcitx5] Failed to update DBus environment: %s\n", process.readAllStandardError().toStdString().c_str());
     }
 }
 
@@ -493,16 +493,23 @@ void startFcitx5IfNeeded() {
     pgrep.waitForFinished();
 
     if (pgrep.exitCode() == 0) {
-        LOG_DEBUG("[XFCE] fcitx5 is already running\n");
+        LOG_DEBUG("[Fcitx5] fcitx5 is already running\n");
         return;
     }
 
     // Start fcitx5 as a daemon
     QProcess::startDetached("fcitx5", {"-d"});
-    LOG_DEBUG("[XFCE] Started fcitx5 daemon\n");
+    LOG_DEBUG("[Fcitx5] Started fcitx5 daemon\n");
 }
 
 void setupXfceIME() {
+    configureImConfigForFcitx5();
+    setFcitx5EnvVarsForSession();
+    startFcitx5IfNeeded();
+    setupFcitx5InputMethod();
+}
+
+void setupMateIME() {
     configureImConfigForFcitx5();
     setFcitx5EnvVarsForSession();
     startFcitx5IfNeeded();
@@ -522,6 +529,8 @@ void setupInputSources() {
         setupFcitx5InputMethod();
     } else if(de == DesktopEnvironment::XFCE) {
         setupXfceIME();
+    } else if(de == DesktopEnvironment::MATE) {
+        setupMateIME();
     } else if(de == DesktopEnvironment::macOS) {
         #ifdef Q_OS_MACOS
             bool enabled = macOS::getInputSourceEnabled();
