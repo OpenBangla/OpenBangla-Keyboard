@@ -45,26 +45,18 @@ int main(int argc, char *argv[]) {
   parser.addVersionOption();
   QCommandLineOption darkIcon("dark","Enable dark theme support");
   QCommandLineOption startInTray("tray","Start in tray");
+  QCommandLineOption setupSystem("setup-system","Setup OpenBangla input source");
   parser.addOption(darkIcon);
   parser.addOption(startInTray);
-
-  #ifdef Q_OS_MACOS
-    QCommandLineOption setTIS("setup-macos","Setup macOS input source");
-    parser.addOption(setTIS);
-  #endif
-
+  parser.addOption(setupSystem);
   parser.process(app);
+  
+  LOG_INFO("Detected Desktop Environment: %s\n", desktopEnvironmentToString(detectDesktopEnvironment()).toStdString().c_str());
 
-  #ifdef Q_OS_MACOS
-    if(parser.isSet(setTIS)) {
-        macOS::setupOpenBanglaInputSource();
-        return 0;
-    }
-  #endif
-
-  LOG_DEBUG("Detected Desktop Environment: %s\n", desktopEnvironmentToString(detectDesktopEnvironment()).toStdString().c_str());
-
-  setupInputSources();
+  if(parser.isSet(setupSystem)) {
+    setupInputSources();
+    return 0;
+  }
 
   // Prevent many instances of the app to be launched
   QString name = "com.openbangla.keyboard";

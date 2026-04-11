@@ -551,8 +551,7 @@ void setupInputSources() {
         setupLXQtIME();
     } else if(de == DesktopEnvironment::macOS) {
         #ifdef Q_OS_MACOS
-            bool enabled = macOS::getInputSourceEnabled();
-            LOG_DEBUG("OpenBangla Input Source Enabled: %s\n", enabled ? "true" : "false");
+            macOS::setupOpenBanglaInputSource();
         #endif
     } else {
         LOG_DEBUG("Desktop Environment not supported for input source setup\n");

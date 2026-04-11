@@ -176,6 +176,9 @@ set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
 set(CPACK_RPM_PACKAGE_URL "https://openbangla.org/")
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
+configure_file("${CMAKE_SOURCE_DIR}/data/linux/postinst.in" "${CMAKE_BINARY_DIR}/postinst" @ONLY)
+set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_BINARY_DIR}/postinst")
+set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_BINARY_DIR}/postinst")
 # Prevents CPack from generating file conflicts
 set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/usr/share/metainfo" "/usr/share/pixmaps"
                                                   "/usr/share/icons" "/usr/share/icons/hicolor" 
