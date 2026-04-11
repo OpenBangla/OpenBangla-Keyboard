@@ -412,6 +412,37 @@ void setupFcitx5InputMethod() {
     }
 }
 
+void setupPantheonIME() {
+    // Pantheon (elementary OS) uses iBus directly, not GNOME input sources.
+    // Add OpenBangla to iBus preload engines so it appears in Pantheon's
+    // Input Method settings panel.
+    QString key = "/desktop/ibus/general/preload-engines";
+
+    QProcess readProcess;
+    readProcess.start("dconf", {"read", key});
+    readProcess.waitForFinished();
+
+    QString engines;
+    if (readProcess.exitCode() == 0) {
+        engines = readProcess.readAllStandardOutput().trimmed();
+    }
+
+    if (engines.contains("'OpenBangla'")) {
+        LOG_DEBUG("OpenBangla already in iBus preload engines\n");
+        return;
+    }
+
+    if (engines.isEmpty() || engines == "@as []") {
+        engines = "['OpenBangla']";
+    } else {
+        // Insert before the closing bracket
+        engines = engines.left(engines.length() - 1) + ", 'OpenBangla']";
+    }
+
+    writeDConfSetting(key, engines);
+    LOG_DEBUG("Added OpenBangla to iBus preload engines for Pantheon\n");
+}
+
 void setupKdeIME() {
     setupKdeVirtualKeyboard();
     setupFcitx5InputMethod();
@@ -422,6 +453,8 @@ void setupInputSources() {
 
     if(de == DesktopEnvironment::GNOME) {
         setupGnomeIME();
+    } else if(de == DesktopEnvironment::Pantheon) {
+        setupPantheonIME();
     } else if(de == DesktopEnvironment::KDE) {
         setupKdeIME();
     } else if(de == DesktopEnvironment::macOS) {
