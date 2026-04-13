@@ -1,8 +1,8 @@
 ---
 name: Bug Report
 description: File a bug report to help us improve OpenBangla Keyboard
-labels: ["bug"]
-assignees: []
+labels: ["Bug"]
+title: "[Bug]: "
 body:
   - type: markdown
     attributes:
@@ -11,45 +11,45 @@ body:
   - type: input
     id: obk-version
     attributes:
-      label: OBK Version
-      description: What version of OpenBangla Keyboard are you using? (e.g., 3.0.0)
+      label: OpenBangla Keyboard Version
+      description: What version of OpenBangla Keyboard are you using?
       placeholder: e.g., 3.0.0
     validations:
       required: true
   - type: input
     id: os-details
     attributes:
-      label: Operating System
-      description: Which Linux distribution and version are you using? (e.g., Ubuntu 24.04, Arch Linux)
-      placeholder: e.g., Ubuntu 24.04
+      label: Operating System and Version
+      description: Which OS or Distro and which version are you using?
+      placeholder: e.g., Windows 11 25H2, macOS 26.4, Linux Mint 22.3
     validations:
       required: true
   - type: input
     id: environment-details
     attributes:
-      label: Environment Details
-      description: Which Linux destop environment and display type are you using? (e.g., GNOME Wayland, Plasma X11, Hyprland)
-      placeholder: e.g., GNOME Wayland
+      label: Environment Details (for GNU/Linux Users)
+      description: Which desktop environment and display type are you using?
+      placeholder: e.g., KDE Plasma Wayland, Cinnamon X11
     validations:
-      required: true
+      required: false
   - type: dropdown
     id: input-method
     attributes:
       label: Input Method Framework
-      description: Which input method framework are you using? (e.g., IBus, Fcitx)
+      description: Which input method framework are you using?
       multiple: true
       options:
         - IBus
         - Fcitx
-        - Other (please specify in Additional Context)
+        - Other (Specify in Additional Context)
     validations:
-      required: true
+      required: false
   - type: textarea
     id: bug-description
     attributes:
       label: Describe the Bug
       description: A clear and concise description of what the bug is.
-      placeholder: Tell us what you see!
+      placeholder: Let us know what issues you are experiencing.
     validations:
       required: true
   - type: textarea
@@ -62,22 +62,6 @@ body:
         2. Select a specific layout
         3. Type specific characters
         4. Observe the issue
-    validations:
-      required: true
-  - type: textarea
-    id: expected-behavior
-    attributes:
-      label: Expected Behavior
-      description: What did you expect to happen?
-      placeholder: A clear and concise description of what you expected.
-    validations:
-      required: true
-  - type: textarea
-    id: actual-behavior
-    attributes:
-      label: Actual Behavior
-      description: What actually happened?
-      placeholder: A clear and concise description of what occurred.
     validations:
       required: true
   - type: textarea
