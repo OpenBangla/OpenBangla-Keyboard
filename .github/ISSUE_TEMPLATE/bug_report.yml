@@ -13,7 +13,7 @@ body:
     attributes:
       label: OpenBangla Keyboard Version
       description: What version of OpenBangla Keyboard are you using?
-      placeholder: e.g., 3.0.0
+      placeholder: e.g., 2.0.0
     validations:
       required: true
   - type: input
