@@ -3,6 +3,7 @@ name: Feature Request
 description: Suggest an idea for improving OpenBangla Keyboard
 labels: ["Enhancement"]
 title: "[Feature]: "
+type: feature
 body:
   - type: markdown
     attributes:

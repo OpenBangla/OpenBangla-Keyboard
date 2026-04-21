@@ -3,6 +3,7 @@ name: Bug Report
 description: File a bug report to help us improve OpenBangla Keyboard
 labels: ["Bug"]
 title: "[Bug]: "
+type: bug
 body:
   - type: markdown
     attributes:
