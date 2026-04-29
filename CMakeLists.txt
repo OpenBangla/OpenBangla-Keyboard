@@ -151,7 +151,6 @@ set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/us
                                                   "/usr/share/icons/hicolor/32x32" "/usr/share/icons/hicolor/32x32/apps"
                                                   "/usr/share/icons/hicolor/48x48" "/usr/share/icons/hicolor/48x48/apps"
                                                   "/usr/share/icons/hicolor/512x512" "/usr/share/icons/hicolor/512x512/apps")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 # Configure CPack on the basis of which backend we are building for.
 if(ENABLE_IBUS)
     ## IBUS
@@ -182,5 +181,8 @@ elseif(APPLE)
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA "installer.png")
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA_ALIGNMENT "left")
 endif()
+
+# Set package filename after CPACK_PACKAGE_NAME is defined
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 
 include(CPack)
