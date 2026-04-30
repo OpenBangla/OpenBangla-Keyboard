@@ -6,7 +6,7 @@ on:
     tags-ignore: [ '**' ]
 
 jobs:
-  build:
+  build-x64:
     if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
     strategy:
       matrix:
@@ -64,12 +64,68 @@ jobs:
       - name: upload-artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: pkg-${{ steps.sanitizer.outputs.sanitized_container }}-${{ matrix.ime }}
+          name: pkg-x64-${{ steps.sanitizer.outputs.sanitized_container }}-${{ matrix.ime }}
+          path: artifact
+
+  build-arm64:
+    if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
+    strategy:
+      matrix:
+        # Note: opensuse doesn't have official arm64v8 images on Docker Hub
+        container: [ "ubuntu:20.04", "ubuntu:22.04", "ubuntu:24.04", "debian:11", "debian:12", "fedora:40", "fedora:41" ]
+        ime: [ "ibus", "fcitx" ]
+        # Some distributions doesn't have the required version of fcitx library, so we exclude them.
+        exclude:
+          - container: "ubuntu:20.04"
+            ime: "fcitx"
+    runs-on: "ubuntu-24.04-arm"
+    container:
+      image: arm64v8/${{ matrix.container }}
+      env:
+        DIST: ${{ matrix.container }}
+        IME: ${{ matrix.ime }}
+        DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: install-git
+        run: |
+          # Install Git based on distro
+          if command -v apt-get >/dev/null; then
+            apt-get update -y
+            apt-get install -y git
+          elif command -v dnf >/dev/null; then
+            dnf install -y git
+          elif command -v zypper >/dev/null; then
+            zypper install -y git
+          elif command -v pacman >/dev/null; then
+            pacman -Sy git --noconfirm
+          fi
+      
+      - name: checkout-source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: run-builder
+        shell: bash
+        run: ./tools/build.sh
+
+      - name: Sanitize container name
+        id: sanitizer
+        shell: bash
+        run: |
+          # Replace colons and slashes with dashes
+          SANITIZED_CONTAINER=$(echo "${{ matrix.container }}" | sed 's/[:\\/]/-/g')
+          echo "sanitized_container=$SANITIZED_CONTAINER" >> $GITHUB_OUTPUT
+
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkg-arm64-${{ steps.sanitizer.outputs.sanitized_container }}-${{ matrix.ime }}
           path: artifact
 
   release:
     if: contains(github.event.head_commit.message, 'deploy+')
-    needs: build
+    needs: [build-x64, build-arm64]
     runs-on: "ubuntu-latest"
     steps:
       - name: checkout-source
