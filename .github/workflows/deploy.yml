@@ -12,7 +12,7 @@ jobs:
       matrix:
         platform: [ "ubuntu-latest", "ubuntu-24.04-arm" ]
         # container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38", "archlinux:latest" ]
-        container: [ "ubuntu:22.04", "ubuntu:24.04", "debian:12", "fedora:40", "fedora:41", "opensuse/tumbleweed" ]
+        container: [ "ubuntu:22.04", "ubuntu:24.04", "debian:12", "fedora:40", "fedora:41" ]
         # this list should be updated from time to time by consulting these pages:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases
@@ -23,8 +23,6 @@ jobs:
         exclude:
           - container: "ubuntu:20.04"
             ime: "fcitx"
-          - platform: "ubuntu-24.04-arm"
-            container: "opensuse/tumbleweed"
     runs-on: ${{ matrix.platform }}
     container:
       image: ${{ matrix.platform == 'ubuntu-24.04-arm' && format('arm64v8/{0}', matrix.container) || matrix.container }}
