@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
 project("OpenBangla-Keyboard" VERSION ${VERSION_STRING})
@@ -13,8 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(NOT WIN32 AND NOT APPLE)
-    enable_language(Rust)
-    include(CMakeCargo)
+    add_subdirectory(cmake/corrosion-rs)
 endif()
 
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
