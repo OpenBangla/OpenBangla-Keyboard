@@ -1,8 +1,9 @@
 ---
 name: Feature Request
 description: Suggest an idea for improving OpenBangla Keyboard
-labels: ["enhancement"]
-assignees: []
+labels: ["Enhancement"]
+title: "[Feature]: "
+type: feature
 body:
   - type: markdown
     attributes:
