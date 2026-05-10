@@ -23,8 +23,6 @@ jobs:
         exclude:
           - container: "ubuntu:20.04"
             ime: "fcitx"
-          - platform: "ubuntu-24.04-arm"
-            container: "opensuse/tumbleweed"
     runs-on: ${{ matrix.platform }}
     container:
       image: ${{ matrix.container }}
