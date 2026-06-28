@@ -3,6 +3,11 @@ add_subdirectory(common)
 ## Platform depended things
 if (OS_LINUX)
     ## Platform is Linux
+    corrosion_import_crate(
+        MANIFEST_PATH riti/Cargo.toml
+        CRATE_TYPES staticlib
+        CRATES riti
+    )
 
     if (ENABLE_IBUS)
         add_subdirectory(ibus)
@@ -16,9 +21,6 @@ if (OS_LINUX)
         add_subdirectory(ibus)
         add_subdirectory(fcitx)
     endif()
-
-    ## Include subdirectories
-    add_subdirectory(riti)
 endif (OS_LINUX)
 
 if (APPLE)

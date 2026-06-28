@@ -10,14 +10,14 @@ jobs:
     if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
     strategy:
       matrix:
-        # container: [ "ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:23.04", "debian:11", "fedora:37", "fedora:38", "archlinux:latest" ]
-        container: [ "ubuntu:22.04", "ubuntu:24.04", "debian:11", "debian:12", "fedora:40", "fedora:41", "opensuse/tumbleweed" ]
+        platform: [ "ubuntu-latest", "ubuntu-24.04-arm" ]
         # this list should be updated from time to time by consulting these pages:
         # https://releases.ubuntu.com/
         # https://wiki.debian.org/DebianReleases#Production_Releases
         # https://fedoraproject.org/wiki/Releases
         # https://en.wikipedia.org/wiki/OpenSUSE#Version_history
-    runs-on: "ubuntu-latest"
+        container: [ "ubuntu:22.04", "ubuntu:24.04", "debian:12", "fedora:40", "fedora:41", "opensuse/tumbleweed" ]
+    runs-on: ${{ matrix.platform }}
     container:
       image: ${{ matrix.container }}
       env:
@@ -58,7 +58,7 @@ jobs:
       - name: upload-artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: pkg-${{ steps.sanitizer.outputs.sanitized_container }}
+          name: pkg-${{ matrix.platform == 'ubuntu-24.04-arm' && 'arm64' || 'x64' }}-${{ steps.sanitizer.outputs.sanitized_container }}
           path: artifact
 
   release:

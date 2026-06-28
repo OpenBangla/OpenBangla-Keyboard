@@ -2,3 +2,6 @@
 	path = src/engine/riti
 	url = https://github.com/OpenBangla/riti.git
 	branch = master
+[submodule "cmake/corrosion-rs"]
+	path = cmake/corrosion-rs
+	url = https://github.com/corrosion-rs/corrosion.git

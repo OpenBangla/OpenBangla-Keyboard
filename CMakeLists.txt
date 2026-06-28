@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18...3.29)
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
 project("OpenBangla-Keyboard" VERSION ${VERSION_STRING})
@@ -13,8 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(NOT WIN32 AND NOT APPLE)
-    enable_language(Rust)
-    include(CMakeCargo)
+    add_subdirectory(cmake/corrosion-rs)
 endif()
 
 if(APPLE)
@@ -188,7 +187,6 @@ set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/us
                                                   "/usr/share/icons/hicolor/32x32" "/usr/share/icons/hicolor/32x32/apps"
                                                   "/usr/share/icons/hicolor/48x48" "/usr/share/icons/hicolor/48x48/apps"
                                                   "/usr/share/icons/hicolor/512x512" "/usr/share/icons/hicolor/512x512/apps")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 # Configure CPack on the basis of which backend we are building for.
 if(ENABLE_IBUS)
     ## IBUS
@@ -227,5 +225,8 @@ elseif(APPLE)
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA "installer.png")
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA_ALIGNMENT "left")
 endif()
+
+# Set package filename after CPACK_PACKAGE_NAME is defined
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
 
 include(CPack)

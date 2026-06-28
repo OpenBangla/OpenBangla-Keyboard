@@ -37,6 +37,11 @@ QPushButton {
     margin: 2px;
     color: rgba(0, 0, 0, 0.7);
     font-size: 18px;
+    outline: none;
+}
+
+QPushButton:focus {
+    outline: none;
 }
 
 QPushButton:hover {

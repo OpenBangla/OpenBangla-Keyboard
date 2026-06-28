@@ -18,6 +18,7 @@
 
 #include <QSystemTrayIcon>
 #include <QScreen>
+#include <QGuiApplication>
 #include <QWindow>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -112,19 +113,31 @@ void TopBar::SetupTopBar() {
   this->setFixedSize(QSize(this->width(), this->height()));
   this->setAttribute(Qt::WA_TranslucentBackground);
 
-  if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
+  QPoint savedPos = gSettings->getTopBarWindowPosition();
+  bool validPosition = false;
+
+  if (savedPos != QPoint(0, 0)) {
+    // Check if the saved position is within any known screen
+    for (QScreen *screen : QGuiApplication::screens()) {
+      if (screen->geometry().contains(savedPos)) {
+        validPosition = true;
+        break;
+      }
+    }
+  }
+
+  if (validPosition) {
+    move(savedPos);
+  } else {
     int width = this->frameGeometry().width();
     int height = this->frameGeometry().height();
 
-    QApplication *app = (QApplication *) QApplication::instance();
-    QScreen *screen = app->primaryScreen();
+    QScreen *screen = QGuiApplication::primaryScreen();
 
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
 
     this->setGeometry((screenWidth / 2) - (width / 2), (screenHeight / 2) - (height / 2), width, height);
-  } else {
-    move(gSettings->getTopBarWindowPosition());
   }
 }
 
@@ -366,8 +379,17 @@ bool TopBar::eventFilter(QObject *object, QEvent *event) {
       event->accept();
     } else if (event->type() == QEvent::MouseMove) {
       if (canMoveTopbar) {
-        if(!this->windowHandle()->startSystemMove()){
-            QMouseEvent *e = (QMouseEvent *) event;
+        QMouseEvent *e = (QMouseEvent *) event;
+        if (!(e->buttons() & Qt::LeftButton)) {
+            // Mouse release event was missed; stop dragging.
+            canMoveTopbar = false;
+            ui->buttonIcon->setCursor(Qt::ArrowCursor);
+        } else if(this->windowHandle()->startSystemMove()){
+            // The window manager now owns the drag and will consume the
+            // mouse release event, so reset our drag state immediately.
+            canMoveTopbar = false;
+            ui->buttonIcon->setCursor(Qt::ArrowCursor);
+        } else {
             ui->buttonIcon->setCursor(Qt::ClosedHandCursor);
             move(e->globalX() - pressedMouseX, e->globalY() - pressedMouseY);
         }
