@@ -38,6 +38,20 @@
 #include "FileSystem.h"
 #include "ui_TopBar.h"
 
+#include <iostream>
+
+static void notifyTrayStart(QSystemTrayIcon* tray) {
+  if (qApp->property("invokedAsTray").toBool()) return;
+  uint count = gSettings->getTrayInfoCount();
+  if (count >= 4) return;
+  if (gSettings->getTopBarVisibility()) return;
+
+  tray->showMessage("OpenBangla Keyboard", "Currently running in the system tray.\n"
+                    "You can use the tray icon to change keyboard layouts and other "
+                    "settings and to show the TopBar again.");
+  // Update the counter to show only the message for the first three times
+  gSettings->setTrayInfoCount(count + 1);
+}
 
 TopBar::TopBar(bool darkIcon, QWidget *parent) :
   QMainWindow(parent),
@@ -76,16 +90,10 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   SetupPopupMenus();
   SetupTrayIcon();
   DataMigration();
-
-  uint count = gSettings->getTrayInfoCount();
-  if(count < 4 && !gSettings->getTopBarVisibility()) {
-    tray->showMessage("OpenBangla Keyboard", "Currently running in the system tray.\n"
-                      "You can use the tray icon to change keyboard layouts and other "
-                      "settings and to show the TopBar again.");
-    // Update the counter to show only the message for the first three times
-    gSettings->setTrayInfoCount(count + 1);
-  }
+  notifyTrayStart(tray);
 }
+
+
 
 TopBar::~TopBar() {
   /* Dialogs */
@@ -142,7 +150,7 @@ void TopBar::SetupPopupMenus() {
   // Icon Button Popup Menu
   iconMenuHide = new QAction("Hide this TopBar", this);
   connect(iconMenuHide, &QAction::triggered, [&]() {
-    this->setVisible(false);
+    this->hide();
     trayTopBarVisibility->setText("Show the TopBar");
   });
 
@@ -189,16 +197,18 @@ void TopBar::SetupTrayIcon() {
   connect(traySettings, &QAction::triggered, this, &TopBar::on_buttonSettings_clicked);
 
   trayTopBarVisibility = new QAction(
-    gSettings->getTopBarVisibility() ? "Hide the TopBar" : "Show the TopBar",
+    (this->isVisible())
+      ? "Hide the TopBar"
+      : "Show the TopBar",
     this
   );
 
   connect(trayTopBarVisibility, &QAction::triggered, [&]() {
     if(this->isVisible()) {
-      this->setVisible(false);
+      this->hide();
       trayTopBarVisibility->setText("Show the TopBar");
     } else {
-      this->setVisible(true);
+      this->show();
       trayTopBarVisibility->setText("Hide the TopBar");
     }
   });
@@ -216,7 +226,7 @@ void TopBar::SetupTrayIcon() {
   trayMenu->addAction(trayQuit);
 
   tray->setContextMenu(trayMenu);
-  tray->setVisible(true);
+  tray->show();
 }
 
 void TopBar::RefreshLayouts() {
@@ -340,7 +350,8 @@ void TopBar::on_buttonIcon_clicked() {
 
 void TopBar::closeEvent(QCloseEvent *event) {
   gSettings->setTopBarWindowPosition(this->pos());
-  gSettings->setTopBarVisibility(this->isVisible());
+  if(! qApp->property("invokedAsTray").toBool())
+    gSettings->setTopBarVisibility(this->isVisible());
   event->accept();
 }
 
@@ -382,7 +393,8 @@ void TopBar::on_buttonSetLayout_clicked() {
 
 void TopBar::on_buttonShutdown_clicked() {
   gSettings->setTopBarWindowPosition(this->pos());
-  gSettings->setTopBarVisibility(this->isVisible());
+  if(! qApp->property("invokedAsTray").toBool())
+    gSettings->setTopBarVisibility(this->isVisible());
   QApplication::exit();
 }
 
