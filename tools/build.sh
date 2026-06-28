@@ -30,7 +30,7 @@ makeRpmOpenSuse () {
     export DIST=$(echo "$DIST" | tr '/' '-')
     RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
 
-    zypper install -y libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel cmake ninja ibus-devel fcitx5-devel gcc curl rpm-build
+    zypper --non-interactive install --force-resolution libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel cmake ninja ibus-devel fcitx5-devel gcc  gcc-c++ curl rpm-build
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
     cmake -H"$GITHUB_WORKSPACE" -B/build -GNinja -DCMAKE_INSTALL_PREFIX="/usr" -DENABLE_BOTH=ON -DCPACK_GENERATOR=RPM
