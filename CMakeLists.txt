@@ -226,7 +226,9 @@ elseif(APPLE)
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA_ALIGNMENT "left")
 endif()
 
-# Set package filename after CPACK_PACKAGE_NAME is defined
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
+# Set package filename after CPACK_PACKAGE_NAME is defined (Linux only; macOS is set above)
+if(NOT APPLE)
+    set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}$ENV{ARCH_SUFFIX}")
+endif()
 
 include(CPack)

@@ -2,9 +2,16 @@
 RELEASE_VERSION=$(cat version.txt | head -n1)
 # follow cmake PACKAGE_FILE_NAME directive in main repo
 RELEASE_STUB="openbangla-keyboard_${RELEASE_VERSION}-"
+RAW_ARCH=$(uname -m)
 
 makeDeb () {
-    RELEASE_FILENAME="${RELEASE_STUB}${DIST}.deb"
+    case "$RAW_ARCH" in
+        x86_64)  ARCH_SUFFIX="_amd64" ;;
+        aarch64) ARCH_SUFFIX="_arm64" ;;
+        *)       ARCH_SUFFIX="_${RAW_ARCH}" ;;
+    esac
+    export ARCH_SUFFIX
+    RELEASE_FILENAME="${RELEASE_STUB}${DIST}${ARCH_SUFFIX}.deb"
     apt-get -y install build-essential pkg-config libibus-1.0-dev libfcitx5core-dev cmake libzstd-dev ninja-build curl qtbase5-dev qtbase5-dev-tools file
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
@@ -15,7 +22,9 @@ makeDeb () {
 }
 
 makeRpmFedora () {
-    RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
+    ARCH_SUFFIX=".${RAW_ARCH}"
+    export ARCH_SUFFIX
+    RELEASE_FILENAME="${RELEASE_STUB}${DIST}${ARCH_SUFFIX}.rpm"
     dnf install -y --allowerasing @buildsys-build cmake ibus-devel fcitx5-devel libzstd-devel qt5-qtdeclarative-devel ninja-build curl
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
     
@@ -28,7 +37,9 @@ makeRpmFedora () {
 makeRpmOpenSuse () {
     # Replace '/' with '-'
     export DIST=$(echo "$DIST" | tr '/' '-')
-    RELEASE_FILENAME="${RELEASE_STUB}${DIST}.rpm"
+    ARCH_SUFFIX=".${RAW_ARCH}"
+    export ARCH_SUFFIX
+    RELEASE_FILENAME="${RELEASE_STUB}${DIST}${ARCH_SUFFIX}.rpm"
 
     zypper --non-interactive install --force-resolution libQt5Core-devel libQt5Widgets-devel libQt5Network-devel libzstd-devel cmake ninja ibus-devel fcitx5-devel gcc  gcc-c++ curl rpm-build
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
@@ -41,10 +52,12 @@ makeRpmOpenSuse () {
 
 makeArch () {
     DIST=archlinux
+    ARCH_SUFFIX="-${RAW_ARCH}"
+    export ARCH_SUFFIX
     echo "PACKAGER='OpenBangla Team <openbanglateam@gmail.com>'" >> /etc/makepkg.conf
     PKGEXT=".pkg.tar.zst"
     echo "PKGEXT='$PKGEXT'" >> /etc/makepkg.conf
-    RELEASE_FILENAME="${RELEASE_STUB}${DIST}${PKGEXT}"
+    RELEASE_FILENAME="${RELEASE_STUB}${DIST}${ARCH_SUFFIX}${PKGEXT}"
     pacman -S --noconfirm --needed base-devel cmake libibus zstd qt5-base rust curl
     mkdir /build
     cd /build
