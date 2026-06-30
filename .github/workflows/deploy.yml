@@ -61,9 +61,20 @@ jobs:
           name: pkg-${{ matrix.platform == 'ubuntu-24.04-arm' && 'arm64' || 'x64' }}-${{ steps.sanitizer.outputs.sanitized_container }}
           path: artifact
 
+  merge:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: merge-artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: packages
+          pattern: pkg-*
+          delete-merged: true
+
   release:
     if: contains(github.event.head_commit.message, 'deploy+')
-    needs: build
+    needs: merge
     runs-on: "ubuntu-latest"
     steps:
       - name: checkout-source
@@ -79,8 +90,9 @@ jobs:
       - name: download-artifacts
         uses: actions/download-artifact@v4
         with:
+          name: packages
           path: artifacts
-      
+
       - name: create-release
         id: create_release
         uses: ncipollo/release-action@v1
@@ -88,7 +100,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.get_version.outputs.RELEASE_VERSION }}
           name: ${{ steps.get_version.outputs.RELEASE_VERSION }}
-          artifacts: "artifacts/*/*"
+          artifacts: "artifacts/*"
           allowUpdates: true
           draft: true
           body: |
