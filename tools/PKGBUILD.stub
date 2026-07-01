@@ -3,7 +3,7 @@
 pkgname="openbangla-keyboard"
 pkgrel=1
 pkgdesc="An OpenSource, Unicode compliant Bengali Input Method"
-arch=('x86_64')
+arch=('x86_64' 'aarch64')
 url="https://openbangla.github.io"
 license=('GPL3')
 depends=('ibus' 'qt5-base' 'zstd')

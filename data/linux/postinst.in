@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+@BIN_DIR@/openbangla-gui --setup-system
+
+exit 0

@@ -34,6 +34,8 @@
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
+#include "AutoCorrectDialog.h"
+#include "PlatformConfig.h"
 #include "FileSystem.h"
 #include "ui_TopBar.h"
 
@@ -172,7 +174,10 @@ void TopBar::SetupPopupMenus() {
   connect(iconMenuAbout, SIGNAL(triggered()), this, SLOT(iconMenuAbout_clicked()));
 
   iconMenu = new QMenu(this);
-  iconMenu->addAction(iconMenuHide);
+  // Gnome Shell and Pantheon doesn't support tray icon natively.
+  if(shouldShowTrayIcon()) {
+    iconMenu->addAction(iconMenuHide);
+  }
   iconMenu->addAction(iconMenuLayout);
   iconMenu->addAction(iconMenuAbout);
 }

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.18...3.29)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 file(STRINGS "${CMAKE_SOURCE_DIR}/version.txt" VERSION_STRING LIMIT_COUNT 1 REGEX "^.+")
@@ -14,6 +14,20 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(NOT WIN32 AND NOT APPLE)
     add_subdirectory(cmake/corrosion-rs)
+endif()
+
+if(APPLE)
+    enable_language(Swift)
+
+    if("${CMAKE_Swift_COMPILER_VERSION}" VERSION_LESS 5.9)
+        message(FATAL_ERROR "Bidirectional C++ Interop requires Swift 5.9 or greater. Have ${CMAKE_Swift_COMPILER_VERSION}")
+    endif()
+
+    # Set up swiftrt.o and runtime library search paths
+    include(InitializeSwift)
+    # cmake/modules/AddSwift.cmake provides the function for creating the Swift to
+    # C++ bridging header
+    include(AddSwift)
 endif()
 
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
@@ -65,10 +79,14 @@ if(OS_LINUX)
 
     option(ENABLE_IBUS "Enable IBus support" OFF)
     option(ENABLE_FCITX "Enable Fcitx support" OFF)
+    option(ENABLE_BOTH "Enable both IBus and Fcitx support" OFF)
 
-    if((NOT ENABLE_IBUS) AND (NOT ENABLE_FCITX))
-        message(FATAL_ERROR "Please set atleast ENABLE_IBUS or ENABLE_FCITX to be ON to build a backend")
+    if((NOT ENABLE_IBUS) AND (NOT ENABLE_FCITX) AND (NOT ENABLE_BOTH))
+        message(FATAL_ERROR "Please set atleast ENABLE_IBUS or ENABLE_FCITX or ENABLE_BOTH to be ON to build a backend")
     endif()
+    
+    ## Find zstd ##
+    pkg_check_modules(ZSTD REQUIRED libzstd)
 
     ## Find iBus ##
     if(ENABLE_IBUS)
@@ -80,13 +98,16 @@ if(OS_LINUX)
         find_package(Fcitx5Core 5.0.5 REQUIRED) 
     endif()
 
-    ## Find zstd ##
-    pkg_check_modules(ZSTD REQUIRED libzstd)
+    if(ENABLE_BOTH)
+        pkg_check_modules(IBUS REQUIRED ibus-1.0)
+        find_package(Fcitx5Core 5.0.5 REQUIRED)
+    endif()
 endif()
 
 # For Windows
 if(WIN32)
     find_package(zstd CONFIG REQUIRED)
+
     set(PROJECT_DATADIR "$ENV{LOCALAPPDATA}\\OpenBangla" CACHE PATH "Path to Data Directory")
     set(BIN_DIR "${PROJECT_DATADIR}/bin")
     add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
@@ -99,6 +120,14 @@ if(APPLE)
 
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
     set(CMAKE_INSTALL_PREFIX "/")
+
+    # Determine host architectures for the .pkg installer distribution.
+    # Without hostArchitectures, macOS assumes x86_64 and prompts for Rosetta.
+    if(CMAKE_OSX_ARCHITECTURES)
+        string(REPLACE ";" "," CPACK_HOST_ARCHITECTURES "${CMAKE_OSX_ARCHITECTURES}")
+    else()
+        set(CPACK_HOST_ARCHITECTURES "${CMAKE_SYSTEM_PROCESSOR}")
+    endif()
 endif()
 
 add_subdirectory(src/engine)
@@ -123,16 +152,21 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "OpenBangla Team <openbanglateam@gmail.com>"
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/data/Readme.txt")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/data/Readme.txt")
 if(APPLE)
+    set(CPACK_PACKAGE_NAME "OpenBangla Keyboard")
     # macOS productbuild requires license files with .txt, .rtf, .rtfd, or .html extension
     configure_file("${CMAKE_SOURCE_DIR}/LICENSE" "${CMAKE_BINARY_DIR}/LICENSE.txt" COPYONLY)
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt")
 else()
+    set(CPACK_PACKAGE_NAME "openbangla-keyboard")
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+
+    # Stripping on macOS invalidates ad-hoc code signatures, causing
+    # installed apps to be killed by the system.
+    set(CPACK_STRIP_FILES TRUE)
 endif()
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-set(CPACK_STRIP_FILES TRUE)
 set(CPACK_PRODUCTBUILD_IDENTITY_NAME "" CACHE STRING "Code signing identity for productbuild")
 set(CPACK_PRODUCTBUILD_KEYCHAIN_PATH "" CACHE STRING "Keychain path for code signing")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://openbangla.org/")
@@ -141,6 +175,9 @@ set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
 set(CPACK_RPM_PACKAGE_URL "https://openbangla.org/")
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
+configure_file("${CMAKE_SOURCE_DIR}/data/linux/postinst.in" "${CMAKE_BINARY_DIR}/postinst" @ONLY)
+set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_BINARY_DIR}/postinst")
+set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_BINARY_DIR}/postinst")
 # Prevents CPack from generating file conflicts
 set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/usr/share/metainfo" "/usr/share/pixmaps"
                                                   "/usr/share/icons" "/usr/share/icons/hicolor" 
@@ -153,18 +190,24 @@ set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/applications" "/us
 # Configure CPack on the basis of which backend we are building for.
 if(ENABLE_IBUS)
     ## IBUS
-    set(CPACK_PACKAGE_NAME "ibus-openbangla")
+    # set(CPACK_PACKAGE_NAME "ibus-openbangla")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "ibus (>= 1.5.1)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, ibus >= 1.5.1, ibus-libs >= 1.5.1, libzstd >= 1.3.3")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component")
 elseif(ENABLE_FCITX)
     ## FCITX
-    set(CPACK_PACKAGE_NAME "fcitx-openbangla")
+    # set(CPACK_PACKAGE_NAME "fcitx-openbangla")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "fcitx5 (>= 5.0.5)")
     set(CPACK_RPM_PACKAGE_REQUIRES "qt5-qtbase >= 5.9.0, libzstd >= 1.3.3, fcitx5 >= 5.0.5")
     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/lib64/fcitx5" "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
+elseif(ENABLE_BOTH)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "fcitx5 (>= 5.0.5) | ibus (>= 1.5.1)")
+    set(CPACK_RPM_PACKAGE_REQUIRES
+        "(ibus >= 1.5.1 if gnome-shell else fcitx5 >= 5.0.5), (gnome-shell-extension-appindicator if gnome-shell), qt5-qtbase >= 5.15.0, libzstd >= 1.3.3"
+    )
+    list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/share/ibus" "/usr/share/ibus/component" "/usr/lib64/fcitx5" 
+                                                              "/usr/share/fcitx5" "/usr/share/fcitx5/inputmethod" "/usr/share/fcitx5/addon")
 elseif(APPLE)
-    set(CPACK_PACKAGE_NAME "OpenBangla Keyboard")
     set(CPACK_PACKAGE_VENDOR "OpenBangla")
     set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
     set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}")
@@ -173,7 +216,9 @@ elseif(APPLE)
     set(CPACK_COMPONENTS_ALL IME GUI)
     set(CPACK_COMPONENT_IME_REQUIRED TRUE)
     set(CPACK_COMPONENT_GUI_REQUIRED TRUE)
+    set(CPACK_COMPONENT_GUI_DEPENDS IME)
     set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED "FALSE")
+    set(CPACK_POSTFLIGHT_GUI_SCRIPT "${CMAKE_SOURCE_DIR}/data/productbuild/postinstall")
     set(CPACK_PRODUCTBUILD_RESOURCES_DIR "${CMAKE_SOURCE_DIR}/data/productbuild")
     set(CPACK_PRODUCTBUILD_BACKGROUND "installer.png")
     set(CPACK_PRODUCTBUILD_BACKGROUND_ALIGNMENT "left")
@@ -181,7 +226,9 @@ elseif(APPLE)
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA_ALIGNMENT "left")
 endif()
 
-# Set package filename after CPACK_PACKAGE_NAME is defined
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}")
+# Set package filename after CPACK_PACKAGE_NAME is defined (Linux only; macOS is set above)
+if(NOT APPLE)
+    set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}$ENV{ARCH_SUFFIX}")
+endif()
 
 include(CPack)

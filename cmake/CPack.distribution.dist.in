@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<installer-gui-script minSpecVersion="1.0">
+	<title>@CPACK_PACKAGE_NAME@</title>
+	<welcome file="@CPACK_RESOURCE_FILE_WELCOME_NOPATH@"/>
+	<readme file="@CPACK_RESOURCE_FILE_README_NOPATH@"/>
+	<license file="@CPACK_RESOURCE_FILE_LICENSE_NOPATH@"/>
+
+	<options allow-external-scripts="no" customize="allow" hostArchitectures="@CPACK_HOST_ARCHITECTURES@"/>
+	<domains enable_anywhere="true" enable_currentUserHome="false" enable_localSystem="true"/>
+	<choices-outline>
+		<line choice="GUIChoice"></line>
+		<line choice="IMEChoice"></line>
+	</choices-outline>
+	<choice id="GUIChoice" title="GUI" start_selected="true" start_enabled="false" start_visible="true" selected="my.choice.selected &amp;&amp; choices[&apos;IMEChoice&apos;].selected">
+		<pkg-ref id="com.@CPACK_PACKAGE_VENDOR@.@CPACK_PACKAGE_NAME@.GUI"/>
+	</choice>
+	<pkg-ref id="com.@CPACK_PACKAGE_VENDOR@.@CPACK_PACKAGE_NAME@.GUI" version="@CPACK_PACKAGE_VERSION@" onConclusion="None">file:./Contents/Packages/@CPACK_PACKAGE_FILE_NAME@-GUI.pkg</pkg-ref>
+	<choice id="IMEChoice" title="IME" start_selected="true" start_enabled="false" start_visible="true" selected="my.choice.selected || choices[&apos;GUIChoice&apos;].selected">
+		<pkg-ref id="com.@CPACK_PACKAGE_VENDOR@.@CPACK_PACKAGE_NAME@.IME"/>
+	</choice>
+	<pkg-ref id="com.@CPACK_PACKAGE_VENDOR@.@CPACK_PACKAGE_NAME@.IME" version="@CPACK_PACKAGE_VERSION@" onConclusion="None">file:./Contents/Packages/@CPACK_PACKAGE_FILE_NAME@-IME.pkg</pkg-ref>
+	<background file="installer.png" alignment="left"/>
+	<background-darkAqua file="installer.png" alignment="left"/>
+</installer-gui-script>

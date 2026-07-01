@@ -1,4 +1,4 @@
-include_directories(../shared 3rdParty)
+include_directories(../shared 3rdParty macOS)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -18,7 +18,8 @@ set(SRC_MAIN main.cpp
         LayoutConverter.cpp
         LayoutConverter.h
         SingleInstance.cpp
-        AvroPhonetic.cpp)
+        AvroPhonetic.cpp
+        PlatformConfig.cpp)
 
 set(LINK_LIBS libShared Qt5::Widgets Qt5::Network)
 
@@ -27,13 +28,15 @@ if(OS_LINUX)
 endif(OS_LINUX)
 
 if(WIN32)
-    list(APPEND LINK_LIBS zstd::libzstd)
     set(CMAKE_WIN32_EXECUTABLE ON)
+
+    list(APPEND LINK_LIBS zstd::libzstd)
 endif(WIN32)
 
 if(APPLE)
-    list(APPEND LINK_LIBS zstd::libzstd)
-    list(APPEND LINK_LIBS "-framework Foundation")
+    add_subdirectory(macOS)
+
+    list(APPEND LINK_LIBS macOS "-framework Foundation" zstd::libzstd)
 endif(APPLE)
 
 if(APPLE)
@@ -121,8 +124,12 @@ if(OS_LINUX)
 endif()
 
 if(APPLE)
-    install(TARGETS openbangla-gui
-        BUNDLE DESTINATION "Applications"
+    # Install the bundle as a directory rather than a target to prevent
+    # install_name_tool from modifying the binary and invalidating the
+    # code signature applied after macdeployqt.
+    install(DIRECTORY "$<TARGET_BUNDLE_DIR:openbangla-gui>"
+        DESTINATION "Applications"
+        USE_SOURCE_PERMISSIONS
         COMPONENT GUI
     )
 endif()

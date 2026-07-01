@@ -16,6 +16,11 @@ if (OS_LINUX)
     if (ENABLE_FCITX)
         add_subdirectory(fcitx)
     endif()
+
+    if(ENABLE_BOTH)
+        add_subdirectory(ibus)
+        add_subdirectory(fcitx)
+    endif()
 endif (OS_LINUX)
 
 if (APPLE)

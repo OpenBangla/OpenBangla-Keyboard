@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+/Applications/OpenBangla\ Keyboard.app/Contents/MacOS/OpenBangla\ Keyboard --setup-system
+
+exit 0
