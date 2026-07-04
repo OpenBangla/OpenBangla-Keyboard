@@ -31,6 +31,7 @@ class QDir;
 
 enum LayoutType {
   Layout_Phonetic,
+  Layout_Khipro,
   Layout_Fixed
 };
 

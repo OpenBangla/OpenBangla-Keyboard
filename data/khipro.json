@@ -1,0 +1,14 @@
+{
+    "info": {
+        "type": "khipro",
+        "version": 1,
+        "layout": {
+            "name": "Khipro",
+            "version": "1.0",
+            "developer": {
+                "name": "Khipro Team",
+                "comment": "Khipro is a modern, shift-free phonetic transliteration method for Bangla. Type the way words sound, without reaching for the Shift key."
+            }
+        }
+    }
+}

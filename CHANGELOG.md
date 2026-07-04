@@ -1,4 +1,7 @@
 # Change Log
+## Unreleased
+* Add the [Khipro](https://khiprokeyboard.github.io/) layout, a modern shift-free phonetic method for Bangla ([#426](https://github.com/OpenBangla/OpenBangla-Keyboard/issues/426))
+
 ## 3.0.0
 * Fcitx5 engine for KDE based distributions ([#202])
 * Use [okkhor] as the Avro Phonetic implementation. It is substantially faster than the previous implementation ([#15])
