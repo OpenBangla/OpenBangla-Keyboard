@@ -19,7 +19,7 @@ jobs:
           - { CXX: clang++, CC: clang, CXX_FOR_BUILD: clang++, CC_FOR_BUILD: clang }
     steps:
       - name: checkout-source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: update-system
@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DENABLE_IBUS=ON -DENABLE_FCITX=ON
+          cmake .. -DENABLE_BOTH=ON
           make
 
   build-windows-x86_64:
@@ -94,12 +94,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: checkout-source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
 
       - name: install-deps
-        run: brew install cmake qt@5 zstd
+        run: brew install cmake qt@5 zstd ninja
 
       - name: setup-qt
         run: echo "$(brew --prefix qt@5)/bin" >> $GITHUB_PATH
@@ -108,6 +108,6 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)"
-          make
+          cmake .. -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)" -GNinja
+          ninja
 

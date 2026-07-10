@@ -18,6 +18,7 @@
 
 #include <QSystemTrayIcon>
 #include <QScreen>
+#include <QGuiApplication>
 #include <QWindow>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -33,6 +34,8 @@
 #include "AboutDialog.h"
 #include "SettingsDialog.h"
 #include "LayoutConverter.h"
+#include "AutoCorrectDialog.h"
+#include "PlatformConfig.h"
 #include "FileSystem.h"
 #include "ui_TopBar.h"
 
@@ -110,19 +113,31 @@ void TopBar::SetupTopBar() {
   this->setFixedSize(QSize(this->width(), this->height()));
   this->setAttribute(Qt::WA_TranslucentBackground);
 
-  if (gSettings->getTopBarWindowPosition() == QPoint(0, 0)) {
+  QPoint savedPos = gSettings->getTopBarWindowPosition();
+  bool validPosition = false;
+
+  if (savedPos != QPoint(0, 0)) {
+    // Check if the saved position is within any known screen
+    for (QScreen *screen : QGuiApplication::screens()) {
+      if (screen->geometry().contains(savedPos)) {
+        validPosition = true;
+        break;
+      }
+    }
+  }
+
+  if (validPosition) {
+    move(savedPos);
+  } else {
     int width = this->frameGeometry().width();
     int height = this->frameGeometry().height();
 
-    QApplication *app = (QApplication *) QApplication::instance();
-    QScreen *screen = app->primaryScreen();
+    QScreen *screen = QGuiApplication::primaryScreen();
 
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
 
     this->setGeometry((screenWidth / 2) - (width / 2), (screenHeight / 2) - (height / 2), width, height);
-  } else {
-    move(gSettings->getTopBarWindowPosition());
   }
 }
 
@@ -159,7 +174,10 @@ void TopBar::SetupPopupMenus() {
   connect(iconMenuAbout, SIGNAL(triggered()), this, SLOT(iconMenuAbout_clicked()));
 
   iconMenu = new QMenu(this);
-  iconMenu->addAction(iconMenuHide);
+  // Gnome Shell and Pantheon doesn't support tray icon natively.
+  if(shouldShowTrayIcon()) {
+    iconMenu->addAction(iconMenuHide);
+  }
   iconMenu->addAction(iconMenuLayout);
   iconMenu->addAction(iconMenuAbout);
 }

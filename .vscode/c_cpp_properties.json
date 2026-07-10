@@ -8,6 +8,7 @@
         "${workspaceRoot}"
       ],
       "defines": [],
+      "compileCommands": "build/compile_commands.json",
       "intelliSenseMode": "clang-x64",
       "browse": {
         "path": [
