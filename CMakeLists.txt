@@ -108,11 +108,6 @@ endif()
 if(WIN32)
     find_package(zstd CONFIG REQUIRED)
 
-    set(PROJECT_DATADIR "$ENV{LOCALAPPDATA}\\OpenBangla" CACHE PATH "Path to Data Directory")
-    set(BIN_DIR "${PROJECT_DATADIR}/bin")
-    add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
-    add_definitions(-DBIN_DIR="${BIN_DIR}")
-
     include(InstallRequiredSystemLibraries)
 
     # Install data files
@@ -259,23 +254,18 @@ elseif(WIN32)
     set(CPACK_NSIS_MODIFY_PATH OFF)
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 
-    # NSIS install commands: register DLLs and deploy data to %LOCALAPPDATA%
+    # NSIS install commands: register IME DLLs and create user data directory.
     # Note: NSIS installer is 32-bit, so $SYSDIR points to SysWOW64 (32-bit)
     # and $WINDIR\Sysnative points to the real System32 (64-bit).
     set(_nsis_install_commands
-        # Deploy data files to %LOCALAPPDATA%\OpenBangla
-        "CreateDirectory \"$LOCALAPPDATA\\OpenBangla\\data\""
+        # Create user data directory for user-created layouts
         "CreateDirectory \"$LOCALAPPDATA\\OpenBangla\\layouts\""
-        "CopyFiles /SILENT \"$INSTDIR\\data\\*.*\" \"$LOCALAPPDATA\\OpenBangla\\data\""
-        "CopyFiles /SILENT \"$INSTDIR\\layouts\\*.*\" \"$LOCALAPPDATA\\OpenBangla\\layouts\""
         # Register 64-bit IME DLL (use Sysnative to reach 64-bit regsvr32)
         "ExecWait '\"$WINDIR\\Sysnative\\regsvr32.exe\" /s \"$INSTDIR\\bin\\openbangla.dll\"'"
     )
     set(_nsis_uninstall_commands
         # Unregister 64-bit IME DLL
         "ExecWait '\"$WINDIR\\Sysnative\\regsvr32.exe\" /s /u \"$INSTDIR\\bin\\openbangla.dll\"'"
-        # Clean up data directory
-        "RMDir /r \"$LOCALAPPDATA\\OpenBangla\""
     )
 
     if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")

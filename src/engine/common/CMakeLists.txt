@@ -42,7 +42,7 @@ if(OS_LINUX)
                 DESTINATION ${DATADIR}/metainfo)
 endif()
 
-if(NOT APPLE)
+if(OS_LINUX)
         install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
                 DESTINATION ${PROJECT_DATADIR}/layouts)
 
@@ -72,4 +72,4 @@ if(NOT APPLE)
 
         install(FILES ${CMAKE_SOURCE_DIR}/data/regex.json
                 DESTINATION ${PROJECT_DATADIR}/data)
-endif() # not APPLE
+endif() # OS_LINUX
