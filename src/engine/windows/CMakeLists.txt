@@ -15,6 +15,8 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
 
     add_custom_target(openbangla_x86 ALL
         COMMAND
+            ${CMAKE_COMMAND} -E env
+            "CARGO_BUILD_RUSTC=${_CORROSION_RUSTC}"
             ${Rust_CARGO_CACHED} build
             ${_x86_cargo_profile}
             --target i686-pc-windows-msvc
