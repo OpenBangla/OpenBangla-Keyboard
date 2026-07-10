@@ -24,6 +24,8 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
         COMMAND_EXPAND_LISTS
         VERBATIM
     )
+    # Serialize after the 64-bit build to avoid concurrent cargo/rustup races
+    add_dependencies(openbangla_x86 cargo-build_openbangla)
 
     set(IME_DLL_X86_PATH "${_x86_target_dir}/i686-pc-windows-msvc/${_x86_build_type_dir}/openbangla.dll")
     install(FILES "${IME_DLL_X86_PATH}" DESTINATION bin/x86)
