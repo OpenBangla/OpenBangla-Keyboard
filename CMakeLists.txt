@@ -240,7 +240,14 @@ elseif(APPLE)
 elseif(WIN32)
     set(CPACK_GENERATOR "NSIS")
     set(CPACK_PACKAGE_NAME "OpenBangla-Keyboard")
-    set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}-x86_64")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")
+        set(_arch_suffix "x86_64")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64")
+        set(_arch_suffix "aarch64")
+    else()
+        set(_arch_suffix "${CMAKE_SYSTEM_PROCESSOR}")
+    endif()
+    set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}-${_arch_suffix}")
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenBangla-Keyboard")
     set(CPACK_PACKAGE_EXECUTABLES "openbangla-gui" "OpenBangla Keyboard")
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
@@ -254,23 +261,43 @@ elseif(WIN32)
     set(CPACK_NSIS_MODIFY_PATH OFF)
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 
+    # Include x64.nsh for 64-bit/ARM64 detection and file system redirection macros.
+    set(CPACK_NSIS_DEFINES "!include \\\"x64.nsh\\\"")
+
+    # Disable file system redirection before file extraction so that files are
+    # installed into the true 64-bit/ARM64 paths instead of WoW64 redirected ones.
+    # Also validate that the installer matches the target architecture.
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64")
+        set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "\
+  \\\${If} \\\${IsNativeARM64}\n\
+  \\\${Else}\n\
+    MessageBox MB_ICONSTOP \\\"This installer requires Windows on ARM64.\\\"\n\
+    Quit\n\
+  \\\${EndIf}\n\
+  \\\${DisableX64FSRedirection}")
+    else()
+        set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "\\\${DisableX64FSRedirection}")
+    endif()
+
     # NSIS install commands: register IME DLLs and create user data directory.
     # Note: NSIS installer is 32-bit, so $SYSDIR points to SysWOW64 (32-bit)
-    # and $WINDIR\Sysnative points to the real System32 (64-bit).
+    # and $WINDIR\Sysnative points to the real System32 (64-bit/ARM64 native).
     # Backslashes need quadruple-escaping (\\\\) to survive two rounds of CMake
     # parsing: CMakeLists.txt → CPackConfig.cmake → NSIS template.
     set(_nsis_install_commands
         # Create user data directory for user-created layouts
         "CreateDirectory \\\"$LOCALAPPDATA\\\\OpenBangla\\\\layouts\\\""
-        # Register 64-bit IME DLL (use Sysnative to reach 64-bit regsvr32)
+        # Register native IME DLL (use Sysnative to reach native regsvr32)
         "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"'"
     )
     set(_nsis_uninstall_commands
-        # Unregister 64-bit IME DLL
+        # Re-enable redirection for uninstall, then disable again for our operations
+        "\\\${DisableX64FSRedirection}"
+        # Unregister native IME DLL
         "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"'"
     )
 
-    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")
         list(APPEND _nsis_install_commands
             # Register 32-bit IME DLL (use $SYSDIR which is SysWOW64 in 32-bit NSIS)
             "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\x86\\\\openbangla.dll\\\"'"

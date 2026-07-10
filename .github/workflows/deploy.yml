@@ -96,8 +96,49 @@ jobs:
           name: pkg-windows-x64
           path: build/OpenBangla-Keyboard-*.exe
 
+  build-windows-arm:
+    if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
+    runs-on: windows-11-arm
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: setup-msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: CLANGARM64
+          install: >-
+            mingw-w64-clang-aarch64-cmake
+            mingw-w64-clang-aarch64-clang
+            mingw-w64-clang-aarch64-ninja
+            mingw-w64-clang-aarch64-qt5-base
+            mingw-w64-clang-aarch64-qt5-tools
+            mingw-w64-clang-aarch64-zstd
+            mingw-w64-clang-aarch64-rust
+
+      - name: install-nsis
+        run: choco install nsis -y
+
+      - name: build-and-package
+        shell: msys2 {0}
+        run: |
+          export PATH="/c/Program Files (x86)/NSIS:$PATH"
+          mkdir build
+          cd build
+          cmake .. -G Ninja
+          cmake --build .
+          cpack -G NSIS
+
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: pkg-windows-arm64
+          path: build/OpenBangla-Keyboard-*.exe
+
   merge:
-    needs: [build, build-windows]
+    needs: [build, build-windows, build-windows-arm]
     runs-on: ubuntu-latest
     steps:
       - name: merge-artifacts
