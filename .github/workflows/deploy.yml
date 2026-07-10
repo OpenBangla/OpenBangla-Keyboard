@@ -61,8 +61,40 @@ jobs:
           name: pkg-${{ matrix.platform == 'ubuntu-24.04-arm' && 'arm64' || 'x64' }}-${{ steps.sanitizer.outputs.sanitized_container }}
           path: artifact
 
+  build-windows:
+    if: contains(github.event.head_commit.message, 'deploy+') || contains(github.event.head_commit.message, 'pkg+')
+    runs-on: windows-latest
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: install-qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          arch: win64_msvc2019_64
+
+      - name: install-rust-i686-target
+        run: rustup target add i686-pc-windows-msvc
+
+      - name: build-and-package
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+          cmake --build . --config Release
+          cpack -G NSIS -C Release
+
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: pkg-windows-x64
+          path: build/OpenBangla-Keyboard-*.exe
+
   merge:
-    needs: build
+    needs: [build, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: merge-artifacts
