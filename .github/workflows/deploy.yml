@@ -79,6 +79,9 @@ jobs:
       - name: install-rust-i686-target
         run: rustup target add i686-pc-windows-msvc
 
+      - name: install-nsis
+        run: choco install nsis -y
+
       - name: build-and-package
         run: |
           mkdir build
