@@ -257,25 +257,27 @@ elseif(WIN32)
     # NSIS install commands: register IME DLLs and create user data directory.
     # Note: NSIS installer is 32-bit, so $SYSDIR points to SysWOW64 (32-bit)
     # and $WINDIR\Sysnative points to the real System32 (64-bit).
+    # Backslashes need quadruple-escaping (\\\\) to survive two rounds of CMake
+    # parsing: CMakeLists.txt → CPackConfig.cmake → NSIS template.
     set(_nsis_install_commands
         # Create user data directory for user-created layouts
-        "CreateDirectory \"$LOCALAPPDATA\\OpenBangla\\layouts\""
+        "CreateDirectory \\\"$LOCALAPPDATA\\\\OpenBangla\\\\layouts\\\""
         # Register 64-bit IME DLL (use Sysnative to reach 64-bit regsvr32)
-        "ExecWait '\"$WINDIR\\Sysnative\\regsvr32.exe\" /s \"$INSTDIR\\bin\\openbangla.dll\"'"
+        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"'"
     )
     set(_nsis_uninstall_commands
         # Unregister 64-bit IME DLL
-        "ExecWait '\"$WINDIR\\Sysnative\\regsvr32.exe\" /s /u \"$INSTDIR\\bin\\openbangla.dll\"'"
+        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"'"
     )
 
     if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
         list(APPEND _nsis_install_commands
             # Register 32-bit IME DLL (use $SYSDIR which is SysWOW64 in 32-bit NSIS)
-            "ExecWait '\"$SYSDIR\\regsvr32.exe\" /s \"$INSTDIR\\bin\\x86\\openbangla.dll\"'"
+            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\x86\\\\openbangla.dll\\\"'"
         )
         list(INSERT _nsis_uninstall_commands 0
             # Unregister 32-bit IME DLL
-            "ExecWait '\"$SYSDIR\\regsvr32.exe\" /s /u \"$INSTDIR\\bin\\x86\\openbangla.dll\"'"
+            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\bin\\\\x86\\\\openbangla.dll\\\"'"
         )
     endif()
 
