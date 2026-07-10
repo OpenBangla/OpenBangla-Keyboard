@@ -288,10 +288,13 @@ elseif(WIN32)
         # Create user data directory for user-created layouts
         "CreateDirectory \\\"$LOCALAPPDATA\\\\OpenBangla\\\\layouts\\\""
         # Register native IME DLL (use Sysnative to reach native regsvr32)
-        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"'"
+        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"' $0"
+        "\\\${If} $0 <> 0"
+        "  MessageBox MB_OK|MB_ICONEXCLAMATION \\\"Failed to register the IME module (error code: $0). The keyboard may not work correctly.\\\""
+        "\\\${EndIf}"
     )
     set(_nsis_uninstall_commands
-        # Re-enable redirection for uninstall, then disable again for our operations
+        # Disable FS redirection for uninstall operations
         "\\\${DisableX64FSRedirection}"
         # Unregister native IME DLL
         "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"'"
@@ -300,7 +303,10 @@ elseif(WIN32)
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")
         list(APPEND _nsis_install_commands
             # Register 32-bit IME DLL (use $SYSDIR which is SysWOW64 in 32-bit NSIS)
-            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\x86\\\\openbangla.dll\\\"'"
+            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\x86\\\\openbangla.dll\\\"' $0"
+            "\\\${If} $0 <> 0"
+            "  MessageBox MB_OK|MB_ICONEXCLAMATION \\\"Failed to register the 32-bit IME module (error code: $0). The keyboard may not work in 32-bit applications.\\\""
+            "\\\${EndIf}"
         )
         list(INSERT _nsis_uninstall_commands 0
             # Unregister 32-bit IME DLL
