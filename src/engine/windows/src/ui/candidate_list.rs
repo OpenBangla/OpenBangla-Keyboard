@@ -24,11 +24,9 @@ use windows::{
                 IDWriteTextLayout,
             },
             Dxgi::Common::DXGI_FORMAT_B8G8R8A8_UNORM,
-            Gdi::{
-                BeginPaint, EndPaint, GetDC, GetDeviceCaps, HDC, InvalidateRect, LOGPIXELSY,
-                PAINTSTRUCT, ReleaseDC,
-            },
+            Gdi::{BeginPaint, EndPaint, HDC, InvalidateRect, PAINTSTRUCT},
         },
+        UI::HiDpi::GetDpiForWindow,
         UI::WindowsAndMessaging::{
             CS_DROPSHADOW, CS_HREDRAW, CS_IME, CS_VREDRAW, CreateWindowExA, DefWindowProcA,
             DestroyWindow, GetClientRect, GetWindowLongPtrA, HICON, HWND_TOPMOST, IDC_ARROW,
@@ -105,6 +103,45 @@ const ENGLISH_Y_OFFSET: f32 = -3.0;
 /// Check if text is ASCII (English/Latin)
 fn is_ascii_text(text: &str) -> bool {
     text.chars().all(|c| c.is_ascii())
+}
+
+/// Query the DPI scale (1.0 == 96 DPI) for the monitor the window is on.
+/// Uses per-monitor DPI so the popup scales correctly on high-DPI displays and
+/// adapts when the caret moves across monitors. Falls back to 1.0 if the query
+/// fails (`GetDpiForWindow` returns 0 for an invalid window).
+fn dpi_scale_for(window: HWND) -> f32 {
+    let dpi = unsafe { GetDpiForWindow(window) };
+    if dpi == 0 { 1.0 } else { dpi as f32 / 96.0 }
+}
+
+/// Layout constants scaled to physical pixels for the current DPI. The render
+/// target is pinned to 96 DPI (1 DIP == 1 px), so every layout value must be
+/// pre-scaled here; both the sizing path (`repaint`) and the drawing path
+/// (`paint`) build this from the same `dpi_scale` to stay consistent.
+struct ScaledLayout {
+    clip_width: f32,
+    label_padding_top: f32,
+    label_padding_bottom: f32,
+    label_padding_left: f32,
+    label_padding_right: f32,
+    index_candi_gap: f32,
+    border_width: f32,
+    english_y_offset: f32,
+}
+
+impl ScaledLayout {
+    fn new(dpi_scale: f32) -> Self {
+        Self {
+            clip_width: CLIP_WIDTH as f32 * dpi_scale,
+            label_padding_top: LABEL_PADDING_TOP as f32 * dpi_scale,
+            label_padding_bottom: LABEL_PADDING_BOTTOM as f32 * dpi_scale,
+            label_padding_left: LABEL_PADDING_LEFT as f32 * dpi_scale,
+            label_padding_right: LABEL_PADDING_RIGHT as f32 * dpi_scale,
+            index_candi_gap: INDEX_CANDI_GAP as f32 * dpi_scale,
+            border_width: BORDER_WIDTH as f32 * dpi_scale,
+            english_y_offset: ENGLISH_Y_OFFSET * dpi_scale,
+        }
+    }
 }
 
 #[cfg(target_pointer_width = "64")]
@@ -207,8 +244,6 @@ struct HighlightState {
 pub struct CandidateList {
     window: HWND,
     index_suffix: &'static str,
-    font_size: f32,
-    index_font_size: f32,
     state: RwLock<HighlightState>,
 }
 
@@ -238,21 +273,12 @@ impl CandidateList {
                 error!("CreateWindowExA returned null.");
                 return Err(GetLastError().into());
             }
-            let dc: HDC = GetDC(window);
-            let pixel_per_inch = GetDeviceCaps(dc, LOGPIXELSY);
-            let dpi_scale = pixel_per_inch as f32 / 96.0;
-
-            // DirectWrite uses DIPs (device independent pixels), convert from points
-            let font_size = FONT_SIZE as f32 * dpi_scale;
-            let index_font_size = font_size * 0.7;
-
+            // DPI is queried per-repaint (see `repaint`) so the popup adapts to
+            // the monitor it is currently shown on.
             let index_suffix = CANDI_INDEX_SUFFIX;
-            ReleaseDC(window, dc);
             Ok(CandidateList {
                 window,
                 index_suffix,
-                font_size,
-                index_font_size,
                 state: RwLock::new(HighlightState {
                     highlighted_index: 0,
                     candidate_count: 0,
@@ -265,12 +291,15 @@ impl CandidateList {
 
     pub fn locate(&self, x: i32, y: i32) -> Result<()> {
         trace!("locate({x}, {y})");
+        let dpi_scale = dpi_scale_for(self.window);
+        let offset_x = (POS_OFFSETX as f32 * dpi_scale).round() as i32;
+        let offset_y = (POS_OFFSETY as f32 * dpi_scale).round() as i32;
         unsafe {
             SetWindowPos(
                 self.window,
                 HWND_TOPMOST,
-                x + POS_OFFSETX,
-                y + POS_OFFSETY,
+                x + offset_x,
+                y + offset_y,
                 0,
                 0,
                 SWP_NOACTIVATE | SWP_NOSIZE,
@@ -368,6 +397,15 @@ impl CandidateList {
                 (state.highlighted_index, state.candidates.clone(), state.vertical)
             };
 
+            // Query the current monitor's DPI so the popup scales correctly and
+            // adapts when the caret moves across monitors. The render target is
+            // pinned to 96 DPI (1 DIP == 1 px), so fonts and layout constants are
+            // scaled here in physical pixels.
+            let dpi_scale = dpi_scale_for(self.window);
+            let font_size = FONT_SIZE as f32 * dpi_scale;
+            let index_font_size = font_size * 0.7;
+            let layout = ScaledLayout::new(dpi_scale);
+
             // Create DirectWrite text formats for measurement
             let (candi_format, index_format) = DW_FACTORY.with(|factory| {
                 let font_name_wide: Vec<u16> =
@@ -380,7 +418,7 @@ impl CandidateList {
                         DWRITE_FONT_WEIGHT_NORMAL,
                         DWRITE_FONT_STYLE_NORMAL,
                         DWRITE_FONT_STRETCH_NORMAL,
-                        self.font_size,
+                        font_size,
                         w!("en-us"),
                     )
                     .ok();
@@ -392,7 +430,7 @@ impl CandidateList {
                         DWRITE_FONT_WEIGHT_NORMAL,
                         DWRITE_FONT_STYLE_NORMAL,
                         DWRITE_FONT_STRETCH_NORMAL,
-                        self.index_font_size,
+                        index_font_size,
                         w!("en-us"),
                     )
                     .ok();
@@ -434,7 +472,7 @@ impl CandidateList {
             });
 
             let row_height = max_candi_height.max(index_height);
-            let label_height = LABEL_PADDING_TOP as f32 + row_height + LABEL_PADDING_BOTTOM as f32;
+            let label_height = layout.label_padding_top + row_height + layout.label_padding_bottom;
 
             let mut wnd_height: f32 = 0.0;
             let mut wnd_width: f32 = 0.0;
@@ -443,34 +481,34 @@ impl CandidateList {
                 let candi_num = suggs.len().min(CANDI_NUM) as f32;
                 wnd_height += candi_num * label_height;
                 let max_candi_width = candi_widths.iter().cloned().fold(0.0f32, f32::max);
-                wnd_width += CLIP_WIDTH as f32
-                    + LABEL_PADDING_LEFT as f32
+                wnd_width += layout.clip_width
+                    + layout.label_padding_left
                     + index_width
-                    + INDEX_CANDI_GAP as f32
+                    + layout.index_candi_gap
                     + max_candi_width
-                    + LABEL_PADDING_RIGHT as f32;
+                    + layout.label_padding_right;
             } else {
                 wnd_height += label_height;
-                wnd_width += CLIP_WIDTH as f32;
+                wnd_width += layout.clip_width;
                 for candi_width in candi_widths.iter() {
-                    wnd_width += LABEL_PADDING_LEFT as f32 + LABEL_PADDING_RIGHT as f32;
+                    wnd_width += layout.label_padding_left + layout.label_padding_right;
                     wnd_width += index_width;
-                    wnd_width += INDEX_CANDI_GAP as f32;
+                    wnd_width += layout.index_candi_gap;
                     wnd_width += candi_width;
                 }
             }
-            wnd_height += (BORDER_WIDTH * 2) as f32;
-            wnd_width += (BORDER_WIDTH * 2) as f32;
+            wnd_height += layout.border_width * 2.0;
+            wnd_width += layout.border_width * 2.0;
 
             // Calculate highlight width based on the highlighted candidate
             let highlight_width = if vertical {
-                wnd_width - CLIP_WIDTH as f32 - (BORDER_WIDTH * 2) as f32
+                wnd_width - layout.clip_width - layout.border_width * 2.0
             } else {
-                LABEL_PADDING_LEFT as f32
+                layout.label_padding_left
                     + index_width
-                    + INDEX_CANDI_GAP as f32
+                    + layout.index_candi_gap
                     + candi_widths[highlighted_index]
-                    + LABEL_PADDING_RIGHT as f32
+                    + layout.label_padding_right
             };
 
             let arg = PaintArg {
@@ -481,11 +519,12 @@ impl CandidateList {
                 candi_widths,
                 candis: candis_str,
                 indice: indice_str,
-                font_size: self.font_size,
-                index_font_size: self.index_font_size,
+                font_size,
+                index_font_size,
                 font_name: FONT_NAME.to_owned(),
                 highlighted_index,
                 vertical,
+                dpi_scale,
             };
             let long_ptr = arg.into_long_ptr();
             SetWindowLongPtrA(self.window, WINDOW_LONG_PTR_INDEX::default(), long_ptr);
@@ -531,6 +570,7 @@ struct PaintArg {
     font_name: String,
     highlighted_index: usize,
     vertical: bool,
+    dpi_scale: f32,
 }
 
 impl PaintArg {
@@ -571,6 +611,12 @@ fn paint(window: HWND) -> LRESULT {
                 format: DXGI_FORMAT_B8G8R8A8_UNORM,
                 alphaMode: D2D1_ALPHA_MODE_PREMULTIPLIED,
             },
+            // Pin to 96 DPI so 1 DIP == 1 physical pixel. Without this Direct2D
+            // uses the desktop DPI and scales all drawing up, overflowing the
+            // window (which is sized treating DirectWrite DIP metrics as pixels).
+            // DPI scaling is applied manually to fonts and layout instead.
+            dpiX: 96.0,
+            dpiY: 96.0,
             ..Default::default()
         };
 
@@ -638,6 +684,10 @@ fn paint(window: HWND) -> LRESULT {
         return LRESULT::default();
     };
 
+    // Layout constants scaled to physical pixels, matching how the window was
+    // sized in `repaint`. Must use the same `dpi_scale` used there.
+    let layout = ScaledLayout::new(arg.dpi_scale);
+
     unsafe {
         rt.BeginDraw();
 
@@ -649,20 +699,20 @@ fn paint(window: HWND) -> LRESULT {
         let highlight_y: f32;
 
         if arg.vertical {
-            highlight_x = (BORDER_WIDTH + CLIP_WIDTH) as f32;
-            highlight_y = BORDER_WIDTH as f32 + (arg.highlighted_index as f32 * arg.label_height);
+            highlight_x = layout.border_width + layout.clip_width;
+            highlight_y = layout.border_width + (arg.highlighted_index as f32 * arg.label_height);
         } else {
             // Calculate x position by summing widths of previous candidates
-            let mut x = (BORDER_WIDTH + CLIP_WIDTH) as f32;
+            let mut x = layout.border_width + layout.clip_width;
             for i in 0..arg.highlighted_index {
-                x += LABEL_PADDING_LEFT as f32
+                x += layout.label_padding_left
                     + arg.index_width
-                    + INDEX_CANDI_GAP as f32
+                    + layout.index_candi_gap
                     + arg.candi_widths[i]
-                    + LABEL_PADDING_RIGHT as f32;
+                    + layout.label_padding_right;
             }
             highlight_x = x;
-            highlight_y = BORDER_WIDTH as f32;
+            highlight_y = layout.border_width;
         }
 
         // Draw clip (always at top-left, next to highlighted item in vertical mode)
@@ -670,13 +720,13 @@ fn paint(window: HWND) -> LRESULT {
             let clip_y = if arg.vertical {
                 highlight_y
             } else {
-                BORDER_WIDTH as f32
+                layout.border_width
             };
             rt.FillRectangle(
                 &D2D_RECT_F {
-                    left: BORDER_WIDTH as f32,
+                    left: layout.border_width,
                     top: clip_y,
-                    right: (BORDER_WIDTH + CLIP_WIDTH) as f32,
+                    right: layout.border_width + layout.clip_width,
                     bottom: clip_y + arg.label_height,
                 },
                 &clip_brush,
@@ -713,9 +763,10 @@ fn paint(window: HWND) -> LRESULT {
         let candidate_brush = candidate_brush.unwrap();
 
         // Draw text - use row_height for all items and let DirectWrite paragraph alignment handle centering
-        let mut index_x = (BORDER_WIDTH + CLIP_WIDTH + LABEL_PADDING_LEFT) as f32;
-        let mut candi_x = index_x + arg.index_width + INDEX_CANDI_GAP as f32;
-        let mut text_y = BORDER_WIDTH as f32 + LABEL_PADDING_TOP as f32;
+        let text_pad = 10.0 * arg.dpi_scale;
+        let mut index_x = layout.border_width + layout.clip_width + layout.label_padding_left;
+        let mut candi_x = index_x + arg.index_width + layout.index_candi_gap;
+        let mut text_y = layout.border_width + layout.label_padding_top;
 
         // Draw all items, using highlighted color for the selected one
         for i in 0..arg.candis.len() {
@@ -724,16 +775,16 @@ fn paint(window: HWND) -> LRESULT {
                     text_y += arg.label_height;
                 } else {
                     index_x += arg.index_width
-                        + INDEX_CANDI_GAP as f32
+                        + layout.index_candi_gap
                         + arg.candi_widths[i - 1]
-                        + LABEL_PADDING_LEFT as f32
-                        + LABEL_PADDING_RIGHT as f32;
-                    candi_x = index_x + arg.index_width + INDEX_CANDI_GAP as f32;
+                        + layout.label_padding_left
+                        + layout.label_padding_right;
+                    candi_x = index_x + arg.index_width + layout.index_candi_gap;
                 }
             }
 
             let candi_y_adjust = if is_ascii_text(&arg.candis[i]) {
-                ENGLISH_Y_OFFSET
+                layout.english_y_offset
             } else {
                 0.0
             };
@@ -751,7 +802,7 @@ fn paint(window: HWND) -> LRESULT {
                 &index_format,
                 index_x,
                 text_y,
-                arg.index_width + 10.0, // Add horizontal padding
+                arg.index_width + text_pad, // Add horizontal padding
                 arg.row_height,
                 &index_brush,
             );
@@ -761,7 +812,7 @@ fn paint(window: HWND) -> LRESULT {
                 &candi_format,
                 candi_x,
                 text_y + candi_y_adjust,
-                arg.candi_widths[i] + 10.0,
+                arg.candi_widths[i] + text_pad,
                 arg.row_height,
                 text_brush,
             );
