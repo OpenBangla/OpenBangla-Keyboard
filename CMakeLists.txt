@@ -302,7 +302,10 @@ elseif(WIN32)
         "CopyFiles /SILENT \\\"$INSTDIR\\\\data\\\\kalpurush.ttf\\\" \\\"$FONTS\\\\kalpurush.ttf\\\""
         "System::Call 'GDI32::AddFontResource(t)i(\\\"$FONTS\\\\kalpurush.ttf\\\")'"
         "WriteRegStr HKLM \\\"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts\\\" \\\"Kalpurush (TrueType)\\\" \\\"kalpurush.ttf\\\""
-        "SendMessage 0xFFFF 0x001D 0 0"
+        # Use /TIMEOUT so NSIS uses SendMessageTimeout (abort-if-hung) instead of a
+        # blocking SendMessage; a HWND_BROADCAST of WM_FONTCHANGE otherwise waits on
+        # every top-level window and hangs the installer if any window is unresponsive.
+        "SendMessage 0xFFFF 0x001D 0 0 /TIMEOUT=1000"
         # Register native IME DLL (use Sysnative to reach native regsvr32)
         "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\openbangla.dll\\\"' $0"
         "\\\${If} $0 <> 0"
@@ -318,7 +321,8 @@ elseif(WIN32)
         "System::Call 'GDI32::RemoveFontResource(t)i(\\\"$FONTS\\\\kalpurush.ttf\\\")'"
         "DeleteRegValue HKLM \\\"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts\\\" \\\"Kalpurush (TrueType)\\\""
         "Delete \\\"$FONTS\\\\kalpurush.ttf\\\""
-        "SendMessage 0xFFFF 0x001D 0 0"
+        # See install block: /TIMEOUT avoids the blocking-broadcast hang.
+        "SendMessage 0xFFFF 0x001D 0 0 /TIMEOUT=1000"
     )
 
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")

@@ -34,6 +34,7 @@ features = [
     "Win32_Graphics_Direct2D",
     "Win32_Graphics_Direct2D_Common",
     "Win32_Graphics_DirectWrite",
+    "Win32_Graphics_Dwm",
     "Win32_Graphics_Dxgi_Common",
     "Foundation_Numerics",
 ]

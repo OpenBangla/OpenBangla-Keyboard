@@ -13,8 +13,8 @@ use windows::{
                 Common::{D2D_RECT_F, D2D1_ALPHA_MODE_PREMULTIPLIED, D2D1_PIXEL_FORMAT},
                 D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT, D2D1_FACTORY_TYPE_SINGLE_THREADED,
                 D2D1_HWND_RENDER_TARGET_PROPERTIES, D2D1_PRESENT_OPTIONS_NONE,
-                D2D1_RENDER_TARGET_PROPERTIES, D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1CreateFactory,
-                ID2D1Factory, ID2D1HwndRenderTarget, ID2D1SolidColorBrush,
+                D2D1_RENDER_TARGET_PROPERTIES, D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1_ROUNDED_RECT,
+                D2D1CreateFactory, ID2D1Factory, ID2D1HwndRenderTarget, ID2D1SolidColorBrush,
             },
             DirectWrite::{
                 DWRITE_FACTORY_TYPE_SHARED, DWRITE_FONT_STRETCH_NORMAL, DWRITE_FONT_STYLE_NORMAL,
@@ -22,6 +22,10 @@ use windows::{
                 DWRITE_PARAGRAPH_ALIGNMENT_CENTER, DWRITE_TEXT_ALIGNMENT_LEADING,
                 DWRITE_TEXT_METRICS, DWriteCreateFactory, IDWriteFactory, IDWriteTextFormat,
                 IDWriteTextLayout,
+            },
+            Dwm::{
+                DWM_WINDOW_CORNER_PREFERENCE, DWMWA_WINDOW_CORNER_PREFERENCE, DWMWCP_ROUND,
+                DwmSetWindowAttribute,
             },
             Dxgi::Common::DXGI_FORMAT_B8G8R8A8_UNORM,
             Gdi::{BeginPaint, EndPaint, HDC, InvalidateRect, PAINTSTRUCT},
@@ -46,13 +50,19 @@ use crate::{
 
 const WINDOW_CLASS: PCSTR = s!("CANDIDATE_LIST");
 // Layout
-const CLIP_WIDTH: i32 = 3;
-const LABEL_PADDING_TOP: i32 = 4;
-const LABEL_PADDING_BOTTOM: i32 = 4;
-const LABEL_PADDING_LEFT: i32 = 5;
-const LABEL_PADDING_RIGHT: i32 = 6;
-const INDEX_CANDI_GAP: i32 = 6;
+// Inset kept clear on every side of the content so text/pills never touch the
+// rounded window edge. (Replaces the old 3px blue "clip" bar.)
+const CONTENT_MARGIN: i32 = 8;
+const LABEL_PADDING_TOP: i32 = 6;
+const LABEL_PADDING_BOTTOM: i32 = 6;
+const LABEL_PADDING_LEFT: i32 = 10;
+const LABEL_PADDING_RIGHT: i32 = 10;
+const INDEX_CANDI_GAP: i32 = 4;
 const BORDER_WIDTH: i32 = 0;
+// Corner radius of the rounded selection pill.
+const PILL_RADIUS: i32 = 6;
+// Vertical inset of the pill from the full row height so it appears to float.
+const PILL_INSET_Y: i32 = 2;
 
 // Auxiliary (preedit) text row shown above the candidates.
 const AUX_PADDING_TOP: i32 = 3;
@@ -65,48 +75,48 @@ const POS_OFFSETY: i32 = 2;
 const FONT_NAME: &str = "Kalpurush";
 const FONT_SIZE: i32 = 20;
 
-const CLIP_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
-    r: 0.0,
-    g: 0.47058824,
-    b: 0.84313726,
-    a: 1.0,
-}; // #0078D7
 const BACKGROUND_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
-    r: 0.98039216,
-    g: 0.98039216,
-    b: 0.98039216,
-    a: 1.0,
-}; // #FAFAFA
-const HIGHLIGHT_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
-    r: 0.9098039,
-    g: 0.9098039,
+    r: 1.0,
+    g: 1.0,
     b: 1.0,
     a: 1.0,
-}; // #E8E8FF
+}; // #FFFFFF
+const HIGHLIGHT_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
+    r: 0.9176471,
+    g: 0.9490196,
+    b: 0.9960784,
+    a: 1.0,
+}; // #EAF2FE (soft blue pill)
 const INDEX_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
-    r: 0.627451,
-    g: 0.627451,
-    b: 0.627451,
+    r: 0.68235296,
+    g: 0.7058824,
+    b: 0.7372549,
     a: 1.0,
-}; // #A0A0A0
+}; // #AEB4BC
 const CANDIDATE_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
-    r: 0.0,
-    g: 0.0,
-    b: 0.0,
+    r: 0.1254902,
+    g: 0.1294118,
+    b: 0.14117648,
     a: 1.0,
-}; // black
-const HIGHLIGHTED_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
-    r: 0.0,
-    g: 0.0,
-    b: 0.0,
+}; // #202124 (near-black)
+const SELECTED_TEXT_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
+    r: 0.101960786,
+    g: 0.4509804,
+    b: 0.9098039,
     a: 1.0,
-}; // black
+}; // #1A73E8 (accent blue)
+const AUX_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
+    r: 0.37254903,
+    g: 0.3882353,
+    b: 0.40784314,
+    a: 1.0,
+}; // #5F6368
 const SEPARATOR_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
-    r: 0.8784314,
-    g: 0.8784314,
-    b: 0.8784314,
+    r: 0.9254902,
+    g: 0.9254902,
+    b: 0.9254902,
     a: 1.0,
-}; // #E0E0E0
+}; // #ECECEC
 
 // Vertical offset adjustment for English text to align with Bangla baseline
 const ENGLISH_Y_OFFSET: f32 = -3.0;
@@ -130,7 +140,7 @@ fn dpi_scale_for(window: HWND) -> f32 {
 /// pre-scaled here; both the sizing path (`repaint`) and the drawing path
 /// (`paint`) build this from the same `dpi_scale` to stay consistent.
 struct ScaledLayout {
-    clip_width: f32,
+    content_margin: f32,
     label_padding_top: f32,
     label_padding_bottom: f32,
     label_padding_left: f32,
@@ -141,12 +151,14 @@ struct ScaledLayout {
     aux_padding_top: f32,
     aux_padding_bottom: f32,
     separator_height: f32,
+    pill_radius: f32,
+    pill_inset_y: f32,
 }
 
 impl ScaledLayout {
     fn new(dpi_scale: f32) -> Self {
         Self {
-            clip_width: CLIP_WIDTH as f32 * dpi_scale,
+            content_margin: CONTENT_MARGIN as f32 * dpi_scale,
             label_padding_top: LABEL_PADDING_TOP as f32 * dpi_scale,
             label_padding_bottom: LABEL_PADDING_BOTTOM as f32 * dpi_scale,
             label_padding_left: LABEL_PADDING_LEFT as f32 * dpi_scale,
@@ -157,6 +169,8 @@ impl ScaledLayout {
             aux_padding_top: AUX_PADDING_TOP as f32 * dpi_scale,
             aux_padding_bottom: AUX_PADDING_BOTTOM as f32 * dpi_scale,
             separator_height: SEPARATOR_HEIGHT as f32 * dpi_scale,
+            pill_radius: PILL_RADIUS as f32 * dpi_scale,
+            pill_inset_y: PILL_INSET_Y as f32 * dpi_scale,
         }
     }
 }
@@ -304,6 +318,16 @@ impl CandidateList {
                 error!("CreateWindowExA returned null.");
                 return Err(GetLastError().into());
             }
+            // Request rounded window corners from the compositor. Supported on
+            // Windows 11 only; on Windows 10 the call fails harmlessly and the
+            // popup keeps square corners with the CS_DROPSHADOW shadow.
+            let corner_pref = DWMWCP_ROUND;
+            let _ = DwmSetWindowAttribute(
+                window,
+                DWMWA_WINDOW_CORNER_PREFERENCE,
+                &corner_pref as *const _ as *const core::ffi::c_void,
+                size_of::<DWM_WINDOW_CORNER_PREFERENCE>() as u32,
+            );
             // DPI is queried per-repaint (see `repaint`) so the popup adapts to
             // the monitor it is currently shown on.
             let index_suffix = CANDI_INDEX_SUFFIX;
@@ -441,7 +465,7 @@ impl CandidateList {
             // scaled here in physical pixels.
             let dpi_scale = dpi_scale_for(self.window);
             let font_size = FONT_SIZE as f32 * dpi_scale;
-            let index_font_size = font_size * 0.7;
+            let index_font_size = font_size * 0.55;
             let layout = ScaledLayout::new(dpi_scale);
 
             // Create DirectWrite text formats for measurement
@@ -526,19 +550,20 @@ impl CandidateList {
             // Reserve room for the aux-text section at the top (0 when no aux).
             wnd_height += aux_section_height(&layout, aux_row_height);
 
+            // Content margin insets both left and right edges so text/pills
+            // clear the rounded window corners.
+            wnd_width += layout.content_margin * 2.0;
             if vertical {
                 let candi_num = suggs.len().min(CANDI_NUM) as f32;
                 wnd_height += candi_num * label_height;
                 let max_candi_width = candi_widths.iter().cloned().fold(0.0f32, f32::max);
-                wnd_width += layout.clip_width
-                    + layout.label_padding_left
+                wnd_width += layout.label_padding_left
                     + index_width
                     + layout.index_candi_gap
                     + max_candi_width
                     + layout.label_padding_right;
             } else {
                 wnd_height += label_height;
-                wnd_width += layout.clip_width;
                 for candi_width in candi_widths.iter() {
                     wnd_width += layout.label_padding_left + layout.label_padding_right;
                     wnd_width += index_width;
@@ -550,10 +575,11 @@ impl CandidateList {
             wnd_width += layout.border_width * 2.0;
 
             // Ensure the window is wide enough for the aux text (it aligns under
-            // the first index: clip + left padding, with right padding to spare).
+            // the first index: content margin + left padding, with right padding
+            // to spare).
             if aux_row_height > 0.0 {
                 let aux_total_width = layout.border_width * 2.0
-                    + layout.clip_width
+                    + layout.content_margin * 2.0
                     + layout.label_padding_left
                     + aux_width
                     + layout.label_padding_right;
@@ -562,7 +588,7 @@ impl CandidateList {
 
             // Calculate highlight width based on the highlighted candidate
             let highlight_width = if vertical {
-                wnd_width - layout.clip_width - layout.border_width * 2.0
+                wnd_width - layout.content_margin * 2.0 - layout.border_width * 2.0
             } else {
                 layout.label_padding_left
                     + index_width
@@ -766,28 +792,31 @@ fn paint(window: HWND) -> LRESULT {
         let content_top = aux_section_height(&layout, arg.aux_row_height);
         if content_top > 0.0 {
             let aux_pad = 10.0 * arg.dpi_scale;
-            if let Ok(aux_brush) = rt.CreateSolidColorBrush(&INDEX_COLOR, None) {
+            if let Ok(aux_brush) = rt.CreateSolidColorBrush(&AUX_COLOR, None) {
                 draw_text_with_color_emoji(
                     &rt,
                     &arg.aux_text,
                     &candi_format,
-                    layout.border_width + layout.clip_width + layout.label_padding_left,
+                    layout.border_width + layout.content_margin + layout.label_padding_left,
                     layout.border_width + layout.aux_padding_top,
                     arg.aux_width + aux_pad,
                     arg.aux_row_height,
                     &aux_brush,
                 );
             }
-            // Thin separator line at the bottom of the aux section.
+            // Thin separator line at the bottom of the aux section, inset from
+            // the rounded edges by the content margin.
             if let Ok(sep_brush) = rt.CreateSolidColorBrush(&SEPARATOR_COLOR, None) {
                 let sep_top = content_top - layout.separator_height;
                 let mut rect = RECT::default();
                 let _ = GetClientRect(window, &mut rect);
                 rt.FillRectangle(
                     &D2D_RECT_F {
-                        left: layout.border_width,
+                        left: layout.border_width + layout.content_margin,
                         top: sep_top,
-                        right: (rect.right - rect.left) as f32 - layout.border_width,
+                        right: (rect.right - rect.left) as f32
+                            - layout.border_width
+                            - layout.content_margin,
                         bottom: content_top,
                     },
                     &sep_brush,
@@ -800,13 +829,13 @@ fn paint(window: HWND) -> LRESULT {
         let highlight_y: f32;
 
         if arg.vertical {
-            highlight_x = layout.border_width + layout.clip_width;
+            highlight_x = layout.border_width + layout.content_margin;
             highlight_y = layout.border_width
                 + content_top
                 + (arg.highlighted_index as f32 * arg.label_height);
         } else {
             // Calculate x position by summing widths of previous candidates
-            let mut x = layout.border_width + layout.clip_width;
+            let mut x = layout.border_width + layout.content_margin;
             for i in 0..arg.highlighted_index {
                 x += layout.label_padding_left
                     + arg.index_width
@@ -818,43 +847,28 @@ fn paint(window: HWND) -> LRESULT {
             highlight_y = layout.border_width + content_top;
         }
 
-        // Draw clip (always at top-left, next to highlighted item in vertical mode)
-        if let Ok(clip_brush) = rt.CreateSolidColorBrush(&CLIP_COLOR, None) {
-            let clip_y = if arg.vertical {
-                highlight_y
-            } else {
-                layout.border_width + content_top
-            };
-            rt.FillRectangle(
-                &D2D_RECT_F {
-                    left: layout.border_width,
-                    top: clip_y,
-                    right: layout.border_width + layout.clip_width,
-                    bottom: clip_y + arg.label_height,
-                },
-                &clip_brush,
-            );
-        }
-
-        // Draw highlight
+        // Draw the selection as a soft rounded pill, inset vertically so it
+        // appears to float within the row.
         if let Ok(highlight_brush) = rt.CreateSolidColorBrush(&HIGHLIGHT_COLOR, None) {
-            rt.FillRectangle(
-                &D2D_RECT_F {
+            let pill = D2D1_ROUNDED_RECT {
+                rect: D2D_RECT_F {
                     left: highlight_x,
-                    top: highlight_y,
+                    top: highlight_y + layout.pill_inset_y,
                     right: highlight_x + arg.highlight_width,
-                    bottom: highlight_y + arg.label_height,
+                    bottom: highlight_y + arg.label_height - layout.pill_inset_y,
                 },
-                &highlight_brush,
-            );
+                radiusX: layout.pill_radius,
+                radiusY: layout.pill_radius,
+            };
+            rt.FillRoundedRectangle(&pill, &highlight_brush);
         }
 
         // Create text brushes
         let index_brush = rt.CreateSolidColorBrush(&INDEX_COLOR, None).ok();
-        let highlighted_brush = rt.CreateSolidColorBrush(&HIGHLIGHTED_COLOR, None).ok();
+        let selected_brush = rt.CreateSolidColorBrush(&SELECTED_TEXT_COLOR, None).ok();
         let candidate_brush = rt.CreateSolidColorBrush(&CANDIDATE_COLOR, None).ok();
 
-        if index_brush.is_none() || highlighted_brush.is_none() || candidate_brush.is_none() {
+        if index_brush.is_none() || selected_brush.is_none() || candidate_brush.is_none() {
             error!("Failed to create text brushes");
             let _ = rt.EndDraw(None, None);
             EndPaint(window, &ps);
@@ -862,12 +876,12 @@ fn paint(window: HWND) -> LRESULT {
         }
 
         let index_brush = index_brush.unwrap();
-        let highlighted_brush = highlighted_brush.unwrap();
+        let selected_brush = selected_brush.unwrap();
         let candidate_brush = candidate_brush.unwrap();
 
         // Draw text - use row_height for all items and let DirectWrite paragraph alignment handle centering
         let text_pad = 10.0 * arg.dpi_scale;
-        let mut index_x = layout.border_width + layout.clip_width + layout.label_padding_left;
+        let mut index_x = layout.border_width + layout.content_margin + layout.label_padding_left;
         let mut candi_x = index_x + arg.index_width + layout.index_candi_gap;
         let mut text_y = layout.border_width + content_top + layout.label_padding_top;
 
@@ -892,9 +906,9 @@ fn paint(window: HWND) -> LRESULT {
                 0.0
             };
 
-            // Use highlighted brush for the selected candidate, candidate brush for others
+            // Blue text for the selected candidate, near-black for the others.
             let text_brush = if i == arg.highlighted_index {
-                &highlighted_brush
+                &selected_brush
             } else {
                 &candidate_brush
             };
