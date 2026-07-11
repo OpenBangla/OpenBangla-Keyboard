@@ -54,6 +54,11 @@ const LABEL_PADDING_RIGHT: i32 = 6;
 const INDEX_CANDI_GAP: i32 = 6;
 const BORDER_WIDTH: i32 = 0;
 
+// Auxiliary (preedit) text row shown above the candidates.
+const AUX_PADDING_TOP: i32 = 3;
+const AUX_PADDING_BOTTOM: i32 = 3;
+const SEPARATOR_HEIGHT: i32 = 1;
+
 const POS_OFFSETX: i32 = 2;
 const POS_OFFSETY: i32 = 2;
 
@@ -96,6 +101,12 @@ const HIGHLIGHTED_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
     b: 0.0,
     a: 1.0,
 }; // black
+const SEPARATOR_COLOR: D2D1_COLOR_F = D2D1_COLOR_F {
+    r: 0.8784314,
+    g: 0.8784314,
+    b: 0.8784314,
+    a: 1.0,
+}; // #E0E0E0
 
 // Vertical offset adjustment for English text to align with Bangla baseline
 const ENGLISH_Y_OFFSET: f32 = -3.0;
@@ -127,6 +138,9 @@ struct ScaledLayout {
     index_candi_gap: f32,
     border_width: f32,
     english_y_offset: f32,
+    aux_padding_top: f32,
+    aux_padding_bottom: f32,
+    separator_height: f32,
 }
 
 impl ScaledLayout {
@@ -140,7 +154,23 @@ impl ScaledLayout {
             index_candi_gap: INDEX_CANDI_GAP as f32 * dpi_scale,
             border_width: BORDER_WIDTH as f32 * dpi_scale,
             english_y_offset: ENGLISH_Y_OFFSET * dpi_scale,
+            aux_padding_top: AUX_PADDING_TOP as f32 * dpi_scale,
+            aux_padding_bottom: AUX_PADDING_BOTTOM as f32 * dpi_scale,
+            separator_height: SEPARATOR_HEIGHT as f32 * dpi_scale,
         }
+    }
+}
+
+/// Total height of the auxiliary-text section (aux row padding + text + separator)
+/// that sits above the candidates. Returns 0.0 when there is no aux text, so the
+/// candidate area falls back to its original position. This is the single source
+/// of truth used by both the sizing path (`repaint`) and the drawing path
+/// (`paint`) for the candidates' top offset.
+fn aux_section_height(layout: &ScaledLayout, aux_row_height: f32) -> f32 {
+    if aux_row_height <= 0.0 {
+        0.0
+    } else {
+        layout.aux_padding_top + aux_row_height + layout.aux_padding_bottom + layout.separator_height
     }
 }
 
@@ -238,6 +268,7 @@ struct HighlightState {
     highlighted_index: usize,
     candidate_count: usize,
     candidates: Vec<String>,
+    aux_text: String,
     vertical: bool,
 }
 
@@ -283,6 +314,7 @@ impl CandidateList {
                     highlighted_index: 0,
                     candidate_count: 0,
                     candidates: Vec::new(),
+                    aux_text: String::new(),
                     vertical: false,
                 }),
             })
@@ -373,13 +405,14 @@ impl CandidateList {
         let _ = self.repaint(false);
     }
 
-    pub fn show(&self, suggs: &[String]) -> Result<()> {
-        // Reset highlight to first candidate and store candidates
+    pub fn show(&self, aux: &str, suggs: &[String]) -> Result<()> {
+        // Reset highlight to first candidate and store candidates + aux text
         {
             let mut state = self.state.write().unwrap();
             state.highlighted_index = 0;
             state.candidate_count = suggs.len().min(CANDI_NUM);
             state.candidates = suggs.iter().take(CANDI_NUM).cloned().collect();
+            state.aux_text = aux.to_string();
         }
 
         self.repaint(true)
@@ -389,12 +422,17 @@ impl CandidateList {
     fn repaint(&self, resize: bool) -> Result<()> {
         unsafe {
             // Copy data out of state and release lock early
-            let (highlighted_index, suggs, vertical) = {
+            let (highlighted_index, suggs, aux_text, vertical) = {
                 let state = self.state.read().unwrap();
                 if state.candidates.is_empty() {
                     return Ok(());
                 }
-                (state.highlighted_index, state.candidates.clone(), state.vertical)
+                (
+                    state.highlighted_index,
+                    state.candidates.clone(),
+                    state.aux_text.clone(),
+                    state.vertical,
+                )
             };
 
             // Query the current monitor's DPI so the popup scales correctly and
@@ -471,11 +509,22 @@ impl CandidateList {
                 }
             });
 
+            // Measure the auxiliary (preedit) text shown above the candidates.
+            // A 0.0 height means "no aux row" (empty aux), keeping the original layout.
+            let (aux_width, aux_row_height) = if aux_text.is_empty() {
+                (0.0, 0.0)
+            } else {
+                DW_FACTORY.with(|factory| measure_text_dwrite(factory, &aux_text, &candi_format))
+            };
+
             let row_height = max_candi_height.max(index_height);
             let label_height = layout.label_padding_top + row_height + layout.label_padding_bottom;
 
             let mut wnd_height: f32 = 0.0;
             let mut wnd_width: f32 = 0.0;
+
+            // Reserve room for the aux-text section at the top (0 when no aux).
+            wnd_height += aux_section_height(&layout, aux_row_height);
 
             if vertical {
                 let candi_num = suggs.len().min(CANDI_NUM) as f32;
@@ -500,6 +549,17 @@ impl CandidateList {
             wnd_height += layout.border_width * 2.0;
             wnd_width += layout.border_width * 2.0;
 
+            // Ensure the window is wide enough for the aux text (it aligns under
+            // the first index: clip + left padding, with right padding to spare).
+            if aux_row_height > 0.0 {
+                let aux_total_width = layout.border_width * 2.0
+                    + layout.clip_width
+                    + layout.label_padding_left
+                    + aux_width
+                    + layout.label_padding_right;
+                wnd_width = wnd_width.max(aux_total_width);
+            }
+
             // Calculate highlight width based on the highlighted candidate
             let highlight_width = if vertical {
                 wnd_width - layout.clip_width - layout.border_width * 2.0
@@ -519,6 +579,9 @@ impl CandidateList {
                 candi_widths,
                 candis: candis_str,
                 indice: indice_str,
+                aux_text,
+                aux_width,
+                aux_row_height,
                 font_size,
                 index_font_size,
                 font_name: FONT_NAME.to_owned(),
@@ -565,6 +628,9 @@ struct PaintArg {
     candi_widths: Vec<f32>,
     indice: Vec<String>,
     candis: Vec<String>,
+    aux_text: String,
+    aux_width: f32,
+    aux_row_height: f32,
     font_size: f32,
     index_font_size: f32,
     font_name: String,
@@ -694,13 +760,50 @@ fn paint(window: HWND) -> LRESULT {
         // Clear with background color
         rt.Clear(Some(&BACKGROUND_COLOR));
 
+        // Draw the auxiliary (preedit) text section at the top, above the
+        // candidates. `content_top` is the y-offset the candidate area shifts
+        // down by; it is 0.0 when there is no aux text (original layout).
+        let content_top = aux_section_height(&layout, arg.aux_row_height);
+        if content_top > 0.0 {
+            let aux_pad = 10.0 * arg.dpi_scale;
+            if let Ok(aux_brush) = rt.CreateSolidColorBrush(&INDEX_COLOR, None) {
+                draw_text_with_color_emoji(
+                    &rt,
+                    &arg.aux_text,
+                    &candi_format,
+                    layout.border_width + layout.clip_width + layout.label_padding_left,
+                    layout.border_width + layout.aux_padding_top,
+                    arg.aux_width + aux_pad,
+                    arg.aux_row_height,
+                    &aux_brush,
+                );
+            }
+            // Thin separator line at the bottom of the aux section.
+            if let Ok(sep_brush) = rt.CreateSolidColorBrush(&SEPARATOR_COLOR, None) {
+                let sep_top = content_top - layout.separator_height;
+                let mut rect = RECT::default();
+                let _ = GetClientRect(window, &mut rect);
+                rt.FillRectangle(
+                    &D2D_RECT_F {
+                        left: layout.border_width,
+                        top: sep_top,
+                        right: (rect.right - rect.left) as f32 - layout.border_width,
+                        bottom: content_top,
+                    },
+                    &sep_brush,
+                );
+            }
+        }
+
         // Calculate highlight position based on highlighted_index
         let highlight_x: f32;
         let highlight_y: f32;
 
         if arg.vertical {
             highlight_x = layout.border_width + layout.clip_width;
-            highlight_y = layout.border_width + (arg.highlighted_index as f32 * arg.label_height);
+            highlight_y = layout.border_width
+                + content_top
+                + (arg.highlighted_index as f32 * arg.label_height);
         } else {
             // Calculate x position by summing widths of previous candidates
             let mut x = layout.border_width + layout.clip_width;
@@ -712,7 +815,7 @@ fn paint(window: HWND) -> LRESULT {
                     + layout.label_padding_right;
             }
             highlight_x = x;
-            highlight_y = layout.border_width;
+            highlight_y = layout.border_width + content_top;
         }
 
         // Draw clip (always at top-left, next to highlighted item in vertical mode)
@@ -720,7 +823,7 @@ fn paint(window: HWND) -> LRESULT {
             let clip_y = if arg.vertical {
                 highlight_y
             } else {
-                layout.border_width
+                layout.border_width + content_top
             };
             rt.FillRectangle(
                 &D2D_RECT_F {
@@ -766,7 +869,7 @@ fn paint(window: HWND) -> LRESULT {
         let text_pad = 10.0 * arg.dpi_scale;
         let mut index_x = layout.border_width + layout.clip_width + layout.label_padding_left;
         let mut candi_x = index_x + arg.index_width + layout.index_candi_gap;
-        let mut text_y = layout.border_width + layout.label_padding_top;
+        let mut text_y = layout.border_width + content_top + layout.label_padding_top;
 
         // Draw all items, using highlighted color for the selected one
         for i in 0..arg.candis.len() {

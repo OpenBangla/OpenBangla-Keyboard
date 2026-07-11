@@ -73,7 +73,8 @@ impl TextServiceInner {
         if self.suggestions.as_ref().unwrap().is_empty() {
             candidate_list.hide();
         } else {
-            candidate_list.show(self.suggestions.as_ref().unwrap().get_suggestions())?;
+            let sugg = self.suggestions.as_ref().unwrap();
+            candidate_list.show(sugg.get_auxiliary_text(), sugg.get_suggestions())?;
             if let Some((x, y)) = self.get_pos() {
                 candidate_list.locate(x, y)?;
             }
