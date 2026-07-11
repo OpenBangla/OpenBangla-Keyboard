@@ -108,6 +108,8 @@ endif()
 if(WIN32)
     find_package(zstd CONFIG REQUIRED)
 
+    # Install the MSVC runtime next to the GUI executable (flat layout, no bin/).
+    set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
     include(InstallRequiredSystemLibraries)
 
     # Install data files
@@ -249,7 +251,13 @@ elseif(WIN32)
     endif()
     set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}-${_arch_suffix}")
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenBangla-Keyboard")
-    set(CPACK_PACKAGE_EXECUTABLES "openbangla-gui" "OpenBangla Keyboard")
+    # Create the Start Menu shortcut explicitly (below) instead of via
+    # CPACK_PACKAGE_EXECUTABLES, whose target path depends on the CPack/NSIS
+    # generator version (older generators hardcode a nonexistent $INSTDIR\bin).
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA
+        "CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\OpenBangla Keyboard.lnk\\\" \\\"$INSTDIR\\\\openbangla-gui.exe\\\"")
+    set(CPACK_NSIS_DELETE_ICONS_EXTRA
+        "Delete \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\OpenBangla Keyboard.lnk\\\"")
     set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
     set(CPACK_NSIS_DISPLAY_NAME "OpenBangla Keyboard ${PROJECT_VERSION}")
     set(CPACK_NSIS_PACKAGE_NAME "OpenBangla Keyboard")
@@ -288,7 +296,7 @@ elseif(WIN32)
         # Create user data directory for user-created layouts
         "CreateDirectory \\\"$LOCALAPPDATA\\\\OpenBangla\\\\layouts\\\""
         # Register native IME DLL (use Sysnative to reach native regsvr32)
-        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"' $0"
+        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\openbangla.dll\\\"' $0"
         "\\\${If} $0 <> 0"
         "  MessageBox MB_OK|MB_ICONEXCLAMATION \\\"Failed to register the IME module (error code: $0). The keyboard may not work correctly.\\\""
         "\\\${EndIf}"
@@ -297,20 +305,20 @@ elseif(WIN32)
         # Disable FS redirection for uninstall operations
         "\\\${DisableX64FSRedirection}"
         # Unregister native IME DLL
-        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\bin\\\\openbangla.dll\\\"'"
+        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\openbangla.dll\\\"'"
     )
 
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")
         list(APPEND _nsis_install_commands
             # Register 32-bit IME DLL (use $SYSDIR which is SysWOW64 in 32-bit NSIS)
-            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\bin\\\\x86\\\\openbangla.dll\\\"' $0"
+            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\openbangla_x86.dll\\\"' $0"
             "\\\${If} $0 <> 0"
             "  MessageBox MB_OK|MB_ICONEXCLAMATION \\\"Failed to register the 32-bit IME module (error code: $0). The keyboard may not work in 32-bit applications.\\\""
             "\\\${EndIf}"
         )
         list(INSERT _nsis_uninstall_commands 0
             # Unregister 32-bit IME DLL
-            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\bin\\\\x86\\\\openbangla.dll\\\"'"
+            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\openbangla_x86.dll\\\"'"
         )
     endif()
 

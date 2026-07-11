@@ -4,8 +4,8 @@ corrosion_import_crate(
     CRATES openbangla
 )
 
-# Install the DLL (relative path for CPack compatibility)
-install(FILES $<TARGET_FILE:openbangla-shared> DESTINATION bin)
+# Install the DLL at the install root (flat layout; no bin/ subdirectory)
+install(FILES $<TARGET_FILE:openbangla-shared> DESTINATION .)
 
 # Build 32-bit DLL for x86_64 to support WOW64 (32-bit) applications
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
@@ -23,6 +23,9 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
             --manifest-path "${CMAKE_CURRENT_SOURCE_DIR}/Cargo.toml"
             --target-dir "${_x86_target_dir}"
         COMMENT "Building 32-bit OpenBangla IME DLL..."
+        # Run from the crate directory so cargo discovers .cargo/config.toml
+        # (which statically links the CRT via +crt-static).
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         COMMAND_EXPAND_LISTS
         VERBATIM
     )
@@ -30,7 +33,8 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
     add_dependencies(openbangla_x86 cargo-build_openbangla)
 
     set(IME_DLL_X86_PATH "${_x86_target_dir}/i686-pc-windows-msvc/${_x86_build_type_dir}/openbangla.dll")
-    install(FILES "${IME_DLL_X86_PATH}" DESTINATION bin/x86)
+    # Install at the install root, renamed so it coexists with the 64-bit openbangla.dll
+    install(FILES "${IME_DLL_X86_PATH}" DESTINATION . RENAME openbangla_x86.dll)
 endif()
 
 # Convenience targets for IME registration (requires elevated privileges)

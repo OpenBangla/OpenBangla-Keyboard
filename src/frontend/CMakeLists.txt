@@ -128,6 +128,10 @@ endif()
 if(WIN32)
     install(TARGETS openbangla-gui RUNTIME DESTINATION .)
 
+    # Bundle third-party runtime DLLs (e.g. zstd.dll) next to the GUI executable.
+    # windeployqt deploys only Qt; InstallRequiredSystemLibraries only the MSVC runtime.
+    install(FILES $<TARGET_RUNTIME_DLLS:openbangla-gui> DESTINATION .)
+
     # Deploy Qt DLLs alongside the installed executable
     if(MINGW)
         install(CODE "execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" --no-angle --no-opengl-sw \"\${CMAKE_INSTALL_PREFIX}/openbangla-gui.exe\")")
