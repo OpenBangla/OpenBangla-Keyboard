@@ -118,6 +118,7 @@ if(WIN32)
         "${CMAKE_SOURCE_DIR}/data/regex.json"
         "${CMAKE_SOURCE_DIR}/data/suffix.json"
         "${CMAKE_SOURCE_DIR}/src/engine/riti/data/autocorrect.json"
+        "${CMAKE_SOURCE_DIR}/data/kalpurush.ttf"
         DESTINATION data)
     install(FILES
         "${CMAKE_SOURCE_DIR}/data/avrophonetic.json"
@@ -295,6 +296,13 @@ elseif(WIN32)
     set(_nsis_install_commands
         # Create user data directory for user-created layouts
         "CreateDirectory \\\"$LOCALAPPDATA\\\\OpenBangla\\\\layouts\\\""
+        # Install the Kalpurush font (required by the candidate window) as a system font:
+        # copy into the Fonts dir, register it for the running session, persist it in the
+        # registry, then broadcast WM_FONTCHANGE (0x001D) so running apps pick it up.
+        "CopyFiles /SILENT \\\"$INSTDIR\\\\data\\\\kalpurush.ttf\\\" \\\"$FONTS\\\\kalpurush.ttf\\\""
+        "System::Call 'GDI32::AddFontResource(t)i(\\\"$FONTS\\\\kalpurush.ttf\\\")'"
+        "WriteRegStr HKLM \\\"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts\\\" \\\"Kalpurush (TrueType)\\\" \\\"kalpurush.ttf\\\""
+        "SendMessage 0xFFFF 0x001D 0 0"
         # Register native IME DLL (use Sysnative to reach native regsvr32)
         "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\openbangla.dll\\\"' $0"
         "\\\${If} $0 <> 0"
@@ -306,6 +314,11 @@ elseif(WIN32)
         "\\\${DisableX64FSRedirection}"
         # Unregister native IME DLL
         "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\openbangla.dll\\\"'"
+        # Remove the Kalpurush system font installed above.
+        "System::Call 'GDI32::RemoveFontResource(t)i(\\\"$FONTS\\\\kalpurush.ttf\\\")'"
+        "DeleteRegValue HKLM \\\"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts\\\" \\\"Kalpurush (TrueType)\\\""
+        "Delete \\\"$FONTS\\\\kalpurush.ttf\\\""
+        "SendMessage 0xFFFF 0x001D 0 0"
     )
 
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")
