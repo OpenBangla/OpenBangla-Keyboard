@@ -12,7 +12,7 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(NOT WIN32 AND NOT APPLE)
+if(NOT APPLE)
     add_subdirectory(cmake/corrosion-rs)
 endif()
 
@@ -108,10 +108,26 @@ endif()
 if(WIN32)
     find_package(zstd CONFIG REQUIRED)
 
-    set(PROJECT_DATADIR "$ENV{LOCALAPPDATA}\\OpenBangla" CACHE PATH "Path to Data Directory")
-    set(BIN_DIR "${PROJECT_DATADIR}/bin")
-    add_definitions(-DPROJECT_DATADIR="${PROJECT_DATADIR}")
-    add_definitions(-DBIN_DIR="${BIN_DIR}")
+    # Install the MSVC runtime next to the GUI executable (flat layout, no bin/).
+    set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
+    include(InstallRequiredSystemLibraries)
+
+    # Install data files
+    install(FILES
+        "${CMAKE_SOURCE_DIR}/data/dictionary.json"
+        "${CMAKE_SOURCE_DIR}/data/regex.json"
+        "${CMAKE_SOURCE_DIR}/data/suffix.json"
+        "${CMAKE_SOURCE_DIR}/src/engine/riti/data/autocorrect.json"
+        "${CMAKE_SOURCE_DIR}/data/kalpurush.ttf"
+        DESTINATION data)
+    install(FILES
+        "${CMAKE_SOURCE_DIR}/data/avrophonetic.json"
+        "${CMAKE_SOURCE_DIR}/data/Avro_Easy.json"
+        "${CMAKE_SOURCE_DIR}/data/Borno.json"
+        "${CMAKE_SOURCE_DIR}/data/Munir_Optima.json"
+        "${CMAKE_SOURCE_DIR}/data/National_Jatiya.json"
+        "${CMAKE_SOURCE_DIR}/data/Probhat.json"
+        DESTINATION layouts)
 endif()
 
 # For Apple
@@ -224,10 +240,113 @@ elseif(APPLE)
     set(CPACK_PRODUCTBUILD_BACKGROUND_ALIGNMENT "left")
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA "installer.png")
     set(CPACK_PRODUCTBUILD_BACKGROUND_DARKAQUA_ALIGNMENT "left")
+elseif(WIN32)
+    set(CPACK_GENERATOR "NSIS")
+    set(CPACK_PACKAGE_NAME "OpenBangla-Keyboard")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")
+        set(_arch_suffix "x86_64")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64")
+        set(_arch_suffix "aarch64")
+    else()
+        set(_arch_suffix "${CMAKE_SYSTEM_PROCESSOR}")
+    endif()
+    set(CPACK_PACKAGE_FILE_NAME "OpenBangla-Keyboard-${PROJECT_VERSION}-${_arch_suffix}")
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenBangla-Keyboard")
+    # Create the Start Menu shortcut explicitly (below) instead of via
+    # CPACK_PACKAGE_EXECUTABLES, whose target path depends on the CPack/NSIS
+    # generator version (older generators hardcode a nonexistent $INSTDIR\bin).
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA
+        "CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\OpenBangla Keyboard.lnk\\\" \\\"$INSTDIR\\\\openbangla-gui.exe\\\"")
+    set(CPACK_NSIS_DELETE_ICONS_EXTRA
+        "Delete \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\OpenBangla Keyboard.lnk\\\"")
+    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+    set(CPACK_NSIS_DISPLAY_NAME "OpenBangla Keyboard ${PROJECT_VERSION}")
+    set(CPACK_NSIS_PACKAGE_NAME "OpenBangla Keyboard")
+    set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/src/frontend/openbangla.ico")
+    set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/src/frontend/openbangla.ico")
+    set(CPACK_NSIS_INSTALLED_ICON_NAME "openbangla-gui.exe")
+    set(CPACK_NSIS_URL_INFO_ABOUT "https://openbangla.github.io/")
+    set(CPACK_NSIS_HELP_LINK "https://github.com/OpenBangla/OpenBangla-Keyboard")
+    set(CPACK_NSIS_MODIFY_PATH OFF)
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+
+    # Include x64.nsh for 64-bit/ARM64 detection and file system redirection macros.
+    set(CPACK_NSIS_DEFINES "!include \\\"x64.nsh\\\"")
+
+    # Disable file system redirection before file extraction so that files are
+    # installed into the true 64-bit/ARM64 paths instead of WoW64 redirected ones.
+    # Also validate that the installer matches the target architecture.
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64")
+        set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "\
+  \\\${If} \\\${IsNativeARM64}\n\
+  \\\${Else}\n\
+    MessageBox MB_ICONSTOP \\\"This installer requires Windows on ARM64.\\\"\n\
+    Quit\n\
+  \\\${EndIf}\n\
+  \\\${DisableX64FSRedirection}")
+    else()
+        set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "\\\${DisableX64FSRedirection}")
+    endif()
+
+    # NSIS install commands: register IME DLLs and create user data directory.
+    # Note: NSIS installer is 32-bit, so $SYSDIR points to SysWOW64 (32-bit)
+    # and $WINDIR\Sysnative points to the real System32 (64-bit/ARM64 native).
+    # Backslashes need quadruple-escaping (\\\\) to survive two rounds of CMake
+    # parsing: CMakeLists.txt → CPackConfig.cmake → NSIS template.
+    set(_nsis_install_commands
+        # Create user data directory for user-created layouts
+        "CreateDirectory \\\"$LOCALAPPDATA\\\\OpenBangla\\\\layouts\\\""
+        # Install the Kalpurush font (required by the candidate window) as a system font:
+        # copy into the Fonts dir, register it for the running session, persist it in the
+        # registry, then broadcast WM_FONTCHANGE (0x001D) so running apps pick it up.
+        "CopyFiles /SILENT \\\"$INSTDIR\\\\data\\\\kalpurush.ttf\\\" \\\"$FONTS\\\\kalpurush.ttf\\\""
+        "System::Call 'GDI32::AddFontResource(t)i(\\\"$FONTS\\\\kalpurush.ttf\\\")'"
+        "WriteRegStr HKLM \\\"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts\\\" \\\"Kalpurush (TrueType)\\\" \\\"kalpurush.ttf\\\""
+        # Use /TIMEOUT so NSIS uses SendMessageTimeout (abort-if-hung) instead of a
+        # blocking SendMessage; a HWND_BROADCAST of WM_FONTCHANGE otherwise waits on
+        # every top-level window and hangs the installer if any window is unresponsive.
+        "SendMessage 0xFFFF 0x001D 0 0 /TIMEOUT=1000"
+        # Register native IME DLL (use Sysnative to reach native regsvr32)
+        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\openbangla.dll\\\"' $0"
+        "\\\${If} $0 <> 0"
+        "  MessageBox MB_OK|MB_ICONEXCLAMATION \\\"Failed to register the IME module (error code: $0). The keyboard may not work correctly.\\\""
+        "\\\${EndIf}"
+    )
+    set(_nsis_uninstall_commands
+        # Disable FS redirection for uninstall operations
+        "\\\${DisableX64FSRedirection}"
+        # Unregister native IME DLL
+        "ExecWait '\\\"$WINDIR\\\\Sysnative\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\openbangla.dll\\\"'"
+        # Remove the Kalpurush system font installed above.
+        "System::Call 'GDI32::RemoveFontResource(t)i(\\\"$FONTS\\\\kalpurush.ttf\\\")'"
+        "DeleteRegValue HKLM \\\"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts\\\" \\\"Kalpurush (TrueType)\\\""
+        "Delete \\\"$FONTS\\\\kalpurush.ttf\\\""
+        # See install block: /TIMEOUT avoids the blocking-broadcast hang.
+        "SendMessage 0xFFFF 0x001D 0 0 /TIMEOUT=1000"
+    )
+
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64|x86_64")
+        list(APPEND _nsis_install_commands
+            # Register 32-bit IME DLL (use $SYSDIR which is SysWOW64 in 32-bit NSIS)
+            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s \\\"$INSTDIR\\\\openbangla_x86.dll\\\"' $0"
+            "\\\${If} $0 <> 0"
+            "  MessageBox MB_OK|MB_ICONEXCLAMATION \\\"Failed to register the 32-bit IME module (error code: $0). The keyboard may not work in 32-bit applications.\\\""
+            "\\\${EndIf}"
+        )
+        list(INSERT _nsis_uninstall_commands 0
+            # Unregister 32-bit IME DLL
+            "ExecWait '\\\"$SYSDIR\\\\regsvr32.exe\\\" /s /u \\\"$INSTDIR\\\\openbangla_x86.dll\\\"'"
+        )
+    endif()
+
+    string(REPLACE ";" "\n    " _nsis_install_str "${_nsis_install_commands}")
+    string(REPLACE ";" "\n    " _nsis_uninstall_str "${_nsis_uninstall_commands}")
+    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "    ${_nsis_install_str}")
+    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "    ${_nsis_uninstall_str}")
 endif()
 
-# Set package filename after CPACK_PACKAGE_NAME is defined (Linux only; macOS is set above)
-if(NOT APPLE)
+# Set package filename after CPACK_PACKAGE_NAME is defined (Linux only)
+if(OS_LINUX)
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${PROJECT_VERSION}-$ENV{DIST}$ENV{ARCH_SUFFIX}")
 endif()
 

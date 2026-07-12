@@ -145,6 +145,8 @@ fabric.properties
 *.app
 .cache
 
+target
+
 *~
 *.DS_Store
 .*.swp

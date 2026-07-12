@@ -28,6 +28,8 @@ if(OS_LINUX)
 endif(OS_LINUX)
 
 if(WIN32)
+    list(APPEND SRC_MAIN app.rc)
+    list(APPEND LINK_LIBS zstd::libzstd)
     set(CMAKE_WIN32_EXECUTABLE ON)
 
     list(APPEND LINK_LIBS zstd::libzstd)
@@ -109,13 +111,33 @@ target_link_libraries(openbangla-gui ${LINK_LIBS})
 if(WIN32)
     get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
+    find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt-qt5 windeployqt HINTS "${_qt_bin_dir}")
+
+    set(_windeployqt_flags "")
+    if(MINGW)
+        list(APPEND _windeployqt_flags --no-angle --no-opengl-sw)
+    endif()
 
     add_custom_command(TARGET openbangla-gui POST_BUILD
-    COMMAND ${WINDEPLOYQT_EXECUTABLE} $<TARGET_FILE:openbangla-gui>
+    COMMAND ${WINDEPLOYQT_EXECUTABLE} ${_windeployqt_flags} $<TARGET_FILE:openbangla-gui>
     COMMENT "Deploying Qt..."
     VERBATIM
     )
+endif()
+
+if(WIN32)
+    install(TARGETS openbangla-gui RUNTIME DESTINATION .)
+
+    # Bundle third-party runtime DLLs (e.g. zstd.dll) next to the GUI executable.
+    # windeployqt deploys only Qt; InstallRequiredSystemLibraries only the MSVC runtime.
+    install(FILES $<TARGET_RUNTIME_DLLS:openbangla-gui> DESTINATION .)
+
+    # Deploy Qt DLLs alongside the installed executable
+    if(MINGW)
+        install(CODE "execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" --no-angle --no-opengl-sw \"\${CMAKE_INSTALL_PREFIX}/openbangla-gui.exe\")")
+    else()
+        install(CODE "execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" \"\${CMAKE_INSTALL_PREFIX}/openbangla-gui.exe\")")
+    endif()
 endif()
 
 if(OS_LINUX)

@@ -58,9 +58,19 @@ void UserFolders::setupMacOS() {
     }
 }
 
+void UserFolders::setupWindows() {
+    path = qEnvironmentVariable("LOCALAPPDATA") + "/OpenBangla";
+    // Create our folder in the user specific data folder
+    dir.mkpath(path);
+    // Create user specific layouts folder
+    dir.mkpath(path + "/layouts/");
+}
+
 QString LayoutsFilePath() {
 #ifdef Q_OS_MACOS
     return gUserFolders->dataPath() + "/layouts/";
+#elif defined(Q_OS_WIN)
+    return QCoreApplication::applicationDirPath() + "/layouts";
 #else
     return PROJECT_DATADIR "/layouts";
 #endif
@@ -69,6 +79,8 @@ QString LayoutsFilePath() {
 QString AvroPhoneticLayoutPath() {
 #ifdef Q_OS_MACOS
     return gUserFolders->dataPath() + "/layouts/avrophonetic.json";
+#elif defined(Q_OS_WIN)
+    return QCoreApplication::applicationDirPath() + "/layouts/avrophonetic.json";
 #else
     return PROJECT_DATADIR "/layouts/avrophonetic.json";
 #endif
@@ -77,24 +89,26 @@ QString AvroPhoneticLayoutPath() {
 QString AutoCorrectFilePath() {
 #ifdef Q_OS_MACOS
     return QCoreApplication::applicationDirPath() + "/../Resources/data/autocorrect.json";
+#elif defined(Q_OS_WIN)
+    return QCoreApplication::applicationDirPath() + "/data/autocorrect.json";
 #else
     return PROJECT_DATADIR "/data/autocorrect.json";
 #endif
 }
 
-#ifndef Q_OS_MACOS
+#ifdef Q_OS_LINUX
     QString DatabasePath() {
         return PROJECT_DATADIR "/data";
     }
-    
+
     QString DictionaryPath() {
         return PROJECT_DATADIR "/data/dictionary.json";
     }
-    
+
     QString SuffixDictPath() {
         return PROJECT_DATADIR "/data/suffix.json";
     }
-    
+
     QString RegexDictPath() {
         return PROJECT_DATADIR "/data/regex.json";
     }
