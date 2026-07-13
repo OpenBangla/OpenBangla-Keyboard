@@ -37,6 +37,8 @@ public:
           setupLinux();
       #elif defined(Q_OS_MACOS)
           setupMacOS();
+      #elif defined(Q_OS_WIN)
+          setupWindows();
       #else
           LOG_ERROR("Unsupported OS for UserFolders\n");
       #endif
@@ -44,6 +46,7 @@ public:
 
   void setupLinux();
   void setupMacOS();
+  void setupWindows();
   
   QString dataPath() {
     return path;
@@ -68,13 +71,13 @@ QString AvroPhoneticLayoutPath();
 
 QString AutoCorrectFilePath();
 
-#ifndef Q_OS_MACOS
+#ifdef Q_OS_LINUX
     QString DatabasePath();
-    
+
     QString DictionaryPath();
-    
+
     QString SuffixDictPath();
-    
+
     QString RegexDictPath();
 #endif
 

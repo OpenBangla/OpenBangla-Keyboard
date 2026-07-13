@@ -1,0 +1,9 @@
+# Statically link the MSVC CRT into the Windows IME DLLs so the COM/TSF in-proc
+# servers are self-contained (no vcruntime140.dll dependency). This is what lets the
+# 32-bit DLL register on machines without the 32-bit VC++ redistributable.
+# Scoped to the MSVC targets so nothing here affects the Linux/macOS builds.
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
+
+[target.i686-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
