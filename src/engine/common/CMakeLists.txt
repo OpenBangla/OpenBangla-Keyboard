@@ -46,6 +46,9 @@ if(OS_LINUX)
         install(FILES ${CMAKE_SOURCE_DIR}/data/avrophonetic.json
                 DESTINATION ${PROJECT_DATADIR}/layouts)
 
+        install(FILES ${CMAKE_SOURCE_DIR}/data/khipro.json
+                DESTINATION ${PROJECT_DATADIR}/layouts)
+
         install(FILES ${CMAKE_SOURCE_DIR}/data/Borno.json
                 DESTINATION ${PROJECT_DATADIR}/layouts)
 

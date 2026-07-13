@@ -122,6 +122,7 @@ if(WIN32)
         DESTINATION data)
     install(FILES
         "${CMAKE_SOURCE_DIR}/data/avrophonetic.json"
+        "${CMAKE_SOURCE_DIR}/data/khipro.json"
         "${CMAKE_SOURCE_DIR}/data/Avro_Easy.json"
         "${CMAKE_SOURCE_DIR}/data/Borno.json"
         "${CMAKE_SOURCE_DIR}/data/Munir_Optima.json"

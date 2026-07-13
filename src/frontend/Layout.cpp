@@ -53,6 +53,8 @@ void Layout::loadDesc() {
   QString type = lf.value("info").toObject().value("type").toString();
   if (type == "phonetic") {
     lD.type = Layout_Phonetic;
+  } else if (type == "khipro") {
+    lD.type = Layout_Khipro;
   } else {
     lD.type = Layout_Fixed;
   }
@@ -135,6 +137,9 @@ void Layout::setLayout(QString name) {
   if(lD.type == Layout_Phonetic) {
     // Hardcoded Avro Phonetic setting.
     gSettings->setLayoutPath("avro_phonetic");
+  } else if(lD.type == Layout_Khipro) {
+    // Hardcoded Khipro setting. The transliteration is handled by riti.
+    gSettings->setLayoutPath("khipro");
   } else {
     gSettings->setLayoutPath(layoutMap[name]);
   }

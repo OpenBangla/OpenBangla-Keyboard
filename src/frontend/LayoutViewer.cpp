@@ -24,6 +24,7 @@
 #include "AboutFile.h"
 #include "base.hpp"
 #include "ui_LayoutViewer.h"
+#include "Log.h"
 
 LayoutViewer::LayoutViewer(QString iconTheme, QWidget *parent) :
     QDialog(parent),
@@ -111,6 +112,15 @@ void LayoutViewer::on_viewAltGr_clicked() {
 QByteArray LayoutViewer::decodeAndDecompress(QByteArray &data) {
   std::string decoded = base91::decode(std::string(data.data(), data.size()));
   unsigned long long cap = ZSTD_getFrameContentSize(decoded.data(), decoded.size());
+
+  if(cap == ZSTD_CONTENTSIZE_ERROR) {
+    LOG_ERROR("Layout Image: Not compressed by ZSTD!");
+    return QByteArray(decoded.data(), decoded.size());
+  } else if(cap == ZSTD_CONTENTSIZE_UNKNOWN) {
+    LOG_ERROR("Layout Image: Unknown decompressed size!");
+    return QByteArray(decoded.data(), decoded.size());
+  }
+  
   char *imgData = (char *)malloc(cap);
 
   size_t decompressed = ZSTD_decompress(imgData, cap, decoded.data(), decoded.size());
