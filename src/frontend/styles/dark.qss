@@ -1,0 +1,140 @@
+/* OpenBangla Keyboard — Settings dialog, dark theme */
+
+QDialog#SettingsDialog {
+    background-color: #262a30;
+}
+
+/* ---- Sidebar ---- */
+QWidget#sidebar {
+    background-color: #1e2126;
+}
+
+QWidget#sidebar QToolButton {
+    color: #b7bcc4;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    border-radius: 10px;
+    padding: 10px 4px;
+    font-size: 13px;
+}
+
+QWidget#sidebar QToolButton:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+QWidget#sidebar QToolButton:checked {
+    color: #19c2b0;
+    background: rgba(22, 163, 148, 0.16);
+}
+
+/* ---- Page header ---- */
+QLabel[role="title"] {
+    color: #e6e8eb;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* ---- Card ---- */
+QFrame[role="card"] {
+    background-color: #2f343b;
+    border: 1px solid #383e46;
+    border-radius: 12px;
+}
+
+QLabel[role="section"] {
+    color: #8b919b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+QLabel[role="primary"] {
+    color: #dfe2e6;
+    font-size: 14px;
+}
+
+QLabel[role="status"] {
+    color: #8b919b;
+    font-size: 13px;
+    min-width: 30px;
+}
+
+/* ---- Combo boxes ---- */
+QComboBox {
+    background-color: #363b44;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+QComboBox:hover {
+    border: 1px solid #565d68;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/images/white/arrow-down.svg);
+    width: 12px;
+    height: 12px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #2f343b;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    outline: none;
+    selection-background-color: #16a394;
+    selection-color: #ffffff;
+}
+
+/* ---- Buttons ---- */
+QPushButton[role="primary"] {
+    background-color: #16a394;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 22px;
+    font-weight: 600;
+}
+
+QPushButton[role="primary"]:hover {
+    background-color: #148f82;
+}
+
+QPushButton[role="primary"]:pressed {
+    background-color: #127d72;
+}
+
+QPushButton[role="secondary"] {
+    background-color: #363b44;
+    color: #dfe2e6;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 8px 20px;
+}
+
+QPushButton[role="secondary"]:hover {
+    background-color: #3f454e;
+}
+
+QPushButton[role="secondary"]:pressed {
+    background-color: #31363e;
+}
+
+QPushButton[role="secondary"]:disabled {
+    color: #6b7078;
+    border: 1px solid #3a3f47;
+}
+
+/* ---- Toggle switch colors (consumed by the custom widget) ---- */
+ToggleSwitch {
+    qproperty-trackOn: #16a394;
+    qproperty-trackOff: #4a5059;
+    qproperty-handle: #f5f6f7;
+}
