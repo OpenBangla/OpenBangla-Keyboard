@@ -26,6 +26,7 @@
 #include "PlatformConfig.h"
 #include "Log.h"
 #include "FileSystem.h"
+#include "platform.h"
 
 #ifdef Q_OS_MACOS
   #include "macOS.h"
@@ -43,10 +44,8 @@ int main(int argc, char *argv[]) {
   parser.setApplicationDescription("OpenBangla Keyboard");
   parser.addHelpOption();
   parser.addVersionOption();
-  QCommandLineOption darkIcon("dark","Enable dark theme support");
   QCommandLineOption startInTray("tray","Start in tray");
   QCommandLineOption setupSystem("setup-system","Setup OpenBangla input source");
-  parser.addOption(darkIcon);
   parser.addOption(startInTray);
   parser.addOption(setupSystem);
   parser.process(app);
@@ -72,12 +71,9 @@ int main(int argc, char *argv[]) {
 
   instance.listen(name);
 
-  // Detect Dark Mode
-  QPalette palette = app.palette();
-  QColor color = palette.color(QPalette::Button);
-  QColor darker = QColor::fromRgb(55, 55, 55); // Grayish color used for button in dark mode
-
-  bool darkMode = (color == darker) || parser.isSet(darkIcon);
+  // Detect Dark Mode via the OS color scheme (platform crate).
+  bool darkMode = (get_system_theme() == Dark);
+  LOG_INFO("System Theme Dark Mode: %s\n", darkMode ? "true" : "false");
 
   TopBar w(darkMode);
   if (parser.isSet(startInTray))

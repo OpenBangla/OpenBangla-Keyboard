@@ -12,9 +12,7 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(NOT APPLE)
-    add_subdirectory(cmake/corrosion-rs)
-endif()
+add_subdirectory(cmake/corrosion-rs)
 
 if(APPLE)
     enable_language(Swift)
@@ -148,6 +146,7 @@ if(APPLE)
 endif()
 
 add_subdirectory(src/engine)
+add_subdirectory(src/platform)
 add_subdirectory(src/frontend)
 add_subdirectory(src/shared)
 
