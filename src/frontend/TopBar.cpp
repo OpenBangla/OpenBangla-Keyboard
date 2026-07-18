@@ -62,9 +62,9 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   gLayout = new Layout();
 
   if(darkIcon) {
-    m_iconTheme = "black";
-  } else {
     m_iconTheme = "white";
+  } else {
+    m_iconTheme = "black";
   }
 
   /* Dialogs */
@@ -79,7 +79,8 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   });
 
   auto set_icon = [&](QPushButton* obj, QString icon) {
-    obj->setIcon(QIcon(":/images/" + m_iconTheme + "/" + icon + ".svg"));
+    // TODO: Change this logic if we ever have white theme for TopBar
+    obj->setIcon(QIcon(":/images/" + QString("white") + "/" + icon + ".svg"));
   };
   set_icon(ui->buttonSetLayout, "layouts");
   set_icon(ui->buttonViewLayout, "layout");
