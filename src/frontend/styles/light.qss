@@ -133,9 +133,75 @@ QPushButton[role="secondary"]:disabled {
     border: 1px solid #e5e2db;
 }
 
+/* Icon-only "About this Layout" button: symmetric padding for a compact square. */
+QPushButton#buttonAboutLayout {
+    padding: 8px;
+}
+
+/* Compact form when the button floats over a single-view layout image. */
+QPushButton#buttonAboutLayout[floating="true"] {
+    padding: 4px;
+}
+
 /* ---- Toggle switch colors (consumed by the custom widget) ---- */
 ToggleSwitch {
     qproperty-trackOn: #16a394;
     qproperty-trackOff: #cfd3d8;
     qproperty-handle: #ffffff;
+}
+
+/* ---- Layout viewer ---- */
+QDialog#LayoutViewer {
+    background-color: #ffffff;
+}
+
+/* Segmented Normal / AltGr toggle */
+QPushButton[role="segment"] {
+    background-color: #ececec;
+    color: #4a4a4a;
+    border: 1px solid #d8d4cc;
+    padding: 8px 22px;
+    font-weight: 600;
+}
+
+QPushButton[role="segment"]:hover {
+    background-color: #e0e0e0;
+}
+
+QPushButton[role="segment"]:checked {
+    background-color: #16a394;
+    color: #ffffff;
+    border: 1px solid #16a394;
+}
+
+QPushButton[role="segment"]:disabled {
+    color: #b0b0b0;
+    border: 1px solid #e5e2db;
+}
+
+QPushButton#viewNormal {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+QPushButton#viewAltGr {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Natively drawn keyboard palette (consumed by KeyboardWidget) */
+KeyboardWidget {
+    qproperty-bezel: #e3dccb;
+    qproperty-keycap: #ffffff;
+    qproperty-keyBorder: #cfcabf;
+    qproperty-asciiText: #8a8a8a;
+    qproperty-banglaText: #1b3a8f;
+    qproperty-modifierText: #7a7a7a;
+    qproperty-altGrHighlight: #16a394;
+    qproperty-altGrHighlightText: #ffffff;
 }

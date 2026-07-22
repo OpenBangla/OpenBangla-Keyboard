@@ -9,6 +9,7 @@ set(SRC_GUI TopBar.cpp
         AboutDialog.cpp
         AboutFile.cpp
         LayoutViewer.cpp
+        KeyboardWidget.cpp
         SettingsDialog.cpp
         ToggleSwitch.cpp
         AutoCorrectDialog.cpp

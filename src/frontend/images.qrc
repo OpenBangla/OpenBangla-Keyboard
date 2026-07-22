@@ -17,9 +17,14 @@
         <file>images/white/arrow-down.svg</file>
         <file>images/black/translate.svg</file>
         <file>images/white/translate.svg</file>
+        <file>images/black/info.svg</file>
+        <file>images/white/info.svg</file>
     </qresource>
     <qresource prefix="/styles">
         <file alias="light.qss">styles/light.qss</file>
         <file alias="dark.qss">styles/dark.qss</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file alias="kalpurush.ttf">../../data/kalpurush.ttf</file>
     </qresource>
 </RCC>

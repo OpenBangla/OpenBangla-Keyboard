@@ -12,6 +12,7 @@ SOURCES += \
     TopBar.cpp \
     AboutFile.cpp \
     LayoutViewer.cpp \
+    KeyboardWidget.cpp \
     SettingsDialog.cpp \
     AboutDialog.cpp \
     AutoCorrectDialog.cpp
@@ -20,6 +21,7 @@ HEADERS  += \
     TopBar.h \
     AboutFile.h \
     LayoutViewer.h \
+    KeyboardWidget.h \
     SettingsDialog.h \
     AboutDialog.h \
     AutoCorrectDialog.h

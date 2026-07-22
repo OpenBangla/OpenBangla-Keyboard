@@ -89,6 +89,21 @@ LayoutDesc Layout::getDesc() {
   return lD;
 }
 
+QMap<QString, QString> Layout::getLayoutMap() {
+  QMap<QString, QString> map;
+  // Only fixed layouts have a per-key mapping to draw a keyboard from.
+  if (lD.type != Layout_Fixed) {
+    return map;
+  }
+  // The whole layout file is still available in `lf`; the top level "layout"
+  // object holds flat Key_<name>_Normal / Key_<name>_AltGr -> glyph entries.
+  QJsonObject layout = lf.value("layout").toObject();
+  for (auto it = layout.constBegin(); it != layout.constEnd(); ++it) {
+    map.insert(it.key(), it.value().toString());
+  }
+  return map;
+}
+
 LayoutList Layout::searchLayoutsEx(QDir dir) {
   LayoutList layoutList;
   QStringList flist = dir.entryList(QStringList("*.json"), QDir::Files);

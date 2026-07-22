@@ -45,6 +45,8 @@ public:
 protected:
   void closeEvent(QCloseEvent *event) override;
 
+  void resizeEvent(QResizeEvent *event) override;
+
 private slots:
 
   void on_buttonAboutLayout_clicked();
@@ -60,8 +62,16 @@ private:
   QImage image;
   LayoutDesc desc;
   QByteArray image0, image1;
+  /* True when the current layout is drawn natively by KeyboardWidget; false
+   * when the stored image (phonetic/khipro) is shown instead. */
+  bool useKeyboard = false;
 
   QByteArray decodeAndDecompress(QByteArray &data);
+
+  /* Keep the free-floating "About this Layout" button pinned to the top-right:
+   * the header bar's corner in two-view mode, or over the content (image /
+   * keyboard) corner when the header is hidden for single-view layouts. */
+  void positionInfoButton();
 };
 
 #endif // LAYOUTVIEWER_H
