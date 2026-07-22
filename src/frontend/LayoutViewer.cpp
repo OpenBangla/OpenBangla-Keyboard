@@ -60,8 +60,7 @@ LayoutViewer::~LayoutViewer() {
 }
 
 void LayoutViewer::refreshLayoutViewer() {
-  image0.clear();
-  image1.clear();
+  imageData.clear();
   ui->viewAltGr->setEnabled(false);
   ui->viewNormal->setEnabled(false);
   ui->labelImage->setText("");
@@ -90,19 +89,15 @@ void LayoutViewer::refreshLayoutViewer() {
     ui->viewAltGr->setEnabled(twoViews);
     ui->headerBar->setVisible(twoViews);
     on_viewNormal_clicked();
-  } else if (desc.image0.size() != 0) {
-    // Phonetic / Khipro layouts ship an instructional image instead.
+  } else if (desc.image.size() != 0) {
+    // Phonetic layouts ship a single instructional image instead; it is always
+    // single-view (no Normal/AltGr toggle), so the header stays collapsed.
     useKeyboard = false;
     ui->keyboard->hide();
     ui->labelImage->show();
-    image0 = decodeAndDecompress(desc.image0);
-    if (desc.image1.size() != 0) {
-      image1 = decodeAndDecompress(desc.image1);
-      ui->viewAltGr->setEnabled(true);
-      twoViews = true;
-    }
+    imageData = decodeAndDecompress(desc.image);
     ui->viewNormal->setEnabled(true);
-    ui->headerBar->setVisible(twoViews);
+    ui->headerBar->setVisible(false);
     on_viewNormal_clicked();
   } else {
     useKeyboard = false;
@@ -183,7 +178,7 @@ void LayoutViewer::on_viewNormal_clicked() {
   if (useKeyboard) {
     ui->keyboard->setMode(KeyboardWidget::Normal);
   } else {
-    image.loadFromData(image0);
+    image.loadFromData(imageData);
     ui->labelImage->setPixmap(QPixmap::fromImage(image));
     ui->labelImage->adjustSize();
   }
@@ -193,12 +188,10 @@ void LayoutViewer::on_viewNormal_clicked() {
 }
 
 void LayoutViewer::on_viewAltGr_clicked() {
+  // The AltGr toggle is only ever shown for keyboard-rendered (fixed) layouts;
+  // image-based layouts are single-view.
   if (useKeyboard) {
     ui->keyboard->setMode(KeyboardWidget::AltGr);
-  } else {
-    image.loadFromData(image1);
-    ui->labelImage->setPixmap(QPixmap::fromImage(image));
-    ui->labelImage->adjustSize();
   }
   ui->viewAltGr->setChecked(true);
   this->adjustSize();

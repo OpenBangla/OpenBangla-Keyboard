@@ -61,7 +61,7 @@ private:
   AboutFile *aboutDialog;
   QImage image;
   LayoutDesc desc;
-  QByteArray image0, image1;
+  QByteArray imageData;
   /* True when the current layout is drawn natively by KeyboardWidget; false
    * when the stored image (phonetic/khipro) is shown instead. */
   bool useKeyboard = false;

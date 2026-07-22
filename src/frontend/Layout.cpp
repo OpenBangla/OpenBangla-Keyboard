@@ -66,15 +66,15 @@ void Layout::loadDesc() {
   lD.name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
   // Layout Version
   lD.ver = lf.value("info").toObject().value("layout").toObject().value("version").toString();
-  // Layout Image 0
-  lD.image0.clear();
-  if(!lf.value("info").toObject().value("layout").toObject().value("image0").isUndefined()) {
-    lD.image0 = lf.value("info").toObject().value("layout").toObject().value("image0").toString().toUtf8();
-  }
-  // Layout Image 1
-  lD.image1.clear();
-  if(!lf.value("info").toObject().value("layout").toObject().value("image1").isUndefined()) {
-    lD.image1 = lf.value("info").toObject().value("layout").toObject().value("image1").toString().toUtf8();
+  // Layout Image
+  // v3 phonetic layouts carry a single instructional image in "image"; fall back
+  // to the legacy "image0" so already-installed v2 phonetic layouts still show it.
+  lD.image.clear();
+  QJsonObject layoutInfo = lf.value("info").toObject().value("layout").toObject();
+  if(!layoutInfo.value("image").isUndefined()) {
+    lD.image = layoutInfo.value("image").toString().toUtf8();
+  } else if(!layoutInfo.value("image0").isUndefined()) {
+    lD.image = layoutInfo.value("image0").toString().toUtf8();
   }
   // Layout Develper Name
   lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value(

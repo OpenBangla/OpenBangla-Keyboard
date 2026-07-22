@@ -27,9 +27,12 @@ enum ConversionResult {
 };
 
 class LayoutConverter {
-  QString decodeCompressAndEncode(QString &data);
-
   ConversionResult saveLayout(QJsonObject obj, QString path);
+
+  /* Normalize an in-memory layout object (any pre-v3 shape) into format
+   * version 3 and save it to @path. Renames the phonetic "image0" field to
+   * "image" and drops the instructional images that keyed layouts no longer use. */
+  ConversionResult convertToV3(QJsonObject layout, QString path);
 
   QString unescapeXML(QString escaped);
 
