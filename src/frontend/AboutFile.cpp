@@ -17,6 +17,7 @@
  */
 
 #include <QFile>
+#include <QTextOption>
 #include "AboutFile.h"
 #include "ui_AboutFile.h"
 
@@ -30,6 +31,11 @@ AboutFile::AboutFile(QString iconTheme, QWidget *parent) :
   if (qss.open(QFile::ReadOnly | QFile::Text)) {
     setStyleSheet(QString::fromUtf8(qss.readAll()));
   }
+
+  // Justify the developer comment so multi-line text reads as a clean block.
+  QTextOption commentOption = ui->txtDevComment->document()->defaultTextOption();
+  commentOption.setAlignment(Qt::AlignJustify);
+  ui->txtDevComment->document()->setDefaultTextOption(commentOption);
 
   this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
 }

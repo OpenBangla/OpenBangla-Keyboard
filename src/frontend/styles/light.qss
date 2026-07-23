@@ -5,7 +5,7 @@ QDialog#SettingsDialog {
 }
 
 QDialog#AboutFile {
-    background-color: #ffffff;
+    background-color: #f1eee8;
 }
 
 /* ---- Sidebar ---- */
