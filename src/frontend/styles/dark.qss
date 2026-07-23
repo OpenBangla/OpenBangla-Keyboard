@@ -4,6 +4,10 @@ QDialog#SettingsDialog {
     background-color: #262a30;
 }
 
+QDialog#AboutFile {
+    background-color: #262a30;
+}
+
 /* ---- Sidebar ---- */
 QWidget#sidebar {
     background-color: #1e2126;
@@ -91,6 +95,21 @@ QComboBox QAbstractItemView {
     outline: none;
     selection-background-color: #16a394;
     selection-color: #ffffff;
+}
+
+/* ---- Read-only text panels (e.g. developer comment) ---- */
+QPlainTextEdit {
+    background-color: #363b44;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 8px 10px;
+    selection-background-color: #16a394;
+    selection-color: #ffffff;
+}
+
+QPlainTextEdit:focus {
+    border: 1px solid #565d68;
 }
 
 /* ---- Buttons ---- */

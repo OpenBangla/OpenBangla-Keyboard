@@ -16,16 +16,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QFile>
 #include "AboutFile.h"
 #include "ui_AboutFile.h"
 
-AboutFile::AboutFile(QWidget *parent) :
+AboutFile::AboutFile(QString iconTheme, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AboutFile) {
   ui->setupUi(this);
 
+  bool darkMode = (iconTheme == "white");
+  QFile qss(darkMode ? ":/styles/dark.qss" : ":/styles/light.qss");
+  if (qss.open(QFile::ReadOnly | QFile::Text)) {
+    setStyleSheet(QString::fromUtf8(qss.readAll()));
+  }
+
   this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
-  this->setFixedSize(QSize(this->width(), this->height()));
 }
 
 AboutFile::~AboutFile() {
@@ -34,7 +40,7 @@ AboutFile::~AboutFile() {
 
 void AboutFile::setDialogType(DialogType type) {
   if (type == AboutLayout) {
-    this->setWindowTitle("About This Layout...");
+    this->setWindowTitle("About This Layout");
     loadLayoutInfo();
   }
 }

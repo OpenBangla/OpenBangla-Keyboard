@@ -35,7 +35,7 @@ LayoutViewer::LayoutViewer(QString iconTheme, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LayoutViewer) {
   ui->setupUi(this);
-  aboutDialog = new AboutFile(this);
+  aboutDialog = new AboutFile(iconTheme, this);
   ui->buttonAboutLayout->setIcon(QIcon(":/images/" + iconTheme + "/info.svg"));
   ui->labelImage->setAlignment(Qt::AlignCenter);
 
