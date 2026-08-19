@@ -51,10 +51,9 @@ void Layout::loadDesc() {
   // Load Layout Description
   // Layout File Type
   QString type = lf.value("info").toObject().value("type").toString();
-  if (type == "phonetic") {
-    lD.type = Layout_Phonetic;
-  } else if (type == "khipro") {
-    lD.type = Layout_Khipro;
+  QString name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
+  if (type == "transliteration") {
+    lD.type = (name == "Khipro") ? Layout_Khipro : Layout_Phonetic;
   } else {
     lD.type = Layout_Fixed;
   }
@@ -63,7 +62,7 @@ void Layout::loadDesc() {
   // Layout File Version
   lD.fileVer = lf.value("info").toObject().value("version").toInt();
   // Layout Name
-  lD.name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
+  lD.name = name;
   // Layout Version
   lD.ver = lf.value("info").toObject().value("layout").toObject().value("version").toString();
   // Layout Image
@@ -126,7 +125,7 @@ LayoutList Layout::searchLayouts() {
   layoutMap.clear();
 
   QDir dir;
-  
+
 #ifndef Q_OS_MACOS
   // Search in system layouts folder
   // On macOS we don't have a system layouts folder, all layouts are stored in user folder

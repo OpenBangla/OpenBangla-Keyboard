@@ -9,7 +9,7 @@
             "name": "Avro Phonetic",
             "version": "4"
         },
-        "type": "phonetic",
+        "type": "transliteration",
         "version": "3"
     },
     "layout": {

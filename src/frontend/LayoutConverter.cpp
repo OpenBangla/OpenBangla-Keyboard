@@ -411,9 +411,13 @@ ConversionResult LayoutConverter::convertToV3(QJsonObject layout, QString path) 
   QJsonObject info = layout.value("info").toObject();
   QJsonObject infoLayout = info.value("layout").toObject();
 
-  // Phonetic layouts keep their single instructional image, renamed image0 -> image.
-  if (info.value("type").toString() == "phonetic" && infoLayout.contains("image0")) {
-    infoLayout["image"] = infoLayout.value("image0");
+  // Legacy phonetic layouts keep their single instructional image, renamed
+  // image0 -> image, and adopt the unified "transliteration" type.
+  if (info.value("type").toString() == "phonetic") {
+    if (infoLayout.contains("image0")) {
+      infoLayout["image"] = infoLayout.value("image0");
+    }
+    info["type"] = "transliteration";
   }
   // v3 no longer stores the Normal/AltGr instructional images for keyed layouts.
   infoLayout.remove("image0");
