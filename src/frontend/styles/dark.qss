@@ -1,0 +1,225 @@
+/* OpenBangla Keyboard — Settings dialog, dark theme */
+
+QDialog#SettingsDialog {
+    background-color: #262a30;
+}
+
+QDialog#AboutFile {
+    background-color: #262a30;
+}
+
+/* ---- Sidebar ---- */
+QWidget#sidebar {
+    background-color: #1e2126;
+}
+
+QWidget#sidebar QToolButton {
+    color: #b7bcc4;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    border-radius: 10px;
+    padding: 10px 4px;
+    font-size: 13px;
+}
+
+QWidget#sidebar QToolButton:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+QWidget#sidebar QToolButton:checked {
+    color: #19c2b0;
+    background: rgba(22, 163, 148, 0.16);
+}
+
+/* ---- Page header ---- */
+QLabel[role="title"] {
+    color: #e6e8eb;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* ---- Card ---- */
+QFrame[role="card"] {
+    background-color: #2f343b;
+    border: 1px solid #383e46;
+    border-radius: 12px;
+}
+
+QLabel[role="section"] {
+    color: #8b919b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+QLabel[role="primary"] {
+    color: #dfe2e6;
+    font-size: 14px;
+}
+
+QLabel[role="status"] {
+    color: #8b919b;
+    font-size: 13px;
+    min-width: 30px;
+}
+
+/* ---- Combo boxes ---- */
+QComboBox {
+    background-color: #363b44;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+QComboBox:hover {
+    border: 1px solid #565d68;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/images/white/arrow-down.svg);
+    width: 12px;
+    height: 12px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #2f343b;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    outline: none;
+    selection-background-color: #16a394;
+    selection-color: #ffffff;
+}
+
+/* ---- Read-only text panels (e.g. developer comment) ---- */
+QPlainTextEdit {
+    background-color: #363b44;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 8px 10px;
+    selection-background-color: #16a394;
+    selection-color: #ffffff;
+}
+
+QPlainTextEdit:focus {
+    border: 1px solid #565d68;
+}
+
+/* ---- Buttons ---- */
+QPushButton[role="primary"] {
+    background-color: #16a394;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 22px;
+    font-weight: 600;
+}
+
+QPushButton[role="primary"]:hover {
+    background-color: #148f82;
+}
+
+QPushButton[role="primary"]:pressed {
+    background-color: #127d72;
+}
+
+QPushButton[role="secondary"] {
+    background-color: #363b44;
+    color: #dfe2e6;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 8px 20px;
+}
+
+QPushButton[role="secondary"]:hover {
+    background-color: #3f454e;
+}
+
+QPushButton[role="secondary"]:pressed {
+    background-color: #31363e;
+}
+
+QPushButton[role="secondary"]:disabled {
+    color: #6b7078;
+    border: 1px solid #3a3f47;
+}
+
+/* Icon-only "About this Layout" button: symmetric padding for a compact square. */
+QPushButton#buttonAboutLayout {
+    padding: 8px;
+}
+
+/* Compact form when the button floats over a single-view layout image. */
+QPushButton#buttonAboutLayout[floating="true"] {
+    padding: 4px;
+}
+
+/* ---- Toggle switch colors (consumed by the custom widget) ---- */
+ToggleSwitch {
+    qproperty-trackOn: #16a394;
+    qproperty-trackOff: #4a5059;
+    qproperty-handle: #f5f6f7;
+}
+
+/* ---- Layout viewer ---- */
+QDialog#LayoutViewer {
+    background-color: #262a30;
+}
+
+/* Segmented Normal / AltGr toggle */
+QPushButton[role="segment"] {
+    background-color: #363b44;
+    color: #b7bcc4;
+    border: 1px solid #464c56;
+    padding: 8px 22px;
+    font-weight: 600;
+}
+
+QPushButton[role="segment"]:hover {
+    background-color: #3f454e;
+}
+
+QPushButton[role="segment"]:checked {
+    background-color: #16a394;
+    color: #ffffff;
+    border: 1px solid #16a394;
+}
+
+QPushButton[role="segment"]:disabled {
+    color: #6b7078;
+    border: 1px solid #3a3f47;
+}
+
+QPushButton#viewNormal {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+QPushButton#viewAltGr {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Natively drawn keyboard palette (consumed by KeyboardWidget) */
+KeyboardWidget {
+    qproperty-bezel: #1e2126;
+    qproperty-keycap: #f4f5f7;
+    qproperty-keyBorder: #cfd2d7;
+    qproperty-asciiText: #6b7079;
+    qproperty-banglaText: #1b3a8f;
+    qproperty-modifierText: #575c65;
+    qproperty-altGrHighlight: #16a394;
+    qproperty-altGrHighlightText: #ffffff;
+}

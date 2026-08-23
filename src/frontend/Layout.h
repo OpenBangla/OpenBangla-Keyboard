@@ -41,8 +41,7 @@ struct LayoutDesc {
   int fileVer;
   QString name;
   QString ver;
-  QByteArray image0;
-  QByteArray image1;
+  QByteArray image;
   QString devName;
   QString devComment;
 };
@@ -75,6 +74,11 @@ public:
 
   /* Get Layout Description */
   LayoutDesc getDesc();
+
+  /* Get the raw per-key map (Key_<name>_Normal / _AltGr -> glyph) of the
+   * currently loaded layout. Only fixed layouts carry such a map; returns an
+   * empty map for phonetic/khipro layouts. */
+  QMap<QString, QString> getLayoutMap();
 
   /* Search for available layouts and return the list of them */
   LayoutList searchLayouts();

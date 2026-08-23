@@ -70,7 +70,7 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   /* Dialogs */
   aboutDialog = new AboutDialog(Q_NULLPTR);
   layoutViewer = new LayoutViewer(m_iconTheme, Q_NULLPTR);
-  settingsDialog = new SettingsDialog(Q_NULLPTR);
+  settingsDialog = new SettingsDialog(darkIcon, Q_NULLPTR);
 
   // Update tray state after settings have been changed.
   connect(settingsDialog, &QDialog::finished, [&]() {

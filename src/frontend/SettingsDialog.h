@@ -26,12 +26,14 @@ class SettingsDialog;
 }
 
 class AutoCorrectDialog;
+class ToggleSwitch;
+class QLabel;
 
 class SettingsDialog : public QDialog {
 Q_OBJECT
 
 public:
-  explicit SettingsDialog(QWidget *parent = nullptr);
+  explicit SettingsDialog(bool darkMode, QWidget *parent = nullptr);
 
   ~SettingsDialog() override;
 
@@ -43,7 +45,11 @@ protected:
 private:
   Ui::SettingsDialog *ui;
   AutoCorrectDialog *autoCorrectDialog;
+  bool m_darkMode;
 
+  void applyTheme();
+  void setupSidebar();
+  void bindToggle(ToggleSwitch *sw, QLabel *status);
   void implementSignals();
   void saveSettings();
 };
