@@ -136,6 +136,11 @@ if(WIN32)
     # Deploy Qt DLLs alongside the installed executable
     if(MINGW)
         install(CODE "execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" --no-angle --no-opengl-sw \"\${CMAKE_INSTALL_PREFIX}/openbangla-gui.exe\")")
+        # windeployqt bundles Qt's own DLLs/plugins but not the MSYS2/Clang runtime
+        # DLLs (libc++, libunwind, libwinpthread) nor Qt's third-party dependencies
+        # (libpng, pcre2, harfbuzz, ...). Resolve and copy that closure so the app
+        # runs outside an MSYS2 shell.
+        install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/BundleMingwDeps.cmake")
     else()
         install(CODE "execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" \"\${CMAKE_INSTALL_PREFIX}/openbangla-gui.exe\")")
     endif()
