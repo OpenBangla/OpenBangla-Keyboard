@@ -25,7 +25,7 @@ jobs:
       - name: update-system
         run: sudo apt-get update -qq
       - name: install-deps
-        run: sudo apt-get -y install build-essential clang cmake rustc cargo libibus-1.0-dev libfcitx5core-dev libzstd-dev qtbase5-dev qtbase5-dev-tools
+        run: sudo apt-get -y install build-essential clang cmake rustc cargo libibus-1.0-dev libfcitx5core-dev libzstd-dev qtbase5-dev qtbase5-dev-tools libqt5svg5-dev
       - name: make
         env: ${{ matrix.env }}
         run: |
@@ -77,6 +77,7 @@ jobs:
             mingw-w64-clang-aarch64-clang
             mingw-w64-clang-aarch64-ninja
             mingw-w64-clang-aarch64-qt5-base
+            mingw-w64-clang-aarch64-qt5-svg
             mingw-w64-clang-aarch64-qt5-tools
             mingw-w64-clang-aarch64-zstd
             mingw-w64-clang-aarch64-rust
