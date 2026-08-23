@@ -114,6 +114,7 @@ jobs:
             mingw-w64-clang-aarch64-clang
             mingw-w64-clang-aarch64-ninja
             mingw-w64-clang-aarch64-qt5-base
+            mingw-w64-clang-aarch64-qt5-svg
             mingw-w64-clang-aarch64-qt5-tools
             mingw-w64-clang-aarch64-zstd
             mingw-w64-clang-aarch64-rust

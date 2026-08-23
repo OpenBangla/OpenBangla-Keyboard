@@ -21,7 +21,7 @@ set(SRC_MAIN main.cpp
         AvroPhonetic.cpp
         PlatformConfig.cpp)
 
-set(LINK_LIBS libShared Qt5::Widgets Qt5::Network platform)
+set(LINK_LIBS libShared Qt5::Widgets Qt5::Network Qt5::Svg platform)
 
 if(OS_LINUX)
     list(APPEND LINK_LIBS ${ZSTD_LIBRARIES})

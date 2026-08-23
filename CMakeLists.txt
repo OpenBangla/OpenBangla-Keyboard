@@ -28,7 +28,7 @@ if(APPLE)
     include(AddSwift)
 endif()
 
-find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Network Svg REQUIRED)
 
 message(STATUS "Qt5 framework version: ${Qt5Core_VERSION}")
 
