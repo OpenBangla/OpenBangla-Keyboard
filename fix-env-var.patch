@@ -1,0 +1,53 @@
+diff --git a/src/frontend/TopBar.cpp b/src/frontend/TopBar.cpp
+index 61b3fab..927f392 100644
+--- a/src/frontend/TopBar.cpp
++++ b/src/frontend/TopBar.cpp
+@@ -339,7 +339,7 @@ void TopBar::DataMigration() {
+   UserFolders usr;
+   LayoutConverter converter;
+   if(gSettings->getPreviousUserDataRemains()) {
+-    QDir previousUserDataPath = QDir(environmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
++    QDir previousUserDataPath = QDir(qEnvironmentVariable("HOME", "") + "/.OpenBangla-Keyboard");
+     if(previousUserDataPath.exists()) {
+       // Handle the data files.
+       migrateFile("phonetic-candidate-selection.json", previousUserDataPath, usr.dataPath());
+diff --git a/src/shared/FileSystem.cpp b/src/shared/FileSystem.cpp
+index a36d7d3..395bf99 100644
+--- a/src/shared/FileSystem.cpp
++++ b/src/shared/FileSystem.cpp
+@@ -46,13 +46,6 @@ QString AutoCorrectFilePath() {
+     return "/usr/share/openbangla-keyboard/data/autocorrect.json";
+ }
+ 
+-QString environmentVariable(const char *varName, const QString &defaultValue)
+-{
+-    QByteArray value = qgetenv(varName);
+-    if (value.isNull())
+-        return defaultValue;
+-    return QString::fromLocal8Bit(value);
+-}
+ 
+ /// Copy the `fileName` from `src` to `dst`.
+ /// This function overwrites if the file already exists in the destination.
+diff --git a/src/shared/FileSystem.h b/src/shared/FileSystem.h
+index ad83bf8..6772ac7 100644
+--- a/src/shared/FileSystem.h
++++ b/src/shared/FileSystem.h
+@@ -22,8 +22,6 @@
+ #include <QDir>
+ #include "Log.h"
+ 
+-// TODO: Use qEnvironmentVariable function when we are able to use Qt 5.10 version.
+-QString environmentVariable(const char *varName, const QString &defaultValue);
+ 
+ /* We follow XDG Directory Specification for storing user specific data.
+    https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+@@ -33,7 +31,7 @@ class UserFolders {
+   QDir dir;
+ public:
+   UserFolders() {
+-    path = environmentVariable("XDG_DATA_HOME", dir.homePath() + "/.local/share") + "/openbangla-keyboard";
++    path = qEnvironmentVariable("XDG_DATA_HOME", dir.homePath() + "/.local/share") + "/openbangla-keyboard";
+     // Create our folder in the user specific data folder
+     dir.mkpath(path);
+     // Create user specific layouts folder
