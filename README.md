@@ -1,3 +1,7 @@
+![Logo](./data/128.png)
+
+[English](README.md) | [বাংলা](README.bn.md)
+
 # OpenBangla Keyboard (OBK)
 
 OpenBangla Keyboard is an open-source, Unicode-compliant Bangla input method designed for GNU/Linux, macOS, and Windows. It offers advanced automation features and supports popular keyboard layouts, including Avro Phonetic, Probhat, Munir Optima, and National (Jatiya).

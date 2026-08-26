@@ -1,3 +1,7 @@
+![Logo](./data/128.png)
+
+[English](README.md) | [বাংলা](README.bn.md)
+
 # ওপেনবাংলা কিবোর্ড (OBK)
 
 ওপেনবাংলা কিবোর্ড হলো GNU/Linux, macOS, এবং Windows-এর জন্য একটি ওপেন-সোর্স ও ইউনিকোড-সমর্থিত বাংলা ইনপুট মেথড। এতে রয়েছে উন্নত অটোমেশন সুবিধা এবং এটি অভ্র ফোনেটিক, প্রভাত, মুনীর অপটিমা ও জাতীয়-র মতো জনপ্রিয় কিবোর্ড লেআউটগুলো সাপোর্ট করে।
@@ -37,4 +41,4 @@
 
 এই প্রজেক্টটি [GPL 3 License](https://opensource.org/licenses/GPL-3.0)-এর অধীনে লাইসেন্সকৃত।
 
-[মুহাম্মদ মোমিনুল হক](https://github.com/mominul) এবং [✨ অবদানকারীগণের ✨](https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors) দ্বারা ভালোবাসার সাথে তৈরি!
+মোহাম্মদ মোমিনুল হক এবং [✨ অবদানকারী ✨](https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors)-দের ❤️ দিয়ে তৈরি!
