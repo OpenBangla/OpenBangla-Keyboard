@@ -21,14 +21,6 @@
 
 আমরা যেকোনো অবদানে স্বাগত জানাই! আমাদের অবদান প্রক্রিয়া সম্পর্কিত বিস্তারিত তথ্যের জন্য [CONTRIBUTING.md](CONTRIBUTING.md) দেখুন।
 
-দ্রুত শুরু করতে:
-
-1. রিপোজিটরিটি ফর্ক করুন।
-2. নতুন একটি ব্রাঞ্চ তৈরি করুন (`git checkout -b feature-branch`)।
-3. আপনার পরিবর্তনসমূহ কমিট করুন (`git commit -m 'Add new feature'`)।
-4. ব্রাঞ্চটিতে পুশ করুন (`git push origin feature-branch`)।
-5. একটি পুল রিকুয়েস্ট (Pull Request) ওপেন করুন।
-
 যদি কোনো বাগ খুঁজে পান বা নতুন কোনো ফিচারের অনুরোধ থাকে, তবে অনুগ্রহ করে [একটি ইস্যু ওপেন করুন](https://github.com/OpenBangla/OpenBangla-Keyboard/issues)।
 
 ## কৃতজ্ঞতা (Acknowledgements)
