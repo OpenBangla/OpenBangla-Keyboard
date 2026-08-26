@@ -41,4 +41,4 @@
 
 এই প্রজেক্টটি [GPL 3 License](https://opensource.org/licenses/GPL-3.0)-এর অধীনে লাইসেন্সকৃত।
 
-মোহাম্মদ মোমিনুল হক এবং [✨ অবদানকারী ✨](https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors)-দের ❤️ দিয়ে তৈরি!
+[মোহাম্মদ মোমিনুল হক](https://github.com/mominul) এবং [✨ অবদানকারী ✨](https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors)-দের ❤️ দিয়ে তৈরি!
