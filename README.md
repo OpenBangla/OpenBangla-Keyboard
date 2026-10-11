@@ -41,4 +41,4 @@ If you find a bug or have a feature request, please [open an issue](https://gith
 
 This project is licensed under [GPL 3 License](https://opensource.org/licenses/GPL-3.0).
 
-Made with ❤️ by [Muhammad Mominul Huque](https://github.com/mominul) and [✨ contributors ✨](https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors)!
+Made with ❤️ by [Muhammad Mominul Huque](https://github.com/mominul) and [✨ contributors ✨](https://github.com/OpenBangla/OpenBangla-Keyboard/graphs/contributors?all=1)!
