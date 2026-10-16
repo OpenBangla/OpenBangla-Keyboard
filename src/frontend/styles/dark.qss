@@ -8,6 +8,14 @@ QDialog#AboutFile {
     background-color: #262a30;
 }
 
+QDialog#AboutDialog {
+    background-color: #262a30;
+}
+
+QDialog#AboutDialog QLabel {
+    color: #dfe2e6;
+}
+
 /* ---- Sidebar ---- */
 QWidget#sidebar {
     background-color: #1e2126;

@@ -29,7 +29,7 @@ class AboutDialog : public QDialog {
 Q_OBJECT
 
 public:
-  explicit AboutDialog(QWidget *parent = nullptr);
+  explicit AboutDialog(bool darkMode, QWidget *parent = nullptr);
 
   ~AboutDialog() override;
 
@@ -41,6 +41,7 @@ private slots:
 
 private:
   Ui::AboutDialog *ui;
+  bool m_darkMode;
 };
 
 #endif // ABOUTDIALOG_H

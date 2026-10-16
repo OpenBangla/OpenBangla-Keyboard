@@ -68,7 +68,7 @@ TopBar::TopBar(bool darkIcon, QWidget *parent) :
   }
 
   /* Dialogs */
-  aboutDialog = new AboutDialog(Q_NULLPTR);
+  aboutDialog = new AboutDialog(darkIcon, Q_NULLPTR);
   layoutViewer = new LayoutViewer(m_iconTheme, Q_NULLPTR);
   settingsDialog = new SettingsDialog(darkIcon, Q_NULLPTR);
 
