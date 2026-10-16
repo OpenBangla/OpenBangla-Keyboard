@@ -130,6 +130,11 @@ QPushButton[role="primary"]:pressed {
     background-color: #127d72;
 }
 
+QPushButton[role="primary"]:disabled {
+    background-color: #363b44;
+    color: #6b7078;
+}
+
 QPushButton[role="secondary"] {
     background-color: #363b44;
     color: #dfe2e6;
