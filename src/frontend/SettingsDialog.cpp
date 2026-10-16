@@ -32,7 +32,7 @@ SettingsDialog::SettingsDialog(bool darkMode, QWidget *parent) :
     ui(new Ui::SettingsDialog),
     m_darkMode(darkMode) {
   ui->setupUi(this);
-  autoCorrectDialog = new AutoCorrectDialog(this);
+  autoCorrectDialog = new AutoCorrectDialog(m_darkMode, this);
 
   applyTheme();
 

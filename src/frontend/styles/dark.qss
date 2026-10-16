@@ -223,3 +223,114 @@ KeyboardWidget {
     qproperty-altGrHighlight: #16a394;
     qproperty-altGrHighlightText: #ffffff;
 }
+
+/* ---- Auto Correct dialog ---- */
+QDialog#AutoCorrectDialog {
+    background-color: #262a30;
+}
+
+/* Vertical rule between the entry form and the preview column */
+QFrame[role="divider"] {
+    background-color: #383e46;
+    border: none;
+}
+
+/* Read-only preview well (transliteration result) */
+QLabel[role="panel"] {
+    background-color: #363b44;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 4px 10px;
+}
+
+/* ---- Text fields ---- */
+QLineEdit {
+    background-color: #363b44;
+    color: #e6e8eb;
+    border: 1px solid #464c56;
+    border-radius: 8px;
+    padding: 5px 10px;
+    selection-background-color: #16a394;
+    selection-color: #ffffff;
+}
+
+QLineEdit:hover {
+    border: 1px solid #565d68;
+}
+
+QLineEdit:focus {
+    border: 1px solid #565d68;
+}
+
+QLineEdit:disabled {
+    color: #6b7078;
+    border: 1px solid #3a3f47;
+}
+
+/* ---- Entry list ---- */
+QTreeWidget {
+    background-color: #2f343b;
+    alternate-background-color: #2a2f35;
+    color: #dfe2e6;
+    border: 1px solid #383e46;
+    border-radius: 10px;
+    outline: none;
+}
+
+QTreeWidget::item {
+    height: 24px;
+    padding: 0 12px;
+    border: none;
+}
+
+QTreeWidget::item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+QTreeWidget::item:selected {
+    background-color: #16a394;
+    color: #ffffff;
+}
+
+QHeaderView {
+    background: transparent;
+    border: none;
+}
+
+QHeaderView::section {
+    background: transparent;
+    color: #8b919b;
+    border: none;
+    border-bottom: 1px solid #383e46;
+    padding: 8px 12px;
+    font-weight: 600;
+}
+
+/* ---- Scrollbars ---- */
+QScrollBar:vertical {
+    background: transparent;
+    width: 12px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical {
+    background: #4a5059;
+    border-radius: 4px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #565d68;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+    background: transparent;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
