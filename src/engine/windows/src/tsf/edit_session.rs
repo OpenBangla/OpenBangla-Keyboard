@@ -205,14 +205,14 @@ pub fn insert_text(tid: u32, context: &ITfContext, text: &[u16]) -> Result<()> {
     }
 }
 
-pub fn get_pos(tid: u32, context: &ITfContext, range: &ITfRange) -> Result<(i32, i32)> {
+pub fn get_pos(tid: u32, context: &ITfContext, range: &ITfRange) -> Result<RECT> {
     //log::info!("[{}:{};{}] {}()", file!(), line!(), column!(), crate::function!());
 
     #[implement(ITfEditSession)]
     struct Session<'a> {
         context: &'a ITfContext,
         range: &'a ITfRange,
-        pos: Cell<(i32, i32)>,
+        rect: Cell<RECT>,
     }
 
     impl ITfEditSession_Impl for Session<'_> {
@@ -223,7 +223,7 @@ pub fn get_pos(tid: u32, context: &ITfContext, range: &ITfRange) -> Result<(i32,
                 let mut clipped = BOOL::default();
                 let view = self.context.GetActiveView()?;
                 view.GetTextExt(ec, self.range, &mut rect, &mut clipped)?;
-                self.pos.set((rect.left, rect.bottom));
+                self.rect.set(rect);
                 Ok(())
             }
         }
@@ -232,7 +232,7 @@ pub fn get_pos(tid: u32, context: &ITfContext, range: &ITfRange) -> Result<(i32,
     let session = ITfEditSession::from(Session {
         context,
         range,
-        pos: Cell::new((0, 0)),
+        rect: Cell::new(RECT::default()),
     });
     unsafe {
         let result = context.RequestEditSession(tid, &session, TF_ES_READWRITE)?;
@@ -240,7 +240,7 @@ pub fn get_pos(tid: u32, context: &ITfContext, range: &ITfRange) -> Result<(i32,
             Err(result.into())
         } else {
             let session: &Session = session.as_impl();
-            Ok(session.pos.take())
+            Ok(session.rect.take())
         }
     }
 }

@@ -28,8 +28,8 @@ impl TextServiceInner {
         let composition =
             edit_session::start_composition(self.tid, self.context()?, &self.interface()?)?;
         self.composition = Some(composition);
-        if let Some((x, y)) = self.get_pos() {
-            self.candidate_list()?.locate(x, y)?;
+        if let Some((x, top, bottom)) = self.get_pos() {
+            self.candidate_list()?.set_caret(x, top, bottom);
         }
         Ok(())
     }
@@ -73,11 +73,13 @@ impl TextServiceInner {
         if self.suggestions.as_ref().unwrap().is_empty() {
             candidate_list.hide();
         } else {
+            // Record the caret before showing so `show` -> `repaint(true)` can place
+            // the window inside the monitor work area (flipping above when needed).
+            if let Some((x, top, bottom)) = self.get_pos() {
+                candidate_list.set_caret(x, top, bottom);
+            }
             let sugg = self.suggestions.as_ref().unwrap();
             candidate_list.show(sugg.get_auxiliary_text(), sugg.get_suggestions())?;
-            if let Some((x, y)) = self.get_pos() {
-                candidate_list.locate(x, y)?;
-            }
         }
         Ok(())
     }
@@ -90,16 +92,16 @@ impl TextServiceInner {
         edit_session::set_text(self.tid, self.context()?, range, &text, None)
     }
 
-    fn get_pos(&self) -> Option<(i32, i32)> {
+    fn get_pos(&self) -> Option<(i32, i32, i32)> {
         //log::info!("[{}:{};{}] {}()", file!(), line!(), column!(), crate::function!());
 
         let range = unsafe { self.composition().ok()?.GetRange().ok()? };
-        let pos = edit_session::get_pos(self.tid, self.context().ok()?, &range).ok()?;
-        if pos.0 <= 0 && pos.1 <= 0 {
-            debug!("Abnormal position: ({}, {})", pos.0, pos.1);
+        let rect = edit_session::get_pos(self.tid, self.context().ok()?, &range).ok()?;
+        if rect.left <= 0 && rect.bottom <= 0 {
+            debug!("Abnormal position: ({}, {})", rect.left, rect.bottom);
             None
         } else {
-            Some(pos)
+            Some((rect.left, rect.top, rect.bottom))
         }
     }
 

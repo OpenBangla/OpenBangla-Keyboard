@@ -7,7 +7,7 @@ use windows::Win32::Graphics::Direct2D::Common::D2D1_COLOR_F;
 use windows::Win32::Graphics::Gdi::CreateSolidBrush;
 use windows::{
     Win32::{
-        Foundation::{BOOL, GetLastError, HWND, LPARAM, LRESULT, RECT, WPARAM},
+        Foundation::{BOOL, GetLastError, HWND, LPARAM, LRESULT, POINT, RECT, WPARAM},
         Graphics::{
             Direct2D::{
                 Common::{D2D_RECT_F, D2D1_ALPHA_MODE_PREMULTIPLIED, D2D1_PIXEL_FORMAT},
@@ -28,16 +28,19 @@ use windows::{
                 DwmSetWindowAttribute,
             },
             Dxgi::Common::DXGI_FORMAT_B8G8R8A8_UNORM,
-            Gdi::{BeginPaint, EndPaint, HDC, InvalidateRect, PAINTSTRUCT},
+            Gdi::{
+                BeginPaint, EndPaint, GetMonitorInfoW, HDC, InvalidateRect, MONITORINFO,
+                MONITOR_DEFAULTTONEAREST, MonitorFromPoint, PAINTSTRUCT,
+            },
         },
         UI::HiDpi::GetDpiForWindow,
         UI::WindowsAndMessaging::{
             CS_DROPSHADOW, CS_HREDRAW, CS_IME, CS_VREDRAW, CreateWindowExA, DefWindowProcA,
-            DestroyWindow, GetClientRect, GetWindowLongPtrA, HICON, HWND_TOPMOST, IDC_ARROW,
-            LoadCursorW, RegisterClassExA, SW_HIDE, SW_SHOWNOACTIVATE, SWP_NOACTIVATE, SWP_NOMOVE,
-            SWP_NOSIZE, SetWindowLongPtrA, SetWindowPos, ShowWindow, WINDOW_LONG_PTR_INDEX,
-            WM_ERASEBKGND, WM_PAINT, WNDCLASSEXA, WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW,
-            WS_EX_TOPMOST, WS_POPUP,
+            DestroyWindow, GetClientRect, GetSystemMetrics, GetWindowLongPtrA, HICON,
+            HWND_TOPMOST, IDC_ARROW, LoadCursorW, RegisterClassExA, SM_CXSCREEN, SM_CYSCREEN,
+            SW_HIDE, SW_SHOWNOACTIVATE, SWP_NOACTIVATE, SWP_NOMOVE, SetWindowLongPtrA,
+            SetWindowPos, ShowWindow, WINDOW_LONG_PTR_INDEX, WM_ERASEBKGND, WM_PAINT, WNDCLASSEXA,
+            WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_POPUP,
         },
     },
     core::{PCSTR, Result, s, w},
@@ -133,6 +136,65 @@ fn is_ascii_text(text: &str) -> bool {
 fn dpi_scale_for(window: HWND) -> f32 {
     let dpi = unsafe { GetDpiForWindow(window) };
     if dpi == 0 { 1.0 } else { dpi as f32 / 96.0 }
+}
+
+/// Compute the on-screen position for a popup of size `wnd_w` x `wnd_h` so it stays
+/// fully inside the work area (taskbar-excluded region) of the monitor under the
+/// caret. The popup is placed just below-right of the caret; when it would overflow
+/// the bottom edge it flips above the caret line, and when it would overflow the
+/// right edge it slides left to stay flush with the work-area edge.
+fn compute_popup_pos(caret: RECT, wnd_w: i32, wnd_h: i32, dpi_scale: f32) -> (i32, i32) {
+    let off_x = (POS_OFFSETX as f32 * dpi_scale).round() as i32;
+    let off_y = (POS_OFFSETY as f32 * dpi_scale).round() as i32;
+
+    // Work area of the monitor containing the caret. Falls back to the primary
+    // screen bounds if the monitor query fails for any reason.
+    let point = POINT {
+        x: caret.left,
+        y: caret.bottom,
+    };
+    let mut info = MONITORINFO {
+        cbSize: size_of::<MONITORINFO>() as u32,
+        ..Default::default()
+    };
+    let work = unsafe {
+        let monitor = MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST);
+        if GetMonitorInfoW(monitor, &mut info).as_bool() {
+            info.rcWork
+        } else {
+            RECT {
+                left: 0,
+                top: 0,
+                right: GetSystemMetrics(SM_CXSCREEN),
+                bottom: GetSystemMetrics(SM_CYSCREEN),
+            }
+        }
+    };
+
+    // Horizontal: place to the right of the caret, shifting left if it would run
+    // past the work-area right edge (clamped to the left edge if it fits nowhere).
+    let max_x = work.right - wnd_w;
+    let x = if max_x <= work.left {
+        work.left
+    } else {
+        (caret.left + off_x).clamp(work.left, max_x)
+    };
+
+    // Vertical: place below the caret; if it does not fit, flip above the caret
+    // line; if it fits in neither direction, clamp so the top stays visible.
+    let below = caret.bottom + off_y;
+    let y = if below + wnd_h <= work.bottom {
+        below
+    } else {
+        let above = caret.top - wnd_h - off_y;
+        if above >= work.top {
+            above
+        } else {
+            (work.bottom - wnd_h).max(work.top)
+        }
+    };
+
+    (x, y)
 }
 
 /// Layout constants scaled to physical pixels for the current DPI. The render
@@ -284,6 +346,8 @@ struct HighlightState {
     candidates: Vec<String>,
     aux_text: String,
     vertical: bool,
+    /// Caret geometry (screen coordinates) used to place the popup on screen.
+    caret: Option<RECT>,
 }
 
 pub struct CandidateList {
@@ -340,28 +404,23 @@ impl CandidateList {
                     candidates: Vec::new(),
                     aux_text: String::new(),
                     vertical: false,
+                    caret: None,
                 }),
             })
         }
     }
 
-    pub fn locate(&self, x: i32, y: i32) -> Result<()> {
-        trace!("locate({x}, {y})");
-        let dpi_scale = dpi_scale_for(self.window);
-        let offset_x = (POS_OFFSETX as f32 * dpi_scale).round() as i32;
-        let offset_y = (POS_OFFSETY as f32 * dpi_scale).round() as i32;
-        unsafe {
-            SetWindowPos(
-                self.window,
-                HWND_TOPMOST,
-                x + offset_x,
-                y + offset_y,
-                0,
-                0,
-                SWP_NOACTIVATE | SWP_NOSIZE,
-            )?
-        };
-        Ok(())
+    /// Record the caret geometry (screen coordinates). The actual placement happens
+    /// in `repaint(resize=...)`, where the window's on-screen size is known, so the
+    /// popup can be positioned within the monitor work area in a single call.
+    pub fn set_caret(&self, left: i32, top: i32, bottom: i32) {
+        trace!("set_caret({left}, {top}, {bottom})");
+        self.state.write().unwrap().caret = Some(RECT {
+            left,
+            top,
+            right: left,
+            bottom,
+        });
     }
 
     /// Move the highlight to the next candidate (right/down), wrapping around to the first.
@@ -446,7 +505,7 @@ impl CandidateList {
     fn repaint(&self, resize: bool) -> Result<()> {
         unsafe {
             // Copy data out of state and release lock early
-            let (highlighted_index, suggs, aux_text, vertical) = {
+            let (highlighted_index, suggs, aux_text, vertical, caret) = {
                 let state = self.state.read().unwrap();
                 if state.candidates.is_empty() {
                     return Ok(());
@@ -456,6 +515,7 @@ impl CandidateList {
                     state.candidates.clone(),
                     state.aux_text.clone(),
                     state.vertical,
+                    state.caret,
                 )
             };
 
@@ -619,15 +679,19 @@ impl CandidateList {
             SetWindowLongPtrA(self.window, WINDOW_LONG_PTR_INDEX::default(), long_ptr);
 
             if resize {
-                SetWindowPos(
-                    self.window,
-                    HWND_TOPMOST,
-                    0,
-                    0,
-                    wnd_width.ceil() as i32,
-                    wnd_height.ceil() as i32,
-                    SWP_NOACTIVATE | SWP_NOMOVE,
-                )?;
+                let wnd_w = wnd_width.ceil() as i32;
+                let wnd_h = wnd_height.ceil() as i32;
+                // Position and size in a single call so the popup never flashes at a
+                // stale location. When a caret is known, keep the window inside the
+                // monitor work area (flip above / slide left as needed).
+                let (x, y, flags) = match caret {
+                    Some(caret) => {
+                        let (x, y) = compute_popup_pos(caret, wnd_w, wnd_h, dpi_scale);
+                        (x, y, SWP_NOACTIVATE)
+                    }
+                    None => (0, 0, SWP_NOACTIVATE | SWP_NOMOVE),
+                };
+                SetWindowPos(self.window, HWND_TOPMOST, x, y, wnd_w, wnd_h, flags)?;
                 ShowWindow(self.window, SW_SHOWNOACTIVATE);
             }
             InvalidateRect(self.window, None, BOOL::from(false));
