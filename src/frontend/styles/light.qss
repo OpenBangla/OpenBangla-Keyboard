@@ -1,7 +1,7 @@
 /* OpenBangla Keyboard — Settings dialog, light theme */
 
 QDialog#SettingsDialog {
-    background-color: #ffffff;
+    background-color: #f1eee8;
 }
 
 QDialog#AboutFile {
@@ -10,7 +10,7 @@ QDialog#AboutFile {
 
 /* ---- Sidebar ---- */
 QWidget#sidebar {
-    background-color: #efe7d9;
+    background-color: #e8dfcd;
 }
 
 QWidget#sidebar QToolButton {
@@ -227,7 +227,7 @@ KeyboardWidget {
 
 /* ---- Auto Correct dialog ---- */
 QDialog#AutoCorrectDialog {
-    background-color: #ffffff;
+    background-color: #f1eee8;
 }
 
 /* Vertical rule between the entry form and the preview column */
