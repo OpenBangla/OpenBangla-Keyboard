@@ -79,6 +79,8 @@ QString AutoCorrectFilePath();
     QString SuffixDictPath();
 
     QString RegexDictPath();
+
+    QString baseDataPath();
 #endif
 
 bool migrateFile(const QString &fileName, const QDir &src, const QDir &dst, bool overwrite=true);
