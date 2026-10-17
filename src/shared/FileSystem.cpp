@@ -66,13 +66,53 @@ void UserFolders::setupWindows() {
     dir.mkpath(path + "/layouts/");
 }
 
+
+#ifdef Q_OS_LINUX
+#include <QCoreApplication>
+#include <QStandardPaths>
+#include <QDir>
+
+QString baseDataPath() {
+    // check environment variable override
+    QString envPath = qEnvironmentVariable("OPENBANGLA_DATA_DIR", QString());
+    if (!envPath.isEmpty() && QDir(envPath).exists()) {
+        return envPath;
+    }
+
+    // portable mode: check if data/layouts exist right beside the executable
+    if (QCoreApplication::instance()) {
+        QString appDir = QCoreApplication::applicationDirPath();
+        if (QDir(appDir + "/data").exists() || QDir(appDir + "/layouts").exists()) {
+            return appDir;
+        }
+    }
+
+    // xdg standard locations (~/.local/share, then /usr/share)
+    QString xdgPath = QStandardPaths::locate(
+        QStandardPaths::GenericDataLocation,
+        "openbangla-keyboard",
+        QStandardPaths::LocateDirectory
+    );
+    if (!xdgPath.isEmpty()) {
+        return xdgPath;
+    }
+
+    // fallback to compile-time definition
+#if defined(PROJECT_DATADIR)
+    return QStringLiteral(PROJECT_DATADIR);
+#else
+    return QStringLiteral("/usr/share/openbangla-keyboard");
+#endif
+}
+#endif
+
 QString LayoutsFilePath() {
 #ifdef Q_OS_MACOS
     return gUserFolders->dataPath() + "/layouts/";
 #elif defined(Q_OS_WIN)
     return QCoreApplication::applicationDirPath() + "/layouts";
 #else
-    return PROJECT_DATADIR "/layouts";
+    return baseDataPath() + "/layouts";
 #endif
 }
 
@@ -82,7 +122,7 @@ QString AvroPhoneticLayoutPath() {
 #elif defined(Q_OS_WIN)
     return QCoreApplication::applicationDirPath() + "/layouts/avrophonetic.json";
 #else
-    return PROJECT_DATADIR "/layouts/avrophonetic.json";
+    return baseDataPath() + "/layouts/avrophonetic.json";
 #endif
 }
 
@@ -92,25 +132,25 @@ QString AutoCorrectFilePath() {
 #elif defined(Q_OS_WIN)
     return QCoreApplication::applicationDirPath() + "/data/autocorrect.json";
 #else
-    return PROJECT_DATADIR "/data/autocorrect.json";
+    return baseDataPath() + "/data/autocorrect.json";
 #endif
 }
 
 #ifdef Q_OS_LINUX
     QString DatabasePath() {
-        return PROJECT_DATADIR "/data";
+        return baseDataPath() + "/data";
     }
 
     QString DictionaryPath() {
-        return PROJECT_DATADIR "/data/dictionary.json";
+        return baseDataPath() + "/data/dictionary.json";
     }
 
     QString SuffixDictPath() {
-        return PROJECT_DATADIR "/data/suffix.json";
+        return baseDataPath() + "/data/suffix.json";
     }
 
     QString RegexDictPath() {
-        return PROJECT_DATADIR "/data/regex.json";
+        return baseDataPath() + "/data/regex.json";
     }
 #endif
 
