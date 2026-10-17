@@ -85,6 +85,37 @@ function is_immutable {
   return 1
 }
 
+# remove userspace installation from ~/.local
+function uninstall_userspace {
+  local target_dir="$HOME/.local"
+  echo "Uninstalling OpenBangla Keyboard from $target_dir ..."
+
+  # 1. remove binaries and wrappers
+  rm -f "$target_dir/bin/openbangla-gui"
+  rm -f "$target_dir/bin/openbangla-uninstall"
+  rm -f "$target_dir/libexec/ibus-engine-openbangla"
+  rm -f "$target_dir/lib/ibus/ibus-engine-openbangla"
+
+  # 2. remove data files, layouts, and dictionaries
+  rm -rf "$target_dir/share/openbangla-keyboard"
+
+  # 3. remove desktop launcher and application icons
+  rm -f "$target_dir/share/applications/openbangla"*
+  rm -f "$target_dir/share/icons/hicolor/"*"/apps/OpenBangla"* 2>/dev/null || true
+  rm -f "$target_dir/share/icons/hicolor/"*"/apps/openbangla"* 2>/dev/null || true
+
+  # 4. remove ibus component definition and systemd environment config
+  rm -f "$target_dir/share/ibus/component/openbangla.xml"
+  rm -f "$HOME/.config/environment.d/10-openbangla.conf"
+
+  # 5. reset ibus cache and restart daemon
+  echo "Refreshing IBus registry..."
+  export IBUS_COMPONENT_PATH="/usr/share/ibus/component"
+  ibus write-cache >/dev/null 2>&1 || true
+  ibus restart >/dev/null 2>&1 || true
+
+  echo "OpenBangla Keyboard has been completely removed from user space."
+}
 
 # perform userspace installation to ~/.local
 function install_userspace {
@@ -172,9 +203,53 @@ ENVCONF
   ibus write-cache >/dev/null 2>&1
   ibus restart >/dev/null 2>&1
 
+
+  # create userspace uninstaller script
+    mkdir -p "$target_dir/bin"
+    cat << 'UNINSTALL_EOF' > "$target_dir/bin/openbangla-uninstall"
+#!/usr/bin/env bash
+TARGET_DIR="$HOME/.local"
+echo "Uninstalling OpenBangla Keyboard from $TARGET_DIR ..."
+
+# remove binaries
+rm -f "$TARGET_DIR/bin/openbangla-gui"
+rm -f "$TARGET_DIR/libexec/ibus-engine-openbangla"
+rm -f "$TARGET_DIR/lib/ibus/ibus-engine-openbangla"
+
+# remove layouts, dictionaries, and assets
+rm -rf "$TARGET_DIR/share/openbangla-keyboard"
+
+# remove desktop entries and icons
+rm -f "$TARGET_DIR/share/applications/openbangla"*
+rm -f "$TARGET_DIR/share/icons/hicolor/"*"/apps/OpenBangla"* 2>/dev/null || true
+rm -f "$TARGET_DIR/share/icons/hicolor/"*"/apps/openbangla"* 2>/dev/null || true
+
+# remove ibus registration and environment config
+rm -f "$TARGET_DIR/share/ibus/component/openbangla.xml"
+rm -f "$HOME/.config/environment.d/10-openbangla.conf"
+
+# refresh ibus cache
+export IBUS_COMPONENT_PATH="/usr/share/ibus/component"
+ibus write-cache >/dev/null 2>&1 || true
+ibus restart >/dev/null 2>&1 || true
+
+# self-delete the uninstaller script
+rm -f "$0"
+
+echo "OpenBangla Keyboard has been completely removed."
+UNINSTALL_EOF
+  
+    chmod +x "$target_dir/bin/openbangla-uninstall"
   echo "Installation completed successfully in $target_dir."
+  echo "To uninstall anytime, simply run: openbangla-uninstall"
   echo "Please log out and log back in, then add OpenBangla Keyboard from your desktop settings."
-}
+ }
+
+# check if uninstallation was requested
+if [ "$1" = "--uninstall" ]; then
+  uninstall_userspace
+  exit 0
+fi
 
 DISTRO_NAME=$(get_distro)
 
