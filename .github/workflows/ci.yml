@@ -93,6 +93,9 @@ jobs:
   build-macos:
     if: contains(github.event.head_commit.message, 'deploy+') == false
     runs-on: macos-latest
+    env:
+      # Must match an Xcode installed on the runner image.
+      XCODE_DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
       - name: checkout-source
         uses: actions/checkout@v5
@@ -105,10 +108,24 @@ jobs:
       - name: setup-qt
         run: echo "$(brew --prefix qt@5)/bin" >> $GITHUB_PATH
 
+      # The runner also ships a standalone Command Line Tools install whose
+      # MacOSX.sdk (27.0) is newer than the linker in Xcode 26.6, which breaks
+      # linking ("tapi error: malformed file ... unknown architecture").
+      # Force every tool to use Xcode's own toolchain and SDK instead.
+      - name: select-xcode-sdk
+        run: |
+          sudo xcode-select -s "$XCODE_DEVELOPER_DIR"
+          echo "DEVELOPER_DIR=$XCODE_DEVELOPER_DIR" >> $GITHUB_ENV
+          SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
+          echo "SDKROOT=$SDK_PATH" >> $GITHUB_ENV
+          echo "Using SDK: $SDK_PATH"
+
       - name: build
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)" -GNinja
+          cmake .. \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)" \
+            -DCMAKE_OSX_SYSROOT="$SDKROOT" \
+            -GNinja
           ninja
-
