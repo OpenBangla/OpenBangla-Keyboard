@@ -51,10 +51,9 @@ void Layout::loadDesc() {
   // Load Layout Description
   // Layout File Type
   QString type = lf.value("info").toObject().value("type").toString();
-  if (type == "phonetic") {
-    lD.type = Layout_Phonetic;
-  } else if (type == "khipro") {
-    lD.type = Layout_Khipro;
+  QString name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
+  if (type == "transliteration") {
+    lD.type = (name == "Khipro") ? Layout_Khipro : Layout_Phonetic;
   } else {
     lD.type = Layout_Fixed;
   }
@@ -63,18 +62,18 @@ void Layout::loadDesc() {
   // Layout File Version
   lD.fileVer = lf.value("info").toObject().value("version").toInt();
   // Layout Name
-  lD.name = lf.value("info").toObject().value("layout").toObject().value("name").toString();
+  lD.name = name;
   // Layout Version
   lD.ver = lf.value("info").toObject().value("layout").toObject().value("version").toString();
-  // Layout Image 0
-  lD.image0.clear();
-  if(!lf.value("info").toObject().value("layout").toObject().value("image0").isUndefined()) {
-    lD.image0 = lf.value("info").toObject().value("layout").toObject().value("image0").toString().toUtf8();
-  }
-  // Layout Image 1
-  lD.image1.clear();
-  if(!lf.value("info").toObject().value("layout").toObject().value("image1").isUndefined()) {
-    lD.image1 = lf.value("info").toObject().value("layout").toObject().value("image1").toString().toUtf8();
+  // Layout Image
+  // v3 phonetic layouts carry a single instructional image in "image"; fall back
+  // to the legacy "image0" so already-installed v2 phonetic layouts still show it.
+  lD.image.clear();
+  QJsonObject layoutInfo = lf.value("info").toObject().value("layout").toObject();
+  if(!layoutInfo.value("image").isUndefined()) {
+    lD.image = layoutInfo.value("image").toString().toUtf8();
+  } else if(!layoutInfo.value("image0").isUndefined()) {
+    lD.image = layoutInfo.value("image0").toString().toUtf8();
   }
   // Layout Develper Name
   lD.devName = lf.value("info").toObject().value("layout").toObject().value("developer").toObject().value(
@@ -87,6 +86,21 @@ void Layout::loadDesc() {
 LayoutDesc Layout::getDesc() {
   // We have loaded Loaded LayoutDesc earlier, so just return it
   return lD;
+}
+
+QMap<QString, QString> Layout::getLayoutMap() {
+  QMap<QString, QString> map;
+  // Only fixed layouts have a per-key mapping to draw a keyboard from.
+  if (lD.type != Layout_Fixed) {
+    return map;
+  }
+  // The whole layout file is still available in `lf`; the top level "layout"
+  // object holds flat Key_<name>_Normal / Key_<name>_AltGr -> glyph entries.
+  QJsonObject layout = lf.value("layout").toObject();
+  for (auto it = layout.constBegin(); it != layout.constEnd(); ++it) {
+    map.insert(it.key(), it.value().toString());
+  }
+  return map;
 }
 
 LayoutList Layout::searchLayoutsEx(QDir dir) {
@@ -111,7 +125,7 @@ LayoutList Layout::searchLayouts() {
   layoutMap.clear();
 
   QDir dir;
-  
+
 #ifndef Q_OS_MACOS
   // Search in system layouts folder
   // On macOS we don't have a system layouts folder, all layouts are stored in user folder

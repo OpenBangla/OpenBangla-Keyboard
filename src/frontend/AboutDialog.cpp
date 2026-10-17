@@ -18,15 +18,20 @@
 
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFile>
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
 
-AboutDialog::AboutDialog(QWidget *parent) :
+AboutDialog::AboutDialog(bool darkMode, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AboutDialog) {
+    ui(new Ui::AboutDialog),
+    m_darkMode(darkMode) {
   ui->setupUi(this);
 
-  this->setFixedSize(this->width(), this->height());
+  QFile qss(m_darkMode ? ":/styles/dark.qss" : ":/styles/light.qss");
+  if (qss.open(QFile::ReadOnly | QFile::Text)) {
+    setStyleSheet(QString::fromUtf8(qss.readAll()));
+  }
 
   // Set version
   ui->labelVer->setText(PROJECT_VERSION);

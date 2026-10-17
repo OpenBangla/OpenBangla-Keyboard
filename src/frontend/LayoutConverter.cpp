@@ -22,10 +22,8 @@
 #include <QXmlStreamReader>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <zstd.h>
 #include "LayoutConverter.h"
 #include "FileSystem.h"
-#include "base.hpp"
 
 // This map is used for when converting from previous layout format(version 1) or Avro keyboard layout.
 QMap<QString, QString> keyConversionMap = {
@@ -239,7 +237,7 @@ QMap<QString, QString> keyConversionMap = {
     {"Key_BackBracket_ShiftAltGr", "Key_Bar_AltGr"}
 };
 
-/** Convert Layout format from version 1 into version 2 **/
+/** Convert Layout format from version 1 into version 3 **/
 ConversionResult LayoutConverter::convertLayoutFormat(QString path) {
   QFile oldFile(path);
   if (!oldFile.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -260,24 +258,9 @@ ConversionResult LayoutConverter::convertLayoutFormat(QString path) {
      ++iter;
   }
 
-  // Image conversion
-  QJsonObject infoLayout;
-  QJsonValue image0 = oldLayout.value("info").toObject().value("layout").toObject().value("image0");
-  QJsonValue image1 = oldLayout.value("info").toObject().value("layout").toObject().value("image1");
-
-  // Image 0 or Normal View
-  if(!image0.isUndefined()) {
-    QString data = image0.toString();
-    infoLayout["image0"] = decodeCompressAndEncode(data);
-  }
-
-  // Image 1 or AltGr View
-  if(!image1.isUndefined()) {
-    QString data = image1.toString();
-    infoLayout["image1"] = decodeCompressAndEncode(data);
-  }
-
-  QJsonObject layout, info;
+  // v3 fixed layouts are drawn from the key map, so the instructional images
+  // that version 1 carried are dropped during conversion.
+  QJsonObject layout, info, infoLayout;
 
   infoLayout["developer"] = oldLayout.value("info").toObject().value("layout").toObject().value("developer").toObject();
   infoLayout["name"] = oldLayout.value("info").toObject().value("layout").toObject().value("name");
@@ -285,8 +268,7 @@ ConversionResult LayoutConverter::convertLayoutFormat(QString path) {
 
   info["layout"] = infoLayout;
   info["type"] = "fixed";
-  info["version"] = "2";
-    
+
   layout["info"] = info;
   layout["layout"] = newKeys;
 
@@ -294,7 +276,7 @@ ConversionResult LayoutConverter::convertLayoutFormat(QString path) {
 
   QFileInfo fileInfo(oldFile);
   QString savePath = gUserFolders->getUserLayoutPath() + fileInfo.baseName() + ".json";
-  return saveLayout(layout, savePath);
+  return convertToV3(layout, savePath);
 }
 
 QString LayoutConverter::unescapeXML(QString escaped) {
@@ -350,11 +332,9 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path) {
           layoutDev["name"] = data;
         } else if (name == "DeveloperComment") {
           layoutDev["comment"] = unescapeXML(data);
-        } else if (name == "ImageNormalShift") {
-          infoLayout["image0"] = decodeCompressAndEncode(data.simplified().replace(" ", ""));
-        } else if (name == "ImageAltGrShift") {
-          infoLayout["image1"] = decodeCompressAndEncode(data.simplified().replace(" ", ""));
         }
+        // v3 fixed layouts are drawn from the key map, so the ImageNormalShift /
+        // ImageAltGrShift instructional images are intentionally ignored.
       } else {
         // Key conversion
         QString key = name.toString();
@@ -387,7 +367,6 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path) {
   }
 
   info["type"] = "fixed";
-  info["version"] = "2";
   infoLayout["developer"] = layoutDev;
   info["layout"] = infoLayout;
 
@@ -401,7 +380,7 @@ ConversionResult LayoutConverter::convertAvroLayout(QString path) {
 
   QFileInfo fileInfo(xmlFile);
   QString savePath = gUserFolders->getUserLayoutPath() + fileInfo.baseName() + ".json";
-  return saveLayout(layout, savePath);
+  return convertToV3(layout, savePath);
 }
 
 ConversionResult LayoutConverter::saveLayout(QString path) {
@@ -409,15 +388,46 @@ ConversionResult LayoutConverter::saveLayout(QString path) {
   if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
     return OpenError;
   }
-  QString version = QJsonDocument::fromJson(jsonFile.readAll()).object()
-                    .value("info").toObject()
-                    .value("version").toString();
+  QJsonObject layout = QJsonDocument::fromJson(jsonFile.readAll()).object();
+  QString version = layout.value("info").toObject().value("version").toString();
+
   if (version == "1") return convertLayoutFormat(path);
-  if (version != "2") return UnsupportedLayout;
+
+  if (version == "2") {
+    QFileInfo fileInfo(jsonFile);
+    QString savePath = gUserFolders->getUserLayoutPath() + fileInfo.fileName();
+    return convertToV3(layout, savePath);
+  }
+
+  if (version != "3") return UnsupportedLayout;
 
   QFileInfo fileInfo(jsonFile);
   QString savePath = gUserFolders->getUserLayoutPath() + fileInfo.fileName();
   return jsonFile.copy(savePath) ? Ok : SaveError;
+}
+
+/** Normalize a layout object into format version 3 and save it. **/
+ConversionResult LayoutConverter::convertToV3(QJsonObject layout, QString path) {
+  QJsonObject info = layout.value("info").toObject();
+  QJsonObject infoLayout = info.value("layout").toObject();
+
+  // Legacy phonetic layouts keep their single instructional image, renamed
+  // image0 -> image, and adopt the unified "transliteration" type.
+  if (info.value("type").toString() == "phonetic") {
+    if (infoLayout.contains("image0")) {
+      infoLayout["image"] = infoLayout.value("image0");
+    }
+    info["type"] = "transliteration";
+  }
+  // v3 no longer stores the Normal/AltGr instructional images for keyed layouts.
+  infoLayout.remove("image0");
+  infoLayout.remove("image1");
+
+  info["layout"] = infoLayout;
+  info["version"] = "3";
+  layout["info"] = info;
+
+  return saveLayout(layout, path);
 }
 
 ConversionResult LayoutConverter::saveLayout(QJsonObject obj, QString path) {
@@ -431,22 +441,4 @@ ConversionResult LayoutConverter::saveLayout(QJsonObject obj, QString path) {
   saveFile.close();
 
   return Ok;
-}
-
-/** 
- * Decodes `data` using the Base64 algorithm, compresses it using zstd algorithm
- * and encodes the compressed bytes using a custom base91 algorithm.
- **/
-QString LayoutConverter::decodeCompressAndEncode(QString &data) {
-    QByteArray image = QByteArray::fromBase64(data.toUtf8());
-    size_t cap = ZSTD_compressBound(image.size());
-    char *dst = (char *)malloc(cap);
-
-    size_t ret = ZSTD_compress(dst, cap, image.data(), image.size(), 20);
-
-    std::string imgCompressed = std::string(dst, ret);
-    QString imgEncoded = QString::fromStdString(base91::encode(imgCompressed));
-    free(dst);
-
-    return imgEncoded;
 }

@@ -34,7 +34,7 @@ class AboutFile : public QDialog {
 Q_OBJECT
 
 public:
-  explicit AboutFile(QWidget *parent = nullptr);
+  explicit AboutFile(QString iconTheme, QWidget *parent = nullptr);
 
   ~AboutFile() override;
 

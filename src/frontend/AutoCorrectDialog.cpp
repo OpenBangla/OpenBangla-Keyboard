@@ -17,18 +17,37 @@
  */
 
 #include <QTreeWidget>
+#include <QAbstractItemView>
+#include <QHeaderView>
+#include <QFile>
 #include <QJsonDocument>
 #include "AutoCorrectDialog.h"
 #include "FileSystem.h"
 #include "ui_AutoCorrectDialog.h"
 
-AutoCorrectDialog::AutoCorrectDialog(QWidget *parent) :
+AutoCorrectDialog::AutoCorrectDialog(bool darkMode, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AutoCorrectDialog) {
+    ui(new Ui::AutoCorrectDialog),
+    m_darkMode(darkMode) {
   ui->setupUi(this);
+
+  QFile qss(m_darkMode ? ":/styles/dark.qss" : ":/styles/light.qss");
+  if (qss.open(QFile::ReadOnly | QFile::Text)) {
+    setStyleSheet(QString::fromUtf8(qss.readAll()));
+  }
 
   ui->autoCorrect->setColumnCount(2);
   ui->autoCorrect->setHeaderLabels({"Replace", "With"});
+  ui->autoCorrect->header()->setSectionResizeMode(QHeaderView::Stretch);
+  ui->autoCorrect->header()->setStretchLastSection(false);
+  ui->autoCorrect->setRootIsDecorated(false);
+  ui->autoCorrect->setIndentation(0);
+  ui->autoCorrect->setUniformRowHeights(true);
+  ui->autoCorrect->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+  // Split the entry form and the preview evenly across the card (index 1 is the divider).
+  ui->columnsRow->setStretch(0, 1);
+  ui->columnsRow->setStretch(2, 1);
 
   ui->btnClear->setEnabled(false);
   ui->btnUpdate->setEnabled(false);
@@ -109,7 +128,7 @@ void AutoCorrectDialog::addEntryInViewer(QString replace, QString with) {
   item->setText(1, with);
 }
 
-void AutoCorrectDialog::on_buttonBox_accepted() {
+void AutoCorrectDialog::on_btnSave_clicked() {
   // Save changes in user specific auto correct file.
   QFile saveFile(gUserFolders->getUserAutoCorrectFile());
   if (!saveFile.open(QIODevice::WriteOnly)) {
@@ -121,10 +140,12 @@ void AutoCorrectDialog::on_buttonBox_accepted() {
   saveFile.write(json.toJson());
 
   saveFile.close();
+
+  accept();
 }
 
-void AutoCorrectDialog::on_buttonBox_rejected() {
-  AutoCorrectDialog::close();
+void AutoCorrectDialog::on_btnCancel_clicked() {
+  close();
 }
 
 void AutoCorrectDialog::on_btnUpdate_clicked() {

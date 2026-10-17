@@ -17,9 +17,14 @@
  */
 
 #include <QCloseEvent>
+#include <QResizeEvent>
+#include <QLayout>
 #include <QPushButton>
+#include <QStyle>
+#include <QFile>
 #include <zstd.h>
 #include "LayoutViewer.h"
+#include "KeyboardWidget.h"
 #include "Settings.h"
 #include "AboutFile.h"
 #include "base.hpp"
@@ -30,14 +35,23 @@ LayoutViewer::LayoutViewer(QString iconTheme, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LayoutViewer) {
   ui->setupUi(this);
-  aboutDialog = new AboutFile(this);
-  auto set_icon = [&](QPushButton* obj, QString icon) {
-    obj->setIcon(QIcon(":/images/" + iconTheme + "/" + icon + ".png"));
-  };
-  set_icon(ui->buttonAboutLayout, "description");
+  aboutDialog = new AboutFile(iconTheme, this);
+  ui->buttonAboutLayout->setIcon(QIcon(":/images/" + iconTheme + "/info.svg"));
   ui->labelImage->setAlignment(Qt::AlignCenter);
+
+  bool darkMode = (iconTheme == "white");
+  QFile qss(darkMode ? ":/styles/dark.qss" : ":/styles/light.qss");
+  if (qss.open(QFile::ReadOnly | QFile::Text)) {
+    setStyleSheet(QString::fromUtf8(qss.readAll()));
+  }
+
   this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
   this->move(gSettings->getLayoutViewerWindowPosition());
+
+  // The info button floats above the content (it isn't in the layout); keep it
+  // on top and give it a sane initial position so it doesn't flash at (0, 0).
+  ui->buttonAboutLayout->raise();
+  positionInfoButton();
 }
 
 LayoutViewer::~LayoutViewer() {
@@ -46,30 +60,103 @@ LayoutViewer::~LayoutViewer() {
 }
 
 void LayoutViewer::refreshLayoutViewer() {
-  image0.clear();
-  image1.clear();
+  imageData.clear();
   ui->viewAltGr->setEnabled(false);
   ui->viewNormal->setEnabled(false);
   ui->labelImage->setText("");
 
   desc = gLayout->getDesc();
-  this->setWindowTitle(desc.name + " :: Layout Viewer");
+  this->setWindowTitle(desc.name + " :: Keyboard Layout Viewer");
 
-  if(desc.image0.size() != 0) {
-    image0 = decodeAndDecompress(desc.image0);
-    if(desc.image1.size() != 0) {
-      image1 = decodeAndDecompress(desc.image1);
-      ui->viewAltGr->setEnabled(true);
-    }
+  // Fixed layouts carry a per-key map, so we can draw the keyboard natively.
+  QMap<QString, QString> keyMap;
+  if (desc.type == Layout_Fixed) {
+    keyMap = gLayout->getLayoutMap();
+  }
+
+  // The Normal/AltGr toggle only makes sense when the layout has a second view.
+  // Phonetic (Avro) and Khipro layouts ship a single image, so the whole header
+  // collapses and the info button floats over the content instead.
+  bool twoViews = false;
+
+  if (!keyMap.isEmpty()) {
+    useKeyboard = true;
+    ui->keyboard->setKeyMap(keyMap);
+    ui->labelImage->hide();
+    ui->keyboard->show();
     ui->viewNormal->setEnabled(true);
+    twoViews = ui->keyboard->hasAltGr();
+    ui->viewAltGr->setEnabled(twoViews);
+    ui->headerBar->setVisible(twoViews);
+    on_viewNormal_clicked();
+  } else if (desc.image.size() != 0) {
+    // Phonetic layouts ship a single instructional image instead; it is always
+    // single-view (no Normal/AltGr toggle), so the header stays collapsed.
+    useKeyboard = false;
+    ui->keyboard->hide();
+    ui->labelImage->show();
+    imageData = decodeAndDecompress(desc.image);
+    ui->viewNormal->setEnabled(true);
+    ui->headerBar->setVisible(false);
     on_viewNormal_clicked();
   } else {
+    useKeyboard = false;
+    ui->keyboard->hide();
+    ui->labelImage->show();
+    ui->headerBar->setVisible(false);
     ui->labelImage->setText("No image to display!");
     this->resize(537, 152);
   }
 
+  // Use a more compact info button when it floats over a single-view image;
+  // re-polish so the new padding (and its sizeHint) takes effect before we
+  // position it.
+  ui->buttonAboutLayout->setProperty("floating", !twoViews);
+  ui->buttonAboutLayout->style()->unpolish(ui->buttonAboutLayout);
+  ui->buttonAboutLayout->style()->polish(ui->buttonAboutLayout);
+
+  // Re-pin the floating info button now that the header/content changed.
+  positionInfoButton();
+
   // This refreshes Layout Info Dialog
   aboutDialog->setDialogType(AboutLayout);
+}
+
+void LayoutViewer::resizeEvent(QResizeEvent *event) {
+  QDialog::resizeEvent(event);
+  positionInfoButton();
+}
+
+void LayoutViewer::positionInfoButton() {
+  // Flush any pending layout so the header/content geometries we read below are
+  // current (e.g. right after the header was collapsed and adjustSize() ran).
+  if (this->layout()) {
+    this->layout()->activate();
+  }
+
+  QSize s = ui->buttonAboutLayout->sizeHint();
+  ui->buttonAboutLayout->resize(s);
+
+  int x, y;
+  // isVisibleTo() (not isVisible()) so this is correct even while the dialog is
+  // still hidden — refreshLayoutViewer() runs before show().
+  if (ui->headerBar->isVisibleTo(this)) {
+    // Two-view: sit at the header's top-right, vertically centered on it.
+    QRect h = ui->headerBar->geometry();
+    x = h.right() - s.width();
+    y = h.top() + (h.height() - s.height()) / 2;
+  } else {
+    // Single-view: overlay the top-right corner of the content.
+    QWidget *content = useKeyboard ? static_cast<QWidget *>(ui->keyboard)
+                                   : static_cast<QWidget *>(ui->labelImage);
+    QRect g = content->geometry();
+    const int inset = 10;
+    x = g.right() - s.width() - inset;
+    y = g.top() + inset;
+  }
+
+  ui->buttonAboutLayout->move(x, y);
+  ui->buttonAboutLayout->raise();
 }
 
 void LayoutViewer::showLayoutInfoDialog() {
@@ -88,25 +175,26 @@ void LayoutViewer::on_buttonAboutLayout_clicked() {
 }
 
 void LayoutViewer::on_viewNormal_clicked() {
-  image.loadFromData(image0);
-  ui->labelImage->setPixmap(QPixmap::fromImage(image));
-  ui->labelImage->adjustSize();
-  QSize size;
-  size.setHeight(ui->labelImage->height() + ui->labelImage->y());
-  size.setWidth(ui->labelImage->width());
-  this->resize(size);
+  if (useKeyboard) {
+    ui->keyboard->setMode(KeyboardWidget::Normal);
+  } else {
+    image.loadFromData(imageData);
+    ui->labelImage->setPixmap(QPixmap::fromImage(image));
+    ui->labelImage->adjustSize();
+  }
   ui->viewNormal->setChecked(true);
+  // Let the layout (margins + the active widget's size hint) drive the size.
+  this->adjustSize();
 }
 
 void LayoutViewer::on_viewAltGr_clicked() {
-  image.loadFromData(image1);
-  ui->labelImage->setPixmap(QPixmap::fromImage(image));
-  ui->labelImage->adjustSize();
-  QSize size;
-  size.setHeight(ui->labelImage->height() + ui->labelImage->y());
-  size.setWidth(ui->labelImage->width());
-  this->resize(size);
+  // The AltGr toggle is only ever shown for keyboard-rendered (fixed) layouts;
+  // image-based layouts are single-view.
+  if (useKeyboard) {
+    ui->keyboard->setMode(KeyboardWidget::AltGr);
+  }
   ui->viewAltGr->setChecked(true);
+  this->adjustSize();
 }
 
 QByteArray LayoutViewer::decodeAndDecompress(QByteArray &data) {
