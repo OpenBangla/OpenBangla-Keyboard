@@ -118,8 +118,13 @@ jobs:
           echo "DEVELOPER_DIR=$XCODE_DEVELOPER_DIR" >> $GITHUB_ENV
           SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
           echo "SDKROOT=$SDK_PATH" >> $GITHUB_ENV
+          echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+          echo "RUSTFLAGS=-C link-arg=-isysroot -C link-arg=$SDK_PATH" >> $GITHUB_ENV
           echo "Using SDK: $SDK_PATH"
 
+          # Neutralize the incompatible CommandLineTools SDK 27.0:
+          sudo rm -rf /Library/Developer/CommandLineTools/SDKs/*
+          sudo ln -s "$SDK_PATH" /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
       - name: build
         run: |
           mkdir build
@@ -127,5 +132,6 @@ jobs:
           cmake .. \
             -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5);$(brew --prefix zstd)" \
             -DCMAKE_OSX_SYSROOT="$SDKROOT" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET="11.0" \
             -GNinja
           ninja
