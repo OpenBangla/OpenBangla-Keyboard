@@ -1,0 +1,62 @@
+name: Installer
+
+# Tests tools/install.sh: lint, distribution detection for many distros,
+# and a real installation of the published package on each supported family.
+on:
+  push:
+    paths:
+      - 'tools/install.sh'
+      - 'tools/test-install.sh'
+      - '.github/workflows/installer.yml'
+  pull_request:
+    paths:
+      - 'tools/install.sh'
+      - 'tools/test-install.sh'
+      - '.github/workflows/installer.yml'
+  workflow_dispatch:
+
+jobs:
+  lint-and-detect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: shellcheck
+        run: shellcheck -S warning tools/install.sh tools/test-install.sh
+      - name: distribution detection tests
+        run: bash tools/test-install.sh
+
+  install:
+    needs: lint-and-detect
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        container:
+          - ubuntu:22.04
+          - ubuntu:24.04
+          - debian:12
+          - debian:13
+          - kalilinux/kali-rolling
+          - fedora:42
+          - archlinux:latest
+    container:
+      image: ${{ matrix.container }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: install OpenBangla Keyboard with the installer
+        run: bash tools/install.sh --yes --no-setup
+      - name: check the IBus engine is installed
+        run: test -f /usr/share/ibus/component/openbangla.xml
+
+  unsupported:
+    needs: lint-and-detect
+    runs-on: ubuntu-latest
+    container:
+      image: opensuse/tumbleweed
+    steps:
+      - uses: actions/checkout@v5
+      - name: installer exits cleanly with a helpful message
+        run: |
+          if bash tools/install.sh --yes; then
+            echo "expected the installer to refuse openSUSE"; exit 1
+          fi

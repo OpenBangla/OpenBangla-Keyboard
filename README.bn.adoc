@@ -68,27 +68,27 @@ toc::[]
 
 IMPORTANT: ওপেনবাংলা কিবোর্ড ১.৫.১ অথবা পূর্ববর্তী সংস্করণ ইনস্টল করা থাকলে https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Uninstalling-OpenBangla-Keyboard[সেটি প্রথমে আনইনস্টল করে নিন।]
 
-আপনার টার্মিনাল ওপেন করুন এবং এই কমান্ডটি রান করুন আপনার bash শেলে। বিঃদ্রঃ শেলটি **BASH** হতে হতে হবে, তাছাড়া স্ক্রিপ্টটি কাজ করবে না।
+টার্মিনাল ওপেন করুন, নিচের *একটি মাত্র কমান্ড* পেস্ট করুন এবং Enter চাপুন:
 ```bash
-bash -c "$(wget -q https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh -O -)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh 2>/dev/null || wget -qO- https://raw.githubusercontent.com/OpenBangla/OpenBangla-Keyboard/master/tools/install.sh)"
 ```
+
+ইন্সটলারটি নিজে থেকেই আপনার ডিস্ট্রো ও ভার্সন শনাক্ত করবে, সঠিক প্যাকেজ ইন্সটল করবে এবং ইনপুট মেথড (IBus) সেটআপ করে দেবে। কাজ শেষ হলে একবার লগ আউট করে আবার লগ ইন করুন, তারপর kbd:[Super+Space] চেপে ইংরেজি ও বাংলার মধ্যে পরিবর্তন করুন।
 
 যদি এতে আপনার কাজ না হয় তাহলে দয়া করে একটি https://github.com/OpenBangla/OpenBangla-Keyboard/issues[ইস্যু] তৈরি করুন। এমতাবস্থায় https://github.com/OpenBangla/OpenBangla-Keyboard/wiki/Installing-OpenBangla-Keyboard[উইকি] থেকে ডিস্ট্রো-ভেদে ইন্সটল নির্দেশাবলী দেখে নিতে পারেন।
 
 === আর্চলিনাক্স ভিত্তিক ডিস্ট্রো
 TIP: আর্চ লিনাক্সে ওপেনবাংলা কীবোর্ড ইনস্টল করার বিষয়ে একটি ভিডিও টিউটোরিয়াল রয়েছে। আপনি এটি https://youtu.be/C8vnR1AY6sA[এখান] থেকে দেখতে পারেন।
 
-Arch User Repository(AUR) তে ওপেনবাংলা কিবোর্ডের দুটো প্যাকেজ রয়েছে। `openbangla-keyboard` ব্যবহার করুন যদি আপনি সোর্স থেকে প্যাকেজটি তৈরি এবং ইন্সটল করতে চান। অথবা `openbangla-keyboard-bin` ব্যবহার করুন যদি আপনি বাইনারি প্যাকেজটি ব্যবহার করতে চান যেটি আর্চলিনাক্স ভিত্তিক ডিস্ট্রো গুলোর জন্য প্যাকেজটির মেইন্টেইনার তৈরি করেছেন। আপনি আপনার পছন্দের AUR হেল্পার ব্যবহার করে একটি কম্যান্ডের মাধ্যমেই ইন্সটল করতে পারবেন। কিছু জনপ্রিয় টুলের উদাহরণ:
+Arch User Repository(AUR) তে ওপেনবাংলা কিবোর্ডের দুটো প্যাকেজ রয়েছে। `openbangla-keyboard` ব্যবহার করুন যদি আপনি সোর্স থেকে প্যাকেজটি তৈরি এবং ইন্সটল করতে চান। অথবা `openbangla-keyboard-bin` ব্যবহার করুন যদি আপনি বাইনারি প্যাকেজটি ব্যবহার করতে চান যেটি আর্চলিনাক্স ভিত্তিক ডিস্ট্রো গুলোর জন্য প্যাকেজটির মেইন্টেইনার তৈরি করেছেন। আপনি আপনার পছন্দের AUR হেল্পার ব্যবহার করে একটি কম্যান্ডের মাধ্যমেই ইন্সটল করতে পারবেন। দুইটি জনপ্রিয় AUR হেল্পারের জন্য উদাহরণ:
 
 ==== `openbangla-keyboard`
-* `$ pacaur -S openbangla-keyboard`
+* `$ paru -S openbangla-keyboard`
 * `$ yay -S openbangla-keyboard`
-* `$ yaourt -S openbangla-keyboard`
 
 ==== `openbangla-keyboard-bin`
-* `$ pacaur -S openbangla-keyboard-bin`
+* `$ paru -S openbangla-keyboard-bin`
 * `$ yay -S openbangla-keyboard-bin`
-* `$ yaourt -S openbangla-keyboard-bin`
 
 অথবা ম্যানুয়ালি ইন্সটল করুন:
 ```bash
@@ -118,11 +118,11 @@ https://github.com/OpenBangla/OpenBangla-Keyboard/discussions[গিটহাব
 
 ওপেনবাংলা কিবোর্ড কম্পাইল তথা সোর্সকোড থেকে বিল্ড করার জন্য বর্তমানে নিম্নোলিখিত ডিপেন্ডেসিগুলো প্রয়োজন:
 
-* GNU GCC, G++ compiler or Clang
+* GNU GCC 8 (or later) or Clang 7 (or later) compiler
 * Rust 1.34.0 or later
 * GNU Make or Ninja
 * CMake
-* Qt 5.5 or later
+* Qt 5.15 or later
 * iBus development library
 * Zstandard compression library (zstd)
 
@@ -176,6 +176,7 @@ sudo make install
  * মেহেদী হাসান খান, অভ্র কিবোর্ডের ডেভলপের জন্য।
  * রীফাত নবী, অভ্র ফোনেটিক জাভাস্ক্রিপ্টে স্থানান্তর করার জন্য।
  * https://github.com/sarim[সারিম খান], আইবাস-অভ্র ডেভলপের জন্য।
+ * https://github.com/dec32[Dec_32], https://github.com/dec32/Ajemi[Ajemi] প্রোজেক্ট ডেভলপের জন্য।
  * https://github.com/saaiful[সাইফুল ইসলাম], আইকনের জন্য।
  * https://material.io/resources/icons[Material Design Icons].
  * https://github.com/alex-spataru/QSimpleUpdater[QSimpleUpdater], হালনাগাদকরণ লাইব্রেরির জন্য।
