@@ -22,6 +22,9 @@ jobs:
             arch: aarch64
 
     runs-on: ${{ matrix.runner }}
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51
+      options: --privileged
 
     steps:
       - name: Checkout source
@@ -29,21 +32,13 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install Flatpak build tools
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y flatpak flatpak-builder appstream appstream-compose
-
       - name: Configure Flathub remote
         run: |
-          flatpak remote-add --user --if-not-exists flathub \
+          flatpak remote-add --if-not-exists --user flathub \
             https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak remotes --user
 
       - name: Build Flatpak bundle
-        env:
-          # Use the distro AppStream tools: a Homebrew appstream on PATH may
-          # lack the appstream-compose helper flatpak-builder needs to finish.
-          PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         run: |
           flatpak-builder --disable-rofiles-fuse --force-clean --user \
             --default-branch=stable \
@@ -52,7 +47,21 @@ jobs:
             build-dir tools/flatpak/shanti-ibus.yml
           flatpak build-bundle --arch=${{ matrix.arch }} \
             flatpak-repo shanti-ibus-${{ matrix.arch }}.flatpak \
-            org.openbangla.Shanti.IBus stable
+            org.shanti.ShantiIbus stable
+
+      - name: Smoke test Flatpak bundle
+        run: |
+          flatpak install --user --noninteractive --assumeyes \
+            ./shanti-ibus-${{ matrix.arch }}.flatpak
+
+          metadata="$(flatpak info --user --show-metadata org.shanti.ShantiIbus)"
+          grep -Fq 'name=org.shanti.ShantiIbus' <<<"$metadata"
+          grep -Fq 'runtime=org.gnome.Platform/' <<<"$metadata"
+
+          flatpak run --user --env=GTK_A11Y=none \
+            org.shanti.ShantiIbus --version
+          flatpak run --user --env=GTK_A11Y=none \
+            org.shanti.ShantiIbus --check-data
 
       - name: Upload Flatpak bundle
         uses: actions/upload-artifact@v5
@@ -68,34 +77,8 @@ jobs:
         include:
           - runner: ubuntu-24.04
             arch: x86_64
-            cc: gcc
-            cxx: g++
-            backend: ibus
-          - runner: ubuntu-24.04
-            arch: x86_64
-            cc: gcc
-            cxx: g++
-            backend: fcitx
-          - runner: ubuntu-24.04
-            arch: x86_64
-            cc: clang
-            cxx: clang++
-            backend: ibus
-          - runner: ubuntu-24.04
-            arch: x86_64
-            cc: clang
-            cxx: clang++
-            backend: fcitx
           - runner: ubuntu-24.04-arm
             arch: aarch64
-            cc: gcc
-            cxx: g++
-            backend: ibus
-          - runner: ubuntu-24.04-arm
-            arch: aarch64
-            cc: gcc
-            cxx: g++
-            backend: fcitx
 
     runs-on: ${{ matrix.runner }}
 
@@ -117,30 +100,14 @@ jobs:
             rustc \
             cargo \
             libzstd-dev \
-            qtbase5-dev \
-            qtbase5-dev-tools \
-            libqt5svg5-dev \
             libibus-1.0-dev \
-            libfcitx5core-dev \
             ca-certificates
 
       - name: Configure
-        env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cxx }}
-          BACKEND: ${{ matrix.backend }}
         run: |
-          if [ "$BACKEND" = "ibus" ]; then
-            cmake -S . -B build -G Ninja \
-              -DCMAKE_BUILD_TYPE=Release \
-              -DENABLE_IBUS=ON \
-              -DENABLE_FCITX=OFF
-          else
-            cmake -S . -B build -G Ninja \
-              -DCMAKE_BUILD_TYPE=Release \
-              -DENABLE_IBUS=OFF \
-              -DENABLE_FCITX=ON
-          fi
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DENABLE_IBUS=ON
 
       - name: Build
         run: cmake --build build --parallel 2
